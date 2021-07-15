@@ -1,0 +1,132 @@
+package mc.elderbr.smarthopper.utils;
+
+import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Item;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+public class Utils {
+
+    public static String ToMaterial(Material material) {
+        return material.getKey().getKey().replaceAll("_", " ").toLowerCase();
+    }
+
+    public static String ToItemStack(ItemStack itemStack) {
+        return itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
+    }
+
+    public static Material ParseItemStack(String keys) {
+        return Material.getMaterial(keys.toUpperCase().replaceAll("\\s", "_"));
+    }
+
+    public static String NAME_ARRAY(String[] args) {
+        StringBuilder txt = new StringBuilder();
+        for (String name : args) {
+            txt.append(name + " ");
+        }
+        return txt.toString().toLowerCase().trim();
+    }
+
+    public static String ToUTF(String obj) {
+        return StringEscapeUtils.unescapeJava(obj);
+    }
+
+    public static Map<String, String> ToUTF(Map<String, String> obj) {
+        if (obj == null) return null;
+        Map<String, String> map = new HashMap<>();
+        for (Map.Entry<String, String> values : obj.entrySet()) {
+            map.put(values.getKey(), StringEscapeUtils.unescapeJava(values.getValue()));
+        }
+        return map;
+    }
+
+    public static Material ParseMaterial(String name) {
+        return Material.valueOf(name.toUpperCase().replaceAll("\\s", "_"));
+    }
+
+    public static String toUP(String name) {
+        return name.substring(0, 1).toUpperCase().concat(name.substring(1));
+    }
+
+    public static String toPotion(PotionMeta potionMeta) {
+        return potionMeta.getBasePotionData().getType().name().toLowerCase().replaceAll("_", " ");
+    }
+
+    public static String toEnchantment(Enchantment enchantment) {
+        return enchantment.getKey().getKey().toLowerCase().replaceAll("_", " ").trim();
+    }
+
+    public static Object getHopperType(String hopper) {
+        hopper = hopper.toLowerCase().replace("#", "");
+        // VERIFICA É ITEM
+        try {
+            if (hopper.startsWith("i")) {
+                return VGlobal.ITEM_MAP_ID.get(Integer.parseInt(hopper.replace("i", "")));
+            }
+        } catch (NumberFormatException e) {
+            return VGlobal.ITEM_MAP_NAME.get(hopper.replace("i", ""));
+        }
+
+        // VERIFICA SE É GRUPO
+        if (hopper.startsWith("g") || hopper.contains("*")) {
+            try {
+                return VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(hopper.replaceAll("[g*]", "")));
+            } catch (NumberFormatException e) {
+                return VGlobal.GRUPO_MAP_NAME.get(hopper.replace("*", ""));
+            }
+        }
+        return null;
+    }
+
+    public static String toData() {
+        Calendar data = Calendar.getInstance(Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        return dateFormat.format(data.getTime());
+    }
+
+    public static String toDataHora() {
+        Calendar data = Calendar.getInstance(Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmm");
+        return dateFormat.format(data.getTime());
+    }
+
+    public static Item isPotion(ItemStack itemStack) {
+
+        Item item = null;
+
+        // SE FOR POÇÃO
+        if (ToItemStack(itemStack).contains("potion")) {
+
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+            item = VGlobal.ITEM_MAP_NAME.get(Utils.toPotion(potionMeta));// BUSCA O ITEM PELO O NOME
+            if (itemStack.getType() == Material.SPLASH_POTION) {
+                item = VGlobal.ITEM_MAP_NAME.get("splash " + Utils.toPotion(potionMeta));// BUSCA O ITEM PELO O NOME
+            }
+            if (itemStack.getType() == Material.LINGERING_POTION) {
+                item = VGlobal.ITEM_MAP_NAME.get("lingering " + Utils.toPotion(potionMeta));// BUSCA O ITEM PELO O NOME
+            }
+        }
+        return item;
+    }
+
+    public static List<Item> isEnchantment(ItemStack itemStack) {
+        List<Item> itemList = new ArrayList<>();
+        if (itemStack.getType() == Material.ENCHANTED_BOOK) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            for (Map.Entry<Enchantment, Integer> keys : meta.getStoredEnchants().entrySet()) {
+                itemList.add(VGlobal.ITEM_MAP_NAME.get(toEnchantment(keys.getKey())));
+            }
+        }
+        return itemList;
+    }
+
+}

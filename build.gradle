@@ -1,0 +1,24 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+}
+
+group = 'mc.elderbr'
+version = '3.4'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    maven {url='https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
+    compileOnly('org.spigotmc:spigot-api:1.17-R0.1-SNAPSHOT')
+}
+
+
