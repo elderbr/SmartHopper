@@ -164,7 +164,7 @@ public class MoveHopper implements Listener {
             if (destination.getType() != InventoryType.HOPPER) {
                 event.setCancelled(false);// Ativa o movimento do item
             }
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             event.setCancelled(false);
         }
     }
