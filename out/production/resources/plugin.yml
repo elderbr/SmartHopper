@@ -1,0 +1,17 @@
+name: SmartHopper
+version: 3.5
+main: mc.elderbr.smarthopper.MainSmartHopper
+api-version: 1.17
+authors: [ ElderBR ]
+commands:
+  item:
+    description: Mostra o número do ID do material
+  grupo:
+    description: Mostra o número do Grupo do material
+  addgrupo:
+    description: Adicionar novo grupo
+  removegrupo:
+    description: Remover grupo existente
+  livro:
+    aliases: [book, livro]
+    description: Recebe um livro com os nomes de todos os grupos
