@@ -12,13 +12,18 @@ Agora além de poder colocar os nomes dos itens vai poder colocar os **IDs** que
 Uma da vantagem de usar o ID que vai caber mais itens por se tratar de apenas 5 caracteres no máximo.  
 Para usar o separador inteligente basta ter uma **bigorna** e renome o funil com o nome ou **ID**, com um custo de um **XP**.
 
+---
 
 > Veja o tutorial completo [SmartHopper](https://youtu.be/fBIeZ57ka1M)
 
+---
+
 ## Como surgiu
+
 O separador surgiu depois de ver que o meu armazém estava ficando muito grande, então resolvi fazer o ***SmartHopper*** para diminuir o armazém.
 
 ## Configurar o filtro
+
 Para configurar o filtro vai precisar de uma bigorna e **XP**,  coloque um ou mais funil na bigorna e renome com o ***~~nome~~*** do item ou grupo em inglês, mas é recomendado usar o **ID**.
 Pronto o funil está configurado.
 Se você não sabe qual é o ID configurou para o funil, basta clicar no funil com graveto na mão será mostrando o nome do item ou grupo.
@@ -57,6 +62,23 @@ Apenas os **adm** e ***operadores*** do ***SmartHopper*** podem alterar grupo.
 #### - Remover grupo
 Para remover o grupo digite o **/removegrupo** ***nome ou ID***.
 Apenas os **adm** e ***operadores*** do ***SmartHopper*** podem remover grupo.
+
+___
+
+## Adminstrador e operadores
+
+### Administradores
+- São responsáveis pelo os operadores e na criação, alterações ou remover os grupos.
+Os administradores podem adicionar novos operadores ou remove-los. 
+
+### Para adicionar novo operador:
+> **/addoperador** ***nome do operador***
+
+### Para remover operador:
+> **/removeoperador** ***nome do operador***
+
+### Operadores 
+- São responsáveis: pela criação, alterações ou remover os grupos.
 
 ## Como usar
 
