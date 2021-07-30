@@ -29,7 +29,7 @@ Se você não sabe qual é o ID configurou para o funil, basta clicar no funil c
  > Ex: I10;I34;G23 
 
 ## Item
-Para saber o **ID** do item basta escrever o nome do item tanto no inglês ou português.
+Para saber o **ID** do item basta escrever o nome do item tanto no inglês ou português ou segurar o item na mão e escrever **/item**.
 >Ex: **/item** escreva o nome do item desejado --> **/item stone** 
 
 Vai receber uma mensagem com a confirmação do nome do item e seu **ID**.
@@ -45,6 +45,18 @@ Se não souber o nome do grupo pode obter uma lista de todos os nomes dos grupos
 >**/book** ou **/livro** vai receber um livro com uma lista com todos os nomes dos grupos 
 
 Pode ver todos os itens que estão no grupo digitando **/grupo** nome ou ID, vai aparecer um inventário com todos os itens do grupo.
+
+#### - Adicionar novo grupo
+Para adicionar novo grupo digite **/addgrupo** ***nome do grupo desejado*** será aberto um inventário para adicionar os itens, adicione todos os itens que deseja ao grupo, depois clique na lã verde para salvar.
+Apenas os **adm** e ***operadores*** do ***SmartHopper*** podem adicionar novo grupo.
+
+#### - Alterando grupo
+Para alterar o grupo digite o **/grupo** ***nome ou ID*** será aberto o grupo como todos os itens adicione ou remova os itens do inventário depois clique na lã verde para salvar.
+Apenas os **adm** e ***operadores*** do ***SmartHopper*** podem alterar grupo.
+
+#### - Remover grupo
+Para remover o grupo digite o **/removegrupo** ***nome ou ID***.
+Apenas os **adm** e ***operadores*** do ***SmartHopper*** podem remover grupo.
 
 ## Como usar
 
