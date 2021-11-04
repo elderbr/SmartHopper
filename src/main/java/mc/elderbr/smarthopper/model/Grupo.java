@@ -224,19 +224,14 @@ public class Grupo implements Dados {
      * @return falso ou verdadeiro
      */
     public boolean isContentItem(String item) {
-
-
-
+        // Se o nome do grupo conter mais do que nome
         if (this.name.split("\\s").length > 1) {
             if (item.contains(name)) {
                 return true;
             }
         } else {
-            if(name.equals("axe")){
-                Msg.ServidorBlue("machado>>>");
-            }
+            //Percorre o nome do item e ver se o nome do grupo existe
             for (String nameItem : item.split("\\s")) {
-                Msg.ServidorBlue("item >> "+ nameItem +" <> grupo "+ name, getClass());
                 if (nameItem.equals(this.name)) {
                     return true;
                 }
