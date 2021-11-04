@@ -70,7 +70,7 @@ public class Grupo implements Dados {
     @Override
     public String getTraducao(String langKey) {
         langMap = VGlobal.GRUPO_LANG_MAP.get(getName());
-        if (langMap == null || langMap.get(langKey)==null) {
+        if (langMap == null || langMap.get(langKey) == null) {
             return name;
         }
         return langMap.get(langKey);
@@ -182,7 +182,7 @@ public class Grupo implements Dados {
         for (Material materials : Material.values()) {
             if (materials.isItem() && !materials.isAir()) {
                 for (String grupo : Utils.ToMaterial(materials).split("\\s")) {
-                    if(grupoNot.contains(grupo)) continue;
+                    if (grupoNot.contains(grupo)) continue;
                     if (!grupoList.contains(grupo)) {
                         grupoList.add(grupo);
                         grupoMap.put(grupo, VGlobal.ITEM_LANG_MAP.get(Utils.ToMaterial(materials)).get("pt_br"));
@@ -199,7 +199,7 @@ public class Grupo implements Dados {
 
         try (BufferedWriter escrever = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
             for (Map.Entry<String, String> grupMap : map.entrySet()) {
-                escrever.write(grupMap.getKey().concat(": ").concat( Utils.ToUTF(grupMap.getValue())));
+                escrever.write(grupMap.getKey().concat(": ").concat(Utils.ToUTF(grupMap.getValue())));
                 escrever.newLine();
                 escrever.flush();
             }
@@ -208,15 +208,41 @@ public class Grupo implements Dados {
         }
     }
 
-    public static int newID(){
+    public static int newID() {
         int newId = 0;
-        for(int id : VGlobal.GRUPO_MAP_ID.keySet()){
-            if(id > newId){
+        for (int id : VGlobal.GRUPO_MAP_ID.keySet()) {
+            if (id > newId) {
                 newId = id;
             }
         }
-        return (newId+1);
+        return (newId + 1);
     }
 
+    /***
+     * Percorre o nome do item verifica se contém espaço se sim compara os nomes separados
+     * @param item nome do item
+     * @return falso ou verdadeiro
+     */
+    public boolean isContentItem(String item) {
+
+
+
+        if (this.name.split("\\s").length > 1) {
+            if (item.contains(name)) {
+                return true;
+            }
+        } else {
+            if(name.equals("axe")){
+                Msg.ServidorBlue("machado>>>");
+            }
+            for (String nameItem : item.split("\\s")) {
+                Msg.ServidorBlue("item >> "+ nameItem +" <> grupo "+ name, getClass());
+                if (nameItem.equals(this.name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

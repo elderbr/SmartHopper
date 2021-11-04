@@ -195,8 +195,10 @@ public class GrupoConfig {
                     // ITEM QUE NÃO FAZEM PARTE DA LISTA DO GRUPO
 
                     // ADICIONA NA LISTA DE ITEM DO GRUPO
-                    if (grupo.isItemGrupo(nameMaterial) && nameMaterial.contains(key)) {
-                        itemStringList.add(Utils.ToMaterial(materials));
+                    if (grupo.isItemGrupo(nameMaterial) && grupo.isContentItem(nameMaterial)) {
+                        Msg.ServidorBlue("nome do grupo >> "+ grupo.getName() + " <> nome do item >> "+ nameMaterial);
+                        Msg.PularLinha(getClass());
+                        itemStringList.add(nameMaterial);
                     }
 
 
