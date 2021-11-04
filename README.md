@@ -15,6 +15,7 @@ Para usar o separador inteligente basta ter uma **bigorna** e renome o funil com
 ---
 
 > Veja o tutorial completo [SmartHopper](https://youtu.be/fBIeZ57ka1M)
+> Download SmartHopper [SmartHopper] (https://github.com/elderbr/SmartHopper/blob/main/build/libs/SmartHopper-3.5.1.jar)
 
 ---
 
