@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Pocao;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemComando implements CommandExecutor {
 
     private Item item = null;
+    private Pocao pocao;
 
     private Player player;
     private String cmd;
@@ -47,8 +49,11 @@ public class ItemComando implements CommandExecutor {
                         return true;
                     }
 
-                    item = Utils.isPotion(itemStack);// SE FOR POÇÃO
-                    if (item == null) {
+                    // SE FOR POÇÃO
+                    pocao = new Pocao(itemStack);
+                    if (pocao.isPotion()) {
+                        item = VGlobal.ITEM_MAP_NAME.get(pocao.getName());// BUSCA O ITEM PELO O NOME
+                    }else{
                         item = VGlobal.ITEM_MAP_NAME.get(Utils.ToItemStack(itemStack));// BUSCA O ITEM PELO O NOME
                     }
                 } else {

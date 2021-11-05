@@ -57,9 +57,7 @@ public class Utils {
         return name.substring(0, 1).toUpperCase().concat(name.substring(1));
     }
 
-    public static String toPotion(PotionMeta potionMeta) {
-        return potionMeta.getBasePotionData().getType().name().toLowerCase().replaceAll("_", " ");
-    }
+
 
     public static String toEnchantment(Enchantment enchantment) {
         return enchantment.getKey().getKey().toLowerCase().replaceAll("_", " ").trim();
@@ -97,25 +95,6 @@ public class Utils {
         Calendar data = Calendar.getInstance(Locale.ENGLISH);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmm");
         return dateFormat.format(data.getTime());
-    }
-
-    public static Item isPotion(ItemStack itemStack) {
-
-        Item item = null;
-
-        // SE FOR POÇÃO
-        if (ToItemStack(itemStack).contains("potion")) {
-
-            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
-            item = VGlobal.ITEM_MAP_NAME.get(Utils.toPotion(potionMeta));// BUSCA O ITEM PELO O NOME
-            if (itemStack.getType() == Material.SPLASH_POTION) {
-                item = VGlobal.ITEM_MAP_NAME.get("splash " + Utils.toPotion(potionMeta));// BUSCA O ITEM PELO O NOME
-            }
-            if (itemStack.getType() == Material.LINGERING_POTION) {
-                item = VGlobal.ITEM_MAP_NAME.get("lingering " + Utils.toPotion(potionMeta));// BUSCA O ITEM PELO O NOME
-            }
-        }
-        return item;
     }
 
     public static List<Item> isEnchantment(ItemStack itemStack) {

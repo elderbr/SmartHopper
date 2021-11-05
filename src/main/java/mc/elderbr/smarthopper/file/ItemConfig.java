@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Pocao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
@@ -168,10 +169,9 @@ public class ItemConfig {
         Debug.Write("PERCORRIDO OS ENCANTAMENTOS!!!");
 
         Debug.Write("Percorrendo as poções...");
-        for (PotionEffectType potion : PotionEffectType.values()) {
-            list.add(potion.getName().replaceAll("_", " ").toLowerCase());// Lista dos itens
-            list.add("splash " + potion.getName().replaceAll("_", " ").toLowerCase());// Lista dos itens
-            list.add("lingering " + potion.getName().replaceAll("_", " ").toLowerCase());// Lista dos itens
+        Pocao pocao = new Pocao();
+        for (Pocao potion : pocao.getListPocao()) {
+            list.add(potion.getName());// Lista dos itens
         }
         Debug.Write("Percorrido as poções!!!");
     }

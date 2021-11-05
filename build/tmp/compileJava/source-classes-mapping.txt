@@ -37,6 +37,8 @@ mc/elderbr/smarthopper/utils/Msg.java
  mc.elderbr.smarthopper.utils.Msg
 mc/elderbr/smarthopper/utils/Debug.java
  mc.elderbr.smarthopper.utils.Debug
+mc/elderbr/smarthopper/model/Pocao.java
+ mc.elderbr.smarthopper.model.Pocao
 mc/elderbr/smarthopper/model/SmartHopper.java
  mc.elderbr.smarthopper.model.SmartHopper
 mc/elderbr/smarthopper/recipes/HopperRecipe.java

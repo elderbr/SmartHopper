@@ -4,6 +4,7 @@ package mc.elderbr.smarthopper.file;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Pocao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
@@ -11,6 +12,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -196,8 +198,6 @@ public class GrupoConfig {
 
                     // ADICIONA NA LISTA DE ITEM DO GRUPO
                     if (grupo.isItemGrupo(nameMaterial) && grupo.isContentItem(nameMaterial)) {
-                        Msg.ServidorBlue("nome do grupo >> "+ grupo.getName() + " <> nome do item >> "+ nameMaterial);
-                        Msg.PularLinha(getClass());
                         itemStringList.add(nameMaterial);
                     }
 
@@ -271,6 +271,31 @@ public class GrupoConfig {
                                 || nameMaterial.equals("large fern")
                         ) {
                             itemStringList.add(nameMaterial);
+                        }
+                    }
+                    // Poções
+                    if(grupo.getName().equals("potion")){
+                        Pocao potion = new Pocao();
+                        for(Pocao potions : potion.getListPocao()){
+                            if(!potions.getName().contains("lingering")&&!potions.getName().contains("splash")&&!itemStringList.contains(potions.getName())){
+                                itemStringList.add(potions.getName());
+                            }
+                        }
+                    }
+                    if(grupo.getName().contains("splash")){
+                        Pocao potion = new Pocao();
+                        for(Pocao potions : potion.getListPocao()){
+                            if(potions.getName().contains("splash")&&!itemStringList.contains(potions.getName())){
+                                itemStringList.add(potions.getName());
+                            }
+                        }
+                    }
+                    if(grupo.getName().contains("lingering")){
+                        Pocao potion = new Pocao();
+                        for(Pocao potions : potion.getListPocao()){
+                            if(potions.getName().contains("lingering")&&!itemStringList.contains(potions.getName())){
+                                itemStringList.add(potions.getName());
+                            }
                         }
                     }
 
