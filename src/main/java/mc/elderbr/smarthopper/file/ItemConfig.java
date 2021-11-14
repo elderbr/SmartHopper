@@ -46,11 +46,6 @@ public class ItemConfig {
 
         Debug.Write("Carregando o arquivo item.yml");
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-
-        if (Config.VERSION() < VGlobal.VERSION) {// VERIFICA A VERSÃO DO PLUGIN
-            Msg.ServidorGreen("Atualizar os itens");
-            update();// ATUALIZA O ITEM PARA O NOVO FORMATO
-        }
         carregar();
     }
 

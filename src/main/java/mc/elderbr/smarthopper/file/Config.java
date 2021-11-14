@@ -55,10 +55,10 @@ public class Config {
 
     //=================== VERSAO DO PLUGIN ===============================/
     public static double VERSION(){
-        return YML.getDouble("version");
+        return Double.parseDouble(YML.getString("version").replaceAll(".",""));
     }
 
-    public static void SET_VERSION(double version) throws IOException {
+    public static void SET_VERSION(String version) throws IOException {
         YML.set("version", version);
         YML.save(FILE_CONFIG);
     }

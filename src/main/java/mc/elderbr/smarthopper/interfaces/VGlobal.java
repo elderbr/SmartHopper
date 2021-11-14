@@ -41,7 +41,7 @@ public interface VGlobal {
     List<Location> LOCATION_LIST = new ArrayList<>();
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
-    double VERSION = Double.parseDouble(VGlobal.SMARTHOPPER.getDescription().getVersion());
+    String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();
 
     File ARQUIVO = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper").getDataFolder().getAbsoluteFile();
 

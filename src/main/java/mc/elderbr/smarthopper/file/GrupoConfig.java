@@ -13,6 +13,10 @@ import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -39,7 +43,17 @@ public class GrupoConfig {
     private List<String> itemStringList;
     private String nameMaterial;
 
+    private Pocao potion;
+    private ItemStack itemPotion;
+    private PotionMeta potionMeta;
+    private List<String> listPotion;
+
     public GrupoConfig() {
+
+        // POÇÕES
+        potion = new Pocao();
+        listPotion = potion.getListPotion();
+
 
         Debug.Write("Verificando se existe o arquivo grupo.yml");
         if (!fileConfig.exists()) {
@@ -54,10 +68,6 @@ public class GrupoConfig {
         Debug.Write("Carregando o arquivo grupo.yml");
         config = YamlConfiguration.loadConfiguration(fileConfig);
 
-        // VERIFICA SE A VERSÃO DO PLUGIN É INFERIOR A 3.2
-        if (Config.VERSION() < 3.2) {
-            update();// ATUALIZA OS GRUPOS CRIANDO O LANG LISTA
-        }
         carregar();
     }
 
@@ -132,7 +142,22 @@ public class GrupoConfig {
             if (!itemStringList.isEmpty()) {
                 for (String items : itemStringList) {
                     // CRIANDO NO ITEM
-                    item = new Item(items);
+
+                    // Se for Poção
+                    if (grupo.getName().contains("potion")) {
+                        if (potion.parseItemStack(items).getType() != Material.AIR) {
+                            item = new Item(potion.parseItemStack(items));
+                        }else{
+                            continue;
+                        }
+                    } else {
+                        try {
+                            item = new Item(items);
+                        }catch (Exception e){
+                            return;
+                        }
+
+                    }
                     grupo.addItemList(item);// ADICIONA O ITEM NA LISTA DO GRUPO
                     grupoStringItem.add(item.getName());
 
@@ -153,7 +178,7 @@ public class GrupoConfig {
             VGlobal.GRUPO_MAP.put(grupo.getName(), grupo.getName());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
             VGlobal.GRUPO_ITEM_MAP_LIST.put(grupo.getName(), grupoStringItem);// LISTA DE ITEM DO GRUPO EM TEXTO
 
-            Debug.Write("Carregando o grupo >> "+ grupo.getName());
+            Debug.Write("Carregando o grupo >> " + grupo.getName());
 
 
         }
@@ -197,10 +222,9 @@ public class GrupoConfig {
                     // ITEM QUE NÃO FAZEM PARTE DA LISTA DO GRUPO
 
                     // ADICIONA NA LISTA DE ITEM DO GRUPO
-                    if (grupo.isItemGrupo(nameMaterial) && grupo.isContentItem(nameMaterial)) {
+                    if (grupo.isItemGrupo(nameMaterial) && grupo.isContentItem(nameMaterial) && !grupo.getName().contains("potion")) {
                         itemStringList.add(nameMaterial);
                     }
-
 
                     // Adiciona o carvão vegetal ao grupo de carvão
                     if (grupo.getName().equals("coal") && nameMaterial.equals("charcoal")) {
@@ -244,8 +268,8 @@ public class GrupoConfig {
                                 || nameMaterial.contains("repeater")) {
                             itemStringList.add(nameMaterial);
                         }
-
                     }
+
                     // Grupo de flores
                     if (grupo.getName().equals("flowers")) {
                         if (nameMaterial.equals("grass")
@@ -274,27 +298,24 @@ public class GrupoConfig {
                         }
                     }
                     // Poções
-                    if(grupo.getName().equals("potion")){
-                        Pocao potion = new Pocao();
-                        for(Pocao potions : potion.getListPocao()){
-                            if(!potions.getName().contains("lingering")&&!potions.getName().contains("splash")&&!itemStringList.contains(potions.getName())){
-                                itemStringList.add(potions.getName());
+                    if (grupo.getName().equals("potion")) {
+                        for (String potions : listPotion) {
+                            if (!potions.contains("lingering") && !potions.contains("splash") && !itemStringList.contains(potions)) {
+                                itemStringList.add(potions);
                             }
                         }
                     }
-                    if(grupo.getName().contains("splash")){
-                        Pocao potion = new Pocao();
-                        for(Pocao potions : potion.getListPocao()){
-                            if(potions.getName().contains("splash")&&!itemStringList.contains(potions.getName())){
-                                itemStringList.add(potions.getName());
+                    if (grupo.getName().contains("splash")) {
+                        for (String potions : listPotion) {
+                            if (potions.contains("splash") && !itemStringList.contains(potions)) {
+                                itemStringList.add(potions);
                             }
                         }
                     }
-                    if(grupo.getName().contains("lingering")){
-                        Pocao potion = new Pocao();
-                        for(Pocao potions : potion.getListPocao()){
-                            if(potions.getName().contains("lingering")&&!itemStringList.contains(potions.getName())){
-                                itemStringList.add(potions.getName());
+                    if (grupo.getName().contains("lingering")) {
+                        for (String potions : listPotion) {
+                            if (potions.contains("lingering") && !itemStringList.contains(potions)) {
+                                itemStringList.add(potions);
                             }
                         }
                     }
@@ -366,7 +387,7 @@ public class GrupoConfig {
 
         } catch (IOException e) {
             Msg.ServidorErro(e, "createDefault()", getClass());
-            Debug.Write("Erro ao criar o arquivo de grupo.yml:\nErro: "+ e.getMessage());
+            Debug.Write("Erro ao criar o arquivo de grupo.yml:\nErro: " + e.getMessage());
         }
         Debug.WriteMsg("Grupos criados com sucesso!");
     }
@@ -389,11 +410,6 @@ public class GrupoConfig {
             }
 
         }
-        try {
-            Config.SET_VERSION( VGlobal.VERSION );// ATUALIZA A VERSÃO
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Msg.ServidorGold("Verificando se precisa atualizar os grupos finalizada!!!");
     }
 
@@ -405,19 +421,19 @@ public class GrupoConfig {
         }
     }
 
-    private void createNameGrupo(){
+    private void createNameGrupo() {
         List<String> grupoList = new ArrayList<>();
         String name = null;
-        for(Material material : Material.values()){
+        for (Material material : Material.values()) {
             name = Utils.ToMaterial(material);
-            if(material.isItem() && !material.isAir()){
-                if(name.contains("\\s")) {
+            if (material.isItem() && !material.isAir()) {
+                if (name.contains("\\s")) {
                     for (String names : name.split("\\s")) {
                         if (!grupoList.contains(names)) {
                             grupoList.add(names);
                         }
                     }
-                }else{
+                } else {
                     if (!grupoList.contains(name)) {
                         grupoList.add(name);
                     }

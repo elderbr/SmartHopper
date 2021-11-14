@@ -10,41 +10,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="12109b36-73cd-4704-a5ea-8e7e064a0b38" name="Default Changelist" comment="Alterando a versão do plugin para 3.4">
-      <change beforePath="$PROJECT_DIR$/.gradle/7.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.0/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/javaCompile/javaCompile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.0/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0/javaCompile/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/workspace-id.txt.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/workspace-id.txt.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/SmartHopper_3_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/SmartHopper_3_5.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/MainSmartHopper.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/MainSmartHopper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/GrupoComando.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/GrupoComando.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/GrupoTabCompleter.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/GrupoTabCompleter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/ItemComando.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/ItemComando.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/ItemTabCompleter.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/ItemTabCompleter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/LivroComando.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/LivroComando.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/event/ClickHopper.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/event/ClickHopper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/event/MoveHopper.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/event/MoveHopper.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/Config.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/Config.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/GrupoConfig$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/GrupoConfig$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/GrupoConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/GrupoConfig.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/ItemConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/ItemConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/ItemTraducaoConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/ItemTraducaoConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Inventario.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Inventario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/recipes/HopperRecipe.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/recipes/HopperRecipe.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/utils/Msg.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/utils/Msg.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/utils/Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/utils/Utils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/SmartHopper-3.5.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/SmartHopper-3.5.1.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/source-classes-mapping.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/resources/grupo.yml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/resources/grupo.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/MainSmartHopper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/MainSmartHopper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/cmd/ItemComando.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/cmd/ItemComando.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/event/MoveHopper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/event/MoveHopper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/interfaces/VGlobal.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/interfaces/VGlobal.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Pocao$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Pocao$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Pocao.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Pocao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/GrupoConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/GrupoConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/ItemConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/ItemConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/grupo.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/grupo.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/interfaces/VGlobal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/interfaces/VGlobal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/model/Pocao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/model/Pocao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,10 +102,10 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39771548" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="shared-indexes" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -228,7 +214,7 @@
       <option name="PROGRAM_PARAMETERS" value="nogui" />
       <option name="WORKING_DIRECTORY" value="F:\Documents\Minecraft\Servidor\SmartHopper" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="ALTERNATIVE_JRE_PATH" value="16" />
+      <option name="ALTERNATIVE_JRE_PATH" value="C:\Program Files\Java\jdk-16.0.2" />
       <method v="2" />
     </configuration>
     <list>
@@ -319,5 +305,9 @@
         <PinnedItemInfo parentTag="mc.elderbr.smarthopper.event.MoveHopper" memberName="smartHopper" />
       </pinned-members>
     </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
