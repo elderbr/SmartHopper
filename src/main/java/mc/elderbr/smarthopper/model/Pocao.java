@@ -1,173 +1,194 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.interfaces.Dados;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionEffectTypeWrapper;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class Pocao {
+public class Pocao implements Dados {
 
-    private ItemStack itemStack;
+
     private String name;
     private String type;
-
-    private List<Pocao> listPocao = new ArrayList<>();
     private List<String> listPotion = new ArrayList<>();
 
-    private PotionMeta meta;
     private PotionEffectType effectType;
+    private PotionEffect effect;
+    private PotionMeta potionMeta;
 
-    public Pocao(ItemStack itemStack) {
-        if (isPotion(itemStack)) {
-            this.itemStack = itemStack;
-            name = getPotion(itemStack);
-        }
-    }
-
+    private ItemStack itemStack;
 
     public Pocao() {
-        // Percorrendo todas os efeitos e poções
-        listPotion = new ArrayList<>();
-        for (PotionType potion : PotionType.values()) {
-            name = potion.name().replaceAll("_", " ").toLowerCase();
-            listPotion.add(name);// Lista dos itens
-            listPotion.add("splash " + name);// Lista dos itens
-            listPotion.add("lingering " + name);// Lista dos itens
-        }
-        Collections.sort(listPotion);// ORGANIZANDO EM ORDEM ALFABETICA
+
     }
 
-    public String getPotion(ItemStack itemStack) {
-        if (Utils.ToItemStack(itemStack).contains("potion")) {
-            meta = (PotionMeta) itemStack.getItemMeta();
-            type = toPotion(meta);
-            switch (itemStack.getType()) {
-                case POTION:
-                    return type;
-                case LINGERING_POTION:
-                    return "lingering " + type;
-                case SPLASH_POTION:
-                    return "splash " + type;
-            }
+    public Pocao(ItemStack itemStack) {
+        this.itemStack = itemStack;
+        if(isPotion(itemStack)){
+            potionMeta = (PotionMeta) itemStack.getItemMeta();
+            name = potionMeta.getBasePotionData().getType().name().replaceAll("_"," ").toLowerCase();
+            effectType = potionMeta.getBasePotionData().getType().getEffectType();
         }
-        return null;
     }
 
+    @Override
+    public int getID() {
+        return 0;
+    }
 
+    @Override
+    public void setID(int id) {
+
+    }
+
+    @Override
     public String getName() {
+        getPotion();
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    @Override
+    public Location getLocation() {
+        return null;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    @Override
+    public void setLocation(Block block) {
+
     }
 
-    public Item getItem() {
-        Item item = new Item();
-        item.setName(name);
-        return item;
+    @Override
+    public void setLang(Map<String, String> lang) {
+
     }
 
-    public ItemStack getItemStack() {
-        itemStack = new ItemStack(Material.POTION);
-        meta = (PotionMeta) itemStack.getItemMeta();
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.getByName(name), 3,3), true);
-        itemStack.setItemMeta(meta);
-        return itemStack;
+    @Override
+    public void setLang(MemorySection memorySection) {
+
     }
 
-    public void setItemStack(ItemStack itemStack) {
+    @Override
+    public Map<String, String> getLang() {
+        return null;
+    }
+
+    @Override
+    public String getTraducao(String lang) {
+        return null;
+    }
+
+    @Override
+    public void addTraducao(String lang, String traducao) {
+
+    }
+
+
+    /***
+     *  Pega o nome da poção o seu tipo e seu efeito
+     * @return Pocao
+     */
+    public Pocao getPotion(){
+        if(isPotion()) {
+            potionMeta = (PotionMeta) itemStack.getItemMeta();
+            switch (itemStack.getType()) {
+                case POTION:
+                    type = "potion";
+                    break;
+                case SPLASH_POTION:
+                    type = "splash";
+                    break;
+                case LINGERING_POTION:
+                    type = "lingering";
+                    break;
+            }
+            name = toName()+" "+ type;
+            effectType = potionMeta.getBasePotionData().getType().getEffectType();
+        }
+        return this;
+    }
+
+    public PotionEffectType getEffectType() {
+        return effectType;
+    }
+
+    public String toEffectType(){
+        return effectType.getName().replaceAll("_"," ").toLowerCase();
+    }
+
+    public boolean isPotion(ItemStack itemStack){
         this.itemStack = itemStack;
+        return isPotion();
     }
 
-    public List<String> getListPotion(){
+    public boolean isPotion(){
+        return (itemStack.getType() == Material.POTION
+                || itemStack.getType() == Material.LINGERING_POTION
+                || itemStack.getType() == Material.SPLASH_POTION);
+
+    }
+
+    public List<String> getListPotion() {
+        listPotion = new ArrayList<>();
+        for (PotionType potions : PotionType.values()) {
+            name = potions.name().replaceAll("_", " ").toLowerCase();
+            effectType = potions.getEffectType();
+            listPotion.add(name);
+            listPotion.add(name+" potion");
+            listPotion.add(name+" splash");
+            listPotion.add(name+" lingering");
+        }
+        for (PotionEffectType potions : PotionEffectType.values()) {
+            name = potions.getName().replaceAll("_", " ").toLowerCase();
+            effectType = potions;
+            listPotion.add(name);
+            listPotion.add(name+" potion");
+            listPotion.add(name+" splash");
+            listPotion.add(name+" lingering");
+        }
+        Collections.sort(listPotion);
         return listPotion;
     }
 
-    public List<Pocao> getListPocao() {
-        // Adicionando na lista de poções
-        listPocao = new ArrayList<>();
-        for (String potion : listPotion) {
-            Pocao pocao = new Pocao();
-            pocao.setName(potion);
-            listPocao.add(pocao);
-        }
-        return listPocao;
+    private String toName(){
+        return potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
     }
 
-    public void setListPocao(List<Pocao> listPocao) {
-        this.listPocao = listPocao;
-    }
-
-    public String toPotion(PotionMeta potionMeta) {
-        return potionMeta.getBasePotionData().getType().name().toLowerCase().replaceAll("_", " ");
-    }
-
-    public Item toItem() {
-        Item item = new Item();
-        item.setName(name);
-        return item;
-    }
-
-    public Item toItem(ItemStack itemStack) {
-        Item item = new Item(itemStack);
-        item.setName(name);
-        return item;
-    }
-
-    public boolean isPotion(ItemStack itemStack) {
-        if (Utils.ToItemStack(itemStack).contains("potion")) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isPotion() {
-        if (itemStack != null) {
-            return isPotion(itemStack);
-        }
-        return false;
-    }
-
-    public PotionEffect parseEffect(String potion){
-        PotionEffect effect = new PotionEffect(PotionEffectType.getByName(potion), 3,3);
-        itemStack = new ItemStack(Material.POTION);
-        PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
-        potionMeta.addCustomEffect(effect, true);
-        itemStack.setItemMeta(potionMeta);
-        return effect;
-    }
-    public ItemStack parseItemStack(String potion){
-        String name = potion.replace("splash","")
-                .replace("lingering","")
-                .replaceAll("\\s","").toUpperCase();
-        try {
-            PotionEffect effect = new PotionEffect(PotionEffectType.getByName(name), 3, 3);
+    public ItemStack parseItemStack(String items) {
+        if(items.contains("potion")){
             itemStack = new ItemStack(Material.POTION);
-            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
-            potionMeta.addCustomEffect(effect, true);
-            itemStack.setItemMeta(potionMeta);
-        }catch (Exception e){
-            return new ItemStack(Material.AIR);
+        }else if(items.contains("lingering")){
+            itemStack = new ItemStack(Material.LINGERING_POTION);
+        }else{
+            itemStack = new ItemStack(Material.SPLASH_POTION);
         }
+
+        items = items.replaceAll(" potion","")
+                .replaceAll(" splash","")
+                .replaceAll(" lingering","")
+                .replaceAll("\\s","_").toUpperCase();
+
+        potionMeta = (PotionMeta) itemStack.getItemMeta();
+        potionMeta.setBasePotionData(new PotionData( PotionType.valueOf(items)));
+        itemStack.setItemMeta(potionMeta);
         return itemStack;
     }
-
 }

@@ -58,7 +58,7 @@ public class GrupoComando implements CommandExecutor {
                         inventoryCustom = new InventoryCustom();
                         inventoryCustom.create(grupo.getTraducao(player.getLocale()).concat(Msg.Color(" $lID:$r"+ grupo.getID())));
                         for (Item items : grupo.getItemList()) {
-                            inventoryCustom.addItem(items.getType());
+                            inventoryCustom.addItem(items);
                         }
                         // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
                         if (Config.ADM_LIST.contains(player.getName()) || Config.OPERADOR_LIST.contains(player.getName())) {

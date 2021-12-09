@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -119,6 +120,8 @@ public class GrupoConfig {
         config.set("grass.grupo_item", list);
         save();
 
+
+
         for (String grups : config.getValues(false).keySet()) {
 
             grupo = new Grupo();
@@ -139,25 +142,20 @@ public class GrupoConfig {
             // LISTA DE ITENS
             List<String> grupoStringItem = new ArrayList<>();
             itemStringList = config.getStringList(grups.concat(".grupo_item"));
+
             if (!itemStringList.isEmpty()) {
+
                 for (String items : itemStringList) {
                     // CRIANDO NO ITEM
 
                     // Se for Poção
-                    if (grupo.getName().contains("potion")) {
-                        if (potion.parseItemStack(items).getType() != Material.AIR) {
-                            item = new Item(potion.parseItemStack(items));
-                        }else{
-                            continue;
-                        }
+                    if (potion.getListPotion().contains(items)) {
+                        item = new Item(potion.parseItemStack(items));
                     } else {
-                        try {
-                            item = new Item(items);
-                        }catch (Exception e){
-                            return;
-                        }
-
+                        item = new Item(items);
                     }
+
+
                     grupo.addItemList(item);// ADICIONA O ITEM NA LISTA DO GRUPO
                     grupoStringItem.add(item.getName());
 
@@ -379,6 +377,17 @@ public class GrupoConfig {
                     itemStringList.add("salmon");
                     itemStringList.add("kelp");
                 }
+
+                //Poções
+                if(potion.getListPotion().contains(grupo.getName())){
+                    for(String potions : potion.getListPotion()) {
+                        Msg.ServidorGreen("potion >> "+ potions, getClass());
+                        if(potions.contains(grupo.getName())) {
+                            itemStringList.add(potions);
+                        }
+                    }
+                }
+
                 config.set(key.concat(".grupo_item"), itemStringList);
                 save();
 

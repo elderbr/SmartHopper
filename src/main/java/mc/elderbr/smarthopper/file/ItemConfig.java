@@ -151,7 +151,11 @@ public class ItemConfig {
         // Percorre todos os materias do jogo
         Debug.WriteMsg("Criando os itens...");
         for (Material materials : Material.values()) {
-            if (materials.isItem() && !materials.isAir() && !list.contains(Utils.ToMaterial(materials))) {
+            if (materials.isItem() && !materials.isAir()
+                    && materials != Material.POTION
+                    && materials != Material.SPLASH_POTION
+                    && materials != Material.LINGERING_POTION
+                    && !list.contains(Utils.ToMaterial(materials))) {
                 list.add(Utils.ToMaterial(materials));
             }
         }
@@ -163,12 +167,12 @@ public class ItemConfig {
         }
         Debug.Write("PERCORRIDO OS ENCANTAMENTOS!!!");
 
-        Debug.Write("Percorrendo as poções...");
+        Debug.Write("LISTA DE POÇÕES...");
         Pocao pocao = new Pocao();
-        for (Pocao potion : pocao.getListPocao()) {
-            list.add(potion.getName());// Lista dos itens
+        for (String potion : pocao.getListPotion()) {
+            list.add(potion);// Lista dos itens
         }
-        Debug.Write("Percorrido as poções!!!");
+        Debug.Write("LISTA DE POÇÕES VERIFICADA!!!");
     }
 
     private void save() {

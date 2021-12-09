@@ -12,22 +12,26 @@ import java.util.List;
 public class InventoryCustom {
 
     private Inventory inventory;
-    private  String name;
+    private String name;
+    private ItemStack itemStack;
+    private Item item;
+    private Pocao potion;
 
 
-    public void create(Object name){
-        if (name instanceof List){
+    public void create(Object name) {
+        if (name instanceof List) {
 
         }
         this.name = Msg.Color("$8$lGrupo: $r" + name);
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
-    public void createNewGrupo(String name){
-        this.name = Msg.Color("$5$lGrupo Novo: $r"+name);
+
+    public void createNewGrupo(String name) {
+        this.name = Msg.Color("$5$lGrupo Novo: $r" + name);
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
 
-    public void createSmartHopper(){
+    public void createSmartHopper() {
         inventory = Bukkit.createInventory(null, 54, Msg.Color("$6SmartHopper"));
     }
 
@@ -40,6 +44,9 @@ public class InventoryCustom {
     }
 
     public void addItem(ItemStack item) {
+        potion = new Pocao();
+        itemStack = new ItemStack(item);
+        this.item = new Item(itemStack);
         inventory.addItem(item);
     }
 
