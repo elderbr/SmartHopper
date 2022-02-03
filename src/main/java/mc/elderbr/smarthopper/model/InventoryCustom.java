@@ -1,7 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -46,7 +45,6 @@ public class InventoryCustom {
     public void addItem(ItemStack item) {
         potion = new Pocao();
         itemStack = new ItemStack(item);
-        this.item = new Item(itemStack);
         inventory.addItem(item);
     }
 

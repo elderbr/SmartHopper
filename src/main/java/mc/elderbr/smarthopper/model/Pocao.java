@@ -1,12 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.Dados;
-import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -17,13 +12,13 @@ import org.bukkit.potion.PotionType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class Pocao implements Dados {
 
 
     private String name;
     private String type;
+    private String lang;
     private List<String> listPotion = new ArrayList<>();
 
     private PotionEffectType effectType;
@@ -38,9 +33,9 @@ public class Pocao implements Dados {
 
     public Pocao(ItemStack itemStack) {
         this.itemStack = itemStack;
-        if(isPotion(itemStack)){
+        if (isPotion(itemStack)) {
             potionMeta = (PotionMeta) itemStack.getItemMeta();
-            name = potionMeta.getBasePotionData().getType().name().replaceAll("_"," ").toLowerCase();
+            name = potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
             effectType = potionMeta.getBasePotionData().getType().getEffectType();
         }
     }
@@ -67,37 +62,23 @@ public class Pocao implements Dados {
     }
 
     @Override
-    public Location getLocation() {
+    public String lang() {
+        return lang;
+    }
+
+
+    @Override
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    @Override
+    public String traducao() {
         return null;
     }
 
     @Override
-    public void setLocation(Block block) {
-
-    }
-
-    @Override
-    public void setLang(Map<String, String> lang) {
-
-    }
-
-    @Override
-    public void setLang(MemorySection memorySection) {
-
-    }
-
-    @Override
-    public Map<String, String> getLang() {
-        return null;
-    }
-
-    @Override
-    public String getTraducao(String lang) {
-        return null;
-    }
-
-    @Override
-    public void addTraducao(String lang, String traducao) {
+    public void setTraducao(String traducao) {
 
     }
 
@@ -106,8 +87,8 @@ public class Pocao implements Dados {
      *  Pega o nome da poção o seu tipo e seu efeito
      * @return Pocao
      */
-    public Pocao getPotion(){
-        if(isPotion()) {
+    public Pocao getPotion() {
+        if (isPotion()) {
             potionMeta = (PotionMeta) itemStack.getItemMeta();
             switch (itemStack.getType()) {
                 case POTION:
@@ -120,7 +101,7 @@ public class Pocao implements Dados {
                     type = "lingering";
                     break;
             }
-            name = toName()+" "+ type;
+            name = toName() + " " + type;
             effectType = potionMeta.getBasePotionData().getType().getEffectType();
         }
         return this;
@@ -130,16 +111,16 @@ public class Pocao implements Dados {
         return effectType;
     }
 
-    public String toEffectType(){
-        return effectType.getName().replaceAll("_"," ").toLowerCase();
+    public String toEffectType() {
+        return effectType.getName().replaceAll("_", " ").toLowerCase();
     }
 
-    public boolean isPotion(ItemStack itemStack){
+    public boolean isPotion(ItemStack itemStack) {
         this.itemStack = itemStack;
         return isPotion();
     }
 
-    public boolean isPotion(){
+    public boolean isPotion() {
         return (itemStack.getType() == Material.POTION
                 || itemStack.getType() == Material.LINGERING_POTION
                 || itemStack.getType() == Material.SPLASH_POTION);
@@ -152,42 +133,42 @@ public class Pocao implements Dados {
             name = potions.name().replaceAll("_", " ").toLowerCase();
             effectType = potions.getEffectType();
             listPotion.add(name);
-            listPotion.add(name+" potion");
-            listPotion.add(name+" splash");
-            listPotion.add(name+" lingering");
+            listPotion.add(name + " potion");
+            listPotion.add(name + " splash");
+            listPotion.add(name + " lingering");
         }
         for (PotionEffectType potions : PotionEffectType.values()) {
             name = potions.getName().replaceAll("_", " ").toLowerCase();
             effectType = potions;
             listPotion.add(name);
-            listPotion.add(name+" potion");
-            listPotion.add(name+" splash");
-            listPotion.add(name+" lingering");
+            listPotion.add(name + " potion");
+            listPotion.add(name + " splash");
+            listPotion.add(name + " lingering");
         }
         Collections.sort(listPotion);
         return listPotion;
     }
 
-    private String toName(){
+    private String toName() {
         return potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
     }
 
     public ItemStack parseItemStack(String items) {
-        if(items.contains("potion")){
+        if (items.contains("potion")) {
             itemStack = new ItemStack(Material.POTION);
-        }else if(items.contains("lingering")){
+        } else if (items.contains("lingering")) {
             itemStack = new ItemStack(Material.LINGERING_POTION);
-        }else{
+        } else {
             itemStack = new ItemStack(Material.SPLASH_POTION);
         }
 
-        items = items.replaceAll(" potion","")
-                .replaceAll(" splash","")
-                .replaceAll(" lingering","")
-                .replaceAll("\\s","_").toUpperCase();
+        items = items.replaceAll(" potion", "")
+                .replaceAll(" splash", "")
+                .replaceAll(" lingering", "")
+                .replaceAll("\\s", "_").toUpperCase();
 
         potionMeta = (PotionMeta) itemStack.getItemMeta();
-        potionMeta.setBasePotionData(new PotionData( PotionType.valueOf(items)));
+        potionMeta.setBasePotionData(new PotionData(PotionType.valueOf(items)));
         itemStack.setItemMeta(potionMeta);
         return itemStack;
     }

@@ -1,27 +1,22 @@
 package mc.elderbr.smarthopper;
 
-import mc.elderbr.smarthopper.cmd.*;
+import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
-import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.file.GrupoConfig;
-import mc.elderbr.smarthopper.file.ItemConfig;
-import mc.elderbr.smarthopper.file.ItemTraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
+import mc.elderbr.smarthopper.utils.Msg;
+import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
-
-    private Config config;
-    private ItemTraducaoConfig itemTraducaoConfig;
-    private ItemConfig itemConfig;
-    private GrupoConfig grupoConfig;
 
 
     @Override
@@ -36,12 +31,11 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
-        config = new Config();
 
-        itemTraducaoConfig = new ItemTraducaoConfig();
-        itemConfig = new ItemConfig();
-        grupoConfig = new GrupoConfig();
-        Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
+        ItemDao itemDao = new ItemDao();
+
+        Msg.ServidorGreen("finalizado");
+
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);
@@ -50,22 +44,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new AnvilCreate(), this);// ABRE O ANVIL BIGORNA
 
         // Comandos
-        getCommand("item").setExecutor(new ItemComando());
-        getCommand("item").setTabCompleter(new ItemTabCompleter());
-
-        // GRUPO
-        getCommand("grupo").setExecutor(new GrupoComando());
-        getCommand("grupo").setTabCompleter(new GrupoTabCompleter());
-
-        // ADICIONAR GRUPO
-        getCommand("addgrupo").setExecutor(new GrupoComando());
-        getCommand("addgrupo").setTabCompleter(new GrupoTabCompleter());
-
-        // REMOVE O GRUPO
-        getCommand("removegrupo").setExecutor(new GrupoComando());
-        getCommand("removegrupo").setTabCompleter(new GrupoTabCompleter());
-
-        getCommand("livro").setExecutor(new LivroComando());
 
         // ADICIONANDO NOVAS RECEITAS
         HopperRecipe recipes = new HopperRecipe();

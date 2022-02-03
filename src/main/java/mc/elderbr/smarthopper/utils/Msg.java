@@ -1,7 +1,5 @@
 package mc.elderbr.smarthopper.utils;
 
-import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -71,29 +69,15 @@ public class Msg {
     }
 
     //========================== ITEM =================================================//
-    public static void Item(Player player, Item item) {
-        player.sendMessage(Color("$2Item: $6" + item.getTraducao(player.getLocale()) + "$e ID: " + item.getID()));
-    }
 
-    public static void ItemNegar(Player player, Item item) {
-        player.sendMessage(Color("$cBloqueado$6 o item: " + item.getTraducao(player.getLocale()) + "$e ID: " + item.getID()));
-    }
 
     public static void ItemNaoExiste(Player player, String name) {
         player.sendMessage(Color("$aO item $6" + name + " $4$lNÃO $r$aexiste!"));
     }
 
     //========================== GRUPO =================================================//
-    public static void Grupo(Player player, Grupo grupo){
-        player.sendMessage(Color("$d$lGrupo: $e" + grupo.getTraducao(player.getLocale()) + " $6ID: " + grupo.getID()));
-    }
-
     public static void GrupoNaoExiste(Player player, String name){
         player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
-    }
-
-    public static void GrupoNegar(Player player, Grupo grupo) {
-        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.getTraducao(player.getLocale()) + "$e ID: " + grupo.getID()));
     }
 
 

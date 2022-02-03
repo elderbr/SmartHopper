@@ -21,10 +21,7 @@ public class Grupo implements Dados {
 
     private int id;
     private String name;
-    private List<Item> itemList = new ArrayList<>();
-    private Map<String, String> langMap = new HashMap<>();
-    public final static int NEW = 0, UPGRADE = 1, DELETE = 2;
-    private Location location;
+    private String lang;
 
     public Grupo() {
     }
@@ -50,65 +47,25 @@ public class Grupo implements Dados {
     }
 
     @Override
-    public void setLang(Map<String, String> lang) {
-        this.langMap = lang;
+    public String lang() {
+        return lang;
     }
 
     @Override
-    public void setLang(MemorySection memorySection) {
-        if (memorySection == null) return;
-        for (Map.Entry<String, Object> me : memorySection.getValues(false).entrySet()) {
-            langMap.put(me.getKey(), me.getValue().toString());
-        }
+    public void setLang(String lang) {
+        this.lang = lang;
     }
 
     @Override
-    public Map<String, String> getLang() {
-        return langMap;
+    public String traducao() {
+        return null;
     }
 
     @Override
-    public String getTraducao(String langKey) {
-        langMap = VGlobal.GRUPO_LANG_MAP.get(getName());
-        if (langMap == null || langMap.get(langKey) == null) {
-            return name;
-        }
-        return langMap.get(langKey);
+    public void setTraducao(String traducao) {
+
     }
 
-    @Override
-    public void addTraducao(String lang, String traducao) {
-        langMap.put(lang, traducao);
-    }
-
-    public List<Item> getItemList() {
-        return itemList;
-    }
-
-    public boolean isContentItem(Item item) {
-        for (Item items : itemList) {
-            if (items.getName().equals(item.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setItemList(List<Item> itemList) {
-        this.itemList = itemList;
-    }
-
-    public void addItemList(Item item) {
-        itemList.add(item);
-    }
-
-    public void addItemList(ItemStack itemStack) {
-        itemList.add(new Item(itemStack));
-    }
-
-    public void removeItemList(ItemStack itemStack) {
-        itemList.remove(new Item(itemStack));
-    }
 
     public boolean isItemGrupo(String material) {
 
@@ -152,17 +109,6 @@ public class Grupo implements Dados {
             }
         }
         return true;
-    }
-
-    @Override
-    public Location getLocation() {
-        return location;
-    }
-
-    @Override
-    public void setLocation(Block block) {
-        location = block.getLocation();// ADICIONANDO A LOCATION
-        VGlobal.LOCATION_LIST.add(location);// ADICIONANDO LOCATION NA LISTA GLOBAL
     }
 
     public void createGrupos() {
