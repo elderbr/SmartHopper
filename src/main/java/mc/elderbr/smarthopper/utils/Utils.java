@@ -108,4 +108,7 @@ public class Utils {
         return itemList;
     }
 
+    public static String toItem(ItemStack item) {
+        return item.getType().name().toLowerCase().replaceAll("_"," ");
+    }
 }
