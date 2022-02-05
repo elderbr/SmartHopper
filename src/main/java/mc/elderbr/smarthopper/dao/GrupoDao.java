@@ -37,12 +37,7 @@ public class GrupoDao {
         } finally {
             Conexao.desconect();
         }
-
         createGrupo();
-
-
-
-
     }
 
     public void createGrupo() {
@@ -138,8 +133,8 @@ public class GrupoDao {
         // LISTA VALIDA DO NOME DO GRUPO
         listItem.forEach(names->{
             grupo = new Grupo();
-            grupo.setName(names);
-            Msg.ServidorGreen("Criando o grupo "+ grupo.getName());
+            grupo.setDsGrupo(names);
+            Msg.ServidorGreen("Criando o grupo "+ grupo.getDsGrupo());
             insert(grupo);
         });
     }
@@ -148,7 +143,7 @@ public class GrupoDao {
         sql = "INSERT INTO grupo (dsGrupo) VALUES (?);";
         try {
             smt = Conexao.prepared(sql);
-            smt.setString(1, grupo.getName());
+            smt.setString(1, grupo.getDsGrupo());
             return smt.executeUpdate();
         } catch (SQLException e) {
             if (e.getErrorCode() != 19)
@@ -162,7 +157,7 @@ public class GrupoDao {
     private void insertName(String name) {
 
         grupo = new Grupo();
-        grupo.setName(name);
+        grupo.setDsGrupo(name);
         if (insert(grupo) > 0) {
             Msg.ServidorGreen("grupo item >> " + name);
         }
@@ -173,18 +168,18 @@ public class GrupoDao {
         if (grupo == null) {
             return null;
         }
-        if (grupo.getID() > 0) {
-            sql = "SELECT * FROM grupo WHERE cdGrupo = " + grupo.getID();
+        if (grupo.getCdGrupo() > 0) {
+            sql = "SELECT * FROM grupo WHERE cdGrupo = " + grupo.getCdGrupo();
         } else {
-            sql = "SELECT * FROM grupo WHERE dsGrupo = " + grupo.getName();
+            sql = "SELECT * FROM grupo WHERE dsGrupo = " + grupo.getDsGrupo();
         }
         try {
             smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.grupo = new Grupo();
-                this.grupo.setID(rs.getInt("cdGrupo"));
-                this.grupo.setName(rs.getString("dsGrupo"));
+                this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                this.grupo.setDsGrupo(rs.getString("dsGrupo"));
             }
         } catch (SQLException e) {
             Msg.ServidorErro(e, "select(Grupo grupo)", getClass());
@@ -202,8 +197,8 @@ public class GrupoDao {
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.grupo = new Grupo();
-                this.grupo.setID(rs.getInt("cdGrupo"));
-                this.grupo.setName(rs.getString("dsGrupo"));
+                this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                this.grupo.setDsGrupo(rs.getString("dsGrupo"));
                 listGrupo.add(this.grupo);
             }
         } catch (SQLException e) {
@@ -213,10 +208,10 @@ public class GrupoDao {
     }
 
     public boolean delete(Grupo grupo) {
-        if (grupo == null && grupo.getID() > 0) {
+        if (grupo == null && grupo.getCdGrupo() > 0) {
             return false;
         }
-        sql = "DELETE FROM grupo WHERE cdGrupo = " + grupo.getID() + ";";
+        sql = "DELETE FROM grupo WHERE cdGrupo = " + grupo.getCdGrupo() + ";";
         try {
             smt = Conexao.prepared(sql);
             int retorno = smt.executeUpdate();
@@ -238,8 +233,8 @@ public class GrupoDao {
         sql = "UPDATE TABLE grupo SET dsGrupo = ? WHERE cdGrupo = ?";
         try {
             smt = Conexao.prepared(sql);
-            smt.setString(1, grupo.getName());
-            smt.setInt(2, grupo.getID());
+            smt.setString(1, grupo.getDsGrupo());
+            smt.setInt(2, grupo.getCdGrupo());
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro(e, "update(Grupo grupo)", getClass());
