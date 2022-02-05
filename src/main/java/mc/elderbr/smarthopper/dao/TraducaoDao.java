@@ -20,6 +20,8 @@ public class TraducaoDao {
     private ResultSet rs;
     private String sql;
 
+    private Item item;
+
     public TraducaoDao() {
         createTable();
     }
@@ -51,17 +53,39 @@ public class TraducaoDao {
     }
 
     public void selectItem(Object item) {
-        if (item instanceof Item || item instanceof Integer) {
-            sql = "SELECT * FROM item i INNER JOIN traducao t WHERE i.cdItem = t.cdItem WHERE i.cdItem = ?";
+        this.item = null;
+        if (item instanceof Item || item instanceof Integer || item instanceof String) {
+
             try {
-                smt = Conexao.prepared(sql);
+
                 if (item instanceof Item) {
-                    smt.setInt(1, ((Item) item).getCdItem());☺
-                } else {
-                    smt.setInt(1, (Integer) item);
+                    sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
+                    smt = Conexao.prepared(sql);
+                    smt.setInt(1, ((Item) item).getCdItem());
+                } else if(item instanceof Integer) {
+                    sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
+                    smt = Conexao.prepared(sql);
+                    smt.setInt(1, ((Item) item).getCdItem());
+                }else{
+                    sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ?";
+                    smt = Conexao.prepared(sql);
+                    smt.setString(1, (String) item);
                 }
+                rs = smt.executeQuery();
+                if(rs.isAfterLast()) {
+                    while (rs.next()) {
+                        this.item = new Item();
+                        this.item.setCdItem(rs.getInt("i.cdItem"));
+                        this.item.setDsItem(rs.getString("i.dsItem"));
+                        this.item.setDsTraducao(rs.getString("t.dsTraducao"));
+                    }
+                }
+                smt.close();
+                rs.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                Msg.ServidorErro("Erro ao buscar a tradução do item!!!", "selectItem(Object item)", getClass(), e);
+            }finally {
+                Conexao.desconect();
             }
         }
 
