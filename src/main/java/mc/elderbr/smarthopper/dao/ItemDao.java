@@ -50,18 +50,18 @@ public class ItemDao {
         if (item == null) {
             return null;
         }
-        if (item.getID() > 0) {
-            sql = "SELECT * FROM item WHERE cdItem = " + item.getID();
+        if (item.getCdItem() > 0) {
+            sql = "SELECT * FROM item WHERE cdItem = " + item.getCdItem();
         } else {
-            sql = "SELECT * FROM item WHERE dsItem = " + item.getName();
+            sql = "SELECT * FROM item WHERE dsItem = " + item.getDsItem();
         }
         try {
             smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.item = new Item();
-                this.item.setID(rs.getInt("cdItem"));
-                this.item.setName(rs.getString("dsItem"));
+                this.item.setCdItem(rs.getInt("cdItem"));
+                this.item.setDsItem(rs.getString("dsItem"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,8 +79,8 @@ public class ItemDao {
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.item = new Item();
-                this.item.setID(rs.getInt("cdItem"));
-                this.item.setName(rs.getString("dsItem"));
+                this.item.setCdItem(rs.getInt("cdItem"));
+                this.item.setDsItem(rs.getString("dsItem"));
                 listItem.add(this.item);
             }
         } catch (SQLException e) {
@@ -141,8 +141,8 @@ public class ItemDao {
         sql = "UPDATE TABLE item SET dsItem = ? WHERE cdItem = ?;";
         try {
             smt = Conexao.prepared(sql);
-            smt.setString(1, item.getName());
-            smt.setInt(2, item.getID());
+            smt.setString(1, item.getDsItem());
+            smt.setInt(2, item.getCdItem());
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro(e, "update(Item item)", getClass());
