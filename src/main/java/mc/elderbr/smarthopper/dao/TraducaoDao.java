@@ -1,9 +1,9 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
-import org.checkerframework.checker.units.qual.C;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,14 +40,25 @@ public class TraducaoDao {
         }
     }
 
-    public int insert(Traducao traducao) {
-        sql = "INSERT INTO traducao (dsTraducao, cdLang, cdItem) VALUES (?,?,?);";
-        try {
-            smt = Conexao.prepared(sql);
-            smt.setString(1, traducao.getDsTraducao());
-            return smt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public int insert(Object traducao) {
+
+        if (traducao instanceof Item || traducao instanceof Grupo) {
+            try {
+                if (traducao instanceof Item) {
+                    sql = "INSERT INTO traducao (dsTraducao, cdLang, cdItem) VALUES (?,?,?);";
+                    smt = Conexao.prepared(sql);
+                    smt.setString(1, ((Item) traducao).getDsTraducao());
+                } else {
+                    sql = "INSERT INTO traducao (dsTraducao, cdLang, cdGrupo) VALUES (?,?,?);";
+                    smt = Conexao.prepared(sql);
+                    smt.setString(1, ((Grupo) traducao).getDsTraducao());
+                }
+                return smt.executeUpdate();
+            } catch (SQLException e) {
+                Msg.ServidorErro("Erro ao adicionar tradução do item/grupo!!!", "insert(Object traducao)", getClass(), e);
+            } finally {
+                Conexao.desconect();
+            }
         }
         return 0;
     }
@@ -59,11 +70,11 @@ public class TraducaoDao {
             try {
 
                 if (item instanceof Item) {
-                    if(((Item) item).getCdItem()>0) {
+                    if (((Item) item).getCdItem() > 0) {
                         sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
                         smt = Conexao.prepared(sql);
                         smt.setInt(1, ((Item) item).getCdItem());
-                    }else{
+                    } else {
                         sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ?";
                         smt = Conexao.prepared(sql);
                         smt.setString(1, ((Item) item).getDsItem());
