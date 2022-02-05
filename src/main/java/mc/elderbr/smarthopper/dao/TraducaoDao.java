@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.checkerframework.checker.units.qual.C;
@@ -23,8 +24,13 @@ public class TraducaoDao {
         createTable();
     }
 
-    private void createTable(){
-        sql = "CREATE TABLE IF NOT EXISTS traducao (cdTraducao INTEGER PRIMARY KEY AUTOINCREMENT, dsTraducao VARCHAR(30) NOT NULL, cdLang INTEGER, cdItem INTEGER)";
+    private void createTable() {
+        sql = "CREATE TABLE IF NOT EXISTS traducao (" +
+                "cdTraducao INTEGER PRIMARY KEY AUTOINCREMENT" +
+                ", dsTraducao VARCHAR(30) NOT NULL" +
+                ", cdLang INTEGER" +
+                ", cdItem INTEGER" +
+                ", cdGrupo INTEGER)";
         try {
             Conexao.create(sql);
         } catch (SQLException e) {
@@ -32,7 +38,7 @@ public class TraducaoDao {
         }
     }
 
-    public int insert(Traducao traducao){
+    public int insert(Traducao traducao) {
         sql = "INSERT INTO traducao (dsTraducao, cdLang, cdItem) VALUES (?,?,?);";
         try {
             smt = Conexao.prepared(sql);
@@ -42,6 +48,23 @@ public class TraducaoDao {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public void selectItem(Object item) {
+        if (item instanceof Item || item instanceof Integer) {
+            sql = "SELECT * FROM item i INNER JOIN traducao t WHERE i.cdItem = t.cdItem WHERE i.cdItem = ?";
+            try {
+                smt = Conexao.prepared(sql);
+                if (item instanceof Item) {
+                    smt.setInt(1, ((Item) item).getCdItem());☺
+                } else {
+                    smt.setInt(1, (Integer) item);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
