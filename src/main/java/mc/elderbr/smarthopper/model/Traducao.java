@@ -14,14 +14,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Traducao {
+public class Traducao extends Lang{
 
     private int cdTraducao;
     private String dsTraducao;
-    private Player player;
 
     public Traducao() {
-        player.getLocale();
+
     }
 
     public int getCdTraducao() {
