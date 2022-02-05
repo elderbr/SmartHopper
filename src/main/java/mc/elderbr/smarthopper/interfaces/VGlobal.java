@@ -14,31 +14,10 @@ import java.util.Map;
 
 public interface VGlobal {
 
-    // Grupo
-    // TODOS OS IDs DO GRUPO QUE RETORNA O NOME EM INGLÊS
-    Map<Integer, Grupo> GRUPO_MAP_ID = new HashMap<>();
-    // TODOS OS NOMES DO GRUPO QUE RETORNA O NOME EM INGLÊS
-    Map<String, Grupo> GRUPO_MAP_NAME = new HashMap<>();
-    // TODOS OS NOMES DO GRUPOS PEGANDO O LANG KEY E TRADUÇÃO
-    Map<String, Map<String, String>> GRUPO_LANG_MAP = new HashMap<>();
-    // TODOS OS NOMES DO GRUPOS E SUA TRADUÇÃO
-    Map<String, String> GRUPO_MAP = new HashMap<>();
-    // TODOS OS NOMES DO GRUPO
-    List<String> GRUPO_NAME_LIST = new ArrayList<>();
-    // ADICIONA LISTA DE ITEM AO NOME DO GRUPO
-    Map<String, List<String>> GRUPO_ITEM_MAP_LIST = new HashMap<>();
-    // CRIANDO LISTA DE ITEM QUE RETORNA O NOME DO GRUPO
-    Map<String, List<String>> GRUPO_LIST_ITEM = new HashMap<>();
+    // ITEM
+    List<Item> LIST_ITEM = new ArrayList<>();
+    List<Grupo> LIST_GRUPO = new ArrayList<>();
 
-    // Items
-    Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();
-    Map<String, Item> ITEM_MAP_NAME = new HashMap<>();
-    // RETORNA A TRADUÇÃO DO ITEM PEGANDO O NOME DO ITEM E O LANG
-    Map<String, Map<String, String>> ITEM_LANG_MAP = new HashMap<>();
-    Map<String, String> ITEM_MAP = new HashMap<>();
-    List<String> ITEM_NAME_LIST = new ArrayList<>();
-
-    List<Location> LOCATION_LIST = new ArrayList<>();
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();
