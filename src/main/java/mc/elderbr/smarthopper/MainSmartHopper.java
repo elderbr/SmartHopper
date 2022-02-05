@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper;
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.dao.LangDao;
+import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
@@ -20,6 +21,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
     private ItemDao itemDao;
     private GrupoDao grupoDao;
     private LangDao langDao;
+    private TraducaoDao traducaoDao;
 
     @Override
     public void onEnable() {
@@ -37,6 +39,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         itemDao = new ItemDao();
         grupoDao = new GrupoDao();
         langDao = new LangDao();
+        traducaoDao = new TraducaoDao();
 
         Msg.ServidorGreen("finalizado");
 
