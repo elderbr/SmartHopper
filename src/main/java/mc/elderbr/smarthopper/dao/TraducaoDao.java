@@ -21,6 +21,7 @@ public class TraducaoDao {
     private String sql;
 
     private Item item;
+    private Grupo grupo;
 
     public TraducaoDao() {
         createTable();
@@ -99,7 +100,6 @@ public class TraducaoDao {
                 }
                 smt.close();
                 rs.close();
-                return this.item;
             } catch (SQLException e) {
                 Msg.ServidorErro("Erro ao buscar a tradução do item!!!", "selectItem(Object item)", getClass(), e);
             } finally {
@@ -107,6 +107,49 @@ public class TraducaoDao {
             }
         }
         return this.item;
+    }
+
+    public Grupo selectGrupo(Object traducao) {
+        grupo = null;
+        if (traducao instanceof Grupo || traducao instanceof Integer || traducao instanceof String) {
+            try {
+                if (traducao instanceof Grupo) {
+                    if (((Grupo) traducao).getCdGrupo() > 0) {
+                        sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.cdGrupo = ?";
+                        smt = Conexao.prepared(sql);
+                        smt.setInt(1, ((Grupo) traducao).getCdGrupo() );
+                    }else{
+                        sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ?";
+                        smt = Conexao.prepared(sql);
+                        smt.setString(1, ((Grupo)traducao).getDsGrupo() );
+                    }
+                }
+                if(traducao instanceof Integer){
+                    sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.cdGrupo = ?";
+                    smt = Conexao.prepared(sql);
+                    smt.setInt(1, (Integer) traducao);
+                }
+                if(traducao instanceof String){
+                    sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ?";
+                    smt = Conexao.prepared(sql);
+                    smt.setString(1, (String) traducao);
+                }
+                rs = smt.executeQuery();
+                while(rs.next()){
+                    grupo = new Grupo();
+                    grupo.setCdGrupo(rs.getInt("g.cdGrupo"));
+                    grupo.setDsGrupo(rs.getString("g.dsGrupo"));
+                    grupo.setDsTraducao(rs.getString("t.dsTraducao"));
+                }
+                smt.close();
+                rs.close();
+            } catch (SQLException e) {
+                Msg.ServidorErro("Erro ao buscar a tradução do grupo!!!", "selectGrupo(Object traducao)", getClass(), e);
+            }finally {
+                Conexao.desconect();
+            }
+        }
+        return grupo;
     }
 
 
