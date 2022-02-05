@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper;
 
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
@@ -33,6 +34,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         saveDefaultConfig();
 
         ItemDao itemDao = new ItemDao();
+        GrupoDao grupoDao = new GrupoDao();
+        //grupoDao.createGrupo();
 
         Msg.ServidorGreen("finalizado");
 
