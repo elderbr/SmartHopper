@@ -8,6 +8,7 @@ import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -17,6 +18,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
+
+    // CONFIGS
+    private Config config;
 
     private ItemDao itemDao;
     private GrupoDao grupoDao;
@@ -35,6 +39,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
+        config = new Config();
 
         itemDao = new ItemDao();
         grupoDao = new GrupoDao();
