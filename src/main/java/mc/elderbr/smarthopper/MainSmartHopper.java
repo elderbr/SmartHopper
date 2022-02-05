@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper;
 
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.ItemDao;
+import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
@@ -9,16 +10,16 @@ import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
 
+    private ItemDao itemDao;
+    private GrupoDao grupoDao;
+    private LangDao langDao;
 
     @Override
     public void onEnable() {
@@ -33,9 +34,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
 
-        ItemDao itemDao = new ItemDao();
-        GrupoDao grupoDao = new GrupoDao();
-        //grupoDao.createGrupo();
+        itemDao = new ItemDao();
+        grupoDao = new GrupoDao();
+        langDao = new LangDao();
 
         Msg.ServidorGreen("finalizado");
 

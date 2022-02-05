@@ -1,6 +1,5 @@
 package mc.elderbr.smarthopper.model;
 
-import mc.elderbr.smarthopper.interfaces.Dados;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Pocao implements Dados {
+public class Pocao {
 
 
     private String name;
@@ -38,48 +37,6 @@ public class Pocao implements Dados {
             name = potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
             effectType = potionMeta.getBasePotionData().getType().getEffectType();
         }
-    }
-
-    @Override
-    public int getID() {
-        return 0;
-    }
-
-    @Override
-    public void setID(int id) {
-
-    }
-
-    @Override
-    public String getName() {
-        getPotion();
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String lang() {
-        return lang;
-    }
-
-
-    @Override
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
-
-    @Override
-    public String traducao() {
-        return null;
-    }
-
-    @Override
-    public void setTraducao(String traducao) {
-
     }
 
 
