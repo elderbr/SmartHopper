@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Item extends Lang{
+public class Item extends Traducao{
 
     private int cdItem = 0;
     private String dsItem;
