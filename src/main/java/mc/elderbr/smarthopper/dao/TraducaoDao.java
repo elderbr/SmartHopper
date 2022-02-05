@@ -152,5 +152,36 @@ public class TraducaoDao {
         return grupo;
     }
 
+    public int update(Item item){
+        sql = "UPDATE traducao SET dsTraducao = ?, cdLang = ? WHERE cdTraducao = ?;";
+        try {
+            smt = Conexao.prepared(sql);
+            smt.setString(1, item.getDsTraducao());
+            smt.setInt(2, item.getCdLang());
+            smt.setInt(3, item.getCdTraducao());
+            return smt.executeUpdate();
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao atualizar a tradução do item!!!", "update(Item item)", getClass(), e);
+        }finally {
+            Conexao.desconect();
+        }
+        return 0;
+    }
+    public int update(Grupo grupo){
+        sql = "UPDATE traducao SET dsTraducao = ?, cdLang = ? WHERE cdTraducao = ?;";
+        try {
+            smt = Conexao.prepared(sql);
+            smt.setString(1, grupo.getDsTraducao());
+            smt.setInt(2, grupo.getCdLang());
+            smt.setInt(3, grupo.getCdTraducao());
+            return smt.executeUpdate();
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao atualizar a tradução do grupo!!!", "update(Grupo grupo)", getClass(), e);
+        }finally {
+            Conexao.desconect();
+        }
+        return 0;
+    }
+
 
 }
