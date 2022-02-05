@@ -13,53 +13,27 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Item extends ItemStack implements Dados {
+public class Item extends Lang{
 
-    private int id = 0;
-    private String name;
-    private String lang;
-    private Traducao traducao;
+    private int cdItem = 0;
+    private String dsItem;
 
     public Item() {
     }
 
-    @Override
-    public int getID() {
-        return 0;
+    public int getCdItem() {
+        return cdItem;
     }
 
-    @Override
-    public void setID(int id) {
-
+    public void setCdItem(int cdItem) {
+        this.cdItem = cdItem;
     }
 
-    @Override
-    public String getName() {
-        return super.getType().name().toLowerCase().replaceAll("_"," ");
+    public String getDsItem() {
+        return dsItem;
     }
 
-    @Override
-    public void setName(String name) {
-
-    }
-
-    @Override
-    public String lang() {
-        return null;
-    }
-
-    @Override
-    public void setLang(String lang) {
-
-    }
-
-    @Override
-    public String traducao() {
-        return null;
-    }
-
-    @Override
-    public void setTraducao(String traducao) {
-
+    public void setDsItem(String dsItem) {
+        this.dsItem = dsItem;
     }
 }
