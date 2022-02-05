@@ -26,11 +26,22 @@ public class LangDao {
     }
 
     private void createTable() {
-        sql = "CREATE TABLE IF NOT EXISTS lang (cdLang INTEGER PRIMARY KEY AUTOINCREMENT, dsLang VARCHAR(3O) NOT NULL);";
+        sql = "CREATE TABLE IF NOT EXISTS lang (cdLang INTEGER PRIMARY KEY AUTOINCREMENT, dsLang NVARCHAR(30) UNIQUE NOT NULL)";
         try {
             Conexao.create(sql);
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao criar a tabela lang", "createTable", getClass(), e);
+        }finally {
+            Conexao.desconect();
+        }
+        // SE NÃO EXISTIR LANG CRIA PORTUGUÊS BRASIL
+        if(selectAll().size()==0){
+            lang = new Lang();
+            lang.setDsLang("eng");
+            insert(lang);
+            lang = new Lang();
+            lang.setDsLang("pt-br");
+            insert(lang);
         }
     }
 
@@ -41,7 +52,8 @@ public class LangDao {
             smt.setString(1, lang.getDsLang());
             return smt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if(e.getErrorCode() != 19)
+                Msg.ServidorErro("Erro ao adicionar Lang!!!", "insert(Lang lang)", getClass(), e);
         } finally {
             Conexao.desconect();
         }
@@ -51,12 +63,13 @@ public class LangDao {
     public List<Lang> selectAll() {
         listLang = new ArrayList<>();
         try {
+            sql = "SELECT * FROM lang;";
             smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.lang = new Lang();
-                this.lang.setCdLang(rs.getInt(0));
-                this.lang.setDsLang(rs.getString(1));
+                this.lang.setCdLang(rs.getInt(1));
+                this.lang.setDsLang(rs.getString(2));
                 listLang.add(this.lang);
             }
             smt.close();
