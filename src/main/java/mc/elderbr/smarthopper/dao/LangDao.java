@@ -34,7 +34,7 @@ public class LangDao {
         }finally {
             Conexao.desconect();
         }
-        // SE NÃO EXISTIR LANG CRIA PORTUGUÊS BRASIL
+        // SE NÃO EXISTIR LANG CRIA O INGLÊS E PORTUGUÊS BRASIL
         if(selectAll().size()==0){
             lang = new Lang();
             lang.setDsLang("eng");
