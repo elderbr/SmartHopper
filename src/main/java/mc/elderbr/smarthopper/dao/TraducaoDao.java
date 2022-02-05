@@ -52,27 +52,33 @@ public class TraducaoDao {
         return 0;
     }
 
-    public void selectItem(Object item) {
+    public Item selectItem(Object item) {
         this.item = null;
         if (item instanceof Item || item instanceof Integer || item instanceof String) {
 
             try {
 
                 if (item instanceof Item) {
+                    if(((Item) item).getCdItem()>0) {
+                        sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
+                        smt = Conexao.prepared(sql);
+                        smt.setInt(1, ((Item) item).getCdItem());
+                    }else{
+                        sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ?";
+                        smt = Conexao.prepared(sql);
+                        smt.setString(1, ((Item) item).getDsItem());
+                    }
+                } else if (item instanceof Integer) {
                     sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
                     smt = Conexao.prepared(sql);
                     smt.setInt(1, ((Item) item).getCdItem());
-                } else if(item instanceof Integer) {
-                    sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
-                    smt = Conexao.prepared(sql);
-                    smt.setInt(1, ((Item) item).getCdItem());
-                }else{
+                } else {
                     sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ?";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, (String) item);
                 }
                 rs = smt.executeQuery();
-                if(rs.isAfterLast()) {
+                if (rs.isAfterLast()) {
                     while (rs.next()) {
                         this.item = new Item();
                         this.item.setCdItem(rs.getInt("i.cdItem"));
@@ -82,13 +88,14 @@ public class TraducaoDao {
                 }
                 smt.close();
                 rs.close();
+                return this.item;
             } catch (SQLException e) {
                 Msg.ServidorErro("Erro ao buscar a tradução do item!!!", "selectItem(Object item)", getClass(), e);
-            }finally {
+            } finally {
                 Conexao.desconect();
             }
         }
-
+        return this.item;
     }
 
 
