@@ -30,7 +30,7 @@ public class TraducaoDao {
     private void createTable() {
         sql = "CREATE TABLE IF NOT EXISTS traducao (" +
                 "cdTraducao INTEGER PRIMARY KEY AUTOINCREMENT" +
-                ", dsTraducao VARCHAR(30) NOT NULL" +
+                ", dsTraducao NVARCHAR(30) NOT NULL" +
                 ", cdLang INTEGER NO NULL" +
                 ", cdItem INTEGER DEFAULT 0" +
                 ", cdGrupo INTEGER DEFAULT 0)";
