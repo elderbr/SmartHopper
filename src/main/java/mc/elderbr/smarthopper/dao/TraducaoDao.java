@@ -31,9 +31,9 @@ public class TraducaoDao {
         sql = "CREATE TABLE IF NOT EXISTS traducao (" +
                 "cdTraducao INTEGER PRIMARY KEY AUTOINCREMENT" +
                 ", dsTraducao VARCHAR(30) NOT NULL" +
-                ", cdLang INTEGER" +
-                ", cdItem INTEGER" +
-                ", cdGrupo INTEGER)";
+                ", cdLang INTEGER NO NULL" +
+                ", cdItem INTEGER DEFAULT 0" +
+                ", cdGrupo INTEGER DEFAULT 0)";
         try {
             Conexao.create(sql);
         } catch (SQLException e) {
