@@ -68,18 +68,18 @@ public class Utils {
         // VERIFICA É ITEM
         try {
             if (hopper.startsWith("i")) {
-                return VGlobal.ITEM_MAP_ID.get(Integer.parseInt(hopper.replace("i", "")));
+                //return VGlobal.ITEM_MAP_ID.get(Integer.parseInt(hopper.replace("i", "")));
             }
         } catch (NumberFormatException e) {
-            return VGlobal.ITEM_MAP_NAME.get(hopper.replace("i", ""));
+            //return VGlobal.ITEM_MAP_NAME.get(hopper.replace("i", ""));
         }
 
         // VERIFICA SE É GRUPO
         if (hopper.startsWith("g") || hopper.contains("*")) {
             try {
-                return VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(hopper.replaceAll("[g*]", "")));
+                //return VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(hopper.replaceAll("[g*]", "")));
             } catch (NumberFormatException e) {
-                return VGlobal.GRUPO_MAP_NAME.get(hopper.replace("*", ""));
+                //return VGlobal.GRUPO_MAP_NAME.get(hopper.replace("*", ""));
             }
         }
         return null;
@@ -102,7 +102,7 @@ public class Utils {
         if (itemStack.getType() == Material.ENCHANTED_BOOK) {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
             for (Map.Entry<Enchantment, Integer> keys : meta.getStoredEnchants().entrySet()) {
-                itemList.add(VGlobal.ITEM_MAP_NAME.get(toEnchantment(keys.getKey())));
+                //itemList.add(VGlobal.ITEM_MAP_NAME.get(toEnchantment(keys.getKey())));
             }
         }
         return itemList;
