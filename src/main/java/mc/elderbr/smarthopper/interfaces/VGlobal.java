@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public interface VGlobal {
     // ITEM
     List<Item> LIST_ITEM = new ArrayList<>();
     List<Grupo> LIST_GRUPO = new ArrayList<>();
+    List<Material> LIST_MATERIAL = new ArrayList<>();
 
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");

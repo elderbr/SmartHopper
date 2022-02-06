@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper;
 
+import mc.elderbr.smarthopper.cmd.ItemComando;
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.dao.LangDao;
@@ -39,6 +40,12 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
                 "| Version " + VGlobal.VERSION + "            |\n" +
                 "| Dircord: ElderBR#5398  |\n" +
                 "+------------------------+");
+        // CARREGANDO A LISTA DE MATERIAS DO JOGO
+        for(Material m : Material.values()){
+            if(m.isItem() && !m.isAir()){
+                VGlobal.LIST_MATERIAL.add(m);
+            }
+        }
 
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
@@ -57,6 +64,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new AnvilCreate(), this);// ABRE O ANVIL BIGORNA
 
         // Comandos
+        getCommand("item").setExecutor(new ItemComando());
 
         // ADICIONANDO NOVAS RECEITAS
         HopperRecipe recipes = new HopperRecipe();
