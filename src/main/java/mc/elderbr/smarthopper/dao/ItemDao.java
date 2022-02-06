@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
@@ -40,8 +41,10 @@ public class ItemDao {
         if (Material.values().length > selectList().size()) {
             // Percorrendo a lista de materias do jogo
             for (Material m : Material.values()) {
-                Msg.ServidorGreen("Criando item >> " + Utils.ToMaterial(m), getClass());
-                insert(m);// Adicionando ao banco
+                if (m.isItem() && !m.isAir()) {
+                    Msg.ServidorGreen("Criando item >> " + Utils.ToMaterial(m), getClass());
+                    insert(m);// Adicionando ao banco
+                }
             }
         }
     }
@@ -82,9 +85,10 @@ public class ItemDao {
                 this.item.setCdItem(rs.getInt("cdItem"));
                 this.item.setDsItem(rs.getString("dsItem"));
                 listItem.add(this.item);
+                VGlobal.LIST_ITEM.add(this.item);// ADICIONANDO NA LISTA GLOBAL
             }
         } catch (SQLException e) {
-            Msg.ServidorErro(e,"selectList", getClass());
+            Msg.ServidorErro(e, "selectList", getClass());
         } finally {
             Conexao.desconect();
         }
@@ -120,7 +124,7 @@ public class ItemDao {
         return 0;
     }
 
-    public boolean delete(String name){
+    public boolean delete(String name) {
         sql = "DELETE FROM item WHERE dsItem = ?;";
         int retorno = 0;
         try {
@@ -129,13 +133,15 @@ public class ItemDao {
             retorno = smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro(e, "delete", getClass());
+        }finally {
+            Conexao.desconect();
         }
-        Msg.ServidorGreen("retorno delete item >> "+ retorno);
+        Msg.ServidorGreen("retorno delete item >> " + retorno);
         return true;
     }
 
-    public int update(Item item){
-        if(item == null){
+    public int update(Item item) {
+        if (item == null) {
             return 0;
         }
         sql = "UPDATE TABLE item SET dsItem = ? WHERE cdItem = ?;";
@@ -146,6 +152,8 @@ public class ItemDao {
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro(e, "update(Item item)", getClass());
+        }finally {
+            Conexao.desconect();
         }
         return 0;
     }
