@@ -38,13 +38,11 @@ public class ItemDao {
 
         // Verifica se existe item na tabela do banco
         // Se a lista de material for maior que a lista da tabela item
-        if (Material.values().length > selectList().size()) {
+        if (VGlobal.LIST_MATERIAL.size() > selectList().size()) {
             // Percorrendo a lista de materias do jogo
-            for (Material m : Material.values()) {
-                if (m.isItem() && !m.isAir()) {
-                    Msg.ServidorGreen("Criando item " + Utils.ToMaterial(m));
-                    insert(m);// Adicionando ao banco
-                }
+            for (Material m : VGlobal.LIST_MATERIAL) {
+                Msg.ServidorGreen("Criando item " + Utils.ToMaterial(m));
+                insert(m);// Adicionando ao banco
             }
         }
     }
@@ -53,21 +51,36 @@ public class ItemDao {
         if (item == null) {
             return null;
         }
-        if (item.getCdItem() > 0) {
-            sql = "SELECT * FROM item WHERE cdItem = " + item.getCdItem();
-        } else {
-            sql = "SELECT * FROM item WHERE dsItem = " + item.getDsItem();
-        }
         try {
-            smt = Conexao.prepared(sql);
+            if (item.getCdItem() > 0) {
+                sql = "SELECT * FROM item i " +
+                        "LEFT JOIN traducao t ON t.cdItem = t.cdItem " +
+                        "LEFT JOIN lang l ON t.cdLang = l.cdLang " +
+                        "WHERE dsItem = ? AND l.dsLang = ?";
+                smt = Conexao.prepared(sql);
+                smt.setInt(1, item.getCdItem());
+                smt.setInt(2, item.getCdLang());
+            } else {
+                sql = "SELECT * FROM item i " +
+                        "LEFT JOIN traducao t ON t.cdItem = t.cdItem " +
+                        "LEFT JOIN lang l ON t.cdLang = l.cdLang " +
+                        "WHERE dsItem = ? AND l.dsLang = ?";
+                smt = Conexao.prepared(sql);
+                smt.setString(1, item.getDsItem());
+                smt.setString(2, item.getDsLang());
+            }
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.item = new Item();
                 this.item.setCdItem(rs.getInt("cdItem"));
                 this.item.setDsItem(rs.getString("dsItem"));
+                this.item.setDsLang(rs.getString("dsLang"));
+                this.item.setDsTraducao(rs.getString("dsTraducao"));
+                Msg.ServidorGreen("item >> "+ this.item.getCdItem()+" - nome >> "+ this.item.getDsItem(), getClass());
+                return this.item;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Msg.ServidorErro("Erro ao buscar o item!!!", "select(Item item)", getClass(), e);
         } finally {
             Conexao.desconect();
         }
@@ -133,7 +146,7 @@ public class ItemDao {
             retorno = smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro(e, "delete", getClass());
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         Msg.ServidorGreen("retorno delete item >> " + retorno);
@@ -152,7 +165,7 @@ public class ItemDao {
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro(e, "update(Item item)", getClass());
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         return 0;
