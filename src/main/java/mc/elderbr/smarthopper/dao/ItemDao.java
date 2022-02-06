@@ -42,7 +42,7 @@ public class ItemDao {
             // Percorrendo a lista de materias do jogo
             for (Material m : Material.values()) {
                 if (m.isItem() && !m.isAir()) {
-                    Msg.ServidorGreen("Criando item >> " + Utils.ToMaterial(m), getClass());
+                    Msg.ServidorGreen("Criando item " + Utils.ToMaterial(m));
                     insert(m);// Adicionando ao banco
                 }
             }
