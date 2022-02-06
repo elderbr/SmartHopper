@@ -12,9 +12,12 @@ import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import mc.elderbr.smarthopper.utils.Msg;
+import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
@@ -40,12 +43,10 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
         config = new Config();
-
         itemDao = new ItemDao();
         grupoDao = new GrupoDao();
         langDao = new LangDao();
         traducaoDao = new TraducaoDao();
-
         Msg.ServidorGreen("finalizado");
 
 
