@@ -46,81 +46,79 @@ public class GrupoDao {
         // NOMES DOS GRUPOS
         listNames = new ArrayList<>();
         // PERCORRENDO A LISTA DE MATERIAL PADÃO DO MINECRAFT
-        for (Material m : Material.values()) {
-            if(m.isItem() && !m.isAir()) {
-                // CONVERTENDO O NOME DO MATERIAL REMOVENDO O ANDERLAINE
-                // ARRAY DO NOME DO MATERIAL SEPARANDO PELO O ESPAÇO
-                String[] itens = Utils.ToMaterial(m).split(" ");
-                String name = null;
+        for (Material m : VGlobal.LIST_MATERIAL) {
+            // CONVERTENDO O NOME DO MATERIAL REMOVENDO O ANDERLAINE
+            // ARRAY DO NOME DO MATERIAL SEPARANDO PELO O ESPAÇO
+            String[] itens = Utils.ToMaterial(m).split(" ");
+            String name = null;
 
-                // ADICIONA NA LISTA DE NOME SE O ITEM ESTIVER MAIS DE UM NOME E
-                // NÃO ESTIVER NA LISTA NOME ADICIONA
-                switch (itens.length) {
-                    case 2:
-                        name = itens[0];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        name = itens[1];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        break;
-                    case 3:
-                        name = itens[0] + " " + itens[1];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        name = itens[1] + " " + itens[2];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        break;
-                    case 4:
-                        name = itens[0] + " " + itens[1];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        name = itens[1] + " " + itens[2];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        name = itens[2] + " " + itens[3];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        break;
-                    case 5:
-                        name = itens[0] + " " + itens[1];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        name = itens[1] + " " + itens[2];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        name = itens[2] + " " + itens[3];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        name = itens[0] + " " + itens[1] + " " + itens[2];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        name = itens[1] + " " + itens[2] + " " + itens[3];
-                        if (!listNames.contains(name)) {
-                            listNames.add(name);
-                        }
-                        break;
-                }
+            // ADICIONA NA LISTA DE NOME SE O ITEM ESTIVER MAIS DE UM NOME E
+            // NÃO ESTIVER NA LISTA NOME ADICIONA
+            switch (itens.length) {
+                case 2:
+                    name = itens[0];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    name = itens[1];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    break;
+                case 3:
+                    name = itens[0] + " " + itens[1];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    name = itens[1] + " " + itens[2];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    break;
+                case 4:
+                    name = itens[0] + " " + itens[1];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    name = itens[1] + " " + itens[2];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    name = itens[2] + " " + itens[3];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    break;
+                case 5:
+                    name = itens[0] + " " + itens[1];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    name = itens[1] + " " + itens[2];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    name = itens[2] + " " + itens[3];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    name = itens[0] + " " + itens[1] + " " + itens[2];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    name = itens[1] + " " + itens[2] + " " + itens[3];
+                    if (!listNames.contains(name)) {
+                        listNames.add(name);
+                    }
+                    break;
             }
         }
         // NOME DO GRUPO É VALIDO SE EXISTIR MAIS DE UM ITEM COM O NOME
         contato = 0;
         listItem = new ArrayList<>();
-        for(String names : listNames){
-            for (Material m : Material.values()) {
-                if(m.isItem()) {
+        for (String names : listNames) {
+            for (Material m : VGlobal.LIST_MATERIAL) {
+                if (m.isItem()) {
                     if (Utils.ToMaterial(m).contains(names)) {
                         if (contato > 1 && !listItem.contains(names)) {
                             listItem.add(names);
@@ -131,15 +129,19 @@ public class GrupoDao {
                 }
             }
             contato = 0;
-        };
+        }
+        ;
 
         // LISTA VALIDA DO NOME DO GRUPO
-        listItem.forEach(names->{
-            grupo = new Grupo();
-            grupo.setDsGrupo(names);
-            Msg.ServidorGreen("Criando o grupo "+ grupo.getDsGrupo());
-            insert(grupo);
-        });
+        // VERIFICA SE A LISTA DE ITEM É MAIOR QUE LISTA DO BANCO
+        if(listItem.size()>selectAll().size()) {
+            listItem.forEach(names -> {
+                grupo = new Grupo();
+                grupo.setDsGrupo(names);
+                Msg.ServidorGreen("Criando o grupo " + grupo.getDsGrupo());
+                insert(grupo);
+            });
+        }
     }
 
     public int insert(Grupo grupo) {
