@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
@@ -202,6 +203,7 @@ public class GrupoDao {
                 this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 this.grupo.setDsGrupo(rs.getString("dsGrupo"));
                 listGrupo.add(this.grupo);
+                VGlobal.LIST_GRUPO.add(grupo);
             }
         } catch (SQLException e) {
             Msg.ServidorErro(e, "selectAll()", getClass());
