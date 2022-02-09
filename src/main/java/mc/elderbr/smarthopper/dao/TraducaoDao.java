@@ -46,13 +46,19 @@ public class TraducaoDao {
         if (traducao instanceof Item || traducao instanceof Grupo) {
             try {
                 if (traducao instanceof Item) {
+                    item = (Item) traducao;
                     sql = "INSERT INTO traducao (dsTraducao, cdLang, cdItem) VALUES (?,?,?);";
                     smt = Conexao.prepared(sql);
-                    smt.setString(1, ((Item) traducao).getDsTraducao());
+                    smt.setString(1, item.getDsTraducao());
+                    smt.setInt(2, item.getCdLang());
+                    smt.setInt(3, item.getCdItem());
                 } else {
+                    grupo = (Grupo) traducao;
                     sql = "INSERT INTO traducao (dsTraducao, cdLang, cdGrupo) VALUES (?,?,?);";
                     smt = Conexao.prepared(sql);
-                    smt.setString(1, ((Grupo) traducao).getDsTraducao());
+                    smt.setString(1, grupo.getDsTraducao());
+                    smt.setInt(2, grupo.getCdLang());
+                    smt.setInt(3, grupo.getCdGrupo());
                 }
                 return smt.executeUpdate();
             } catch (SQLException e) {
@@ -72,9 +78,10 @@ public class TraducaoDao {
 
                 if (item instanceof Item) {
                     if (((Item) item).getCdItem() > 0) {
-                        sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
+                        sql = "SELECT * FROM traducao t INNER JOIN item i ON i.cdItem = t.cdItem LEFT JOIN lang l ON t.cdLang = l.cdLang WHERE t.cdItem = ? AND l.cdlang = ?";
                         smt = Conexao.prepared(sql);
                         smt.setInt(1, ((Item) item).getCdItem());
+                        smt.setInt(2, ((Item) item).getCdLang());
                     } else {
                         sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ?";
                         smt = Conexao.prepared(sql);
@@ -90,13 +97,14 @@ public class TraducaoDao {
                     smt.setString(1, (String) item);
                 }
                 rs = smt.executeQuery();
-                if (rs.isAfterLast()) {
-                    while (rs.next()) {
-                        this.item = new Item();
-                        this.item.setCdItem(rs.getInt("i.cdItem"));
-                        this.item.setDsItem(rs.getString("i.dsItem"));
-                        this.item.setDsTraducao(rs.getString("t.dsTraducao"));
-                    }
+                while (rs.next()) {
+                    this.item = new Item();
+                    this.item.setCdItem(rs.getInt("cdItem"));
+                    this.item.setDsItem(rs.getString("dsItem"));
+                    this.item.setCdLang(rs.getInt("cdLang"));
+                    this.item.setDsLang(rs.getString("dsLang"));
+                    this.item.setCdTraducao(rs.getInt("cdTraducao"));
+                    this.item.setDsTraducao(rs.getString("dsTraducao"));
                 }
                 smt.close();
                 rs.close();
@@ -117,25 +125,25 @@ public class TraducaoDao {
                     if (((Grupo) traducao).getCdGrupo() > 0) {
                         sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.cdGrupo = ?";
                         smt = Conexao.prepared(sql);
-                        smt.setInt(1, ((Grupo) traducao).getCdGrupo() );
-                    }else{
+                        smt.setInt(1, ((Grupo) traducao).getCdGrupo());
+                    } else {
                         sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ?";
                         smt = Conexao.prepared(sql);
-                        smt.setString(1, ((Grupo)traducao).getDsGrupo() );
+                        smt.setString(1, ((Grupo) traducao).getDsGrupo());
                     }
                 }
-                if(traducao instanceof Integer){
+                if (traducao instanceof Integer) {
                     sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.cdGrupo = ?";
                     smt = Conexao.prepared(sql);
                     smt.setInt(1, (Integer) traducao);
                 }
-                if(traducao instanceof String){
+                if (traducao instanceof String) {
                     sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ?";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, (String) traducao);
                 }
                 rs = smt.executeQuery();
-                while(rs.next()){
+                while (rs.next()) {
                     grupo = new Grupo();
                     grupo.setCdGrupo(rs.getInt("g.cdGrupo"));
                     grupo.setDsGrupo(rs.getString("g.dsGrupo"));
@@ -145,14 +153,14 @@ public class TraducaoDao {
                 rs.close();
             } catch (SQLException e) {
                 Msg.ServidorErro("Erro ao buscar a tradução do grupo!!!", "selectGrupo(Object traducao)", getClass(), e);
-            }finally {
+            } finally {
                 Conexao.desconect();
             }
         }
         return grupo;
     }
 
-    public int update(Item item){
+    public int update(Item item) {
         sql = "UPDATE traducao SET dsTraducao = ?, cdLang = ? WHERE cdTraducao = ?;";
         try {
             smt = Conexao.prepared(sql);
@@ -162,12 +170,13 @@ public class TraducaoDao {
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao atualizar a tradução do item!!!", "update(Item item)", getClass(), e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         return 0;
     }
-    public int update(Grupo grupo){
+
+    public int update(Grupo grupo) {
         sql = "UPDATE traducao SET dsTraducao = ?, cdLang = ? WHERE cdTraducao = ?;";
         try {
             smt = Conexao.prepared(sql);
@@ -177,7 +186,7 @@ public class TraducaoDao {
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao atualizar a tradução do grupo!!!", "update(Grupo grupo)", getClass(), e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         return 0;
