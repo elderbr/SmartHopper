@@ -20,7 +20,7 @@ public class Utils {
         return material.getKey().getKey().replaceAll("_", " ").toLowerCase();
     }
 
-    public static String ToItemStack(ItemStack itemStack) {
+    public static String toItemStack(ItemStack itemStack) {
         return itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
     }
 
