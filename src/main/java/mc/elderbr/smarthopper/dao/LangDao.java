@@ -37,10 +37,10 @@ public class LangDao {
         // SE NÃO EXISTIR LANG CRIA O INGLÊS E PORTUGUÊS BRASIL
         if(selectAll().size()==0){
             lang = new Lang();
-            lang.setDsLang("eng");
+            lang.setDsLang("en_us");
             insert(lang);
             lang = new Lang();
-            lang.setDsLang("pt-br");
+            lang.setDsLang("pt_br");
             insert(lang);
         }
     }
@@ -90,22 +90,27 @@ public class LangDao {
                 if (lang instanceof Integer) {
                     sql = "SELECT * FROM lang WHERE cdLang = " + (Integer) lang;
                 } else if (lang instanceof String) {
-                    sql = "SELECT * FROM lang WHERE dsLang = '" + (String) lang + "';";
+                    sql = "SELECT * FROM lang WHERE dsLang = ?;";
+                    smt = Conexao.prepared(sql);
+                    smt.setString(1, (String) lang);
                 } else {
                     this.lang = (Lang) lang;
                     if (this.lang.getCdLang() > 0) {
-                        sql = "SELECT * FROM lang WHERE cdLang = " + this.lang.getCdLang();
+                        sql = "SELECT * FROM lang WHERE cdLang = ?;";
+                        smt = Conexao.prepared(sql);
+                        smt.setInt(1, this.lang.getCdLang());
                     } else {
-                        sql = "SELECT * FROM lang WHERE dsLang = '" + this.lang + "';";
+                        sql = "SELECT * FROM lang WHERE dsLang = ?;";
+                        smt = Conexao.prepared(sql);
+                        smt.setString(1, this.lang.getDsLang());
                     }
                 }
 
-                smt = Conexao.prepared(sql);
                 rs = smt.executeQuery();
                 while (rs.next()) {
                     this.lang = new Lang();
-                    this.lang.setCdLang(rs.getInt(0));
-                    this.lang.setDsLang(rs.getString(1));
+                    this.lang.setCdLang(rs.getInt("cdLang"));
+                    this.lang.setDsLang(rs.getString("dsLang"));
                 }
                 smt.close();
                 rs.close();
