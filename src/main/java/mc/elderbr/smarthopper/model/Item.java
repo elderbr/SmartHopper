@@ -1,11 +1,19 @@
 package mc.elderbr.smarthopper.model;
 
-public class Item extends Traducao{
+import mc.elderbr.smarthopper.utils.Utils;
+import org.bukkit.inventory.ItemStack;
 
-    private int cdItem = 0;
+public class Item extends Traducao {
+
+    private int cdItem;
     private String dsItem;
 
     public Item() {
+    }
+
+    public Item(ItemStack itemStack) {
+        if (itemStack != null)
+            dsItem = Utils.toItem(itemStack);
     }
 
     public int getCdItem() {
