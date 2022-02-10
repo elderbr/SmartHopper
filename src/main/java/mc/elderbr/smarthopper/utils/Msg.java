@@ -43,7 +43,7 @@ public class Msg {
     }
 
     public static void ServidorBlue(String msg, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + msg + " SmartHopper >> " + msg + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + " SmartHopper >> " + msg + " - Class: " + getClass.getSimpleName());
     }
 
     /**
