@@ -31,11 +31,11 @@ public class LangDao {
             Conexao.create(sql);
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao criar a tabela lang", "createTable", getClass(), e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         // SE NÃO EXISTIR LANG CRIA O INGLÊS E PORTUGUÊS BRASIL
-        if(selectAll().size()==0){
+        if (selectAll().size() == 0) {
             lang = new Lang();
             lang.setDsLang("en_us");
             insert(lang);
@@ -45,17 +45,29 @@ public class LangDao {
         }
     }
 
-    public long insert(Lang lang) {
-        try {
-            sql = "INSERT INTO lang (dsLang) VALUES (?);";
-            smt = Conexao.prepared(sql);
-            smt.setString(1, lang.getDsLang());
-            return smt.executeUpdate();
-        } catch (SQLException e) {
-            if(e.getErrorCode() != 19)
-                Msg.ServidorErro("Erro ao adicionar Lang!!!", "insert(Lang lang)", getClass(), e);
-        } finally {
-            Conexao.desconect();
+    public long insert(Object languagem) {
+
+        if (languagem instanceof String) {
+            lang = new Lang();
+            lang.setDsLang(String.valueOf(languagem));
+        } else if (languagem instanceof Lang) {
+            lang = (Lang) languagem;
+        } else {
+            return 0;
+        }
+
+        if (select(lang) == null) {
+            try {
+                sql = "INSERT INTO lang (dsLang) VALUES (?);";
+                smt = Conexao.prepared(sql);
+                smt.setString(1, lang.getDsLang());
+                return smt.executeUpdate();
+            } catch (SQLException e) {
+                if (e.getErrorCode() != 19)
+                    Msg.ServidorErro("Erro ao adicionar Lang!!!", "insert(Lang lang)", getClass(), e);
+            } finally {
+                Conexao.desconect();
+            }
         }
         return 0;
     }
@@ -82,48 +94,48 @@ public class LangDao {
         return listLang;
     }
 
-    public Lang select(Object lang) {
-        this.lang = null;
-        if (lang instanceof Integer || lang instanceof String || lang instanceof Lang) {
-            try {
-
-                if (lang instanceof Integer) {
-                    sql = "SELECT * FROM lang WHERE cdLang = " + (Integer) lang;
-                } else if (lang instanceof String) {
-                    sql = "SELECT * FROM lang WHERE dsLang = ?;";
-                    smt = Conexao.prepared(sql);
-                    smt.setString(1, (String) lang);
-                } else {
-                    this.lang = (Lang) lang;
-                    if (this.lang.getCdLang() > 0) {
-                        sql = "SELECT * FROM lang WHERE cdLang = ?;";
-                        smt = Conexao.prepared(sql);
-                        smt.setInt(1, this.lang.getCdLang());
-                    } else {
-                        sql = "SELECT * FROM lang WHERE dsLang = ?;";
-                        smt = Conexao.prepared(sql);
-                        smt.setString(1, this.lang.getDsLang());
-                    }
-                }
-
-                rs = smt.executeQuery();
-                while (rs.next()) {
-                    this.lang = new Lang();
-                    this.lang.setCdLang(rs.getInt("cdLang"));
-                    this.lang.setDsLang(rs.getString("dsLang"));
-                }
-                smt.close();
-                rs.close();
-            } catch (SQLException e) {
-                Msg.ServidorErro("Erro ao buscar o lang!!!", "select(Object lang)", getClass(), e);
-            } finally {
-                Conexao.desconect();
+    public Lang select(Object languagem) {
+        try {
+            // VERIFICA O TIPO DE OBJETO
+            lang = new Lang();
+            if (languagem instanceof Integer) {
+                lang.setCdLang( (int) languagem);
+            }else if(languagem instanceof String){
+                lang.setDsLang(String.valueOf(languagem));
+            }else if(languagem instanceof Lang){
+                lang = (Lang) languagem;
+            }else{
+                return null;
             }
+
+            // SE O CÓDIGO DA LINGUAGEM FOR MAIOR QUE ZERO PESQUISA
+            if(lang.getCdLang()>0){
+                sql = "SELECT * FROM lang WHERE cdLang = ?";
+                smt = Conexao.prepared(sql);
+                smt.setInt(1, lang.getCdLang());
+            }else{
+                sql = "SELECT * FROM lang WHERE dsLang = ?";
+                smt = Conexao.prepared(sql);
+                smt.setString(1, lang.getDsLang());
+            }
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                this.lang = new Lang();
+                this.lang.setCdLang(rs.getInt("cdLang"));
+                this.lang.setDsLang(rs.getString("dsLang"));
+                return lang;
+            }
+            smt.close();
+            rs.close();
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao buscar o lang!!!", "select(Object lang)", getClass(), e);
+        } finally {
+            Conexao.desconect();
         }
-        return this.lang;
+        return null;
     }
 
-    public long update(Lang lang){
+    public long update(Lang lang) {
         try {
             sql = "UPDATE TABLE lang SET dsLong = ? WHERE cdLong = ?;";
             smt = Conexao.prepared(sql);
@@ -132,12 +144,13 @@ public class LangDao {
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao atualizar o lang!!!", "update(Lang lang)", getClass(), e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         return 0;
     }
-    public long delete(Lang lang){
+
+    public long delete(Lang lang) {
         try {
             sql = "DELETE TABLE lang WHERE cdLong = ?;";
             smt = Conexao.prepared(sql);
@@ -145,7 +158,7 @@ public class LangDao {
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao apagar o lang!!!", "delete(Lang lang)", getClass(), e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         return 0;
