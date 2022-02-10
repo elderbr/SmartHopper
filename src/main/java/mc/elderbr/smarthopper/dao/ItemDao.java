@@ -57,6 +57,10 @@ public class ItemDao {
             return this.item;
         }
 
+        if(selectLang(item) != null){
+            return this.item;
+        }
+
         try {
             if (item.getCdItem() > 0) {
                 sql = "SELECT * FROM item WHERE cdItem = ?";
@@ -122,6 +126,33 @@ public class ItemDao {
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao buscar o item!!!", "select(Item item)", getClass(), e);
         } finally {
+            Conexao.desconect();
+        }
+        return this.item;
+    }
+
+    public Item selectLang(Item item){
+        this.item = null;
+        if(item == null){
+            return null;
+        }
+        sql = "SELECT * FROM item LEFT JOIN lang WHERE dsItem = ? AND dsLang = ?;";
+        try {
+            smt = Conexao.prepared(sql);
+            smt.setString(1, item.getDsItem());
+            smt.setString(2, item.getDsLang());
+            rs = smt.executeQuery();
+            while(rs.next()){
+                this.item = new Item();
+                this.item.setCdItem(rs.getInt("cdItem"));
+                this.item.setDsItem(rs.getString("dsItem"));
+                this.item.setCdLang(rs.getInt("cdLang"));
+                this.item.setDsLang(rs.getString("dsLang"));
+                return this.item;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao buscar o item e o lang!!!", "selectLang(Item item)", getClass(), e);
+        }finally {
             Conexao.desconect();
         }
         return this.item;
