@@ -31,6 +31,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
     private GrupoDao grupoDao;
     private LangDao langDao;
     private TraducaoDao traducaoDao;
+    private TraducaoConfig traducaoConfig;
 
     @Override
     public void onEnable() {
@@ -55,9 +56,10 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         grupoDao = new GrupoDao();
         langDao = new LangDao();
         traducaoDao = new TraducaoDao();
+        traducaoConfig = new TraducaoConfig();
         Msg.ServidorGreen("finalizado");
 
-        TraducaoConfig traducaoConfig = new TraducaoConfig();
+
 
 
         // ADICIONANDO OS EVENTOS
