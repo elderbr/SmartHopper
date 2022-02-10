@@ -110,7 +110,7 @@ public class ItemDao {
                 this.item = new Item();
                 this.item.setCdItem(rs.getInt("cdItem"));
                 this.item.setDsItem(rs.getString("dsItem"));
-                this.item.setCdLang(rs.getInt("cdLan"));
+                this.item.setCdLang(rs.getInt("cdLang"));
                 this.item.setDsLang(rs.getString("dsLang"));
                 this.item.setCdTraducao(rs.getInt("cdTraducao"));
                 this.item.setDsTraducao(rs.getString("dsTraducao"));
