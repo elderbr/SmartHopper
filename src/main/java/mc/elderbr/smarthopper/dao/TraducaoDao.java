@@ -52,13 +52,15 @@ public class TraducaoDao {
                     smt.setString(1, item.getDsTraducao());
                     smt.setInt(2, item.getCdLang());
                     smt.setInt(3, item.getCdItem());
-                } else {
+                } else if(traducao instanceof Grupo){
                     grupo = (Grupo) traducao;
                     sql = "INSERT INTO traducao (dsTraducao, cdLang, cdGrupo) VALUES (?,?,?);";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, grupo.getDsTraducao());
                     smt.setInt(2, grupo.getCdLang());
                     smt.setInt(3, grupo.getCdGrupo());
+                }else{
+                    return 0;
                 }
                 return smt.executeUpdate();
             } catch (SQLException e) {
@@ -161,6 +163,9 @@ public class TraducaoDao {
     }
 
     public int update(Item item) {
+        if(item == null){
+            return 0;
+        }
         sql = "UPDATE traducao SET dsTraducao = ?, cdLang = ? WHERE cdTraducao = ?;";
         try {
             smt = Conexao.prepared(sql);
