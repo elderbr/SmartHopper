@@ -57,14 +57,15 @@ public class ItemComando implements CommandExecutor {
                     item = itemDao.select(itemConsulta);
                 } else {
                     if (itemStack.getType() != Material.AIR) {
-                        itemConsulta = new Item();
-                        itemConsulta.setDsItem(cmd);
+                        itemConsulta = new Item(itemStack);
                         itemConsulta.setDsLang(langPlayer);
                         item = itemDao.select(itemConsulta);
                     }
                 }
                 if (item != null)
                     Msg.PlayerGreen(player, ChatColor.YELLOW + "Item ID: " + item.getCdItem() + ChatColor.GREEN + " - item: " + item.getDsTraducao());
+                else
+                    Msg.PlayerRed(player, "Não existe registro do item "+cmd+"!!!");
             }
 
             // ADICIONANDO OU ATUALIZANDO A TRADUÇÃO DO ITEM
@@ -94,7 +95,6 @@ public class ItemComando implements CommandExecutor {
                     }
                 }
                 Msg.ServidorGreen("cdItem >> "+ item.getCdItem() +" - item getDsItem >> " + item.getDsItem()+" - lang >> "+ item.getDsLang() +" - traducao >> "+ item.getDsTraducao());
-
             }
         }
         return false;
