@@ -76,6 +76,7 @@ public class ItemDao {
                 this.item = new Item();
                 this.item.setCdItem(rs.getInt("cdItem"));
                 this.item.setDsItem(rs.getString("dsItem"));
+                this.item.setDsTraducao(this.item.getDsItem());
                 return this.item;
             }
         } catch (SQLException e) {
@@ -148,6 +149,7 @@ public class ItemDao {
                 this.item.setDsItem(rs.getString("dsItem"));
                 this.item.setCdLang(rs.getInt("cdLang"));
                 this.item.setDsLang(rs.getString("dsLang"));
+                this.item.setDsTraducao(this.item.getDsItem());
                 return this.item;
             }
         } catch (SQLException e) {
@@ -169,7 +171,11 @@ public class ItemDao {
                 this.item.setCdItem(rs.getInt("cdItem"));
                 this.item.setDsItem(rs.getString("dsItem"));
                 listItem.add(this.item);
+
+                // ADICIONANDO NA VARIAVEL GLOBAL
                 VGlobal.LIST_ITEM.add(this.item);// ADICIONANDO NA LISTA GLOBAL
+                VGlobal.ITEM_ID_MAP.put(item.getCdItem(), item);
+                VGlobal.ITEM_NAME_MAP.put(item.getDsItem(), item);
             }
         } catch (SQLException e) {
             Msg.ServidorErro(e, "selectList", getClass());
