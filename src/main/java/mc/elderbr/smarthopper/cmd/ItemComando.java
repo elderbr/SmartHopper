@@ -22,7 +22,7 @@ public class ItemComando implements CommandExecutor {
 
     private Item item = null;
     private Item itemConsulta = null;
-    private ItemDao itemDao;
+    private ItemDao itemDao = new ItemDao();
     private StringBuffer nameItem;
 
     private Player player;
@@ -31,11 +31,11 @@ public class ItemComando implements CommandExecutor {
 
     private ItemStack itemStack;
 
-    private TraducaoDao traducaoDao;
+    private TraducaoDao traducaoDao = new TraducaoDao();
     private Traducao traducao;
 
     private Lang lang;
-    private LangDao langDao;
+    private LangDao langDao = new LangDao();
 
 
     @Override
@@ -47,63 +47,10 @@ public class ItemComando implements CommandExecutor {
             cmd = Utils.NAME_ARRAY(args).toLowerCase();// PEGA O NOME DO ITEM DIGITADO
             itemStack = player.getInventory().getItemInMainHand();// PEGA O NOME DO ITEM NA MÃO
             langPlayer = player.getLocale();
-
-            nameItem = new StringBuffer();
-            if (args.length == 0) {
-                nameItem.append(Utils.toItem(itemStack));
-            }
-
-            // Criar nome do item
-            for (int i = 0; i < args.length; i++) {
-                if (i > 0) {
-                    nameItem.append(args[i]);
-                }
-                if (i < args.length) {
-                    nameItem.append(" ");
-                }
-            }
-
-
-            itemDao = new ItemDao();
             item = null;
 
             if (command.getName().equalsIgnoreCase("item")) {
                 if (cmd.length() > 0) {
-
-                    if (args[0].equalsIgnoreCase("traducao")) {
-
-                        item = itemDao.select(new Item(itemStack));
-                        item.setDsTraducao(nameItem.toString().trim());
-
-                        Msg.ServidorGreen("item cd lang >> "+ item.getCdLang());
-                        Msg.ServidorGreen("item DsTraducao >> "+ item.getDsTraducao());
-
-                        // BUSCAR O ID DO LANG
-                        if(item.getCdLang()<1){
-                            langDao = new LangDao();
-                            lang = langDao.select(langPlayer);
-                            item.setCdLang(lang.getCdLang());
-                        }
-
-                        // SALVANDO NO BANCO A TRADUÇÃO
-                        traducaoDao = new TraducaoDao();
-                        if(item.getCdTraducao()<1) {
-                            if (traducaoDao.insert(item) > 0) {
-                                Msg.PlayerGold(player, "Tradução do item " + Utils.toItem(itemStack) + " salvo com sucesso!!!");
-                            } else {
-                                Msg.PlayerRed(player, "Erro ao salvar a tradução do item " + Utils.toItem(itemStack) + "!!!");
-                            }
-                        }else{
-                            Msg.ServidorGreen("traducao id >> "+ item.getCdTraducao());
-                            if(traducaoDao.update(item)>0){
-                                Msg.PlayerGold(player, "Atualização do item " + item.getDsTraducao() + " bem sucessedida!!!");
-                            }else{
-                                Msg.PlayerRed(player, "Erro ao atualiza do item " + item.getDsTraducao() + "!!!");
-                            }
-                        }
-                        return false;
-                    }
-
                     itemConsulta = new Item();
                     itemConsulta.setDsItem(cmd);
                     itemConsulta.setDsLang(langPlayer);
@@ -111,13 +58,43 @@ public class ItemComando implements CommandExecutor {
                 } else {
                     if (itemStack.getType() != Material.AIR) {
                         itemConsulta = new Item();
-                        itemConsulta.setDsItem(nameItem.toString().trim());
+                        itemConsulta.setDsItem(cmd);
                         itemConsulta.setDsLang(langPlayer);
                         item = itemDao.select(itemConsulta);
                     }
                 }
                 if (item != null)
                     Msg.PlayerGreen(player, ChatColor.YELLOW + "Item ID: " + item.getCdItem() + ChatColor.GREEN + " - item: " + item.getDsTraducao());
+            }
+
+            // ADICIONANDO OU ATUALIZANDO A TRADUÇÃO DO ITEM
+            if (command.getName().equalsIgnoreCase("itemTraducao")) {
+
+                if (itemStack.getType() == Material.AIR) {
+                    Msg.PlayerGold(player, "Segure um item na mão!!!");
+                    return false;
+                }
+
+                item = new Item(itemStack);
+                item.setDsLang(langPlayer);
+                item = itemDao.select(item);
+                item.setDsTraducao(Utils.NAME_ARRAY(args));
+                // VERIFICA SE JÁ EXISTE TRADUÇÃO PARA O ITEM E LANG
+                if(traducaoDao.selectItem(item)==null){
+                    if(traducaoDao.insert(item)>0){
+                        Msg.PlayerGreen(player, "Tradução para o item "+ item.getDsTraducao()+" adicionado com sucesso!");
+                    }else{
+                        Msg.PlayerRed(player, "Erro ao adicionar tradução do item "+ item.getDsTraducao()+"!!!");
+                    }
+                }else{
+                    if(traducaoDao.update(item)>0){
+                        Msg.PlayerGreen(player, "Tradução para o item "+ item.getDsTraducao()+" atualizada com sucesso!");
+                    }else{
+                        Msg.PlayerRed(player, "Erro para atualizar a tradução do item "+ item.getDsTraducao()+"!!!");
+                    }
+                }
+                Msg.ServidorGreen("cdItem >> "+ item.getCdItem() +" - item getDsItem >> " + item.getDsItem()+" - lang >> "+ item.getDsLang() +" - traducao >> "+ item.getDsTraducao());
+
             }
         }
         return false;

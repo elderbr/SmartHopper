@@ -57,10 +57,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         langDao = new LangDao();
         traducaoDao = new TraducaoDao();
         traducaoConfig = new TraducaoConfig();
-        Msg.ServidorGreen("finalizado");
-
-
-
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);
@@ -70,6 +66,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Comandos
         getCommand("item").setExecutor(new ItemComando());
+        getCommand("itemTraducao").setExecutor(new ItemComando());
 
         // ADICIONANDO NOVAS RECEITAS
         HopperRecipe recipes = new HopperRecipe();

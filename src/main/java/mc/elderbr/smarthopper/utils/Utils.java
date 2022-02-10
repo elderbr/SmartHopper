@@ -33,7 +33,7 @@ public class Utils {
         for (String name : args) {
             txt.append(name + " ");
         }
-        return txt.toString().toLowerCase().trim();
+        return txt.toString().trim();
     }
 
     public static String ToUTF(String obj) {
