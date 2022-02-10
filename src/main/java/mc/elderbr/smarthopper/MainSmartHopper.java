@@ -10,6 +10,7 @@ import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -55,6 +56,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         langDao = new LangDao();
         traducaoDao = new TraducaoDao();
         Msg.ServidorGreen("finalizado");
+
+        TraducaoConfig traducaoConfig = new TraducaoConfig();
 
 
         // ADICIONANDO OS EVENTOS
