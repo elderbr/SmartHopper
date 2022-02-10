@@ -94,9 +94,10 @@ public class TraducaoDao {
                     smt = Conexao.prepared(sql);
                     smt.setInt(1, ((Item) item).getCdItem());
                 } else {
-                    sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ?";
+                    sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ? OR t.dsTraducao = ?";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, (String) item);
+                    smt.setString(2, (String) item);
                 }
                 rs = smt.executeQuery();
                 while (rs.next()) {
