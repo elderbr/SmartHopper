@@ -46,6 +46,13 @@ public class TraducaoConfig {
             for (File file : listFile) {
                 lang = file.getName().substring(0, file.getName().lastIndexOf('_'));// PEGA O NOME DO LANG
                 langDao.insert(lang);// ADICIONA O LANG SE NÃO EXITIR
+
+                // ADICIONANDO O LINGUAGEM NA LISTA DA CONFIGURAÇÃO
+                try {
+                    Config.AddLangList(lang);
+                } catch (IOException e) {
+                    Msg.ServidorErro("Erro ao adicionar lang na lista do config!!!", "TraducaoConfig", getClass(), e);
+                }
                 // PERCORRENDO O ARQUIVO LANG
                 try (BufferedReader ler = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
                     while ((itemName = ler.readLine()) != null) {
