@@ -16,7 +16,11 @@ import java.util.Map;
 public interface VGlobal {
 
     // ITEM
+    Map<Integer, Item> ITEM_ID_MAP = new HashMap<>();
+    Map<String, Item> ITEM_NAME_MAP = new HashMap<>();
     List<Item> LIST_ITEM = new ArrayList<>();
+
+    // GRUPO
     List<Grupo> LIST_GRUPO = new ArrayList<>();
     List<Material> LIST_MATERIAL = new ArrayList<>();
 
