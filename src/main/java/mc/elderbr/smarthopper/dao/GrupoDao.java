@@ -174,21 +174,43 @@ public class GrupoDao {
             return null;
         }
         try {
+            // BUSCA PELO CÓDIGO DO GRUPO E O TIPO DE LINGUAGEM
             if (grupo.getCdGrupo() > 0) {
-                sql = "SELECT * FROM grupo WHERE cdGrupo = ?" ;
+                // SE O LANG NÃO ESTIVER DEFENIDO PREENCHE COMO INGLÊS ESTADOS UNIDOS
+                if(grupo.getDsLang()==null){
+                    grupo.setDsLang("en_us");
+                }
+                sql = "SELECT * FROM grupo g " +
+                        "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
+                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                        "WHERE g.cdGrupo = ? AND l.dsLang = ? COLLATE NOCASE;";
                 smt = Conexao.prepared(sql);
                 smt.setInt(1, grupo.getCdGrupo());
+                smt.setString(2, grupo.getDsLang());
             } else {
-                sql = "SELECT * FROM grupo WHERE dsGrupo = ?";
+                // BUSCA PELO NOME DO GRUPO OU TRADUÇÃO
+                sql = "SELECT * FROM grupo g " +
+                        "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
+                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                        "WHERE g.dsGrupo = ? OR t.dsTraducao = ? AND l.dsLang = ? COLLATE NOCASE;";
                 smt = Conexao.prepared(sql);
                 smt.setString(1, grupo.getDsGrupo());
+                smt.setString(2, grupo.getDsTraducao());
+                smt.setString(3, grupo.getDsLang());
             }
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.grupo = new Grupo();
                 this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 this.grupo.setDsGrupo(rs.getString("dsGrupo"));
-                this.grupo.setDsTraducao(this.grupo.getDsGrupo());
+                this.grupo.setCdLang(rs.getInt("cdLang"));
+                this.grupo.setDsLang(rs.getString("dsLang"));
+                this.grupo.setCdTraducao(rs.getInt("cdTraducao"));
+                this.grupo.setDsTraducao(rs.getString("dsTraducao"));
+                // SE O LANG NÃO FOR LOCALIZADO COLOCA COMO O NOME PADRÃO DO GRUPO
+                if(this.grupo.getDsTraducao()==null){
+                    this.grupo.setDsTraducao(this.grupo.getDsGrupo());
+                }
             }
         } catch (SQLException e) {
             Msg.ServidorErro(e, "select(Grupo grupo)", getClass());
