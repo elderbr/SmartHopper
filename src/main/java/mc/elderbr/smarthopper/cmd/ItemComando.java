@@ -33,9 +33,7 @@ public class ItemComando implements CommandExecutor {
     private ItemStack itemStack;
 
     private TraducaoDao traducaoDao = new TraducaoDao();
-    private Traducao traducao;
 
-    private Lang lang;
     private LangDao langDao = new LangDao();
 
 
