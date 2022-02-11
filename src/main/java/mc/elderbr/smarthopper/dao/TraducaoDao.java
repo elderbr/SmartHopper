@@ -101,7 +101,6 @@ public class TraducaoDao {
                     smt = Conexao.prepared(sql);
                     smt.setString(1, (String) item);
                     smt.setString(2, (String) item);
-                    Msg.ServidorGreen("Buscar tradução por string >> "+(String) item);
                 }else{
                     return null;
                 }

@@ -53,11 +53,9 @@ public class ItemComando implements CommandExecutor {
                     itemConsulta = new Item();
                     itemConsulta.setDsItem(cmd);
                     itemConsulta.setDsLang(langPlayer);
-                    item = itemDao.select(itemConsulta);
-                    if (item == null) {
+                    itemQuery = itemDao.select(itemConsulta);
+                    if (itemQuery == null) {
                         item = traducaoDao.selectItem(cmd);
-                        if (item != null)
-                            Msg.ServidorGreen("item " + item.getDsTraducao());
                     }
                 } else {
                     if (itemStack.getType() != Material.AIR) {
