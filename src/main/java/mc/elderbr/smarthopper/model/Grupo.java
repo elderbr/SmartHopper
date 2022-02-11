@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Grupo extends Traducao{
@@ -33,5 +34,13 @@ public class Grupo extends Traducao{
 
     public void setListItem(List<Item> listItem) {
         this.listItem = listItem;
+    }
+
+    public List<Item> addItem(Item item){
+        if(listItem == null){
+            listItem = new ArrayList<>();
+        }
+        listItem.add(item);
+        return listItem;
     }
 }
