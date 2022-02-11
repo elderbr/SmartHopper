@@ -134,7 +134,7 @@ public class GrupoDao {
 
         // LISTA VALIDA DO NOME DO GRUPO
         // VERIFICA SE A LISTA DE ITEM É MAIOR QUE LISTA DO BANCO
-        if(listItem.size()>selectAll().size()) {
+        if (listItem.size() > selectAll().size()) {
             listItem.forEach(names -> {
                 grupo = new Grupo();
                 grupo.setDsGrupo(names);
@@ -173,18 +173,22 @@ public class GrupoDao {
         if (grupo == null) {
             return null;
         }
-        if (grupo.getCdGrupo() > 0) {
-            sql = "SELECT * FROM grupo WHERE cdGrupo = " + grupo.getCdGrupo();
-        } else {
-            sql = "SELECT * FROM grupo WHERE dsGrupo = " + grupo.getDsGrupo();
-        }
         try {
-            smt = Conexao.prepared(sql);
+            if (grupo.getCdGrupo() > 0) {
+                sql = "SELECT * FROM grupo WHERE cdGrupo = ?" ;
+                smt = Conexao.prepared(sql);
+                smt.setInt(1, grupo.getCdGrupo());
+            } else {
+                sql = "SELECT * FROM grupo WHERE dsGrupo = ?";
+                smt = Conexao.prepared(sql);
+                smt.setString(1, grupo.getDsGrupo());
+            }
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.grupo = new Grupo();
                 this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 this.grupo.setDsGrupo(rs.getString("dsGrupo"));
+                this.grupo.setDsTraducao(this.grupo.getDsGrupo());
             }
         } catch (SQLException e) {
             Msg.ServidorErro(e, "select(Grupo grupo)", getClass());

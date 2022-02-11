@@ -146,16 +146,19 @@ public class TraducaoDao {
                     smt.setInt(1, (Integer) traducao);
                 }
                 if (traducao instanceof String) {
-                    sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ?";
+                    sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ? OR t.dsTraducao COLLATE NOCASE";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, (String) traducao);
                 }
                 rs = smt.executeQuery();
                 while (rs.next()) {
                     grupo = new Grupo();
-                    grupo.setCdGrupo(rs.getInt("g.cdGrupo"));
-                    grupo.setDsGrupo(rs.getString("g.dsGrupo"));
-                    grupo.setDsTraducao(rs.getString("t.dsTraducao"));
+                    grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                    grupo.setDsGrupo(rs.getString("dsGrupo"));
+                    grupo.setDsTraducao(rs.getString("dsTraducao"));
+                    if(grupo.getDsTraducao()==null){
+                        grupo.setDsTraducao(grupo.getDsGrupo());
+                    }
                 }
                 smt.close();
                 rs.close();
