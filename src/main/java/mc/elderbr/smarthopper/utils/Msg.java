@@ -74,14 +74,16 @@ public class Msg {
 
     public static void Item(Item item) {
         Bukkit.getServer().getConsoleSender().sendMessage(
-                ChatColor.GREEN + "Item " + ChatColor.GOLD + "ID: " + item.getCdItem() +
-                        ChatColor.GREEN + " - nome: " + item.getDsTraducao());
+                ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.getDsTraducao()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getDsTraducao()
+        );
     }
 
     public static void ItemPlayer(Player player, Item item) {
         player.sendMessage(
-                ChatColor.GREEN + "Item " + ChatColor.GOLD + "ID: " + item.getCdItem() +
-                        ChatColor.GREEN + " - nome: " + item.getDsTraducao());
+                ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.getDsTraducao()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getDsTraducao()
+        );
     }
 
     public static void ItemNaoExiste(Player player, String name) {
@@ -94,7 +96,9 @@ public class Msg {
     }
 
     public static void GrupoPlayer(Player player, Grupo grupo) {
-        player.sendMessage(ChatColor.AQUA + "Grupo ID: " + ChatColor.GOLD + grupo.getCdGrupo() + ChatColor.AQUA + " - nome: " + grupo.getDsTraducao());
+        player.sendMessage(
+                ChatColor.AQUA + "Grupo: " + ChatColor.YELLOW + grupo.getDsTraducao()
+                        + ChatColor.AQUA + " - ID: " + ChatColor.YELLOW + grupo.getCdGrupo());
     }
 
 
