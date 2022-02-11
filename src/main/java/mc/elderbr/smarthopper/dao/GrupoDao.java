@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.dao;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
@@ -19,7 +20,7 @@ public class GrupoDao {
     private List<Grupo> listGrupo;
 
     private List<String> listNames;
-    private List<String> listItem;
+    private List<String> listItemName;
     private int contato;
 
     private String sql;
@@ -28,16 +29,30 @@ public class GrupoDao {
 
     public GrupoDao() {
 
-        sql = "CREATE TABLE IF NOT EXISTS grupo (" +
-                "cdGrupo INTEGER PRIMARY KEY AUTOINCREMENT" +
-                ", dsGrupo VARCHAR(20) NOT NULL UNIQUE);";
+
         try {
+            sql = "CREATE TABLE IF NOT EXISTS grupo (" +
+                    "cdGrupo INTEGER PRIMARY KEY AUTOINCREMENT" +
+                    ", dsGrupo VARCHAR(20) NOT NULL UNIQUE);";
             Conexao.create(sql);
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao criar a tabela grupo!", "GrupoDao", getClass(), e);
         } finally {
             Conexao.desconect();
         }
+
+        try {
+            sql = "CREATE TABLE IF NOT EXISTS grupoItem (" +
+                    "cdGItem INTEGER PRIMARY KEY AUTOINCREMENT" +
+                    ", cdGrupo INTEGER NOT NULL" +
+                    ", cdItem INTEGER NOT NULL);";
+            Conexao.create(sql);
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao criar a tabela item do grupo!", "GrupoDao", getClass(), e);
+        } finally {
+            Conexao.desconect();
+        }
+
         createGrupo();
     }
 
@@ -115,13 +130,13 @@ public class GrupoDao {
         }
         // NOME DO GRUPO É VALIDO SE EXISTIR MAIS DE UM ITEM COM O NOME
         contato = 0;
-        listItem = new ArrayList<>();
+        listItemName = new ArrayList<>();
         for (String names : listNames) {
             for (Material m : VGlobal.LIST_MATERIAL) {
                 if (m.isItem()) {
                     if (Utils.ToMaterial(m).contains(names)) {
-                        if (contato > 1 && !listItem.contains(names)) {
-                            listItem.add(names);
+                        if (contato > 1 && !listItemName.contains(names)) {
+                            listItemName.add(names);
                             break;
                         }
                         contato++;
@@ -134,8 +149,8 @@ public class GrupoDao {
 
         // LISTA VALIDA DO NOME DO GRUPO
         // VERIFICA SE A LISTA DE ITEM É MAIOR QUE LISTA DO BANCO
-        if (listItem.size() > selectAll().size()) {
-            listItem.forEach(names -> {
+        if (listItemName.size() > selectAll().size()) {
+            listItemName.forEach(names -> {
                 grupo = new Grupo();
                 grupo.setDsGrupo(names);
                 Msg.ServidorGreen("Criando o grupo " + grupo.getDsGrupo());
@@ -177,7 +192,7 @@ public class GrupoDao {
             // BUSCA PELO CÓDIGO DO GRUPO E O TIPO DE LINGUAGEM
             if (grupo.getCdGrupo() > 0) {
                 // SE O LANG NÃO ESTIVER DEFENIDO PREENCHE COMO INGLÊS ESTADOS UNIDOS
-                if(grupo.getDsLang()==null){
+                if (grupo.getDsLang() == null) {
                     grupo.setDsLang("en_us");
                 }
                 sql = "SELECT * FROM grupo g " +
@@ -208,7 +223,7 @@ public class GrupoDao {
                 this.grupo.setCdTraducao(rs.getInt("cdTraducao"));
                 this.grupo.setDsTraducao(rs.getString("dsTraducao"));
                 // SE O LANG NÃO FOR LOCALIZADO COLOCA COMO O NOME PADRÃO DO GRUPO
-                if(this.grupo.getDsTraducao()==null){
+                if (this.grupo.getDsTraducao() == null) {
                     this.grupo.setDsTraducao(this.grupo.getDsGrupo());
                 }
             }
@@ -274,6 +289,12 @@ public class GrupoDao {
             Conexao.desconect();
         }
         return 0;
+    }
+
+    /* ITEM DO GRUPO */
+    public List<Item> insertItem(Item item) {
+
+        return null;
     }
 
 
