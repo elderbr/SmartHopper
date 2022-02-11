@@ -6,11 +6,11 @@ authors: [ ElderBR ]
 commands:
   item:
     description: Mostra o número do ID do material
-  itemTraducao:
+  traducaoItem:
     description: Adicionar tradução ao item
   grupo:
     description: Mostra o número do Grupo do material
-  grupoTraducao:
+  traducaoGrupo:
     description: Adicionar tradução ao grupo
   addgrupo:
     description: Adicionar novo grupo

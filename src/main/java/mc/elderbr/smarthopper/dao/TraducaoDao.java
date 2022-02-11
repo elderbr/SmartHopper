@@ -85,19 +85,25 @@ public class TraducaoDao {
                         smt.setInt(1, ((Item) item).getCdItem());
                         smt.setInt(2, ((Item) item).getCdLang());
                     } else {
-                        sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ?";
+                        sql = "SELECT * FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ? COLLATE NOCASE";
                         smt = Conexao.prepared(sql);
                         smt.setString(1, ((Item) item).getDsItem());
                     }
                 } else if (item instanceof Integer) {
-                    sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
+                    sql = "SELECT * FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
                     smt = Conexao.prepared(sql);
                     smt.setInt(1, ((Item) item).getCdItem());
-                } else {
-                    sql = "SELECT i.cdItem, i.dsItem, t.dsTraducao FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ? OR t.dsTraducao = ?";
+                } else if(item instanceof String){
+                    sql = "SELECT * FROM item i " +
+                            "INNER JOIN traducao t ON i.cdItem = t.cdItem " +
+                            "INNER JOIN lang l ON t.cdLang = l.cdLang "+
+                            "WHERE i.dsItem = ? OR t.dsTraducao = ? COLLATE NOCASE";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, (String) item);
                     smt.setString(2, (String) item);
+                    Msg.ServidorGreen("Buscar tradução por string >> "+(String) item);
+                }else{
+                    return null;
                 }
                 rs = smt.executeQuery();
                 while (rs.next()) {
