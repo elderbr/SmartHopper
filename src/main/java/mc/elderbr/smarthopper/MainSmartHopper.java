@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper;
 
+import mc.elderbr.smarthopper.cmd.GrupoComando;
 import mc.elderbr.smarthopper.cmd.ItemComando;
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.ItemDao;
@@ -67,6 +68,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Comandos
         getCommand("item").setExecutor(new ItemComando());
         getCommand("traducaoItem").setExecutor(new ItemComando());
+        getCommand("grupo").setExecutor(new GrupoComando());
 
         // ADICIONANDO NOVAS RECEITAS
         HopperRecipe recipes = new HopperRecipe();
