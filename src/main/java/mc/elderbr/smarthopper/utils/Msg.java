@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.utils;
 
+import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -70,14 +72,29 @@ public class Msg {
 
     //========================== ITEM =================================================//
 
+    public static void Item(Item item) {
+        Bukkit.getServer().getConsoleSender().sendMessage(
+                ChatColor.GREEN + "Item " + ChatColor.GOLD + "ID: " + item.getCdItem() +
+                        ChatColor.GREEN + " - nome: " + item.getDsTraducao());
+    }
+
+    public static void ItemPlayer(Player player, Item item) {
+        player.sendMessage(
+                ChatColor.GREEN + "Item " + ChatColor.GOLD + "ID: " + item.getCdItem() +
+                        ChatColor.GREEN + " - nome: " + item.getDsTraducao());
+    }
 
     public static void ItemNaoExiste(Player player, String name) {
         player.sendMessage(Color("$aO item $6" + name + " $4$lNÃO $r$aexiste!"));
     }
 
     //========================== GRUPO =================================================//
-    public static void GrupoNaoExiste(Player player, String name){
+    public static void GrupoNaoExiste(Player player, String name) {
         player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
+    }
+
+    public static void GrupoPlayer(Player player, Grupo grupo) {
+        player.sendMessage(ChatColor.AQUA + "Grupo ID: " + ChatColor.GOLD + grupo.getCdGrupo() + ChatColor.AQUA + " - nome: " + grupo.getDsTraducao());
     }
 
 
