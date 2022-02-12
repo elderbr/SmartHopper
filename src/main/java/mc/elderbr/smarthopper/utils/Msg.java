@@ -82,7 +82,7 @@ public class Msg {
     public static void ItemPlayer(Player player, Item item) {
         player.sendMessage(
                 ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.getDsTraducao()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getDsTraducao()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCdItem()
         );
     }
 
