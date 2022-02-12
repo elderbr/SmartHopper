@@ -45,15 +45,15 @@ public class Grupo extends Traducao{
     }
 
     public boolean contains(Item item) {
-        String[] names = item.getDsItem().split(" ");
+        String[] names = item.getDsItem().split("\\s");
         if (names.length > 0) {
             for (int i = 0; i < names.length; i++) {
-                if (names[0].equalsIgnoreCase(getDsGrupo())) {
+                if (names[i].equalsIgnoreCase(dsGrupo)) {
                     return true;
                 }
             }
         } else {
-            if (item.getDsItem().equalsIgnoreCase(getDsGrupo())) {
+            if (item.getDsItem().equalsIgnoreCase(dsGrupo)) {
                 return true;
             }
         }
