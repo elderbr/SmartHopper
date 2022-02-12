@@ -146,9 +146,10 @@ public class TraducaoDao {
                     smt.setInt(1, (Integer) traducao);
                 }
                 if (traducao instanceof String) {
-                    sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ? OR t.dsTraducao COLLATE NOCASE";
+                    sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ? OR t.dsTraducao = ? COLLATE NOCASE";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, (String) traducao);
+                    smt.setString(2, (String) traducao);
                 }
                 rs = smt.executeQuery();
                 while (rs.next()) {
