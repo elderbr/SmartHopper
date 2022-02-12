@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.TraducaoDao;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -13,6 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class GrupoComando implements CommandExecutor {
 
     private Player player;
@@ -23,9 +26,13 @@ public class GrupoComando implements CommandExecutor {
     // Grupo
     private Grupo grupo;
     private GrupoDao grupoDao;
+    private List<Grupo> listGrupo;
+
+    private Item item;
 
     // Tradução
     private TraducaoDao traducaoDao;
+
 
     public GrupoComando() {
         grupoDao = new GrupoDao();
@@ -43,23 +50,60 @@ public class GrupoComando implements CommandExecutor {
 
             if (command.getName().equalsIgnoreCase("grupo")) {
                 grupo = new Grupo();
-
+                grupo.setDsLang(langPlayer);
                 if (cmd.length() > 0) {
-                    grupo.setDsGrupo(cmd);
-                }else{
-                    grupo.setDsGrupo(Utils.toItem(itemStack));
-                }
-                grupo = grupoDao.select(grupo);
-                if (grupo != null) {
-                    grupo = traducaoDao.selectGrupo(grupo);
+                    // VERIFICA SE O COMANDO É UM NÚMERO
+                    try {
+                        grupo.setCdGrupo(Integer.parseInt(cmd));
+                    } catch (NumberFormatException e) {
+                        grupo.setDsGrupo(cmd);
+                    }
+                    grupo = grupoDao.select(grupo);
                 } else {
-                    grupo = traducaoDao.selectGrupo(cmd);
+                    item = VGlobal.ITEM_NAME_MAP.get(Utils.toItem(itemStack));
+                    item.setDsLang(langPlayer);
+                    listGrupo = grupoDao.selectListGrupo(item);
+                    if(listGrupo.size()>1) {
+                        for (Grupo gp : listGrupo) {
+                            Msg.GrupoPlayer(player, gp);
+                        }
+                    }else{
+                        Msg.GrupoPlayer(player, listGrupo.get(0));
+                    }
+                    return false;
                 }
+                if (grupo != null) {
+                    Msg.GrupoPlayer(player, grupo);
+                }
+                else {
+                    Msg.PlayerRed(player, "Grupo não encontrado!!!");
+                }
+                return false;
             }
-            if (grupo != null)
-                Msg.GrupoPlayer(player, grupo);
-            else
-                Msg.PlayerRed(player, "Grupo não encontrado!!!");
+
+            if (command.getName().equalsIgnoreCase("traducaoGrupo")) {
+                if (cmd.length() > 0) {
+                    grupo = new Grupo();
+                    grupo.setDsGrupo(cmd);
+                    grupo.setDsLang(langPlayer);
+                    grupo = grupoDao.select(grupo);
+                    if (grupo == null) {
+                        grupo.setDsTraducao(cmd);
+                        if (traducaoDao.insert(grupo)>0)
+                            Msg.PlayerGold(player, "Tradução para o grupo ".concat(grupo.getDsGrupo()).concat(" adicionado com sucesso!!!"));
+                        else
+                            Msg.PlayerGold(player, "Erro ao adicionar a tradução para o ".concat(grupo.getDsGrupo()).concat("!!!"));
+                    } else {
+                        grupo.setDsTraducao(cmd);
+                        if (traducaoDao.update(grupo) > 0)
+                            Msg.PlayerGold(player, "Tradução para o grupo ".concat(grupo.getDsGrupo()).concat(" atualizado com sucesso!!!"));
+                        else
+                            Msg.PlayerGold(player, "Erro ao atualizar a tradução para o ".concat(grupo.getDsGrupo()).concat("!!!"));
+                    }
+                }
+                return false;
+            }
+
 
         }
 
