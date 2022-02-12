@@ -43,4 +43,21 @@ public class Grupo extends Traducao{
         listItem.add(item);
         return listItem;
     }
+
+    public boolean contains(Item item) {
+        String[] names = item.getDsItem().split(" ");
+        if (names.length > 0) {
+            for (int i = 0; i < names.length; i++) {
+                if (names[0].equalsIgnoreCase(getDsGrupo())) {
+                    return true;
+                }
+            }
+        } else {
+            if (item.getDsItem().equalsIgnoreCase(getDsGrupo())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
