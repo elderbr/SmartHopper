@@ -5,7 +5,9 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class GrupoDao {
 
+    private int position;
     private Grupo grupo;
     private List<Grupo> listGrupo;
 
@@ -151,9 +154,16 @@ public class GrupoDao {
         if (listItemName.size() > selectAll().size()) {
             listItemName.forEach(names -> {
                 grupo = new Grupo();
-                grupo.setDsGrupo(names);
+                grupo.setDsGrupo(StringUtils.capitalize(names));
                 Msg.ServidorGreen("Criando o grupo " + grupo.getDsGrupo());
-                insert(grupo);
+                position = insert(grupo);
+                grupo.setCdGrupo(position);
+
+                VGlobal.LIST_ITEM.forEach(items -> {
+                    if (grupo.contains(items))
+                        insertItem(grupo, items);
+                });
+
             });
         }
     }
@@ -163,7 +173,11 @@ public class GrupoDao {
         try {
             smt = Conexao.prepared(sql);
             smt.setString(1, grupo.getDsGrupo());
-            return smt.executeUpdate();
+            smt.executeUpdate();
+            rs = smt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() != 19)
                 Msg.ServidorErro(e, "insert(Grupo grupo)", getClass());
@@ -228,9 +242,9 @@ public class GrupoDao {
         }
         // SELECT SIMPLES NO GRUPO BUSCANDO PELO O CÓDIGO OU NOME DO GRUPO OU SUA TRADUÇÃO
         try {
-            sql = "SELECT * FROM item i " +
-                    "LEFT JOIN traducao t ON t.cdItem = i.cdItem " +
-                    "WHERE i.cdItem = ? OR i.dsItem = ? OR t.dsTraducao = ? COLLATE NOCASE";
+            sql = "SELECT * FROM grupo g " +
+                    "LEFT JOIN traducao t ON g.cdGrupo = g.cdGrupo " +
+                    "WHERE g.cdGrupo = ? OR g.dsGrupo = ? OR t.dsTraducao = ? COLLATE NOCASE";
             smt = Conexao.prepared(sql);
             smt.setInt(1, grupo.getCdGrupo());
             smt.setString(2, grupo.getDsGrupo());
@@ -321,6 +335,58 @@ public class GrupoDao {
             Conexao.desconect();
         }
         return 0;
+    }
+
+    public List<Grupo> selectListGrupo(Item item) {
+        listGrupo = new ArrayList<>();
+        try {
+            sql = "SELECT * FROM grupoItem gi " +
+                    "LEFT JOIN grupo g ON g.cdGrupo = gi.cdGrupo " +
+                    "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo "+
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang "+
+                    "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
+                    "WHERE gi.cdItem = ? AND l.dsLang = ?;";
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, item.getCdItem());
+            smt.setString(2, item.getDsLang());
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                grupo.setDsTraducao(rs.getString("dsGrupo"));
+                listGrupo.add(grupo);
+            }
+            if(listGrupo.size()>0)
+                return listGrupo;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            Conexao.desconect();
+        }
+
+        try {
+            sql = "SELECT * FROM grupoItem gi " +
+                    "LEFT JOIN grupo g ON g.cdGrupo = gi.cdGrupo " +
+                    "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
+                    "WHERE gi.cdItem = ?;";
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, item.getCdItem());
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                grupo.setDsTraducao(rs.getString("dsGrupo"));
+                listGrupo.add(grupo);
+            }
+            return listGrupo;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            Conexao.desconect();
+        }
+        return null;
     }
 
 }
