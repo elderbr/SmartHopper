@@ -145,7 +145,6 @@ public class GrupoDao {
             }
             contato = 0;
         }
-        ;
 
         // LISTA VALIDA DO NOME DO GRUPO
         // VERIFICA SE A LISTA DE ITEM É MAIOR QUE LISTA DO BANCO
@@ -184,21 +183,16 @@ public class GrupoDao {
     }
 
     public Grupo select(Grupo grupo) {
-        this.grupo = null;
         if (grupo == null) {
             return null;
         }
         try {
             // BUSCA PELO CÓDIGO DO GRUPO E O TIPO DE LINGUAGEM
             if (grupo.getCdGrupo() > 0) {
-                // SE O LANG NÃO ESTIVER DEFENIDO PREENCHE COMO INGLÊS ESTADOS UNIDOS
-                if (grupo.getDsLang() == null) {
-                    grupo.setDsLang("en_us");
-                }
                 sql = "SELECT * FROM grupo g " +
                         "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
                         "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE g.cdGrupo = ? AND l.dsLang = ? COLLATE NOCASE;";
+                        "WHERE g.cdGrupo = ? AND l.dsLang = ?;";
                 smt = Conexao.prepared(sql);
                 smt.setInt(1, grupo.getCdGrupo());
                 smt.setString(2, grupo.getDsLang());
@@ -232,7 +226,29 @@ public class GrupoDao {
         } finally {
             Conexao.desconect();
         }
-        return this.grupo;
+        // SELECT SIMPLES NO GRUPO BUSCANDO PELO O CÓDIGO OU NOME DO GRUPO OU SUA TRADUÇÃO
+        try {
+            sql = "SELECT * FROM item i " +
+                    "LEFT JOIN traducao t ON t.cdItem = i.cdItem " +
+                    "WHERE i.cdItem = ? OR i.dsItem = ? OR t.dsTraducao = ? COLLATE NOCASE";
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, grupo.getCdGrupo());
+            smt.setString(2, grupo.getDsGrupo());
+            smt.setString(3, grupo.getDsGrupo());
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                this.grupo = new Grupo();
+                this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                this.grupo.setDsGrupo(rs.getString("dsGrupo"));
+                this.grupo.setDsTraducao(rs.getString("dsGrupo"));
+                return this.grupo;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro(e, "select(Grupo grupo)", getClass());
+        } finally {
+            Conexao.desconect();
+        }
+        return null;
     }
 
     public List<Grupo> selectAll() {
@@ -292,10 +308,19 @@ public class GrupoDao {
     }
 
     /* ITEM DO GRUPO */
-    public List<Item> insertItem(Item item) {
-
-        return null;
+    public int insertItem(Grupo grupo, Item item) {
+        try {
+            sql = "INSERT INTO grupoItem (cdGrupo, cdItem) VALUES (?,?);";
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, grupo.getCdGrupo());
+            smt.setInt(2, item.getCdItem());
+            return smt.executeUpdate();
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao adicionar item do grupo!!!", "", getClass(), e);
+        } finally {
+            Conexao.desconect();
+        }
+        return 0;
     }
-
 
 }
