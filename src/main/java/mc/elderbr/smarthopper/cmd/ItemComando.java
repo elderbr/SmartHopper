@@ -21,8 +21,6 @@ import org.jetbrains.annotations.NotNull;
 public class ItemComando implements CommandExecutor {
 
     private Item item = null;
-    private Item itemQuery = null;
-    private Item itemConsulta = null;
     private ItemDao itemDao = new ItemDao();
     private StringBuffer nameItem;
 
@@ -43,32 +41,39 @@ public class ItemComando implements CommandExecutor {
         if (sender instanceof Player) {
 
             player = (Player) sender;
-            cmd = Utils.NAME_ARRAY(args).toLowerCase();// PEGA O NOME DO ITEM DIGITADO
+            cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
             itemStack = player.getInventory().getItemInMainHand();// PEGA O NOME DO ITEM NA MÃO
             langPlayer = player.getLocale();
             item = null;
 
             if (command.getName().equalsIgnoreCase("item")) {
                 if (cmd.length() > 0) {
-                    itemConsulta = new Item();
-                    itemConsulta.setDsItem(cmd);
-                    itemConsulta.setDsLang(langPlayer);
-                    itemQuery = itemDao.select(itemConsulta);
-                    if (itemQuery == null) {
-                        item = traducaoDao.selectItem(cmd);
+                    item = new Item();
+                    // VERIFICA SE É NÚMERO SE NÃO PESQUISA PELO NOME
+                    try{
+                        Msg.ServidorGreen("cmd >> "+ cmd, getClass());
+                        item.setCdItem(Integer.parseInt(cmd));
+                    }catch (NumberFormatException ex){
+                        item.setDsItem(cmd);
                     }
+                    item.setDsLang(langPlayer);
+                    item = itemDao.select(item);
                 } else {
                     if (itemStack.getType() != Material.AIR) {
-                        itemConsulta = new Item(itemStack);
-                        itemConsulta.setDsLang(langPlayer);
-                        item = itemDao.select(itemConsulta);
+                        item = new Item(itemStack);
+                        item.setDsLang(langPlayer);
+                        item = itemDao.select(item);
                     }
                 }
-                if (item != null)
-                    Msg.PlayerGreen(player, ChatColor.YELLOW + "Item ID: " + item.getCdItem() + ChatColor.GREEN + " - item: " + item.getDsTraducao());
-                else
+                if (item != null) {
+                    Msg.ItemPlayer(player, item);
+                } else {
                     Msg.PlayerRed(player, "Não existe registro do item " + ChatColor.GOLD + cmd + ChatColor.RED + "!!!");
+
+                }
+                return false;
             }
+
 
             // ADICIONANDO OU ATUALIZANDO A TRADUÇÃO DO ITEM
             if (command.getName().equalsIgnoreCase("traducaoItem")) {
