@@ -53,73 +53,38 @@ public class ItemDao {
             return null;
         }
 
-        if(selectTraducao(item) != null){
-            return this.item;
-        }
-
-        if(selectLang(item) != null){
-            return this.item;
-        }
-
-        try {
-            if (item.getCdItem() > 0) {
-                sql = "SELECT * FROM item WHERE cdItem = ?";
-                smt = Conexao.prepared(sql);
-                smt.setInt(1, item.getCdItem());
-            } else {
-                sql = "SELECT * FROM item WHERE dsItem = ?";
-                smt = Conexao.prepared(sql);
-                smt.setString(1, item.getDsItem());
-            }
-            rs = smt.executeQuery();
-            while (rs.next()) {
-                this.item = new Item();
-                this.item.setCdItem(rs.getInt("cdItem"));
-                this.item.setDsItem(rs.getString("dsItem"));
-                this.item.setDsTraducao(this.item.getDsItem());
-                return this.item;
-            }
-        } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao buscar o item!!!", "select(Item item)", getClass(), e);
-        } finally {
-            Conexao.desconect();
-        }
-        return this.item;
-    }
-
-    public Item selectTraducao(Item item) {
-        this.item = null;
-        if (item == null) {
-            return null;
-        }
         try {
             if (item.getCdItem() > 0) {
                 sql = "SELECT * FROM item i " +
-                        "LEFT JOIN traducao t ON t.cdItem = i.cdItem " +
-                        "LEFT JOIN lang l ON t.cdLang = l.cdLang " +
-                        "WHERE cdItem = ? AND l.dsLang = ?";
+                        "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
+                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                        "WHERE i.cdItem = ? AND l.dsLang = ?";
                 smt = Conexao.prepared(sql);
                 smt.setInt(1, item.getCdItem());
                 smt.setString(2, item.getDsLang());
             } else {
                 sql = "SELECT * FROM item i " +
                         "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
-                        "LEFT JOIN lang l ON t.cdLang = l.cdLang " +
-                        "WHERE dsItem = ? AND l.dsLang = ?";
+                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                        "WHERE i.dsItem = ? OR t.dsTraducao = ? AND l.dsLang = ? COLLATE NOCASE";
                 smt = Conexao.prepared(sql);
                 smt.setString(1, item.getDsItem());
-                smt.setString(2, item.getDsLang());
+                smt.setString(2, item.getDsItem());
+                smt.setString(3, item.getDsLang());
             }
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.item = new Item();
                 this.item.setCdItem(rs.getInt("cdItem"));
                 this.item.setDsItem(rs.getString("dsItem"));
+                // LINGUAGEM
                 this.item.setCdLang(rs.getInt("cdLang"));
                 this.item.setDsLang(rs.getString("dsLang"));
+                // TRADUÇÃO
                 this.item.setCdTraducao(rs.getInt("cdTraducao"));
                 this.item.setDsTraducao(rs.getString("dsTraducao"));
-                if(this.item.getDsTraducao()==null){
+                // SE A TRADUÇÃO NÃO EXITIR PEGA O NOME PADRÃO DO ITEM
+                if (this.item.getDsTraducao() == null) {
                     this.item.setDsTraducao(this.item.getDsItem());
                 }
                 return this.item;
@@ -129,35 +94,30 @@ public class ItemDao {
         } finally {
             Conexao.desconect();
         }
-        return this.item;
-    }
 
-    public Item selectLang(Item item){
-        this.item = null;
-        if(item == null){
-            return null;
-        }
-        sql = "SELECT * FROM item LEFT JOIN lang WHERE dsItem = ? AND dsLang = ?;";
+        // SELEC SIMPLES SE NÃO EXISTIR A TRADUÇÃO
         try {
+            sql = "SELECT * FROM item i " +
+                    "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
+                    "WHERE i.cdItem = ? OR i.dsItem = ? OR t.dsTraducao = ? COLLATE NOCASE";
             smt = Conexao.prepared(sql);
-            smt.setString(1, item.getDsItem());
-            smt.setString(2, item.getDsLang());
+            smt.setInt(1, item.getCdItem());
+            smt.setString(2, item.getDsItem());
+            smt.setString(3, item.getDsItem());
             rs = smt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 this.item = new Item();
                 this.item.setCdItem(rs.getInt("cdItem"));
                 this.item.setDsItem(rs.getString("dsItem"));
-                this.item.setCdLang(rs.getInt("cdLang"));
-                this.item.setDsLang(rs.getString("dsLang"));
-                this.item.setDsTraducao(this.item.getDsItem());
+                this.item.setDsTraducao(rs.getString("dsItem"));
                 return this.item;
             }
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao buscar o item e o lang!!!", "selectLang(Item item)", getClass(), e);
+            Msg.ServidorErro("Erro ao buscar o item!!!", "select(Item item)", getClass(), e);
         }finally {
             Conexao.desconect();
         }
-        return this.item;
+        return null;
     }
 
     public List<Item> selectList() {
