@@ -273,6 +273,7 @@ public class GrupoDao {
                 this.grupo.setDsGrupo(rs.getString("dsGrupo"));
                 listGrupo.add(this.grupo);
                 VGlobal.LIST_GRUPO.add(grupo);
+
             }
         } catch (SQLException e) {
             Msg.ServidorErro(e, "selectAll()", getClass());
@@ -400,6 +401,39 @@ public class GrupoDao {
             Conexao.desconect();
         }
         return listGrupo;
+    }
+
+    public Grupo selectListItemGrupo(Grupo gp) {
+        try {
+            sql = "SELECT gi.cdGitem, g.cdGrupo, g.dsGrupo, t.dsTraducao, i.cdItem, i.dsItem  FROM grupoItem gi " +
+                    "LEFT JOIN grupo g ON g.cdGrupo = gi.cdGrupo " +
+                    "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
+                    "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
+                    "WHERE gi.cdGrupo = ? ORDER BY i.dsItem;";
+
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, gp.getCdGrupo());
+            rs = smt.executeQuery();
+
+            // CRIANDO O GRUPO
+            grupo = new Grupo();
+            grupo.setCdGrupo(rs.getInt("cdGrupo"));
+            grupo.setDsGrupo(rs.getString("dsGrupo"));
+            grupo.setDsTraducao(rs.getString("dsTraducao"));
+            while (rs.next()) {
+                Item item = new Item();
+                item.setCdItem(rs.getInt("cdItem"));
+                item.setDsItem(rs.getString("dsItem"));
+                grupo.addItem(item);
+            }
+            if (!grupo.getListItem().isEmpty())
+                return grupo;
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao localizar lista item do grupo!!!", "selectListItemGrupo(Grupo gp)", getClass(), e);
+        } finally {
+            Conexao.desconect();
+        }
+        return null;
     }
 
 }
