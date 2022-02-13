@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.checkerframework.checker.units.qual.A;
@@ -83,6 +84,8 @@ public class LangDao {
                 this.lang.setCdLang(rs.getInt(1));
                 this.lang.setDsLang(rs.getString(2));
                 listLang.add(this.lang);
+                // Varivel Global com todos os langs
+                VGlobal.LANG_NAME_MAP.put(this.lang.getDsLang(), this.lang);
             }
             smt.close();
             rs.close();
