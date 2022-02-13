@@ -68,7 +68,11 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Comandos
         getCommand("item").setExecutor(new ItemComando());
         getCommand("traducaoItem").setExecutor(new ItemComando());
+
+        // COMANDO PARA O GRUPO
         getCommand("grupo").setExecutor(new GrupoComando());
+        getCommand("addgrupo").setExecutor(new GrupoComando());
+        getCommand("traducaoGrupo").setExecutor(new GrupoComando());
 
         // ADICIONANDO NOVAS RECEITAS
         HopperRecipe recipes = new HopperRecipe();
