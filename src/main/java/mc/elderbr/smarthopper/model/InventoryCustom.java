@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.utils.Msg;
+import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -17,11 +18,8 @@ public class InventoryCustom {
     private Pocao potion;
 
 
-    public void create(Object name) {
-        if (name instanceof List) {
-
-        }
-        this.name = Msg.Color("$8$lGrupo: $r" + name);
+    public void create(Grupo grupo) {
+        this.name = Msg.Color("$8$lGrupo: $r" + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao()));
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
 
@@ -40,6 +38,10 @@ public class InventoryCustom {
 
     public void addItem(Material item) {
         inventory.addItem(new ItemStack(item));
+    }
+
+    public void addItem(Item item) {
+        inventory.addItem(new ItemStack(Utils.ParseItemStack(item.getDsItem())));
     }
 
     public void addItem(ItemStack item) {
