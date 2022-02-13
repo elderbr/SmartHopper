@@ -97,7 +97,7 @@ public class Msg {
 
     public static void GrupoPlayer(Player player, Grupo grupo) {
         player.sendMessage(
-                ChatColor.AQUA + "Grupo: " + ChatColor.YELLOW + grupo.getDsTraducao()
+                ChatColor.AQUA + "Grupo: " + ChatColor.YELLOW + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao())
                         + ChatColor.AQUA + " - ID: " + ChatColor.YELLOW + grupo.getCdGrupo());
     }
 
