@@ -5,6 +5,7 @@ import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class Msg {
 
@@ -58,16 +59,36 @@ public class Msg {
     //========================== PLAYERS =================================================//
 
     //Mensagem do player
-    public static void PlayerGreen(Player player, String msg) {
+    public static void PlayerGreen(@NotNull Player player, String msg) {
         player.sendMessage(ChatColor.GREEN + msg);
     }
 
-    public static void PlayerGold(Player player, String msg) {
+    public static void PlayerGold(@NotNull Player player, String msg) {
         player.sendMessage(ChatColor.GOLD + msg);
     }
 
-    public static void PlayerRed(Player player, String msg) {
+    public static void PlayerRed(@NotNull Player player, String msg) {
         player.sendMessage(ChatColor.RED + msg);
+    }
+
+    public static void PlayerBlue(@NotNull Player player, String msg) {
+        player.sendMessage(ChatColor.BLUE + msg);
+    }
+
+    public static void PlayerGreenLine(@NotNull Player player) {
+        player.sendMessage(ChatColor.GREEN + "==================================================");
+    }
+
+    public static void PlayerGoldLine(@NotNull Player player) {
+        player.sendMessage(ChatColor.GOLD + "==================================================");
+    }
+
+    public static void PlayerRedLine(@NotNull Player player) {
+        player.sendMessage(ChatColor.RED + "==================================================");
+    }
+
+    public static void PlayerBlueLine(@NotNull Player player) {
+        player.sendMessage(ChatColor.BLUE + "==================================================");
     }
 
     //========================== ITEM =================================================//
@@ -79,23 +100,23 @@ public class Msg {
         );
     }
 
-    public static void ItemPlayer(Player player, Item item) {
+    public static void ItemPlayer(@NotNull Player player, Item item) {
         player.sendMessage(
                 ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.getDsTraducao()
                         + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCdItem()
         );
     }
 
-    public static void ItemNaoExiste(Player player, String name) {
+    public static void ItemNaoExiste(@NotNull Player player, String name) {
         player.sendMessage(Color("$aO item $6" + name + " $4$lNÃO $r$aexiste!"));
     }
 
     //========================== GRUPO =================================================//
-    public static void GrupoNaoExiste(Player player, String name) {
+    public static void GrupoNaoExiste(@NotNull Player player, String name) {
         player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
     }
 
-    public static void GrupoPlayer(Player player, Grupo grupo) {
+    public static void GrupoPlayer(@NotNull Player player, Grupo grupo) {
         player.sendMessage(
                 ChatColor.AQUA + "Grupo: " + ChatColor.YELLOW + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao())
                         + ChatColor.AQUA + " - ID: " + ChatColor.YELLOW + grupo.getCdGrupo());
