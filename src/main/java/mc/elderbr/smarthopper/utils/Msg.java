@@ -76,19 +76,19 @@ public class Msg {
     }
 
     public static void PlayerGreenLine(@NotNull Player player) {
-        player.sendMessage(ChatColor.GREEN + "-------------------------------------------------------------------------------");
+        player.sendMessage(ChatColor.GREEN + "-----------------------------------------------------");
     }
 
     public static void PlayerGoldLine(@NotNull Player player) {
-        player.sendMessage(ChatColor.GOLD + "-------------------------------------------------------------------------------");
+        player.sendMessage(ChatColor.GOLD + "-----------------------------------------------------");
     }
 
     public static void PlayerRedLine(@NotNull Player player) {
-        player.sendMessage(ChatColor.RED + "-------------------------------------------------------------------------------");
+        player.sendMessage(ChatColor.RED + "-----------------------------------------------------");
     }
 
     public static void PlayerBlueLine(@NotNull Player player) {
-        player.sendMessage(ChatColor.BLUE + "-------------------------------------------------------------------------------");
+        player.sendMessage(ChatColor.BLUE + "-----------------------------------------------------");
     }
 
     //========================== ITEM =================================================//
