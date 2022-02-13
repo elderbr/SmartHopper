@@ -22,9 +22,14 @@ public interface VGlobal {
     List<Item> LIST_ITEM = new ArrayList<>();
 
     // GRUPO
+    Map<Integer, Grupo> GRUPO_ID_MAP = new HashMap<>();
+    Map<String, Grupo> GRUPO_NAME_MAP = new HashMap<>();
     List<Grupo> LIST_GRUPO = new ArrayList<>();
+
+    // LISTA DE TODOS OS MATERIAIS DO JGO
     List<Material> LIST_MATERIAL = new ArrayList<>();
 
+    // LANG
     Map<String, Lang> LANG_NAME_MAP = new HashMap<>();
 
 
