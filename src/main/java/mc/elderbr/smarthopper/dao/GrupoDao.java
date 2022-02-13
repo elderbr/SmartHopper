@@ -226,8 +226,10 @@ public class GrupoDao {
                 this.grupo = new Grupo();
                 this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 this.grupo.setDsGrupo(rs.getString("dsGrupo"));
+                // LANG
                 this.grupo.setCdLang(rs.getInt("cdLang"));
                 this.grupo.setDsLang(rs.getString("dsLang"));
+                // TRADUÇÃO
                 this.grupo.setCdTraducao(rs.getInt("cdTraducao"));
                 this.grupo.setDsTraducao(rs.getString("dsTraducao"));
                 return this.grupo;
@@ -251,6 +253,9 @@ public class GrupoDao {
                 this.grupo = new Grupo();
                 this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 this.grupo.setDsGrupo(rs.getString("dsGrupo"));
+                // TRADUÇÃO
+                this.grupo.setCdTraducao(rs.getInt("cdTraducao"));
+                this.grupo.setDsTraducao(rs.getString("dsTraducao"));
                 return this.grupo;
             }
         } catch (SQLException e) {
@@ -272,7 +277,10 @@ public class GrupoDao {
                 this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 this.grupo.setDsGrupo(rs.getString("dsGrupo"));
                 listGrupo.add(this.grupo);
+                // ADICIONANDO NAS VARIAVEIS GLOBAIS
                 VGlobal.LIST_GRUPO.add(grupo);
+                VGlobal.GRUPO_ID_MAP.put(this.grupo.getCdGrupo(), this.grupo);
+                VGlobal.GRUPO_NAME_MAP.put(this.grupo.getDsGrupo(), this.grupo);
 
             }
         } catch (SQLException e) {

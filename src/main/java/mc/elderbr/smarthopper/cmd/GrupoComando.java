@@ -61,7 +61,7 @@ public class GrupoComando implements CommandExecutor {
 
         if (sender instanceof Player) {
             player = (Player) sender;
-            cmd = Utils.NAME_ARRAY(args).toLowerCase();// PEGA O NOME DO ITEM DIGITADO
+            cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
             itemStack = player.getInventory().getItemInMainHand();// PEGA O NOME DO ITEM NA MÃO
 
             // PEGANDO O LANG DO PLAYER
@@ -196,17 +196,21 @@ public class GrupoComando implements CommandExecutor {
 
             if (cmd.length() > 2) {
 
-                Msg.ServidorGreen("size grupo name >> "+ VGlobal.GRUPO_NAME_MAP.size(), getClass());
+                grupo = new Grupo();
+                grupo.setDsGrupo(cmd);
+                grupo.setCdLang(lang.getCdLang());
+                grupo.setDsLang(lang.getDsLang());
 
-                Msg.ServidorGreen("nome do grupo >> "+ cmd +" - banco >> "+ VGlobal.GRUPO_NAME_MAP.get(cmd), getClass());
-                if (VGlobal.GRUPO_NAME_MAP.get(cmd) == null) {
+                grupo = grupoDao.select(grupo);
+
+                if (grupo == null) {
                     inventory = new InventoryCustom();
                     inventory.createNewGrupo(cmd);
                     player.openInventory(inventory.getInventory());
                 } else {
-                    Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", grupo.getDsGrupo()));
+                    Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", (grupo.getDsTraducao() != null ? grupo.getDsTraducao() : grupo.getDsGrupo())));
                 }
-            }else{
+            } else {
                 Msg.PlayerGold(player, "Digite o nome do grupo com mais de 2 caracteres!!!");
             }
         }
