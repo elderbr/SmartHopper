@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.interfaces;
 
+import mc.elderbr.smarthopper.model.Adm;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Lang;
@@ -35,7 +36,7 @@ public interface VGlobal {
     Map<String, Lang> LANG_NAME_MAP = new HashMap<>();
 
     // ADM
-    List<String> ADM_LIST = new ArrayList<>();
+    List<Adm> ADM_LIST = new ArrayList<>();
 
     // OPERADORES
     List<String> OPERADORE_LIST = new ArrayList<>();

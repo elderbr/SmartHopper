@@ -55,10 +55,9 @@ public class InventarioEvent implements Listener {
                     || Config.OPERADOR_LIST.contains(player.getName())) {
 
 
-                itemBtnSalve = null;
+                itemBtnSalve = inventory.getItem(53);
                 lore = new ArrayList<>();
-                if (inventory.getItem(53) != null) {
-                    itemBtnSalve = inventory.getItem(53);
+                if (itemBtnSalve != null && !itemBtnSalve.getItemMeta().getLore().isEmpty()) {
                     lore = itemBtnSalve.getItemMeta().getLore();
                 }
 
