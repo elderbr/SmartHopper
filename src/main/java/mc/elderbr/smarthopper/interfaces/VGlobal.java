@@ -25,6 +25,8 @@ public interface VGlobal {
     Map<Integer, Grupo> GRUPO_ID_MAP = new HashMap<>();
     Map<String, Grupo> GRUPO_NAME_MAP = new HashMap<>();
     List<Grupo> LIST_GRUPO = new ArrayList<>();
+    String GRUPO_INVENTORY = "$8$lGrupo: $r";
+    String GRUPO_NOVO_INVENTORY = "$5$lGrupo Novo: $r";
 
     // LISTA DE TODOS OS MATERIAIS DO JGO
     List<Material> LIST_MATERIAL = new ArrayList<>();
@@ -32,6 +34,11 @@ public interface VGlobal {
     // LANG
     Map<String, Lang> LANG_NAME_MAP = new HashMap<>();
 
+    // ADM
+    List<String> ADM_LIST = new ArrayList<>();
+
+    // OPERADORES
+    List<String> OPERADORE_LIST = new ArrayList<>();
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();

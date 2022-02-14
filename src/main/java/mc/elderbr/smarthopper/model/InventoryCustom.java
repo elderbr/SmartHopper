@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
@@ -19,12 +20,12 @@ public class InventoryCustom {
 
 
     public void create(Grupo grupo) {
-        this.name = Msg.Color("$8$lGrupo: $r" + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao()));
+        this.name = Msg.Color(VGlobal.GRUPO_INVENTORY + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao()));
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
 
     public void createNewGrupo(String name) {
-        this.name = Msg.Color("$5$lGrupo Novo: $r" + name);
+        this.name = Msg.Color(VGlobal.GRUPO_NOVO_INVENTORY + name);
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
 

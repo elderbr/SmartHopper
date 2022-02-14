@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.cmd;
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.dao.TraducaoDao;
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -16,6 +17,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -192,7 +194,12 @@ public class GrupoComando implements CommandExecutor {
     }
 
     private boolean addGrupo() {
+
         if (command.getName().equalsIgnoreCase("addgrupo")) {
+            if(!Config.ADM_LIST.contains(player.getName()) && !Config.OPERADOR_LIST.contains(player.getName())){
+                Msg.PlayerRed(player, "Para adicionar novo grupo você precisa ser Adm ou Operador do SmartHopper!!!");
+                return false;
+            }
 
             if (cmd.length() > 2) {
 
@@ -206,6 +213,17 @@ public class GrupoComando implements CommandExecutor {
                 if (grupo == null) {
                     inventory = new InventoryCustom();
                     inventory.createNewGrupo(cmd);
+
+                    // CRIANDO O BOTÃO PARA SALVAR
+                    ItemStack itemSalve = new ItemStack(Material.LIME_WOOL);
+                    ItemMeta meta = itemSalve.getItemMeta();
+                    meta.setDisplayName(Msg.Color("$aSalva"));
+                    List<String> lore = new ArrayList<>();
+                    lore.add(Msg.Color(VGlobal.GRUPO_NOVO_INVENTORY));
+                    meta.setLore(lore);
+                    itemSalve.setItemMeta(meta);
+                    inventory.getInventory().setItem(53, itemSalve);
+
                     player.openInventory(inventory.getInventory());
                 } else {
                     Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", (grupo.getDsTraducao() != null ? grupo.getDsTraducao() : grupo.getDsGrupo())));
