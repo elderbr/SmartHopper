@@ -196,7 +196,7 @@ public class GrupoComando implements CommandExecutor {
     private boolean addGrupo() {
 
         if (command.getName().equalsIgnoreCase("addgrupo")) {
-            if(!Config.ADM_LIST.contains(player.getName()) && !Config.OPERADOR_LIST.contains(player.getName())){
+            if(!VGlobal.ADM_LIST.contains(player.getName())){
                 Msg.PlayerRed(player, "Para adicionar novo grupo você precisa ser Adm ou Operador do SmartHopper!!!");
                 return false;
             }

@@ -1,6 +1,5 @@
 package mc.elderbr.smarthopper.dao;
 
-import com.google.gson.JsonArray;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Adm;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -12,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AdmOperadorDao {
+public class AdmDao {
 
     private Adm adm;
 
@@ -23,107 +22,95 @@ public class AdmOperadorDao {
     private Player jogador;
 
 
-    public AdmOperadorDao() {
+    public AdmDao() {
         createTable();
-        if(selectAll().isEmpty()){
+        if (selectAll().isEmpty()) {
             adm = new Adm("ElderBR");
-            adm.setDsUuid("5e3e3142-7bff-4050-8809-e6944c697bd8");
+            adm.setDsUuid("209f5422-e9b9-4540-b630-dff2ff44116b");
+            adm.setCdCargo(1);
             insert(adm);
         }
     }
 
-    public long insert(@NotNull Object player) {
-        adm = new Adm();
-        if(player instanceof Player){
-            jogador = ((Player) player);
-            adm.setDsAdm(jogador.getName());
-            adm.setDsUuid(jogador.getUniqueId().toString());
-        }else
-        if(player instanceof Adm){
-            adm = (Adm) player;
-        }else{
-            return 0;
-        }
+    public long insert(@NotNull Adm adm) {
         try {
-            sql = "INSERT INTO adm (dsAdm, dsUuid) VALUES (?,?);";
+            sql = "INSERT INTO adm (dsAdm, dsUuid, cdCargo) VALUES (?,?,?);";
             smt = Conexao.prepared(sql);
             smt.setString(1, adm.getDsAdm());
             smt.setString(2, adm.getDsUuid());
+            smt.setInt(3, adm.getCdCargo());
             smt.executeUpdate();
             rs = smt.getGeneratedKeys();
-            while(rs.next()){
+            while (rs.next()) {
                 return rs.getInt(1);
             }
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao adicionar novo ADM!!!", "insert(Object player)", getClass(), e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         return 0;
     }
 
-    public Adm select(Object player){
-        adm = new Adm();
-        if(player instanceof Player){
-            jogador = ((Player) player);
-            adm.setDsAdm(jogador.getName());
-            adm.setDsUuid(jogador.getUniqueId().toString());
-        }else
-        if(player instanceof Adm){
-            adm = (Adm) player;
-        }else{
-            return null;
-        }
-        try{
-            sql = "SELECT * FROM adm WHERE dsUuid = ?;";
+    public Adm select(@NotNull Adm adm) {
+        try {
+            sql = "SSELECT * FROM adm a LEFT JOIN cargo c ON c.cdCargo = a.cdCargo WHERE dsUuid = ?;";
             smt = Conexao.prepared(sql);
             smt.setString(1, adm.getDsUuid());
-            whileAdm();
-            return adm;
-        }catch (SQLException e){
-            Msg.ServidorErro("Erro ao buscar ADM!!!", "select(Object player)", getClass(), e);
+            while (rs.next()) {
+                this.adm = new Adm();
+                this.adm.setCdAdm(rs.getInt("cdAdm"));
+                this.adm.setDsAdm(rs.getString("dsAdm"));
+                this.adm.setDsUuid(rs.getString("dsUuid"));
+                this.adm.setCdCargo(rs.getInt("cdCargo"));
+                this.adm.setDsCargo(rs.getString("dsCargo"));
+            }
+            return this.adm;
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao buscar ADM!!!", "select(@NotNull Adm adm)", getClass(), e);
         }
         return null;
     }
 
     private List<Adm> selectAll() {
         try {
-            sql = "SELECT * FROM adm;";
+            sql = "SELECT * FROM adm a LEFT JOIN cargo c ON c.cdCargo = a.cdCargo;";
             smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 adm = new Adm();
                 adm.setCdAdm(rs.getInt("cdAdm"));
                 adm.setDsAdm(rs.getString("dsAdm"));
                 adm.setDsUuid(rs.getString("dsUuid"));
+                adm.setCdCargo(rs.getInt("cdCargo"));
+                adm.setDsCargo(rs.getString("dsCargo"));
                 VGlobal.ADM_LIST.add(adm);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
+            Msg.ServidorErro("Erro ao listar todos ADM!!!", "selectAll", getClass(), e);
+        } finally {
             Conexao.desconect();
         }
         return VGlobal.ADM_LIST;
     }
 
-    public long delete(Object player){
+    public long delete(Object player) {
         adm = new Adm();
-        if(player instanceof Player){
+        if (player instanceof Player) {
             jogador = ((Player) player);
             adm.setDsAdm(jogador.getName());
             adm.setDsUuid(jogador.getUniqueId().toString());
-        }else
-        if(player instanceof Adm){
+        } else if (player instanceof Adm) {
             adm = (Adm) player;
-        }else{
+        } else {
             return 0;
         }
-        try{
+        try {
             sql = "DELETE FROM adm WHERE dsUuid = ?;";
             smt = Conexao.prepared(sql);
             smt.setString(1, adm.getDsUuid());
             return smt.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Msg.ServidorErro("Erro ao buscar ADM!!!", "select(Object player)", getClass(), e);
         }
         return 0;
@@ -131,14 +118,13 @@ public class AdmOperadorDao {
 
     public long update(@NotNull Object player) {
         adm = new Adm();
-        if(player instanceof Player){
+        if (player instanceof Player) {
             jogador = ((Player) player);
             adm.setDsAdm(jogador.getName());
             adm.setDsUuid(jogador.getUniqueId().toString());
-        }else
-        if(player instanceof Adm){
+        } else if (player instanceof Adm) {
             adm = (Adm) player;
-        }else{
+        } else {
             return 0;
         }
         try {
@@ -150,7 +136,7 @@ public class AdmOperadorDao {
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao atualizar ADM!!!", "update(Object player)", getClass(), e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         return 0;
@@ -158,19 +144,10 @@ public class AdmOperadorDao {
 
     private void createTable() {
         try {
-            sql = "CREATE TABLE IF NOT EXISTS adm (cdAdm INTEGER PRIMARY KEY AUTOINCREMENT, dsAdm NVARCHAR(20) NOT NULL UNIQUE, dsUuid TEXT NOT NULL UNIQUE);";
+            sql = "CREATE TABLE IF NOT EXISTS adm (cdAdm INTEGER PRIMARY KEY AUTOINCREMENT, dsAdm NVARCHAR(20) NOT NULL UNIQUE, dsUuid TEXT NOT NULL UNIQUE, cdCargo INTEGER NOT NULL);";
             Conexao.create(sql);
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao criar a tabela ADM!!!", "createTable", getClass(), e);
-        }
-    }
-
-    private void whileAdm() throws SQLException {
-        while(rs.next()){
-            adm = new Adm();
-            adm.setCdAdm(rs.getInt("cdAdm"));
-            adm.setDsAdm(rs.getString("dsAdm"));
-            adm.setDsUuid(rs.getString("dsUuid"));
         }
     }
 

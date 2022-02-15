@@ -11,13 +11,10 @@ import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
-import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
@@ -25,12 +22,13 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
     // CONFIGS
     private Config config;
 
-    private AdmOperadorDao admDao;
+    private AdmDao admDao;
     private ItemDao itemDao;
     private GrupoDao grupoDao;
     private LangDao langDao;
     private TraducaoDao traducaoDao;
     private TraducaoConfig traducaoConfig;
+    private CargoDao cargoDao;
 
 
     @Override
@@ -51,13 +49,14 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
-        config = new Config();
-        admDao = new AdmOperadorDao();
+        admDao = new AdmDao();
         itemDao = new ItemDao();
         grupoDao = new GrupoDao();
         langDao = new LangDao();
         traducaoDao = new TraducaoDao();
         traducaoConfig = new TraducaoConfig();
+        cargoDao = new CargoDao();
+        config = new Config();
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);

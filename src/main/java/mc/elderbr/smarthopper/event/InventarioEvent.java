@@ -51,8 +51,7 @@ public class InventarioEvent implements Listener {
             event.setCancelled(true);
 
             if (titulo.contains(Msg.Color(VGlobal.GRUPO_NOVO_INVENTORY))
-                    && Config.ADM_LIST.contains(player.getName())
-                    || Config.OPERADOR_LIST.contains(player.getName())) {
+                    && VGlobal.ADM_LIST.contains(player.getName())) {
 
 
                 itemBtnSalve = inventory.getItem(53);

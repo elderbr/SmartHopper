@@ -6,15 +6,11 @@ import java.util.List;
 public class ConfigModel {
 
     private String name;
-    private double versao;
-    private List<String> lang;
-    private List<String> adm;
-    private List<String> operador;
+    private String versao;
+    private List<Adm> listAdm;
 
     public ConfigModel() {
-        lang = new ArrayList<>();
-        adm = new ArrayList<>();
-        operador = new ArrayList<>();
+        listAdm = new ArrayList<>();
     }
 
     public String getName() {
@@ -25,56 +21,23 @@ public class ConfigModel {
         this.name = name;
     }
 
-    public double getVersao() {
+    public String toVersao() {
         return versao;
     }
 
-    public void setVersao(double versao) {
+    public Double getVersao(){
+        return Double.parseDouble(versao.replaceAll("[.]",""));
+    }
+
+    public void setVersao(String versao) {
         this.versao = versao;
     }
 
-    public List<String> getLang() {
-        return lang;
+    public List<Adm> getAdm() {
+        return listAdm;
     }
 
-    public void setLang(List<String> lang) {
-        this.lang = lang;
-    }
-
-    public void addLang(String lang){
-        if(this.lang==null){
-            this.lang=new ArrayList<>();
-        }
-        this.lang.add(lang);
-    }
-
-    public List<String> getAdm() {
-        return adm;
-    }
-
-    public void setAdm(List<String> adm) {
-        this.adm = adm;
-    }
-
-    public void addAdm(String adm){
-        if(this.adm==null){
-            this.adm=new ArrayList<>();
-        }
-        this.adm.add(adm);
-    }
-
-    public List<String> getOperador() {
-        return operador;
-    }
-
-    public void setOperador(List<String> operador) {
-        this.operador = operador;
-    }
-
-    public void addOperador(String operador){
-        if(this.operador==null){
-            this.operador=new ArrayList<>();
-        }
-        this.operador.add(operador);
+    public void setAdm(List<Adm> adm) {
+        this.listAdm = adm;
     }
 }

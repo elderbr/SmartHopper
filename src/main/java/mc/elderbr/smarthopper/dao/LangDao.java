@@ -85,6 +85,9 @@ public class LangDao {
                 this.lang.setDsLang(rs.getString(2));
                 listLang.add(this.lang);
                 // Varivel Global com todos os langs
+                if (!VGlobal.LIST_LANG.contains(this.lang)) {
+                    VGlobal.LIST_LANG.add(this.lang);
+                }
                 VGlobal.LANG_NAME_MAP.put(this.lang.getDsLang(), this.lang);
             }
             smt.close();
@@ -102,21 +105,21 @@ public class LangDao {
             // VERIFICA O TIPO DE OBJETO
             lang = new Lang();
             if (languagem instanceof Integer) {
-                lang.setCdLang( (int) languagem);
-            }else if(languagem instanceof String){
+                lang.setCdLang((int) languagem);
+            } else if (languagem instanceof String) {
                 lang.setDsLang(String.valueOf(languagem));
-            }else if(languagem instanceof Lang){
+            } else if (languagem instanceof Lang) {
                 lang = (Lang) languagem;
-            }else{
+            } else {
                 return null;
             }
 
             // SE O CÓDIGO DA LINGUAGEM FOR MAIOR QUE ZERO PESQUISA
-            if(lang.getCdLang()>0){
+            if (lang.getCdLang() > 0) {
                 sql = "SELECT * FROM lang WHERE cdLang = ?";
                 smt = Conexao.prepared(sql);
                 smt.setInt(1, lang.getCdLang());
-            }else{
+            } else {
                 sql = "SELECT * FROM lang WHERE dsLang = ?";
                 smt = Conexao.prepared(sql);
                 smt.setString(1, lang.getDsLang());

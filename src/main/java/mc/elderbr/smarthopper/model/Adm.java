@@ -1,11 +1,19 @@
 package mc.elderbr.smarthopper.model;
 
-public class Adm {
+import org.bukkit.entity.Player;
+
+public class Adm extends Cargo{
     private int cdAdm;
     private String dsAdm;
     private String dsUuid;
 
+
     public Adm() {
+    }
+
+    public Adm(Player player) {
+        dsAdm = player.getName();;
+        dsUuid = player.getUniqueId().toString();
     }
 
     public Adm(String dsAdm) {
