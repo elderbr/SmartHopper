@@ -60,4 +60,8 @@ public class Grupo extends Traducao{
         return false;
     }
 
+    @Override
+    public String toString() {
+        return (getDsTraducao()!=null?getDsTraducao():dsGrupo);
+    }
 }

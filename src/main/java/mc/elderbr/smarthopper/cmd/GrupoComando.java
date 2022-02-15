@@ -3,7 +3,6 @@ package mc.elderbr.smarthopper.cmd;
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.dao.TraducaoDao;
-import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -226,7 +225,7 @@ public class GrupoComando implements CommandExecutor {
 
                     player.openInventory(inventory.getInventory());
                 } else {
-                    Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", (grupo.getDsTraducao() != null ? grupo.getDsTraducao() : grupo.getDsGrupo())));
+                    Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", grupo.toString()));
                 }
             } else {
                 Msg.PlayerGold(player, "Digite o nome do grupo com mais de 2 caracteres!!!");

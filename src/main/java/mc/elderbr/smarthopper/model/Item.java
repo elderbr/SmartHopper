@@ -32,4 +32,8 @@ public class Item extends Traducao {
         this.dsItem = dsItem;
     }
 
+    @Override
+    public String toString() {
+        return (getDsTraducao()!=null?getDsTraducao():dsItem);
+    }
 }
