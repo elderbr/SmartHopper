@@ -7,10 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public interface VGlobal {
 
@@ -23,8 +20,10 @@ public interface VGlobal {
     Map<Integer, Grupo> GRUPO_ID_MAP = new HashMap<>();
     Map<String, Grupo> GRUPO_NAME_MAP = new HashMap<>();
     List<Grupo> LIST_GRUPO = new ArrayList<>();
-    String GRUPO_INVENTORY = "$8$lGrupo: $r";
-    String GRUPO_NOVO_INVENTORY = "$5$lGrupo Novo: $r";
+    String GRUPO_INVENTORY = "§8§lGrupo: §r";
+    String GRUPO_NOVO_INVENTORY = "§5§lGrupo Novo: §r";
+    String GRUPO_SALVA = "§eSalva novo grupo";
+    String GRUPO_UPDATE = "§eAtualizar grupo";
 
     // LISTA DE TODOS OS MATERIAIS DO JGO
     List<Material> LIST_MATERIAL = new ArrayList<>();
@@ -35,6 +34,7 @@ public interface VGlobal {
 
     // ADM
     List<Adm> ADM_LIST = new ArrayList<>();
+    List<String> ADM_UUID = new ArrayList<>();
 
 
     // CARGO
