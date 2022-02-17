@@ -93,6 +93,19 @@ public class GrupoComando implements CommandExecutor {
                         grupo.getListItem().forEach(items -> {
                             inventory.addItem(items);
                         });
+
+                        // SE O PLAYER FOR ADM OU OPERADOR ADICIONA LÃ COMO BOTÃO PARA ATUALIZAR O GRUPO
+                        if(VGlobal.ADM_UUID.contains(player.getUniqueId().toString())){
+                            // CRIANDO O BOTÃO PARA UPDATE
+                            ItemStack itemSalve = new ItemStack(Material.LIME_WOOL);
+                            ItemMeta meta = itemSalve.getItemMeta();
+                            meta.setDisplayName("§eAtualizar");
+                            List<String> lore = new ArrayList<>();
+                            lore.add(VGlobal.GRUPO_UPDATE);
+                            meta.setLore(lore);
+                            itemSalve.setItemMeta(meta);
+                            inventory.getInventory().setItem(53, itemSalve);
+                        }
                         player.openInventory(inventory.getInventory());
                     }
                 }
@@ -232,5 +245,6 @@ public class GrupoComando implements CommandExecutor {
         }
         return false;
     }
+
 
 }
