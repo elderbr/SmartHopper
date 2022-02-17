@@ -43,16 +43,12 @@ public class InventarioEvent implements Listener {
     @EventHandler
     public void InventoryClick(InventoryClickEvent event) {
 
-        item = new Item(new ItemStack(Material.STONE));
-        Msg.Item(item, getClass());
-
         // Player
         player = (Player) event.getWhoClicked();// Pega o player que está manipulando o inventario
         adm = new Adm(player);
 
         inventory = player.getOpenInventory().getTopInventory();
         itemStack = event.getCurrentItem();
-        itemNovo = new ItemStack(event.getCurrentItem().getType(), 1);
 
         titulo = event.getView().getTitle();// NOME DO INVENTARIO
 
@@ -74,12 +70,12 @@ public class InventarioEvent implements Listener {
                 }
 
                 // SE CLICADO COM O BOTÃO ESQUERDO ADICIONA ITEM
-                if (event.isLeftClick() && !inventory.contains(itemNovo)) {
-                    event.getInventory().addItem(itemNovo);
+                if (event.isLeftClick() && !inventory.contains(itemStack)) {
+                    event.getInventory().addItem(itemStack);
                 }
                 // SE CLICADO COM O BOTÃO DIREITO REMOVE ITEM
-                if (event.isRightClick() && inventory.contains(itemNovo) && !lore.contains(VGlobal.GRUPO_SALVA)) {
-                    event.getInventory().removeItem(itemNovo);
+                if (event.isRightClick() && inventory.contains(itemStack) && !lore.contains(VGlobal.GRUPO_SALVA)) {
+                    event.getInventory().removeItem(itemStack);
                 }
                 // SE CLICADO NA LÃ SALVAR ADICIONA NO BANCO O NOVO GRUPO
                 if(event.isLeftClick()&&lore.contains(VGlobal.GRUPO_SALVA)){
@@ -92,16 +88,15 @@ public class InventarioEvent implements Listener {
                     if(cdGrupo>0){
                         // REMOVENDO O BOTÃO LÃ
                         grupo.setCdGrupo(cdGrupo);
-                        inventory.removeItem(itemStack);
+                        inventory.remove(inventory.getItem(53));
                         for(ItemStack items : inventory.getStorageContents()){
                             if(items==null) continue;
                             // ADICIONANDO O ITEM AO GRUPO
                             itemNovo = new ItemStack(items.getType(), 1);
-                            item = VGlobal.ITEM_NAME_MAP.get(new Item(itemNovo));
-                            Msg.ServidorGreen("item id: "+ item.getCdItem()+" - nome: "+ item.getDsItem(), getClass());
+                            item = VGlobal.ITEM_NAME_MAP.get(new Item(itemNovo).toString());
                             grupo.addItem(item);
                             // ADICIONANDO O ITEM DO GRUPO NO BANCO
-                            //grupoDao.insertItem(grupo, item);
+                            grupoDao.insertItem(grupo, item);
                         }
                         Msg.PlayerGold(player, "Grupo salvo com sucesso!!!");
                     }else{
