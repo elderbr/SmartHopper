@@ -93,10 +93,10 @@ public class Msg {
 
     //========================== ITEM =================================================//
 
-    public static void Item(Item item) {
+    public static void Item(@NotNull Item item,@NotNull Class classe) {
         Bukkit.getServer().getConsoleSender().sendMessage(
                 ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.getDsTraducao()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getDsTraducao()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getDsTraducao()+"\n§r - classe: "+ classe.getName()
         );
     }
 
