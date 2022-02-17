@@ -95,14 +95,14 @@ public class Msg {
 
     public static void Item(@NotNull Item item,@NotNull Class classe) {
         Bukkit.getServer().getConsoleSender().sendMessage(
-                ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.getDsTraducao()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getDsTraducao()+"\n§r - classe: "+ classe.getName()
+                ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.toString()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCdItem()+"\n§r - classe: "+ classe.getName()
         );
     }
 
     public static void ItemPlayer(@NotNull Player player, Item item) {
         player.sendMessage(
-                ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.getDsTraducao()
+                ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.toString()
                         + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCdItem()
         );
     }
