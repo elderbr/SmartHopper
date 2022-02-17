@@ -43,4 +43,9 @@ public class Adm extends Cargo{
     public void setDsUuid(String dsUuid) {
         this.dsUuid = dsUuid;
     }
+
+    @Override
+    public String toString() {
+        return dsUuid;
+    }
 }

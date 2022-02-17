@@ -84,7 +84,9 @@ public class AdmDao {
                 adm.setDsUuid(rs.getString("dsUuid"));
                 adm.setCdCargo(rs.getInt("cdCargo"));
                 adm.setDsCargo(rs.getString("dsCargo"));
+                // VARIAVEIS GLOBAIS
                 VGlobal.ADM_LIST.add(adm);
+                VGlobal.ADM_UUID.add(adm.getDsUuid());
             }
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao listar todos ADM!!!", "selectAll", getClass(), e);

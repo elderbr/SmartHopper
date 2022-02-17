@@ -1,8 +1,11 @@
 package mc.elderbr.smarthopper.event;
 
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Adm;
 import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
@@ -22,23 +25,34 @@ public class InventarioEvent implements Listener {
     private String titulo;
     private Player player;
     private ItemStack itemStack;
-    private ItemStack itemBtnSalve;
+    private ItemStack itemNovo;
+
+    // ITEM
+    private Item item;
 
     // GRUPO
     private String nameGrupo;
     private Grupo grupo;
+    private GrupoDao grupoDao;
+    private List<String> lore;
+
     private Inventory inventory;
 
-    private Grupo grupoNovo;
-    private List<String> lore;
+    private Adm adm;
 
     @EventHandler
     public void InventoryClick(InventoryClickEvent event) {
 
+        item = new Item(new ItemStack(Material.STONE));
+        Msg.Item(item, getClass());
+
         // Player
         player = (Player) event.getWhoClicked();// Pega o player que está manipulando o inventario
+        adm = new Adm(player);
+
         inventory = player.getOpenInventory().getTopInventory();
         itemStack = event.getCurrentItem();
+        itemNovo = new ItemStack(event.getCurrentItem().getType(), 1);
 
         titulo = event.getView().getTitle();// NOME DO INVENTARIO
 
@@ -47,28 +61,58 @@ public class InventarioEvent implements Listener {
             return;
         }
 
+        // SE O INVENTARIO RECEBER O NOME DE NOVO GRUPO OU GRUPO CANCELA A MOVIMENTAÇÃO DO ITEM
         if (titulo.contains(Msg.Color(VGlobal.GRUPO_NOVO_INVENTORY)) || titulo.contains(Msg.Color(VGlobal.GRUPO_INVENTORY))) {
             event.setCancelled(true);
 
-            if (titulo.contains(Msg.Color(VGlobal.GRUPO_NOVO_INVENTORY))
-                    && VGlobal.ADM_LIST.contains(player.getName())) {
-
-
-                itemBtnSalve = inventory.getItem(53);
+            // SE O PLAYER É O ADM OU OPERADOR
+            if (VGlobal.ADM_UUID.contains(adm.getDsUuid())) {
+                // SE O ITEM CONTEM LORE
                 lore = new ArrayList<>();
-                if (itemBtnSalve != null && !itemBtnSalve.getItemMeta().getLore().isEmpty()) {
-                    lore = itemBtnSalve.getItemMeta().getLore();
+                if (itemStack != null && itemStack.getItemMeta().getLore() != null) {
+                    lore = itemStack.getItemMeta().getLore();
                 }
 
-                if (event.isLeftClick() && !inventory.contains(itemStack)) {
-                    event.getInventory().addItem(itemStack);
+                // SE CLICADO COM O BOTÃO ESQUERDO ADICIONA ITEM
+                if (event.isLeftClick() && !inventory.contains(itemNovo)) {
+                    event.getInventory().addItem(itemNovo);
                 }
-                if (event.isRightClick() && inventory.contains(itemStack) && itemBtnSalve != null && !lore.contains("$3Salva novo grupo")) {
-                    event.getInventory().removeItem(itemStack);
+                // SE CLICADO COM O BOTÃO DIREITO REMOVE ITEM
+                if (event.isRightClick() && inventory.contains(itemNovo) && !lore.contains(VGlobal.GRUPO_SALVA)) {
+                    event.getInventory().removeItem(itemNovo);
                 }
+                // SE CLICADO NA LÃ SALVAR ADICIONA NO BANCO O NOVO GRUPO
+                if(event.isLeftClick()&&lore.contains(VGlobal.GRUPO_SALVA)){
+                    grupo = new Grupo();
+                    grupo.setDsGrupo(titulo.replace(VGlobal.GRUPO_NOVO_INVENTORY,""));
+
+                    player.closeInventory();// FECHA INVENTARIO
+                    grupoDao = new GrupoDao();
+                    int cdGrupo = grupoDao.insert(grupo);
+                    if(cdGrupo>0){
+                        // REMOVENDO O BOTÃO LÃ
+                        grupo.setCdGrupo(cdGrupo);
+                        inventory.removeItem(itemStack);
+                        for(ItemStack items : inventory.getStorageContents()){
+                            if(items==null) continue;
+                            // ADICIONANDO O ITEM AO GRUPO
+                            itemNovo = new ItemStack(items.getType(), 1);
+                            item = VGlobal.ITEM_NAME_MAP.get(new Item(itemNovo));
+                            Msg.ServidorGreen("item id: "+ item.getCdItem()+" - nome: "+ item.getDsItem(), getClass());
+                            grupo.addItem(item);
+                            // ADICIONANDO O ITEM DO GRUPO NO BANCO
+                            //grupoDao.insertItem(grupo, item);
+                        }
+                        Msg.PlayerGold(player, "Grupo salvo com sucesso!!!");
+                    }else{
+                        Msg.PlayerGold(player, "Erro ao criar novo grupo!!!");
+                    }
+                }
+
             }
+
         }
-        Msg.ServidorGreen("nome do inventario aberto >> " + titulo);
+        Msg.ServidorGreen("nome do inventario aberto >> " + titulo, getClass());
 
 
     }

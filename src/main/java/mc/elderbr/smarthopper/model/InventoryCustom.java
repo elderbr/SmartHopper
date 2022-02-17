@@ -20,12 +20,12 @@ public class InventoryCustom {
 
 
     public void create(Grupo grupo) {
-        this.name = Msg.Color(VGlobal.GRUPO_INVENTORY + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao()));
+        this.name = VGlobal.GRUPO_INVENTORY + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao());
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
 
     public void createNewGrupo(String name) {
-        this.name = Msg.Color(VGlobal.GRUPO_NOVO_INVENTORY + name);
+        this.name = VGlobal.GRUPO_NOVO_INVENTORY + name;
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
 

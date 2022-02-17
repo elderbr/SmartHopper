@@ -10,6 +10,7 @@ import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,7 +48,6 @@ public class GrupoComando implements CommandExecutor {
     private LangDao langDao;
 
     private InventoryCustom inventory;
-
 
     public GrupoComando() {
         grupoDao = new GrupoDao();
@@ -195,8 +195,7 @@ public class GrupoComando implements CommandExecutor {
     private boolean addGrupo() {
 
         if (command.getName().equalsIgnoreCase("addgrupo")) {
-            if(!VGlobal.ADM_LIST.contains(player.getName())){
-                Msg.PlayerRed(player, "Para adicionar novo grupo você precisa ser Adm ou Operador do SmartHopper!!!");
+            if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
                 return false;
             }
 
@@ -216,9 +215,9 @@ public class GrupoComando implements CommandExecutor {
                     // CRIANDO O BOTÃO PARA SALVAR
                     ItemStack itemSalve = new ItemStack(Material.LIME_WOOL);
                     ItemMeta meta = itemSalve.getItemMeta();
-                    meta.setDisplayName(Msg.Color("$aSalva"));
+                    meta.setDisplayName("§eSalva");
                     List<String> lore = new ArrayList<>();
-                    lore.add(Msg.Color(VGlobal.GRUPO_NOVO_INVENTORY));
+                    lore.add(VGlobal.GRUPO_SALVA);
                     meta.setLore(lore);
                     itemSalve.setItemMeta(meta);
                     inventory.getInventory().setItem(53, itemSalve);
