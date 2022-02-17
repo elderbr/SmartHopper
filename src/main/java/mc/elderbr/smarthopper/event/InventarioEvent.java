@@ -74,7 +74,7 @@ public class InventarioEvent implements Listener {
                     event.getInventory().addItem(itemStack);
                 }
                 // SE CLICADO COM O BOTÃO DIREITO REMOVE ITEM
-                if (event.isRightClick() && inventory.contains(itemStack) && !lore.contains(VGlobal.GRUPO_SALVA)) {
+                if (event.isRightClick() && inventory.contains(itemStack) && !lore.contains(VGlobal.GRUPO_SALVA) && !lore.contains(VGlobal.GRUPO_UPDATE)) {
                     event.getInventory().removeItem(itemStack);
                 }
                 // SE CLICADO NA LÃ SALVAR ADICIONA NO BANCO O NOVO GRUPO
