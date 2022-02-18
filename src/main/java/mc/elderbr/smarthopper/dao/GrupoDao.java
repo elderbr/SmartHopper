@@ -215,7 +215,7 @@ public class GrupoDao {
                 sql = "SELECT * FROM grupo g " +
                         "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
                         "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE g.dsGrupo = ? OR lower(t.dsTraducao) = lower(?) AND lower(l.dsLang) = lower(?) COLLATE NOCASE;";
+                        "WHERE lower(g.dsGrupo) = lower(?) OR lower(t.dsTraducao) = lower(?) AND lower(l.dsLang) = lower(?) COLLATE NOCASE;";
                 smt = Conexao.prepared(sql);
                 smt.setString(1, grupo.getDsGrupo());
                 smt.setString(2, grupo.getDsGrupo());
@@ -329,10 +329,12 @@ public class GrupoDao {
     /* ITEM DO GRUPO */
     public int insertItem(Grupo grupo, Item item) {
         try {
-            sql = "INSERT INTO grupoItem (cdGrupo, cdItem) VALUES (?,?);";
+            sql = "INSERT INTO grupoItem (cdGrupo, cdItem) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM grupoItem WHERE cdGrupo = ? AND cdItem = ?);";
             smt = Conexao.prepared(sql);
             smt.setInt(1, grupo.getCdGrupo());
             smt.setInt(2, item.getCdItem());
+            smt.setInt(3, grupo.getCdGrupo());
+            smt.setInt(4, item.getCdItem());
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao adicionar item do grupo!!!", "", getClass(), e);
@@ -442,6 +444,25 @@ public class GrupoDao {
             Conexao.desconect();
         }
         return null;
+    }
+
+    /***
+     * Deleta todos os itens do grupo
+     * @param grupo 
+     * @return Long se for maior que zero foi deletado
+     */
+    public long deleteItem(Grupo grupo){
+        try {
+            sql = "DELETE FROM grupoItem WHERE cdGrupo = ?";
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, grupo.getCdGrupo());
+            return smt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            Conexao.desconect();
+        }
+        return 0;
     }
 
 }
