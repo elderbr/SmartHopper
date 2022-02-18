@@ -6,6 +6,7 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Adm;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ public class InventarioEvent implements Listener {
 
     private String titulo;
     private Player player;
+    private Lang lang;
     private ItemStack itemStack;
     private ItemStack itemNovo;
 
@@ -33,7 +35,7 @@ public class InventarioEvent implements Listener {
     // GRUPO
     private String nameGrupo;
     private Grupo grupo;
-    private GrupoDao grupoDao;
+    private GrupoDao grupoDao = new GrupoDao();
     private List<String> lore;
 
     private Inventory inventory;
@@ -45,6 +47,7 @@ public class InventarioEvent implements Listener {
 
         // Player
         player = (Player) event.getWhoClicked();// Pega o player que está manipulando o inventario
+        lang = VGlobal.LANG_NAME_MAP.get(player.getLocale());
         adm = new Adm(player);
 
         inventory = player.getOpenInventory().getTopInventory();
@@ -81,9 +84,12 @@ public class InventarioEvent implements Listener {
                 if(event.isLeftClick()&&lore.contains(VGlobal.GRUPO_SALVA)){
                     grupo = new Grupo();
                     grupo.setDsGrupo(titulo.replace(VGlobal.GRUPO_NOVO_INVENTORY,""));
+                    // LANG
+                    grupo.setCdLang(lang.getCdLang());
+                    grupo.setDsLang(lang.getDsLang());
 
                     player.closeInventory();// FECHA INVENTARIO
-                    grupoDao = new GrupoDao();
+
                     int cdGrupo = grupoDao.insert(grupo);
                     if(cdGrupo>0){
                         // REMOVENDO O BOTÃO LÃ
@@ -103,11 +109,18 @@ public class InventarioEvent implements Listener {
                         Msg.PlayerGold(player, "Erro ao criar novo grupo!!!");
                     }
                 }
+                if(event.isLeftClick()&&lore.contains(VGlobal.GRUPO_UPDATE)){
+                    nameGrupo = titulo.replaceAll(VGlobal.GRUPO_UPDATE,"");
+                    grupo = new Grupo();
+                    grupo.setDsGrupo(nameGrupo);
+                    Msg.ServidorGreen("nome do grupo >> "+ grupo.getDsGrupo()+" - traducao >> "+ grupo.getDsTraducao(), getClass());
+                    grupo = grupoDao.select(grupo);
+                    Msg.Grupo(grupo, getClass());
+                }
 
             }
 
         }
-        Msg.ServidorGreen("nome do inventario aberto >> " + titulo, getClass());
 
 
     }
