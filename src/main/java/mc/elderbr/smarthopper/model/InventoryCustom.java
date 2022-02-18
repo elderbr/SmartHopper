@@ -20,7 +20,7 @@ public class InventoryCustom {
 
 
     public void create(Grupo grupo) {
-        this.name = VGlobal.GRUPO_INVENTORY + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao());
+        this.name = VGlobal.GRUPO_INVENTORY + grupo.toString();
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
 
