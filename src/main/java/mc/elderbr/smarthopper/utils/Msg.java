@@ -112,6 +112,12 @@ public class Msg {
     }
 
     //========================== GRUPO =================================================//
+    public static void Grupo(@NotNull Grupo grupo, @NotNull Class classe){
+        Bukkit.getServer().getConsoleSender().sendMessage(
+                ChatColor.GREEN + "grupo: " + ChatColor.GOLD + grupo.toString()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + grupo.getCdGrupo()+"\n§rclasse: "+ classe.getName()
+        );
+    }
     public static void GrupoNaoExiste(@NotNull Player player, String name) {
         player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
     }
