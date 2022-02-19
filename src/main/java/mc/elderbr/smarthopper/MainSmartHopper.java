@@ -35,11 +35,11 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
     public void onEnable() {
 
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN +
-                "\n+------------------------+\n" +
-                "| Smart Hopper           |\n" +
+                "\n+--------------------------+\n" +
+                "| Smart Hopper             |\n" +
                 "| Version " + VGlobal.VERSION + "            |\n" +
-                "| Dircord: ElderBR#5398  |\n" +
-                "+------------------------+");
+                "| Dircord: ElderBR#5398    |\n" +
+                "+--------------------------+");
         // CARREGANDO A LISTA DE MATERIAS DO JOGO
         for(Material m : Material.values()){
             if(m.isItem() && !m.isAir()){
