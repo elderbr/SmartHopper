@@ -156,5 +156,4 @@ public class Msg {
     public static String Color(String text) {
         return ChatColor.translateAlternateColorCodes('$', text);
     }
-
 }

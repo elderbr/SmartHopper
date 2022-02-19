@@ -90,9 +90,11 @@ public class GrupoComando implements CommandExecutor {
                         // CRIAR UM INVENTARIO COM TODOS OS ITENS DO GRUPO
                         inventory = new InventoryCustom();
                         inventory.create(grupo);
-                        grupo.getListItem().forEach(items -> {
-                            inventory.addItem(items);
-                        });
+                        if(!grupo.getListItem().isEmpty()) {
+                            grupo.getListItem().forEach(items -> {
+                                inventory.addItem(items);
+                            });
+                        }
 
                         // SE O PLAYER FOR ADM OU OPERADOR ADICIONA LÃ COMO BOTÃO PARA ATUALIZAR O GRUPO
                         if(VGlobal.ADM_UUID.contains(player.getUniqueId().toString())){

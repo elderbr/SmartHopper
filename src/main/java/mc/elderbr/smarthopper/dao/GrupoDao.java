@@ -415,11 +415,12 @@ public class GrupoDao {
 
     public Grupo selectListItemGrupo(Grupo gp) {
         try {
-            sql = "SELECT gi.cdGitem, g.cdGrupo, g.dsGrupo, t.dsTraducao, i.cdItem, i.dsItem  FROM grupoItem gi " +
-                    "LEFT JOIN grupo g ON g.cdGrupo = gi.cdGrupo " +
-                    "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
+            sql = "SELECT gi.cdGitem, g.cdGrupo, g.dsGrupo, t.dsTraducao, i.cdItem, i.dsItem FROM grupo g " +
+                    "LEFT JOIN grupoItem gi ON gi.cdGrupo = g.cdGrupo " +
+                    "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
                     "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
-                    "WHERE gi.cdGrupo = ? ORDER BY i.dsItem;";
+                    "WHERE g.cdGrupo = ?;";
 
             smt = Conexao.prepared(sql);
             smt.setInt(1, gp.getCdGrupo());
@@ -430,13 +431,16 @@ public class GrupoDao {
             grupo.setCdGrupo(rs.getInt("cdGrupo"));
             grupo.setDsGrupo(rs.getString("dsGrupo"));
             grupo.setDsTraducao(rs.getString("dsTraducao"));
+
             while (rs.next()) {
                 Item item = new Item();
                 item.setCdItem(rs.getInt("cdItem"));
                 item.setDsItem(rs.getString("dsItem"));
-                grupo.addItem(item);
+                if (item.getDsItem() != null)
+                    grupo.addItem(item);
             }
             if (!grupo.getListItem().isEmpty())
+                Msg.Grupo(grupo, getClass());
                 return grupo;
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao localizar lista item do grupo!!!", "selectListItemGrupo(Grupo gp)", getClass(), e);
@@ -448,18 +452,18 @@ public class GrupoDao {
 
     /***
      * Deleta todos os itens do grupo
-     * @param grupo 
+     * @param grupo
      * @return Long se for maior que zero foi deletado
      */
-    public long deleteItem(Grupo grupo){
+    public long deleteItem(Grupo grupo) {
         try {
             sql = "DELETE FROM grupoItem WHERE cdGrupo = ?";
             smt = Conexao.prepared(sql);
             smt.setInt(1, grupo.getCdGrupo());
             return smt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
+            Msg.ServidorErro("Erro ao deletar os itens do grupo!!!", "deleteItem", getClass(), e);
+        } finally {
             Conexao.desconect();
         }
         return 0;

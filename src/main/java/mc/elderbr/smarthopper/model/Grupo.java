@@ -3,7 +3,7 @@ package mc.elderbr.smarthopper.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Grupo extends Traducao{
+public class Grupo extends Traducao {
 
     private int cdGrupo;
     private String dsGrupo;
@@ -29,6 +29,9 @@ public class Grupo extends Traducao{
     }
 
     public List<Item> getListItem() {
+        if (listItem == null) {
+            listItem = new ArrayList<>();
+        }
         return listItem;
     }
 
@@ -36,8 +39,8 @@ public class Grupo extends Traducao{
         this.listItem = listItem;
     }
 
-    public List<Item> addItem(Item item){
-        if(listItem == null){
+    public List<Item> addItem(Item item) {
+        if (listItem == null) {
             listItem = new ArrayList<>();
         }
         listItem.add(item);
@@ -62,6 +65,6 @@ public class Grupo extends Traducao{
 
     @Override
     public String toString() {
-        return (getDsTraducao()!=null?getDsTraducao():dsGrupo);
+        return (getDsTraducao() != null ? getDsTraducao() : dsGrupo);
     }
 }
