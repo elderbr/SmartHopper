@@ -90,14 +90,14 @@ public class GrupoComando implements CommandExecutor {
                         // CRIAR UM INVENTARIO COM TODOS OS ITENS DO GRUPO
                         inventory = new InventoryCustom();
                         inventory.create(grupo);
-                        if(!grupo.getListItem().isEmpty()) {
+                        if (!grupo.getListItem().isEmpty()) {
                             grupo.getListItem().forEach(items -> {
                                 inventory.addItem(items);
                             });
                         }
 
                         // SE O PLAYER FOR ADM OU OPERADOR ADICIONA LÃ COMO BOTÃO PARA ATUALIZAR O GRUPO
-                        if(VGlobal.ADM_UUID.contains(player.getUniqueId().toString())){
+                        if (VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
                             // CRIANDO O BOTÃO PARA UPDATE
                             ItemStack itemSalve = new ItemStack(Material.LIME_WOOL);
                             ItemMeta meta = itemSalve.getItemMeta();
@@ -176,11 +176,69 @@ public class GrupoComando implements CommandExecutor {
             }
 
             // ADICIONAR NOVO GRUPO
-            return addGrupo();
+            if (command.getName().equalsIgnoreCase("addgrupo")) {
+                if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
+                    return false;
+                }
 
+                if (cmd.length() > 2) {
 
+                    grupo = new Grupo();
+                    grupo.setDsGrupo(cmd);
+                    grupo.setCdLang(lang.getCdLang());
+                    grupo.setDsLang(lang.getDsLang());
+
+                    grupo = grupoDao.select(grupo);
+
+                    if (grupo == null) {
+                        inventory = new InventoryCustom();
+                        inventory.createNewGrupo(cmd);
+
+                        // CRIANDO O BOTÃO PARA SALVAR
+                        ItemStack itemSalve = new ItemStack(Material.LIME_WOOL);
+                        ItemMeta meta = itemSalve.getItemMeta();
+                        meta.setDisplayName("§eSalva");
+                        List<String> lore = new ArrayList<>();
+                        lore.add(VGlobal.GRUPO_SALVA);
+                        meta.setLore(lore);
+                        itemSalve.setItemMeta(meta);
+                        inventory.getInventory().setItem(53, itemSalve);
+
+                        player.openInventory(inventory.getInventory());
+                    } else {
+                        Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", grupo.toString()));
+                    }
+                } else {
+                    Msg.PlayerGold(player, "Digite o nome do grupo com mais de 2 caracteres!!!");
+                }
+            }
+
+            // REMOVER GRUPO
+            if (command.getName().equalsIgnoreCase("removegrupo")) {
+                if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
+                    return false;
+                }
+                if (cmd.length() > 0) {
+                    grupo = new Grupo();
+                    try {
+                        grupo.setCdGrupo(Integer.parseInt(args[0]));
+                    } catch (NumberFormatException e) {
+                        grupo.setDsGrupo(cmd);
+                    }
+                    grupo = grupoDao.select(grupo);
+                    if(grupo!=null) {
+                        if (grupoDao.delete(grupo)) {
+                            Msg.PlayerGold(player, String.format("Grupo %s apapgado com sucesso!!", grupo.toString()));
+                        }
+                    }else{
+                        Msg.PlayerRed(player, "Esse grupo não foi existe!!!");
+                    }
+
+                } else {
+                    Msg.PlayerGold(player, "Digite o código ou nome do grupo!!!");
+                }
+            }
         }
-
         return false;
     }
 
@@ -206,47 +264,4 @@ public class GrupoComando implements CommandExecutor {
         }
         return false;
     }
-
-    private boolean addGrupo() {
-
-        if (command.getName().equalsIgnoreCase("addgrupo")) {
-            if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
-                return false;
-            }
-
-            if (cmd.length() > 2) {
-
-                grupo = new Grupo();
-                grupo.setDsGrupo(cmd);
-                grupo.setCdLang(lang.getCdLang());
-                grupo.setDsLang(lang.getDsLang());
-
-                grupo = grupoDao.select(grupo);
-
-                if (grupo == null) {
-                    inventory = new InventoryCustom();
-                    inventory.createNewGrupo(cmd);
-
-                    // CRIANDO O BOTÃO PARA SALVAR
-                    ItemStack itemSalve = new ItemStack(Material.LIME_WOOL);
-                    ItemMeta meta = itemSalve.getItemMeta();
-                    meta.setDisplayName("§eSalva");
-                    List<String> lore = new ArrayList<>();
-                    lore.add(VGlobal.GRUPO_SALVA);
-                    meta.setLore(lore);
-                    itemSalve.setItemMeta(meta);
-                    inventory.getInventory().setItem(53, itemSalve);
-
-                    player.openInventory(inventory.getInventory());
-                } else {
-                    Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", grupo.toString()));
-                }
-            } else {
-                Msg.PlayerGold(player, "Digite o nome do grupo com mais de 2 caracteres!!!");
-            }
-        }
-        return false;
-    }
-
-
 }
