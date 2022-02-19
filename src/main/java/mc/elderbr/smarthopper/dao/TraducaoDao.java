@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TraducaoDao {
 
@@ -22,6 +24,10 @@ public class TraducaoDao {
 
     private Item item;
     private Grupo grupo;
+
+    private static String CODIGO = "cd";
+    private static String NAME = "nome";
+    private Map<String, String> parameters = new HashMap<>();
 
     public TraducaoDao() {
         createTable();
@@ -52,14 +58,14 @@ public class TraducaoDao {
                     smt.setString(1, item.getDsTraducao());
                     smt.setInt(2, item.getCdLang());
                     smt.setInt(3, item.getCdItem());
-                } else if(traducao instanceof Grupo){
+                } else if (traducao instanceof Grupo) {
                     grupo = (Grupo) traducao;
                     sql = "INSERT INTO traducao (dsTraducao, cdLang, cdGrupo) VALUES (?,?,?);";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, grupo.getDsTraducao());
                     smt.setInt(2, grupo.getCdLang());
                     smt.setInt(3, grupo.getCdGrupo());
-                }else{
+                } else {
                     return 0;
                 }
                 return smt.executeUpdate();
@@ -93,15 +99,15 @@ public class TraducaoDao {
                     sql = "SELECT * FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
                     smt = Conexao.prepared(sql);
                     smt.setInt(1, ((Item) item).getCdItem());
-                } else if(item instanceof String){
+                } else if (item instanceof String) {
                     sql = "SELECT * FROM item i " +
                             "INNER JOIN traducao t ON i.cdItem = t.cdItem " +
-                            "INNER JOIN lang l ON t.cdLang = l.cdLang "+
+                            "INNER JOIN lang l ON t.cdLang = l.cdLang " +
                             "WHERE i.dsItem = ? OR t.dsTraducao = ? COLLATE NOCASE";
                     smt = Conexao.prepared(sql);
                     smt.setString(1, (String) item);
                     smt.setString(2, (String) item);
-                }else{
+                } else {
                     return null;
                 }
                 rs = smt.executeQuery();
@@ -125,55 +131,42 @@ public class TraducaoDao {
         return this.item;
     }
 
-    public Grupo selectGrupo(Object traducao) {
-        grupo = null;
-        if (traducao instanceof Grupo || traducao instanceof Integer || traducao instanceof String) {
-            try {
-                if (traducao instanceof Grupo) {
-                    if (((Grupo) traducao).getCdGrupo() > 0) {
-                        sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.cdGrupo = ?";
-                        smt = Conexao.prepared(sql);
-                        smt.setInt(1, ((Grupo) traducao).getCdGrupo());
-                    } else {
-                        sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ?";
-                        smt = Conexao.prepared(sql);
-                        smt.setString(1, ((Grupo) traducao).getDsGrupo());
-                    }
-                }
-                if (traducao instanceof Integer) {
-                    sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.cdGrupo = ?";
-                    smt = Conexao.prepared(sql);
-                    smt.setInt(1, (Integer) traducao);
-                }
-                if (traducao instanceof String) {
-                    sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo WHERE g.dsGrupo = ? OR t.dsTraducao = ? COLLATE NOCASE";
-                    smt = Conexao.prepared(sql);
-                    smt.setString(1, (String) traducao);
-                    smt.setString(2, (String) traducao);
-                }
-                rs = smt.executeQuery();
-                while (rs.next()) {
-                    grupo = new Grupo();
-                    grupo.setCdGrupo(rs.getInt("cdGrupo"));
-                    grupo.setDsGrupo(rs.getString("dsGrupo"));
-                    grupo.setDsTraducao(rs.getString("dsTraducao"));
-                    if(grupo.getDsTraducao()==null){
-                        grupo.setDsTraducao(grupo.getDsGrupo());
-                    }
-                }
-                smt.close();
-                rs.close();
-            } catch (SQLException e) {
-                Msg.ServidorErro("Erro ao buscar a tradução do grupo!!!", "selectGrupo(Object traducao)", getClass(), e);
-            } finally {
-                Conexao.desconect();
+    public Grupo selectGrupo(Grupo traducao) {
+        try {
+            grupo = (Grupo) traducao;
+
+            addParameters();
+
+            if (grupo.getCdGrupo() > 0) {
+                sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo LEFT JOIN lang l ON l.cdLang = t.cdLang WHERE " + parameters.get(CODIGO);
+            } else {
+                sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo LEFT JOIN lang l ON l.cdLang = t.cdLang WHERE " + parameters.get(NAME);
             }
+            smt = Conexao.prepared(sql);
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                // LANGUAGEM
+                grupo.setCdLang(rs.getInt("cdLang"));
+                grupo.setDsLang(rs.getString("dsLang"));
+                // Tradução
+                grupo.setCdTraducao(rs.getInt("cdTraducao"));
+                grupo.setDsTraducao(rs.getString("dsTraducao"));
+            }
+            smt.close();
+            rs.close();
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao buscar a tradução do grupo!!!", "selectGrupo(Object traducao)", getClass(), e);
+        } finally {
+            Conexao.desconect();
         }
         return grupo;
     }
 
     public int update(Item item) {
-        if(item == null){
+        if (item == null) {
             return 0;
         }
         sql = "UPDATE traducao SET dsTraducao = ?, cdLang = ? WHERE cdTraducao = ?;";
@@ -192,12 +185,12 @@ public class TraducaoDao {
     }
 
     public int update(Grupo grupo) {
-        sql = "UPDATE traducao SET dsTraducao = ?, cdLang = ? WHERE cdTraducao = ?;";
+        sql = "UPDATE traducao SET dsTraducao = ? WHERE cdTraducao = ? AND cdLang = ?;";
         try {
             smt = Conexao.prepared(sql);
             smt.setString(1, grupo.getDsTraducao());
-            smt.setInt(2, grupo.getCdLang());
-            smt.setInt(3, grupo.getCdTraducao());
+            smt.setInt(2, grupo.getCdTraducao());
+            smt.setInt(3, grupo.getCdLang());
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao atualizar a tradução do grupo!!!", "update(Grupo grupo)", getClass(), e);
@@ -214,9 +207,14 @@ public class TraducaoDao {
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao tentar apagar a tradução do grupo!!!", "", getClass(), e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
         return 0;
+    }
+
+    private void addParameters(){
+        parameters.put(CODIGO, "g.cdGrupo = " + grupo.getCdGrupo() + " AND l.cdLang = " + grupo.getCdLang());
+        parameters.put(NAME, "g.dsGrupo = \"" + grupo.getDsGrupo() + "\"" + " AND l.cdLang = " + grupo.getCdLang());
     }
 }

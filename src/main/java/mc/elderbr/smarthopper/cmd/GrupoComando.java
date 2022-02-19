@@ -68,7 +68,7 @@ public class GrupoComando implements CommandExecutor {
             // PEGANDO O LANG DO PLAYER
             langPlayer = player.getLocale();// LINGUAGEM DO JOGADOR
             // SE O LANG NÃO EXISTIR CRIAR NO BANCO
-            if(langDao.select(langPlayer)==null){
+            if (langDao.select(langPlayer) == null) {
                 langDao.insert(langPlayer);
                 langDao.selectAll();
             }
@@ -162,24 +162,12 @@ public class GrupoComando implements CommandExecutor {
                 }
                 if (cmd.length() > 0) {
                     grupo = new Grupo();
-                    getIdTraducao(args);
-                    grupo.setDsLang(langPlayer);
-                    grupo = grupoDao.select(grupo);
-                    if (grupo.getDsTraducao() == null) {
-                        getIdTraducao(args);
-                        grupo.setCdLang(VGlobal.LANG_NAME_MAP.get(langPlayer).getCdLang());
-                        if (traducaoDao.insert(grupo) > 0) {
-                            Msg.PlayerGold(player, "Tradução para o grupo ".concat(grupo.getDsGrupo()).concat(" adicionado com sucesso!!!"));
-                        } else {
-                            Msg.PlayerGold(player, "Erro ao adicionar a tradução para o ".concat(grupo.getDsGrupo()).concat("!!!"));
-                        }
-                    } else {
-                        getIdTraducao(args);
-                        if (traducaoDao.update(grupo) > 0)
-                            Msg.PlayerGold(player, "Tradução para o grupo ".concat(grupo.getDsGrupo()).concat(" atualizado com sucesso!!!"));
-                        else
-                            Msg.PlayerGold(player, "Erro ao atualizar a tradução para o ".concat(grupo.getDsGrupo()).concat("!!!"));
-                    }
+                    grupo.setCdLang(lang.getCdLang());
+                    grupo.setDsLang(lang.getDsLang());
+                    isCodeName(args);
+                    grupo = traducaoDao.selectGrupo(grupo);
+                    if(grupo != null)
+                        Msg.Grupo(grupo, getClass());
                 }
                 return false;
             }
@@ -235,18 +223,18 @@ public class GrupoComando implements CommandExecutor {
                     grupo.setCdLang(lang.getCdLang());
                     grupo.setDsLang(lang.getDsLang());
                     try {
-                        grupo.setCdGrupo(Integer.parseInt(args[0]));
+                        grupo.setCdGrupo(Integer.parseInt(cmd));
                     } catch (NumberFormatException e) {
                         grupo.setDsGrupo(cmd);
                     }
                     grupo = grupoDao.select(grupo);
-                    if(grupo!=null) {
+                    if (grupo != null) {
                         if (grupoDao.delete(grupo)) {
                             grupoDao.deleteItem(grupo);// APAGA OS ITEM DO GRUPO
                             traducaoDao.delete(grupo);// APAGA A TRADUÇÃO DO GRUPO
                             Msg.PlayerGold(player, String.format("Grupo %s apagado com sucesso!!", grupo.toString()));
                         }
-                    }else{
+                    } else {
                         Msg.PlayerRed(player, "Esse grupo não foi existe!!!");
                     }
                 } else {
@@ -257,26 +245,19 @@ public class GrupoComando implements CommandExecutor {
         return false;
     }
 
-    private boolean getIdTraducao(String[] args) {
+    private void isCodeName(String[] args) {
         cmd = Utils.NAME_ARRAY(args);
         if (args.length > 1) {// 23 Barra de ferro
             try {
-                cdGrupo = Integer.parseInt(args[0]);
+                grupo.setCdGrupo(Integer.parseInt(args[0]));
             } catch (NumberFormatException e) {
-                Msg.PlayerRed(player, "Digite o código do grupo antes da sua tradução!!!");
-                cdGrupo = 0;
+                grupo.setDsGrupo(args[0]);
             }
-
             StringBuilder listName = new StringBuilder();
-            if (cdGrupo > 0) {
-                for (int i = 1; i < args.length; i++) {
-                    listName.append(args[i] + " ");
-                }
+            for (int i = 1; i < args.length; i++) {
+                listName.append(args[i] + " ");
             }
             grupo.setDsTraducao(listName.toString().trim());
-            grupo.setCdGrupo(cdGrupo);
-            return true;
         }
-        return false;
     }
 }
