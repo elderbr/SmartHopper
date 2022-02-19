@@ -151,6 +151,10 @@ public class GrupoComando implements CommandExecutor {
             }
 
             if (command.getName().equalsIgnoreCase("traducaoGrupo")) {
+                if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
+                    Msg.PlayerRed(player, "Apenas os Adm ou operador podem adicionar tradução para o grupo!!!");
+                    return false;
+                }
                 if (cmd.length() > 0) {
                     grupo = new Grupo();
                     getIdTraducao(args);
@@ -178,6 +182,7 @@ public class GrupoComando implements CommandExecutor {
             // ADICIONAR NOVO GRUPO
             if (command.getName().equalsIgnoreCase("addgrupo")) {
                 if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
+                    Msg.PlayerRed(player, "Apenas os Adm ou operador podem adicionar grupo!!!");
                     return false;
                 }
 
@@ -216,6 +221,7 @@ public class GrupoComando implements CommandExecutor {
             // REMOVER GRUPO
             if (command.getName().equalsIgnoreCase("removegrupo")) {
                 if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
+                    Msg.PlayerRed(player, "Apenas os Adm ou operador podem remover grupo!!!");
                     return false;
                 }
                 if (cmd.length() > 0) {
