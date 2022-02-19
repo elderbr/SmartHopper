@@ -81,9 +81,9 @@ public class InventarioEvent implements Listener {
                     event.getInventory().removeItem(itemStack);
                 }
                 // SE CLICADO NA LÃ SALVAR ADICIONA NO BANCO O NOVO GRUPO
-                if(event.isLeftClick()&&lore.contains(VGlobal.GRUPO_SALVA)){
+                if (event.isLeftClick() && lore.contains(VGlobal.GRUPO_SALVA)) {
                     grupo = new Grupo();
-                    grupo.setDsGrupo(titulo.replace(VGlobal.GRUPO_NOVO_INVENTORY,""));
+                    grupo.setDsGrupo(titulo.replace(VGlobal.GRUPO_NOVO_INVENTORY, ""));
                     // LANG
                     grupo.setCdLang(lang.getCdLang());
                     grupo.setDsLang(lang.getDsLang());
@@ -91,12 +91,12 @@ public class InventarioEvent implements Listener {
                     player.closeInventory();// FECHA INVENTARIO
 
                     int cdGrupo = grupoDao.insert(grupo);
-                    if(cdGrupo>0){
+                    if (cdGrupo > 0) {
                         // REMOVENDO O BOTÃO LÃ
                         grupo.setCdGrupo(cdGrupo);
                         inventory.remove(inventory.getItem(53));
-                        for(ItemStack items : inventory.getStorageContents()){
-                            if(items==null) continue;
+                        for (ItemStack items : inventory.getStorageContents()) {
+                            if (items == null) continue;
                             // ADICIONANDO O ITEM AO GRUPO
                             itemNovo = new ItemStack(items.getType(), 1);
                             item = VGlobal.ITEM_NAME_MAP.get(new Item(itemNovo).toString());
@@ -105,17 +105,30 @@ public class InventarioEvent implements Listener {
                             grupoDao.insertItem(grupo, item);
                         }
                         Msg.PlayerGold(player, "Grupo salvo com sucesso!!!");
-                    }else{
+                    } else {
                         Msg.PlayerGold(player, "Erro ao criar novo grupo!!!");
                     }
                 }
-                if(event.isLeftClick()&&lore.contains(VGlobal.GRUPO_UPDATE)){
-                    nameGrupo = titulo.replaceAll(VGlobal.GRUPO_UPDATE,"");
+                if (event.isLeftClick() && lore.contains(VGlobal.GRUPO_UPDATE)) {
+                    nameGrupo = titulo.replaceAll(VGlobal.GRUPO_INVENTORY, "");
                     grupo = new Grupo();
                     grupo.setDsGrupo(nameGrupo);
-                    Msg.ServidorGreen("nome do grupo >> "+ grupo.getDsGrupo()+" - traducao >> "+ grupo.getDsTraducao(), getClass());
+
                     grupo = grupoDao.select(grupo);
-                    Msg.Grupo(grupo, getClass());
+                    if (grupo != null) {
+
+                        inventory.removeItem(inventory.getItem(53));
+
+                        grupoDao.deleteItem(grupo);
+                        for (ItemStack items : inventory.getStorageContents()) {
+                            if (items == null) continue;
+                            itemNovo = new ItemStack(items.getType(), 1);
+                            grupoDao.insertItem(grupo, VGlobal.ITEM_NAME_MAP.get(Utils.toItem(itemNovo)));
+                        }
+                    }
+                    player.closeInventory();
+                    Msg.PlayerGold(player, "Grupo atualizado com sucesso!!!");
+
                 }
 
             }
