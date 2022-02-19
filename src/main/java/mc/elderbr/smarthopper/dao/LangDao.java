@@ -47,28 +47,24 @@ public class LangDao {
     }
 
     public long insert(Object languagem) {
-
+        lang = new Lang();
         if (languagem instanceof String) {
-            lang = new Lang();
-            lang.setDsLang(String.valueOf(languagem));
+            lang.setDsLang( (String) languagem);
         } else if (languagem instanceof Lang) {
             lang = (Lang) languagem;
         } else {
             return 0;
         }
-
-        if (select(lang) == null) {
-            try {
-                sql = "INSERT INTO lang (dsLang) VALUES (?);";
-                smt = Conexao.prepared(sql);
-                smt.setString(1, lang.getDsLang());
-                return smt.executeUpdate();
-            } catch (SQLException e) {
-                if (e.getErrorCode() != 19)
-                    Msg.ServidorErro("Erro ao adicionar Lang!!!", "insert(Lang lang)", getClass(), e);
-            } finally {
-                Conexao.desconect();
-            }
+        try {
+            sql = "INSERT INTO lang (dsLang) VALUES (?);";
+            smt = Conexao.prepared(sql);
+            smt.setString(1, lang.getDsLang());
+            return smt.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 19)
+                Msg.ServidorErro("Erro ao adicionar Lang!!!", "insert(Lang lang)", getClass(), e);
+        } finally {
+            Conexao.desconect();
         }
         return 0;
     }
@@ -107,7 +103,7 @@ public class LangDao {
             if (languagem instanceof Integer) {
                 lang.setCdLang((int) languagem);
             } else if (languagem instanceof String) {
-                lang.setDsLang(String.valueOf(languagem));
+                lang.setDsLang((String) languagem);
             } else if (languagem instanceof Lang) {
                 lang = (Lang) languagem;
             } else {
@@ -116,14 +112,11 @@ public class LangDao {
 
             // SE O CÓDIGO DA LINGUAGEM FOR MAIOR QUE ZERO PESQUISA
             if (lang.getCdLang() > 0) {
-                sql = "SELECT * FROM lang WHERE cdLang = ?";
-                smt = Conexao.prepared(sql);
-                smt.setInt(1, lang.getCdLang());
+                sql = String.format("SELECT * FROM lang WHERE cdLang = %d", lang.getCdLang());
             } else {
-                sql = "SELECT * FROM lang WHERE dsLang = ?";
-                smt = Conexao.prepared(sql);
-                smt.setString(1, lang.getDsLang());
+                sql = String.format("SELECT * FROM lang WHERE dsLang = \"%s\"", lang.getDsLang());
             }
+            smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.lang = new Lang();

@@ -67,6 +67,11 @@ public class GrupoComando implements CommandExecutor {
 
             // PEGANDO O LANG DO PLAYER
             langPlayer = player.getLocale();// LINGUAGEM DO JOGADOR
+            // SE O LANG NÃO EXISTIR CRIAR NO BANCO
+            if(langDao.select(langPlayer)==null){
+                langDao.insert(langPlayer);
+                langDao.selectAll();
+            }
             lang = VGlobal.LANG_NAME_MAP.get(langPlayer);
 
             if (command.getName().equalsIgnoreCase("grupo")) {
