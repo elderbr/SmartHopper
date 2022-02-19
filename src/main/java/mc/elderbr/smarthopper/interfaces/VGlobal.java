@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.interfaces;
 
 import mc.elderbr.smarthopper.model.*;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,10 +21,10 @@ public interface VGlobal {
     Map<Integer, Grupo> GRUPO_ID_MAP = new HashMap<>();
     Map<String, Grupo> GRUPO_NAME_MAP = new HashMap<>();
     List<Grupo> LIST_GRUPO = new ArrayList<>();
-    String GRUPO_INVENTORY = "§8§lGrupo: §r";
-    String GRUPO_NOVO_INVENTORY = "§5§lGrupo Novo: §r";
-    String GRUPO_SALVA = "§eSalva novo grupo";
-    String GRUPO_UPDATE = "§eAtualizar grupo";
+    String GRUPO_INVENTORY = Msg.Color("$8$lGrupo: $r");
+    String GRUPO_NOVO_INVENTORY = Msg.Color("$5$lGrupo Novo: $r");
+    String GRUPO_SALVA = Msg.Color("$eSalva novo grupo");
+    String GRUPO_UPDATE = Msg.Color("$eAtualizar grupo");
 
     // LISTA DE TODOS OS MATERIAIS DO JGO
     List<Material> LIST_MATERIAL = new ArrayList<>();
