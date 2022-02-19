@@ -440,7 +440,6 @@ public class GrupoDao {
                     grupo.addItem(item);
             }
             if (!grupo.getListItem().isEmpty())
-                Msg.Grupo(grupo, getClass());
                 return grupo;
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao localizar lista item do grupo!!!", "selectListItemGrupo(Grupo gp)", getClass(), e);

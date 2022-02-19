@@ -226,6 +226,9 @@ public class GrupoComando implements CommandExecutor {
                 }
                 if (cmd.length() > 0) {
                     grupo = new Grupo();
+                    grupo.setDsGrupo(cmd);
+                    grupo.setCdLang(lang.getCdLang());
+                    grupo.setDsLang(lang.getDsLang());
                     try {
                         grupo.setCdGrupo(Integer.parseInt(args[0]));
                     } catch (NumberFormatException e) {
@@ -234,12 +237,13 @@ public class GrupoComando implements CommandExecutor {
                     grupo = grupoDao.select(grupo);
                     if(grupo!=null) {
                         if (grupoDao.delete(grupo)) {
-                            Msg.PlayerGold(player, String.format("Grupo %s apapgado com sucesso!!", grupo.toString()));
+                            grupoDao.deleteItem(grupo);// APAGA OS ITEM DO GRUPO
+                            traducaoDao.delete(grupo);// APAGA A TRADUÇÃO DO GRUPO
+                            Msg.PlayerGold(player, String.format("Grupo %s apagado com sucesso!!", grupo.toString()));
                         }
                     }else{
                         Msg.PlayerRed(player, "Esse grupo não foi existe!!!");
                     }
-
                 } else {
                     Msg.PlayerGold(player, "Digite o código ou nome do grupo!!!");
                 }

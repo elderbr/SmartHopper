@@ -208,4 +208,15 @@ public class TraducaoDao {
     }
 
 
+    public long delete(Grupo grupo) {
+        try {
+            smt = Conexao.prepared(String.format("DELETE FROM traducao WHERE cdTraducao = %d", grupo.getCdTraducao()));
+            return smt.executeUpdate();
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao tentar apagar a tradução do grupo!!!", "", getClass(), e);
+        }finally {
+            Conexao.desconect();
+        }
+        return 0;
+    }
 }

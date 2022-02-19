@@ -158,7 +158,7 @@ public class LangDao {
 
     public long delete(Lang lang) {
         try {
-            sql = "DELETE TABLE lang WHERE cdLong = ?;";
+            sql = "DELETE FROM lang WHERE cdLang = ?;";
             smt = Conexao.prepared(sql);
             smt.setInt(1, lang.getCdLang());
             return smt.executeUpdate();
