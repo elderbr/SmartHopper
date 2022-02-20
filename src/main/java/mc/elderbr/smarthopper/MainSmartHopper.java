@@ -8,6 +8,7 @@ import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.file.GrupoFile;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
@@ -52,6 +53,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         admDao = new AdmDao();
         itemDao = new ItemDao();
         grupoDao = new GrupoDao();
+        GrupoFile grupoFile = new GrupoFile();
+        grupoFile.escrever();
         langDao = new LangDao();
         traducaoDao = new TraducaoDao();
         traducaoConfig = new TraducaoConfig();

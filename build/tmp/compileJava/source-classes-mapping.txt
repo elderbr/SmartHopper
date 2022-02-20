@@ -14,6 +14,8 @@ mc/elderbr/smarthopper/model/Velocity.java
  mc.elderbr.smarthopper.model.Velocity
 mc/elderbr/smarthopper/dao/CargoDao.java
  mc.elderbr.smarthopper.dao.CargoDao
+mc/elderbr/smarthopper/file/GrupoFile.java
+ mc.elderbr.smarthopper.file.GrupoFile
 mc/elderbr/smarthopper/model/Inventario.java
  mc.elderbr.smarthopper.model.Inventario
 mc/elderbr/smarthopper/file/TraducaoConfig.java
