@@ -93,10 +93,10 @@ public class Msg {
 
     //========================== ITEM =================================================//
 
-    public static void Item(@NotNull Item item,@NotNull Class classe) {
+    public static void Item(@NotNull Item item, @NotNull Class classe) {
         Bukkit.getServer().getConsoleSender().sendMessage(
                 ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.toString()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCdItem()+"\n§r - classe: "+ classe.getName()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCdItem() + "\n§r - classe: " + classe.getName()
         );
     }
 
@@ -112,12 +112,16 @@ public class Msg {
     }
 
     //========================== GRUPO =================================================//
-    public static void Grupo(@NotNull Grupo grupo, @NotNull Class classe){
+    public static void Grupo(@NotNull Grupo grupo, @NotNull Class classe) {
         Bukkit.getServer().getConsoleSender().sendMessage(
-                ChatColor.GREEN + "grupo: " + ChatColor.GOLD + grupo.toString()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + grupo.getCdGrupo()+"\n§rclasse: "+ classe.getName()
+                "ID: " + grupo.getCdGrupo()
+                        + " - Nome: " + grupo.getDsGrupo()
+                        +" - Linguagem: "+ grupo.getDsLang()
+                        + " - Tradução: " + grupo.getDsTraducao()
+                        + " - §rclasse: " + classe.getName()
         );
     }
+
     public static void GrupoNaoExiste(@NotNull Player player, String name) {
         player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
     }
