@@ -4,10 +4,7 @@ import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.model.InventoryCustom;
-import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Lang;
+import mc.elderbr.smarthopper.model.*;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.ChatColor;
@@ -39,8 +36,10 @@ public class GrupoComando implements CommandExecutor {
     private List<Grupo> listGrupo;
 
     private Item item;
+    private List<Item> listItem;
 
     // Tradução
+    private Traducao traducao;
     private TraducaoDao traducaoDao;
 
     // LANG
@@ -48,6 +47,7 @@ public class GrupoComando implements CommandExecutor {
     private LangDao langDao;
 
     private InventoryCustom inventory;
+
 
     public GrupoComando() {
         grupoDao = new GrupoDao();
@@ -90,13 +90,13 @@ public class GrupoComando implements CommandExecutor {
                     }
                     grupo = grupoDao.select(grupo);
                     if (grupo != null) {
-                        grupo = grupoDao.selectListItemGrupo(grupo);
+                        listItem = grupoDao.selectListItemGrupo(grupo);
 
                         // CRIAR UM INVENTARIO COM TODOS OS ITENS DO GRUPO
                         inventory = new InventoryCustom();
                         inventory.create(grupo);
-                        if (!grupo.getListItem().isEmpty()) {
-                            grupo.getListItem().forEach(items -> {
+                        if (!listItem.isEmpty()) {
+                            listItem.forEach(items -> {
                                 inventory.addItem(items);
                             });
                         }
@@ -126,12 +126,9 @@ public class GrupoComando implements CommandExecutor {
 
                     // ITEM
                     item = VGlobal.ITEM_NAME_MAP.get(Utils.toItem(itemStack));
-                    // LANG DO PLAYER
-                    item.setCdLang(lang.getCdLang());
-                    item.setDsLang(lang.getDsLang());
                     listGrupo = grupoDao.selectListGrupo(item);
                     // SE O ITEM CONTER MAIS DE UM GRUPO MOSTRA MENSAGEM
-                    if (!listGrupo.isEmpty() && listGrupo.size() > 1) {
+                    if (listGrupo.size() > 1) {
                         listGrupo.forEach(gp -> {
                             Msg.GrupoPlayer(player, gp);
                         });
@@ -140,10 +137,17 @@ public class GrupoComando implements CommandExecutor {
                     }
                     // BUSCAR O ITEM NO GRUPO COM A TRADUÇÃO
                     else {
-                        if (!listGrupo.isEmpty())
-                            grupo = grupoDao.selectListItemGrupo(listGrupo.get(0));
-                        else
-                            grupo = null;
+                        grupo = listGrupo.get(0);
+                        listItem = grupoDao.selectListItemGrupo(grupo);
+                        // CRIAR UM INVENTARIO COM TODOS OS ITENS DO GRUPO
+                        inventory = new InventoryCustom();
+                        inventory.create(grupo);
+                        if (!listItem.isEmpty()) {
+                            listItem.forEach(items -> {
+                                inventory.addItem(items);
+                            });
+                        }
+                        player.openInventory(inventory.getInventory());
                     }
                 }
                 if (grupo != null) {
@@ -162,84 +166,92 @@ public class GrupoComando implements CommandExecutor {
                 }
                 if (cmd.length() > 0) {
                     grupo = new Grupo();
-                    grupo.setCdLang(lang.getCdLang());
-                    grupo.setDsLang(lang.getDsLang());
                     isCodeName(args);
-                    grupo = traducaoDao.selectGrupo(grupo);
-                    if(grupo != null)
-                        Msg.Grupo(grupo, getClass());
+                    traducao = traducaoDao.selectGrupo(grupo);
+                    if (traducao == null) {
+                        if (traducaoDao.insert(grupo) > 0)
+                            Msg.PlayerGreen(player, "Tradução para o grupo adicionada com sucesso!!!");
+                        else
+                            Msg.PlayerGreen(player, "Erro ao adicionar tradução para o grupo!!!");
+                    } else {
+                        grupo.setCdTraducao(traducao.getCdTraducao());
+                        if (traducaoDao.update(grupo) > 0)
+                            Msg.PlayerGreen(player, "Tradução do grupo atualizada com sucesso!!!");
+                        else
+                            Msg.PlayerGreen(player, "Erro ao atualizar a tradução do grupo!!!");
+                    }
                 }
+            }
+            return false;
+        }
+
+        // ADICIONAR NOVO GRUPO
+        if (command.getName().equalsIgnoreCase("addgrupo")) {
+            if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
+                Msg.PlayerRed(player, "Apenas os Adm ou operador podem adicionar grupo!!!");
                 return false;
             }
 
-            // ADICIONAR NOVO GRUPO
-            if (command.getName().equalsIgnoreCase("addgrupo")) {
-                if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
-                    Msg.PlayerRed(player, "Apenas os Adm ou operador podem adicionar grupo!!!");
-                    return false;
-                }
+            if (cmd.length() > 2) {
 
-                if (cmd.length() > 2) {
+                grupo = new Grupo();
+                grupo.setDsGrupo(cmd);
+                grupo.setCdLang(lang.getCdLang());
+                grupo.setDsLang(lang.getDsLang());
 
-                    grupo = new Grupo();
-                    grupo.setDsGrupo(cmd);
-                    grupo.setCdLang(lang.getCdLang());
-                    grupo.setDsLang(lang.getDsLang());
+                grupo = grupoDao.select(grupo);
 
-                    grupo = grupoDao.select(grupo);
+                if (grupo == null) {
+                    inventory = new InventoryCustom();
+                    inventory.createNewGrupo(cmd);
 
-                    if (grupo == null) {
-                        inventory = new InventoryCustom();
-                        inventory.createNewGrupo(cmd);
+                    // CRIANDO O BOTÃO PARA SALVAR
+                    ItemStack itemSalve = new ItemStack(Material.LIME_WOOL);
+                    ItemMeta meta = itemSalve.getItemMeta();
+                    meta.setDisplayName("§eSalva");
+                    List<String> lore = new ArrayList<>();
+                    lore.add(VGlobal.GRUPO_SALVA);
+                    meta.setLore(lore);
+                    itemSalve.setItemMeta(meta);
+                    inventory.getInventory().setItem(53, itemSalve);
 
-                        // CRIANDO O BOTÃO PARA SALVAR
-                        ItemStack itemSalve = new ItemStack(Material.LIME_WOOL);
-                        ItemMeta meta = itemSalve.getItemMeta();
-                        meta.setDisplayName("§eSalva");
-                        List<String> lore = new ArrayList<>();
-                        lore.add(VGlobal.GRUPO_SALVA);
-                        meta.setLore(lore);
-                        itemSalve.setItemMeta(meta);
-                        inventory.getInventory().setItem(53, itemSalve);
-
-                        player.openInventory(inventory.getInventory());
-                    } else {
-                        Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", grupo.toString()));
-                    }
+                    player.openInventory(inventory.getInventory());
                 } else {
-                    Msg.PlayerGold(player, "Digite o nome do grupo com mais de 2 caracteres!!!");
+                    Msg.PlayerGold(player, String.format("O grupo %s já existe!!!", grupo.toString()));
                 }
+            } else {
+                Msg.PlayerGold(player, "Digite o nome do grupo com mais de 2 caracteres!!!");
             }
+        }
 
-            // REMOVER GRUPO
-            if (command.getName().equalsIgnoreCase("removegrupo")) {
-                if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
-                    Msg.PlayerRed(player, "Apenas os Adm ou operador podem remover grupo!!!");
-                    return false;
-                }
-                if (cmd.length() > 0) {
-                    grupo = new Grupo();
+        // REMOVER GRUPO
+        if (command.getName().equalsIgnoreCase("removegrupo")) {
+            if (!VGlobal.ADM_UUID.contains(player.getUniqueId().toString())) {
+                Msg.PlayerRed(player, "Apenas os Adm ou operador podem remover grupo!!!");
+                return false;
+            }
+            if (cmd.length() > 0) {
+                grupo = new Grupo();
+                grupo.setDsGrupo(cmd);
+                grupo.setCdLang(lang.getCdLang());
+                grupo.setDsLang(lang.getDsLang());
+                try {
+                    grupo.setCdGrupo(Integer.parseInt(cmd));
+                } catch (NumberFormatException e) {
                     grupo.setDsGrupo(cmd);
-                    grupo.setCdLang(lang.getCdLang());
-                    grupo.setDsLang(lang.getDsLang());
-                    try {
-                        grupo.setCdGrupo(Integer.parseInt(cmd));
-                    } catch (NumberFormatException e) {
-                        grupo.setDsGrupo(cmd);
-                    }
-                    grupo = grupoDao.select(grupo);
-                    if (grupo != null) {
-                        if (grupoDao.delete(grupo)) {
-                            grupoDao.deleteItem(grupo);// APAGA OS ITEM DO GRUPO
-                            traducaoDao.delete(grupo);// APAGA A TRADUÇÃO DO GRUPO
-                            Msg.PlayerGold(player, String.format("Grupo %s apagado com sucesso!!", grupo.toString()));
-                        }
-                    } else {
-                        Msg.PlayerRed(player, "Esse grupo não foi existe!!!");
+                }
+                grupo = grupoDao.select(grupo);
+                if (grupo != null) {
+                    if (grupoDao.delete(grupo)) {
+                        grupoDao.deleteItem(grupo);// APAGA OS ITEM DO GRUPO
+                        traducaoDao.delete(grupo);// APAGA A TRADUÇÃO DO GRUPO
+                        Msg.PlayerGold(player, String.format("Grupo %s apagado com sucesso!!", grupo.toString()));
                     }
                 } else {
-                    Msg.PlayerGold(player, "Digite o código ou nome do grupo!!!");
+                    Msg.PlayerRed(player, "Esse grupo não foi existe!!!");
                 }
+            } else {
+                Msg.PlayerGold(player, "Digite o código ou nome do grupo!!!");
             }
         }
         return false;
@@ -258,6 +270,8 @@ public class GrupoComando implements CommandExecutor {
                 listName.append(args[i] + " ");
             }
             grupo.setDsTraducao(listName.toString().trim());
+            grupo.setCdLang(lang.getCdLang());
+            grupo.setDsLang(lang.getDsLang());
         }
     }
 }
