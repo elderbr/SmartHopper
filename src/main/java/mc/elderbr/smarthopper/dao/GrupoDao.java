@@ -7,13 +7,11 @@ import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class GrupoDao {
@@ -24,6 +22,7 @@ public class GrupoDao {
 
     private List<String> listNames;
     private List<String> listItemName;
+    private List<Item> listItem;
     private int contato;
 
     private String sql;
@@ -67,7 +66,7 @@ public class GrupoDao {
         for (Material m : VGlobal.LIST_MATERIAL) {
             // CONVERTENDO O NOME DO MATERIAL REMOVENDO O ANDERLAINE
             // ARRAY DO NOME DO MATERIAL SEPARANDO PELO O ESPAÇO
-            String[] itens = Utils.ToMaterial(m).split(" ");
+            String[] itens = Utils.ToMaterial(m).split("\\s");
             String name = null;
 
             // ADICIONA NA LISTA DE NOME SE O ITEM ESTIVER MAIS DE UM NOME E
@@ -215,7 +214,7 @@ public class GrupoDao {
                 sql = "SELECT * FROM grupo g " +
                         "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
                         "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE lower(g.dsGrupo) = lower(?) OR lower(t.dsTraducao) = lower(?) AND lower(l.dsLang) = lower(?) COLLATE NOCASE;";
+                        "WHERE lower(g.dsGrupo) = lower(?) OR lower(t.dsTraducao) = lower(?) AND lower(l.dsLang) = lower(?);";
                 smt = Conexao.prepared(sql);
                 smt.setString(1, grupo.getDsGrupo());
                 smt.setString(2, grupo.getDsGrupo());
@@ -241,21 +240,14 @@ public class GrupoDao {
         }
         // SELECT SIMPLES NO GRUPO BUSCANDO PELO O CÓDIGO OU NOME DO GRUPO OU SUA TRADUÇÃO
         try {
-            sql = "SELECT * FROM grupo g " +
-                    "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
-                    "WHERE g.cdGrupo = ? OR lower(g.dsGrupo) = lower(?) OR lower(t.dsTraducao) = lower(?) COLLATE NOCASE";
+            sql = "SELECT * FROM grupo g WHERE g.cdGrupo = ?";
             smt = Conexao.prepared(sql);
             smt.setInt(1, grupo.getCdGrupo());
-            smt.setString(2, grupo.getDsGrupo());
-            smt.setString(3, grupo.getDsGrupo());
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.grupo = new Grupo();
                 this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 this.grupo.setDsGrupo(rs.getString("dsGrupo"));
-                // TRADUÇÃO
-                this.grupo.setCdTraducao(rs.getInt("cdTraducao"));
-                this.grupo.setDsTraducao(rs.getString("dsTraducao"));
                 return this.grupo;
             }
         } catch (SQLException e) {
@@ -273,9 +265,9 @@ public class GrupoDao {
             smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
             while (rs.next()) {
-                this.grupo = new Grupo();
-                this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
-                this.grupo.setDsGrupo(rs.getString("dsGrupo"));
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
                 listGrupo.add(this.grupo);
                 // ADICIONANDO NAS VARIAVEIS GLOBAIS
                 VGlobal.LIST_GRUPO.add(grupo);
@@ -346,13 +338,10 @@ public class GrupoDao {
 
     public List<Grupo> selectListGrupo(Item item) {
         listGrupo = new ArrayList<>();
-
         try {
             // PROCURA NA TABELA GRUPO DO ITEM O CÓDIGO DO ITEM
-            sql = "SELECT * FROM grupoItem gi " +
-                    "LEFT JOIN grupo g ON g.cdGrupo = gi.cdGrupo " +
-                    "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
-                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+            sql = "SELECT * FROM grupo g " +
+                    "LEFT JOIN grupoItem gi ON g.cdGrupo = gi.cdGrupo " +
                     "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
                     "WHERE gi.cdItem = ?;";
             smt = Conexao.prepared(sql);
@@ -362,85 +351,34 @@ public class GrupoDao {
                 grupo = new Grupo();
                 grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 grupo.setDsGrupo(rs.getString("dsGrupo"));
-                // TRADUÇÃO
-                grupo.setCdTraducao(rs.getInt("cdTraducao"));
-                grupo.setDsTraducao(rs.getString("dsTraducao"));
-                // Lang
-                grupo.setCdLang(rs.getInt("cdLang"));
-                grupo.setDsLang(rs.getString("dsLang"));
                 listGrupo.add(grupo);
             }
-            // SE A LISTA FOR DIFERENTE DE VAZIO E MAIOR QUE UM
-            if (!listGrupo.isEmpty() && listGrupo.size() > 1)
-                return listGrupo;
-            else
-                listGrupo = new ArrayList<>();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao localizar grupo!!!", "selectListGrupo(Item item)", getClass(), e);
-        } finally {
-            Conexao.desconect();
-        }
-
-        // PROCURA NA TABELA GRUPO DO ITEM O CÓDIGO DO ITEM E TRADUÇÃO NA LINGUAGEM DO JOGADOR
-        try {
-            sql = "SELECT * FROM grupoItem gi " +
-                    "LEFT JOIN grupo g ON g.cdGrupo = gi.cdGrupo " +
-                    "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
-                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                    "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
-                    "WHERE gi.cdItem = ? AND l.dsLang = ?;";
-            smt = Conexao.prepared(sql);
-            smt.setInt(1, item.getCdItem());
-            smt.setString(2, item.getDsLang());
-            rs = smt.executeQuery();
-            while (rs.next()) {
-                grupo = new Grupo();
-                grupo.setCdGrupo(rs.getInt("cdGrupo"));
-                grupo.setDsGrupo(rs.getString("dsGrupo"));
-                // TRADUÇÃO
-                grupo.setCdTraducao(rs.getInt("cdTraducao"));
-                grupo.setDsTraducao(rs.getString("dsTraducao"));
-                // Lang
-                grupo.setCdLang(rs.getInt("cdLang"));
-                grupo.setDsLang(rs.getString("dsLang"));
-                listGrupo.add(grupo);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         } finally {
             Conexao.desconect();
         }
         return listGrupo;
     }
 
-    public Grupo selectListItemGrupo(Grupo gp) {
+    public List<Item> selectListItemGrupo(Grupo gp) {
+        listItem = new ArrayList<>();
         try {
-            sql = "SELECT gi.cdGitem, g.cdGrupo, g.dsGrupo, t.dsTraducao, i.cdItem, i.dsItem FROM grupo g " +
+            sql = "SELECT gi.cdGitem, g.cdGrupo, g.dsGrupo, i.cdItem, i.dsItem FROM grupo g " +
                     "LEFT JOIN grupoItem gi ON gi.cdGrupo = g.cdGrupo " +
-                    "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
-                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
                     "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
                     "WHERE g.cdGrupo = ?;";
 
             smt = Conexao.prepared(sql);
             smt.setInt(1, gp.getCdGrupo());
             rs = smt.executeQuery();
-
-            // CRIANDO O GRUPO
-            grupo = new Grupo();
-            grupo.setCdGrupo(rs.getInt("cdGrupo"));
-            grupo.setDsGrupo(rs.getString("dsGrupo"));
-            grupo.setDsTraducao(rs.getString("dsTraducao"));
-
             while (rs.next()) {
                 Item item = new Item();
                 item.setCdItem(rs.getInt("cdItem"));
                 item.setDsItem(rs.getString("dsItem"));
-                if (item.getDsItem() != null)
-                    grupo.addItem(item);
+                listItem.add(item);
             }
-            if (!grupo.getListItem().isEmpty())
-                return grupo;
+            return listItem;
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao localizar lista item do grupo!!!", "selectListItemGrupo(Grupo gp)", getClass(), e);
         } finally {
@@ -467,5 +405,6 @@ public class GrupoDao {
         }
         return 0;
     }
+
 
 }
