@@ -131,16 +131,16 @@ public class TraducaoDao {
         return this.item;
     }
 
-    public Grupo selectGrupo(Grupo traducao) {
+    public Traducao selectGrupo(Grupo traducao) {
         try {
             grupo = (Grupo) traducao;
 
             addParameters();
 
             if (grupo.getCdGrupo() > 0) {
-                sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo LEFT JOIN lang l ON l.cdLang = t.cdLang WHERE " + parameters.get(CODIGO);
+                sql = "SELECT * FROM grupo g LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo LEFT JOIN lang l ON l.cdLang = t.cdLang WHERE " + parameters.get(CODIGO);
             } else {
-                sql = "SELECT * FROM grupo g INNER JOIN traducao t ON g.cdGrupo = t.cdGrupo LEFT JOIN lang l ON l.cdLang = t.cdLang WHERE " + parameters.get(NAME);
+                sql = "SELECT * FROM grupo g LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo LEFT JOIN lang l ON l.cdLang = t.cdLang WHERE " + parameters.get(NAME);
             }
             smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
@@ -154,6 +154,10 @@ public class TraducaoDao {
                 // Tradução
                 grupo.setCdTraducao(rs.getInt("cdTraducao"));
                 grupo.setDsTraducao(rs.getString("dsTraducao"));
+                this.traducao = new Traducao();
+                this.traducao.setCdTraducao(rs.getInt("cdTraducao"));
+                this.traducao.setDsTraducao(rs.getString("dsTraducao"));
+                return this.traducao;
             }
             smt.close();
             rs.close();
@@ -162,7 +166,7 @@ public class TraducaoDao {
         } finally {
             Conexao.desconect();
         }
-        return grupo;
+        return null;
     }
 
     public int update(Item item) {
@@ -185,12 +189,11 @@ public class TraducaoDao {
     }
 
     public int update(Grupo grupo) {
-        sql = "UPDATE traducao SET dsTraducao = ? WHERE cdTraducao = ? AND cdLang = ?;";
+        sql = "UPDATE traducao SET dsTraducao = ? WHERE cdTraducao = ?;";
         try {
             smt = Conexao.prepared(sql);
             smt.setString(1, grupo.getDsTraducao());
             smt.setInt(2, grupo.getCdTraducao());
-            smt.setInt(3, grupo.getCdLang());
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao atualizar a tradução do grupo!!!", "update(Grupo grupo)", getClass(), e);
