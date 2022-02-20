@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.dao.GrupoDao;
+import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Adm;
@@ -25,7 +26,7 @@ public class InventarioEvent implements Listener {
 
     private String titulo;
     private Player player;
-    private Lang lang;
+
     private ItemStack itemStack;
     private ItemStack itemNovo;
 
@@ -41,6 +42,9 @@ public class InventarioEvent implements Listener {
     private Inventory inventory;
 
     private Adm adm;
+
+    private Lang lang;
+    private LangDao langDao = new LangDao();
 
     @EventHandler
     public void InventoryClick(InventoryClickEvent event) {
@@ -111,10 +115,16 @@ public class InventarioEvent implements Listener {
                 }
                 if (event.isLeftClick() && lore.contains(VGlobal.GRUPO_UPDATE)) {
                     nameGrupo = titulo.replaceAll(VGlobal.GRUPO_INVENTORY, "");
+                    lang  = VGlobal.LANG_NAME_MAP.get(player.getLocale());
+
                     grupo = new Grupo();
                     grupo.setDsGrupo(nameGrupo);
+                    grupo.setLang(lang);
 
                     grupo = grupoDao.select(grupo);
+                    player.closeInventory();
+
+                    int retorno = 0;
                     if (grupo != null) {
 
                         inventory.removeItem(inventory.getItem(53));
@@ -123,11 +133,17 @@ public class InventarioEvent implements Listener {
                         for (ItemStack items : inventory.getStorageContents()) {
                             if (items == null) continue;
                             itemNovo = new ItemStack(items.getType(), 1);
-                            grupoDao.insertItem(grupo, VGlobal.ITEM_NAME_MAP.get(Utils.toItem(itemNovo)));
+                            retorno = grupoDao.insertItem(grupo, VGlobal.ITEM_NAME_MAP.get(Utils.toItem(itemNovo)));
                         }
+                    }else{
+                        Msg.PlayerRed(player, "Esse grupo não existe!!!");
                     }
-                    player.closeInventory();
-                    Msg.PlayerGold(player, "Grupo atualizado com sucesso!!!");
+
+                    if(retorno>0) {
+                        Msg.PlayerGold(player, "Grupo atualizado com sucesso!!!");
+                    }else{
+                        Msg.PlayerRed(player, "Erro ao atualizar o grupo!!!");
+                    }
 
                 }
 
