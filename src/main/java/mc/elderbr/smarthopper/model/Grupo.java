@@ -63,6 +63,11 @@ public class Grupo extends Traducao {
         return false;
     }
 
+    public void setLang(Lang lang){
+        setCdLang(lang.getCdLang());
+        setDsLang(lang.getDsLang());
+    }
+
     @Override
     public String toString() {
         return (getDsTraducao() != null ? getDsTraducao() : dsGrupo);
