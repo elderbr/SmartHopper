@@ -126,7 +126,12 @@ public class GrupoComando implements CommandExecutor {
 
                     // ITEM
                     item = VGlobal.ITEM_NAME_MAP.get(Utils.toItem(itemStack));
+                    item.setDsLang(langPlayer);
                     listGrupo = grupoDao.selectListGrupo(item);
+                    if(listGrupo.isEmpty()){
+                        Msg.PlayerGold(player,"Não foi encontrado grupo do item!!!");
+                        return false;
+                    }
                     // SE O ITEM CONTER MAIS DE UM GRUPO MOSTRA MENSAGEM
                     if (listGrupo.size() > 1) {
                         listGrupo.forEach(gp -> {

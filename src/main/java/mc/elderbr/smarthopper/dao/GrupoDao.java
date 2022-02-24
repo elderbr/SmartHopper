@@ -12,16 +12,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GrupoDao {
 
     private int position;
+    private int cdGrupo;
     private Grupo grupo;
     private List<Grupo> listGrupo;
+    private List<String> listNameGrupo;
 
+    private Item item;
     private List<String> listNames;
-    private List<String> listItemName;
     private List<Item> listItem;
     private int contato;
 
@@ -54,115 +57,143 @@ public class GrupoDao {
         } finally {
             Conexao.desconect();
         }
-
-        createGrupo();
     }
 
     public void createGrupo() {
 
+        String name = null;
         // NOMES DOS GRUPOS
         listNames = new ArrayList<>();
         // PERCORRENDO A LISTA DE MATERIAL PADÃO DO MINECRAFT
-        for (Material m : VGlobal.LIST_MATERIAL) {
-            // CONVERTENDO O NOME DO MATERIAL REMOVENDO O ANDERLAINE
-            // ARRAY DO NOME DO MATERIAL SEPARANDO PELO O ESPAÇO
-            String[] itens = Utils.ToMaterial(m).split("\\s");
-            String name = null;
-
-            // ADICIONA NA LISTA DE NOME SE O ITEM ESTIVER MAIS DE UM NOME E
-            // NÃO ESTIVER NA LISTA NOME ADICIONA
-            switch (itens.length) {
-                case 2:
-                    name = itens[0];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    name = itens[1];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    break;
-                case 3:
-                    name = itens[0] + " " + itens[1];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    name = itens[1] + " " + itens[2];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    break;
-                case 4:
-                    name = itens[0] + " " + itens[1];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    name = itens[1] + " " + itens[2];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    name = itens[2] + " " + itens[3];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    break;
-                case 5:
-                    name = itens[0] + " " + itens[1];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    name = itens[1] + " " + itens[2];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    name = itens[2] + " " + itens[3];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    name = itens[0] + " " + itens[1] + " " + itens[2];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    name = itens[1] + " " + itens[2] + " " + itens[3];
-                    if (!listNames.contains(name)) {
-                        listNames.add(name);
-                    }
-                    break;
+        item = new Item();
+        for (Item itens : item.getListMaterial()) {
+            name = itens.getDsItem();
+            if (!listNames.contains(name)) {
+                listNames.add(name);
             }
-        }
-        // NOME DO GRUPO É VALIDO SE EXISTIR MAIS DE UM ITEM COM O NOME
-        contato = 0;
-        listItemName = new ArrayList<>();
-        for (String names : listNames) {
-            for (Material m : VGlobal.LIST_MATERIAL) {
-                if (m.isItem()) {
-                    if (Utils.ToMaterial(m).contains(names)) {
-                        if (contato > 1 && !listItemName.contains(names)) {
-                            listItemName.add(names);
-                            break;
-                        }
-                        contato++;
+            String names[] = name.split("\\s");
+            for (int i = 0; i < names.length; i++) {
+                if (names[i].length() > 2 && !listNames.contains(names[i])) {
+                    listNames.add(names[i]);
+                }
+                if ((i + 1) < names.length && names[i].length() > 2) {
+                    name = names[i] + " " + names[i + 1];
+                    if (!listNames.contains(names)) {
+                        listNames.add(name);
                     }
+                }
+                if ((i + 2) < names.length && names[i].length() > 2) {
+                    name = names[i] + " " + names[i + 1] + " " + names[i + 2];
+                    if (!listNames.contains(names)) {
+                        listNames.add(name);
+                    }
+                }
+                if ((i + 3) < names.length && names[i].length() > 2) {
+                    name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3];
+                    if (!listNames.contains(names)) {
+                        listNames.add(name);
+                    }
+                }
+                if ((i + 4) < names.length && names[i].length() > 2) {
+                    name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3] + " " + names[i + 4];
+                    if (!listNames.contains(names)) {
+                        listNames.add(name);
+                    }
+                }
+                if ((i + 5) < names.length && names[i].length() > 2) {
+                    name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3] + " " + names[i + 4] + " " + names[i + 5];
+                    if (!listNames.contains(names)) {
+                        listNames.add(name);
+                    }
+                }
+            }
+        }// FIM DE PERCORRER A LISTA DE MATERIAIS
+
+        // VERIFICA SE EXISTE MAIS DE UM ITEM COM O NOME DO GRUPO SE SIM O GRUPO É VALIDO
+        contato = 0;
+        listNameGrupo = new ArrayList<>();
+        Collections.sort(listNames);
+        for (String gp : listNames) {
+            grupo = new Grupo();
+            grupo.setDsGrupo(gp);
+            for (Item item : item.getListMaterial()) {
+                if (item.contains(grupo)) {
+                    if (contato > 0 && !listNameGrupo.contains(gp)) {
+                        listNameGrupo.add(gp);
+                    }
+                    contato++;
                 }
             }
             contato = 0;
         }
-
-        // LISTA VALIDA DO NOME DO GRUPO
-        // VERIFICA SE A LISTA DE ITEM É MAIOR QUE LISTA DO BANCO
-        if (listItemName.size() > selectAll().size()) {
-            listItemName.forEach(names -> {
+        // ADICIONAR GRUPO E SEU ITEM NO BANCO DE DADOS
+        if (listNameGrupo.size() != selectAll().size()) {
+            Msg.ServidorGold("....Criando grupos....");
+            Collections.sort(listNameGrupo);
+            listNameGrupo.forEach(gp -> {
                 grupo = new Grupo();
-                grupo.setDsGrupo(StringUtils.capitalize(names));
-                Msg.ServidorGreen("Criando o grupo " + grupo.getDsGrupo());
-                position = insert(grupo);
-                grupo.setCdGrupo(position);
-
-                VGlobal.LIST_ITEM.forEach(items -> {
-                    if (grupo.contains(items))
-                        insertItem(grupo, items);
-                });
-
+                grupo.setDsGrupo(gp);
+                if ((cdGrupo = insert(grupo)) > 0) {
+                    grupo.setCdGrupo(cdGrupo);
+                    Msg.ServidorGold("Criando grupo " + grupo.getDsGrupo());
+                    for (Item item : VGlobal.LIST_ITEM) {
+                        if (item.contains(grupo)) {
+                            if (insertItem(grupo, item) > 0) {
+                                Msg.ServidorGold("Grupo " + grupo.getDsGrupo() + " - Item >> " + item.getDsItem());
+                            }
+                        }
+                        // Grupo de redstones
+                        if (grupo.getDsGrupo().equals("redstone")) {
+                            if (item.getDsItem().contains("redstone")
+                                    || item.getDsItem().equals("dispenser")
+                                    || item.getDsItem().equals("note block")
+                                    || item.getDsItem().contains("piston")
+                                    || item.getDsItem().equals("lever")
+                                    || item.getDsItem().contains("pressure plate")
+                                    || item.getDsItem().contains("button")
+                                    || item.getDsItem().contains("trapdoor")
+                                    || item.getDsItem().contains("tripwire")
+                                    || item.getDsItem().contains("chest")
+                                    && !item.getDsItem().contains("chestplate")
+                                    || item.getDsItem().contains("daylight")
+                                    || item.getDsItem().contains("hopper")
+                                    || item.getDsItem().contains("drooper")
+                                    || item.getDsItem().contains("observer")
+                                    || item.getDsItem().contains("iron door")
+                                    || item.getDsItem().contains("comparator")
+                                    || item.getDsItem().contains("repeater")) {
+                                insertItem(grupo, item);
+                            }
+                        }
+                        // Grupo de flores
+                        if (grupo.getDsGrupo().equals("flower")) {
+                            if (item.getDsItem().equals("grass")
+                                    || item.getDsItem().equals("fern")
+                                    || item.getDsItem().equals("dead bush")
+                                    || item.getDsItem().contains("seagrass")
+                                    || item.getDsItem().equals("sea pickle")
+                                    || item.getDsItem().equals("dandelion")
+                                    || item.getDsItem().equals("poppy")
+                                    || item.getDsItem().equals("blue orchid")
+                                    || item.getDsItem().equals("allium")
+                                    || item.getDsItem().equals("azure bluet")
+                                    || item.getDsItem().contains("tulip")
+                                    || item.getDsItem().equals("oxeye daisy")
+                                    || item.getDsItem().equals("cornflower")
+                                    || item.getDsItem().contains("lily")
+                                    || item.getDsItem().contains("rose")
+                                    || item.getDsItem().equals("vine")
+                                    || item.getDsItem().equals("sunflower")
+                                    || item.getDsItem().equals("lilac")
+                                    || item.getDsItem().equals("peony")
+                                    || item.getDsItem().equals("tall grass")
+                                    || item.getDsItem().equals("large fern")
+                            ) {
+                                insertItem(grupo, item);
+                            }
+                        }
+                    }
+                }
             });
         }
     }
@@ -187,7 +218,6 @@ public class GrupoDao {
     }
 
     private void insertName(String name) {
-
         grupo = new Grupo();
         grupo.setDsGrupo(name);
         if (insert(grupo) > 0) {
@@ -340,17 +370,28 @@ public class GrupoDao {
         listGrupo = new ArrayList<>();
         try {
             // PROCURA NA TABELA GRUPO DO ITEM O CÓDIGO DO ITEM
-            sql = "SELECT * FROM grupo g " +
+            sql = String.format("SELECT * FROM grupo g " +
                     "LEFT JOIN grupoItem gi ON g.cdGrupo = gi.cdGrupo " +
                     "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
-                    "WHERE gi.cdItem = ?;";
+                    "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                    "WHERE i.cdItem = %d AND l.dsLang = \"%s\"", item.getCdItem(), item.getDsLang());
             smt = Conexao.prepared(sql);
-            smt.setInt(1, item.getCdItem());
+            rs = smt.executeQuery();
+            if (!rs.next()) {
+                sql = String.format("SELECT * FROM grupo g " +
+                        "LEFT JOIN grupoItem gi ON g.cdGrupo = gi.cdGrupo " +
+                        "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
+                        "WHERE gi.cdItem = %d;", item.getCdItem());
+            }
+            smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
             while (rs.next()) {
                 grupo = new Grupo();
                 grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 grupo.setDsGrupo(rs.getString("dsGrupo"));
+                grupo.setDsTraducao(rs.getString("dsTraducao"));
+                grupo.setDsLang(rs.getString("dsLang"));
                 listGrupo.add(grupo);
             }
         } catch (SQLException e) {

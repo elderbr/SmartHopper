@@ -22,6 +22,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
     // CONFIGS
     private Config config;
+    private GrupoFile grupoFile;
 
     private AdmDao admDao;
     private ItemDao itemDao;
@@ -53,13 +54,13 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         admDao = new AdmDao();
         itemDao = new ItemDao();
         grupoDao = new GrupoDao();
-        GrupoFile grupoFile = new GrupoFile();
-        grupoFile.escrever();
+        grupoDao.createGrupo();
         langDao = new LangDao();
         traducaoDao = new TraducaoDao();
         traducaoConfig = new TraducaoConfig();
         cargoDao = new CargoDao();
         config = new Config();
+        grupoFile = new GrupoFile();
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);

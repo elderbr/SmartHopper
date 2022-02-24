@@ -48,22 +48,40 @@ public class Grupo extends Traducao {
     }
 
     public boolean contains(Item item) {
+        String name = null;
         String[] names = item.getDsItem().split("\\s");
-        if (names.length > 0) {
-            for (int i = 0; i < names.length; i++) {
-                if (names[i].equalsIgnoreCase(dsGrupo)) {
-                    return true;
-                }
-            }
-        } else {
-            if (item.getDsItem().equalsIgnoreCase(dsGrupo)) {
+
+        if(dsGrupo.equalsIgnoreCase(item.getDsItem())) return true;
+
+        for (int i = 0; i < names.length; i++) {
+            if (names[i].equalsIgnoreCase(dsGrupo)) {
                 return true;
+            }
+            if ((i + 1) < names.length) {
+                name = names[i] + " " + names[i + 1];
+                if (name.equalsIgnoreCase(dsGrupo)) return true;
+            }
+            if ((i + 2) < names.length) {
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2];
+                if (name.equalsIgnoreCase(dsGrupo)) return true;
+            }
+            if ((i + 3) < names.length) {
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2]+ " " + names[i + 3];
+                if (name.equalsIgnoreCase(dsGrupo)) return true;
+            }
+            if ((i + 4) < names.length) {
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2]+ " " + names[i + 3]+ " " + names[i + 4];
+                if (name.equalsIgnoreCase(dsGrupo)) return true;
+            }
+            if ((i + 5) < names.length) {
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2]+ " " + names[i + 3]+ " " + names[i + 4]+ " " + names[i + 5];
+                if (name.equalsIgnoreCase(dsGrupo)) return true;
             }
         }
         return false;
     }
 
-    public void setLang(Lang lang){
+    public void setLang(Lang lang) {
         setCdLang(lang.getCdLang());
         setDsLang(lang.getDsLang());
     }
