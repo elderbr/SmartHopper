@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class Item extends Traducao {
         this.dsItem = dsItem;
     }
 
-    public List<Item> getListItem() {
+    public List<Item> getListMaterial() {
         listItem = new ArrayList<>();
         for (Material m : Material.values()) {
             Item i = new Item(m);
@@ -52,43 +53,45 @@ public class Item extends Traducao {
         return listItem;
     }
 
-    public boolean constains(Grupo grupo) {
-        String name = grupo.getDsGrupo();
-        String[] names = name.split("\\s");
-        if (name.equalsIgnoreCase(dsItem)) {
-            return true;
-        }
+    public boolean contains(@NotNull Grupo grupo) {
+        String name = null;
+        String nameGrupo = grupo.getDsGrupo();
+
+        if (dsItem.equalsIgnoreCase(nameGrupo)) return true;
+
+        String[] names = dsItem.split("\\s");
+
         for (int i = 0; i < names.length; i++) {
-            if(dsItem.equalsIgnoreCase(names[i])){
+            if (names[i].equalsIgnoreCase(nameGrupo)) {
                 return true;
             }
-            if((i+1)<names.length){
-                name = names[i]+" "+names[i+1];
-                if(dsItem.equalsIgnoreCase(name)){
+            if ((i + 1) < names.length) {
+                name = names[i] + " " + names[i + 1];
+                if (name.equalsIgnoreCase(nameGrupo)) {
                     return true;
                 }
             }
-            if((i+2)<names.length){
-                name = names[i]+" "+names[i+1]+" "+names[i+2];
-                if(dsItem.equalsIgnoreCase(name)){
+            if ((i + 2) < names.length) {
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2];
+                if (name.equalsIgnoreCase(nameGrupo)) {
                     return true;
                 }
             }
-            if((i+3)<names.length){
-                name = names[i]+" "+names[i+1]+" "+names[i+2]+" "+names[i+3];
-                if(dsItem.equalsIgnoreCase(name)){
+            if ((i + 3) < names.length) {
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3];
+                if (name.equalsIgnoreCase(nameGrupo)) {
                     return true;
                 }
             }
-            if((i+4)<names.length){
-                name = names[i]+" "+names[i+1]+" "+names[i+2]+" "+names[i+3]+" "+names[i+4];
-                if(dsItem.equalsIgnoreCase(name)){
+            if ((i + 4) < names.length) {
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3] + " " + names[i + 4];
+                if (name.equalsIgnoreCase(nameGrupo)) {
                     return true;
                 }
             }
-            if((i+5)<names.length){
-                name = names[i]+" "+names[i+1]+" "+names[i+2]+" "+names[i+3]+" "+names[i+4]+" "+names[i+5];
-                if(dsItem.equalsIgnoreCase(name)){
+            if ((i + 5) < names.length) {
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3] + " " + names[i + 4]+ " " + names[i + 5];
+                if (name.equalsIgnoreCase(nameGrupo)) {
                     return true;
                 }
             }
