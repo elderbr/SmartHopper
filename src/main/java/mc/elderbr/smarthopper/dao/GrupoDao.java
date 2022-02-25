@@ -217,6 +217,26 @@ public class GrupoDao {
         return 0;
     }
 
+    public int insertID(Grupo grupo) {
+        sql = "INSERT INTO grupo (cdGrupo, dsGrupo) VALUES (?,?);";
+        try {
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, grupo.getCdGrupo());
+            smt.setString(2, grupo.getDsGrupo());
+            smt.executeUpdate();
+            rs = smt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 19)
+                Msg.ServidorErro(e, "insertID(Grupo grupo)", getClass());
+        } finally {
+            Conexao.desconect();
+        }
+        return 0;
+    }
+
     private void insertName(String name) {
         grupo = new Grupo();
         grupo.setDsGrupo(name);
@@ -381,7 +401,9 @@ public class GrupoDao {
             if (!rs.next()) {
                 sql = String.format("SELECT * FROM grupo g " +
                         "LEFT JOIN grupoItem gi ON g.cdGrupo = gi.cdGrupo " +
+                        "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
                         "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
+                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
                         "WHERE gi.cdItem = %d;", item.getCdItem());
             }
             smt = Conexao.prepared(sql);
