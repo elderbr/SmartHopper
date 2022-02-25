@@ -36,22 +36,29 @@ public class GrupoFile {
                 e.printStackTrace();
             }
         }
-        if(Integer.parseInt(VGlobal.VERSION.replaceAll("\\.",""))>(Config.Version())) {
+        // SE A VERSÃO DO PLUGIN FOR MENOR QUE A VERSÃO ATUAL
+        if(VGlobal.VERSAO > Config.Version()) {
             ler();
         }
     }
 
+    // LER O ARQUIVO grupo.yml E SALVA NO BANCO DE DADOS COM OS SEUS ITENS
     public void ler(){
         for( String values : config.getValues(false).keySet()){
             grupo = new Grupo();
             grupo.setDsGrupo( config.getString(values.concat(".grupo_name")));
             grupo.setCdGrupo(config.getInt(values.concat(".grupo_id")));
-            listItem = new ArrayList<>();
-            for(Object items : config.getList(values.concat(".grupo_item"))){
-                item = VGlobal.ITEM_NAME_MAP.get((String) items);
-                if(item!=null) {
-                    grupoDao.insertItem(grupo, item);
-                    listItem.add(item);
+            // SE O GRUPO FOR SALVO
+            if(grupoDao.insertID(grupo)>0) {
+                // ADICIONANDO LISTA DE ITEM
+                listItem = new ArrayList<>();
+                for (Object items : config.getList(values.concat(".grupo_item"))) {
+                    item = VGlobal.ITEM_NAME_MAP.get((String) items);
+                    Msg.Item(item, getClass());
+                    if (item != null) {
+                        grupoDao.insertItem(grupo, item);
+                        listItem.add(item);
+                    }
                 }
             }
         }
