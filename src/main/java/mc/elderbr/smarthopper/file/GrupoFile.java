@@ -33,9 +33,8 @@ public class GrupoFile {
                 e.printStackTrace();
             }
         }
-
         config = YamlConfiguration.loadConfiguration(FILE);
-        ler();
+
 
     }
 

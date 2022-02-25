@@ -9,6 +9,7 @@ import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoFile;
+import mc.elderbr.smarthopper.file.ItemFile;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
@@ -22,6 +23,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
     // CONFIGS
     private Config config;
+    private ItemFile itemFile;
     private GrupoFile grupoFile;
 
     private AdmDao admDao;
@@ -51,6 +53,10 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
+        config = new Config();
+        itemFile = new ItemFile();
+        grupoFile = new GrupoFile();
+
         admDao = new AdmDao();
         itemDao = new ItemDao();
         grupoDao = new GrupoDao();
@@ -59,8 +65,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         traducaoDao = new TraducaoDao();
         traducaoConfig = new TraducaoConfig();
         cargoDao = new CargoDao();
-        config = new Config();
-        grupoFile = new GrupoFile();
+
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);
