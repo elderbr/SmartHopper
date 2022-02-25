@@ -19,10 +19,9 @@ public class ItemFile {
     private ItemDao itemDao = new ItemDao();
 
     public ItemFile() {
-        if(parse(VGlobal.VERSION)>Config.Version()){
+        if(VGlobal.VERSAO>Config.Version()){
             ler();
             itemDao.create();
-            Config.setVersion();
         }
         escrever();
     }
@@ -52,15 +51,7 @@ public class ItemFile {
             VGlobal.ITEM_NAME_MAP.put(itens.getDsItem(), itens);
         }
     }
-
-    private int parse(String str){
-        try{
-            return Integer.parseInt( str.replaceAll("\\.",""));
-        }catch (NumberFormatException e){
-            return 0;
-        }
-    }
-
+    
     private void save(){
         try{
             config.save(FILE);
