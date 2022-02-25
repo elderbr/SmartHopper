@@ -58,6 +58,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         config = new Config();
         itemFile = new ItemFile();
         grupoFile = new GrupoFile();
+        Config.setVersion();// ATUALIZA A VERSÃO DO PLUGIN
 
 
         admDao = new AdmDao();
