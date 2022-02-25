@@ -35,7 +35,9 @@ public class ItemDao {
         } finally {
             Conexao.desconect();
         }
+    }
 
+    public void create(){
         // Verifica se existe item na tabela do banco
         // Se a lista de material for maior que a lista da tabela item
         if (VGlobal.LIST_MATERIAL.size() > selectList().size()) {
@@ -168,6 +170,23 @@ public class ItemDao {
         } catch (SQLException e) {
             if (e.getErrorCode() != 19)
                 Msg.ServidorErro(e, "insert(Item item)", getClass());
+        } finally {
+            Conexao.desconect();
+        }
+        return 0;
+    }
+
+    public int insertCodigo(Item item) {
+
+        sql = "INSERT INTO item (cdItem, dsItem) VALUES (?,?);";
+        try {
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, item.getCdItem());
+            smt.setString(2, item.getDsItem());
+            return smt.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 19)
+                Msg.ServidorErro(e, "insertCodigo(Item item)", getClass());
         } finally {
             Conexao.desconect();
         }
