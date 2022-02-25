@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Config {
-    private static final File FILE_CONFIG = new File(VGlobal.ARQUIVO, "config.YML");
+    private static final File FILE_CONFIG = new File(VGlobal.ARQUIVO, "config.yml");
     private BufferedWriter escrever;
     private Charset utf8 = StandardCharsets.UTF_8;
-    private static YamlConfiguration YML;
+    private static YamlConfiguration config;
     public static ConfigModel CONFIG_MODEL;
 
     public Config() {
@@ -34,8 +34,8 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
-        saveDefault();
+        config = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        //saveDefault();
     }
 
     private void saveDefault() {
@@ -109,4 +109,17 @@ public class Config {
             e.printStackTrace();
         }
     }
+
+    public static void setVersion(){
+        config.set("version", VGlobal.VERSION);
+        try {
+            config.save(FILE_CONFIG);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static int Version(){
+        return Integer.parseInt(config.getString("version").replaceAll("\\.",""));
+    } 
 }
