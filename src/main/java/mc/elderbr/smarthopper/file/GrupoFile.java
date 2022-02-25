@@ -1,9 +1,11 @@
 package mc.elderbr.smarthopper.file;
 
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.BufferedWriter;
@@ -18,9 +20,10 @@ import java.util.Map;
 public class GrupoFile {
 
     private final File FILE = new File(VGlobal.ARQUIVO, "grupo.yml");
-    private final YamlConfiguration config;
+    private final YamlConfiguration config= YamlConfiguration.loadConfiguration(FILE);
 
     private Grupo grupo;
+    private GrupoDao grupoDao = new GrupoDao();
     private Item item;
     private List<Item> listItem = new ArrayList<>();
 
@@ -33,9 +36,9 @@ public class GrupoFile {
                 e.printStackTrace();
             }
         }
-        config = YamlConfiguration.loadConfiguration(FILE);
-
-
+        if(Integer.parseInt(VGlobal.VERSION.replaceAll("\\.",""))>(Config.Version())) {
+            ler();
+        }
     }
 
     public void ler(){
@@ -45,13 +48,14 @@ public class GrupoFile {
             grupo.setCdGrupo(config.getInt(values.concat(".grupo_id")));
             listItem = new ArrayList<>();
             for(Object items : config.getList(values.concat(".grupo_item"))){
-                item = new Item();
-                item.setDsItem((String) items);
-                listItem.add(item);
+                item = VGlobal.ITEM_NAME_MAP.get((String) items);
+                if(item!=null) {
+                    grupoDao.insertItem(grupo, item);
+                    listItem.add(item);
+                }
             }
-            grupo.setListItem(listItem);
-            Msg.Grupo(grupo, getClass());
         }
+        grupoDao.createGrupo();
     }
 
     public void createGrupo() {
@@ -70,20 +74,6 @@ public class GrupoFile {
             }
         } catch (IOException e) {
             Msg.ServidorErro(e, "", getClass());
-        }
-    }
-
-    public void escrever() {
-        Grupo grupo = new Grupo();
-        try (BufferedWriter w = Files.newBufferedWriter(FILE.toPath(), StandardCharsets.UTF_8)) {
-            w.write("Grupos:");
-            for (Grupo gp : VGlobal.LIST_GRUPO) {
-                w.newLine();
-                w.write("  - " + gp.getDsGrupo());
-            }
-            w.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
