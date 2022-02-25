@@ -13,10 +13,12 @@ import mc.elderbr.smarthopper.file.ItemFile;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
@@ -45,8 +47,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
                 "| Dircord: ElderBR#5398    |\n" +
                 "+--------------------------+");
         // CARREGANDO A LISTA DE MATERIAS DO JOGO
-        for(Material m : Material.values()){
-            if(m.isItem() && !m.isAir()){
+        for (Material m : Material.values()) {
+            if (!m.isAir() && new ItemStack(m) != null) {
                 VGlobal.LIST_MATERIAL.add(m);
             }
         }
@@ -57,10 +59,11 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         itemFile = new ItemFile();
         grupoFile = new GrupoFile();
 
+
         admDao = new AdmDao();
         itemDao = new ItemDao();
+        itemDao.create();
         grupoDao = new GrupoDao();
-        grupoDao.createGrupo();
         langDao = new LangDao();
         traducaoDao = new TraducaoDao();
         traducaoConfig = new TraducaoConfig();
