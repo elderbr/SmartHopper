@@ -51,7 +51,7 @@ public class ItemFile {
             VGlobal.ITEM_NAME_MAP.put(itens.getDsItem(), itens);
         }
     }
-    
+
     private void save(){
         try{
             config.save(FILE);

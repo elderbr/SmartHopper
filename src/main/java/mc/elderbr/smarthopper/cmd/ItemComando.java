@@ -32,6 +32,7 @@ public class ItemComando implements CommandExecutor {
 
     private TraducaoDao traducaoDao = new TraducaoDao();
 
+    private Lang lang = new Lang();
     private LangDao langDao = new LangDao();
 
 
@@ -44,6 +45,7 @@ public class ItemComando implements CommandExecutor {
             cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
             itemStack = player.getInventory().getItemInMainHand();// PEGA O NOME DO ITEM NA MÃO
             langPlayer = player.getLocale();
+            lang = VGlobal.LANG_NAME_MAP.get(langPlayer);
             item = null;
 
             if (command.getName().equalsIgnoreCase("item")) {
@@ -89,6 +91,7 @@ public class ItemComando implements CommandExecutor {
                 item.setDsTraducao(Utils.NAME_ARRAY(args));
                 // VERIFICA SE JÁ EXISTE TRADUÇÃO PARA O ITEM E LANG
                 if (traducaoDao.selectItem(item) == null) {
+                    item.setLang(lang);
                     if (traducaoDao.insert(item) > 0) {
                         Msg.PlayerGreen(player, "Tradução para o item " + item.getDsTraducao() + " adicionado com sucesso!");
                     } else {

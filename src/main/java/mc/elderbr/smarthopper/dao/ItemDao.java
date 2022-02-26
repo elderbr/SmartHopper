@@ -50,7 +50,6 @@ public class ItemDao {
     }
 
     public Item select(Item item) {
-        this.item = null;
         if (item == null) {
             return null;
         }
@@ -68,7 +67,7 @@ public class ItemDao {
                 sql = "SELECT * FROM item i " +
                         "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
                         "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE i.dsItem = ? OR t.dsTraducao = ? AND l.dsLang = ? COLLATE NOCASE";
+                        "WHERE lower(i.dsItem) = lower(?) OR lower(t.dsTraducao) = lower(?) AND l.dsLang = ?";
                 smt = Conexao.prepared(sql);
                 smt.setString(1, item.getDsItem());
                 smt.setString(2, item.getDsItem());
@@ -85,38 +84,11 @@ public class ItemDao {
                 // TRADUÇÃO
                 this.item.setCdTraducao(rs.getInt("cdTraducao"));
                 this.item.setDsTraducao(rs.getString("dsTraducao"));
-                // SE A TRADUÇÃO NÃO EXITIR PEGA O NOME PADRÃO DO ITEM
-                if (this.item.getDsTraducao() == null) {
-                    this.item.setDsTraducao(this.item.getDsItem());
-                }
                 return this.item;
             }
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao buscar o item!!!", "select(Item item)", getClass(), e);
         } finally {
-            Conexao.desconect();
-        }
-
-        // SELEC SIMPLES SE NÃO EXISTIR A TRADUÇÃO
-        try {
-            sql = "SELECT * FROM item i " +
-                    "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
-                    "WHERE i.cdItem = ? OR i.dsItem = ? OR t.dsTraducao = ? COLLATE NOCASE";
-            smt = Conexao.prepared(sql);
-            smt.setInt(1, item.getCdItem());
-            smt.setString(2, item.getDsItem());
-            smt.setString(3, item.getDsItem());
-            rs = smt.executeQuery();
-            while (rs.next()) {
-                this.item = new Item();
-                this.item.setCdItem(rs.getInt("cdItem"));
-                this.item.setDsItem(rs.getString("dsItem"));
-                this.item.setDsTraducao(rs.getString("dsItem"));
-                return this.item;
-            }
-        } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao buscar o item!!!", "select(Item item)", getClass(), e);
-        }finally {
             Conexao.desconect();
         }
         return null;

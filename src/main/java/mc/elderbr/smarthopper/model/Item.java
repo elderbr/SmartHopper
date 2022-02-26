@@ -103,4 +103,9 @@ public class Item extends Traducao {
     public String toString() {
         return (getDsTraducao() != null ? getDsTraducao() : dsItem);
     }
+
+    public void setLang(Lang lang) {
+        setCdLang(lang.getCdLang());
+        setDsLang(lang.getDsLang());
+    }
 }
