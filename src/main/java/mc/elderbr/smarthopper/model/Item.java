@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Item extends Traducao {
         dsItem = name;
     }
     public Item(ItemStack itemStack) {
-        setItemName(itemStack);
+        parseItem(itemStack);
     }
 
     public int getCdItem() {
@@ -43,7 +44,7 @@ public class Item extends Traducao {
         for (Material m : Material.values()) {
             ItemStack itemStack = new ItemStack(m);
             if (itemStack != null) {
-                Item item = new Item().setItemName(itemStack);
+                Item item = new Item().parseItem(itemStack);
                 list.add(item);
                 if (!VGlobal.ITEM_NAME_LIST.contains(item.getDsItem())) {
                     VGlobal.ITEM_NAME_LIST.add(item.getDsItem());
@@ -53,12 +54,17 @@ public class Item extends Traducao {
         return list;
     }
 
-    public Item setItemName(ItemStack itemStack) {
+    public Item parseItem(@NotNull ItemStack itemStack) {
         dsItem = itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
         return this;
     }
+    
+    public Item parseItem(@NotNull Material material){
+        dsItem = material.getKey().getKey().replaceAll("_"," ").toLowerCase();
+        return this;
+    }
 
-    public ItemStack parseItemStack(Item item){
+    public ItemStack parseItemStack(@NotNull Item item){
         return new ItemStack(Material.getMaterial(item.getDsItem().replaceAll("\\s","_").toUpperCase()));
     }
     public ItemStack getItemStack(){
