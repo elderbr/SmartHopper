@@ -55,10 +55,11 @@ public class GrupoComando implements CommandExecutor {
                     }
                     if (grupo != null) {
 
+                        grupo.setDsLang(player);
                         inventoryCustom = new InventoryCustom();
-                        inventoryCustom.create(grupo.getTraducao(player.getLocale()).concat(Msg.Color(" $lID:$r"+ grupo.getID())));
-                        for (Item items : grupo.getItemList()) {
-                            inventoryCustom.addItem(items.getType());
+                        inventoryCustom.create(grupo.getDsTraducao().concat(Msg.Color(" $lID:$r"+ grupo.getCdGrupo())));
+                        for (Item items : grupo.getListItem()) {
+                            inventoryCustom.addItem(items.getItemStack());
                         }
                         // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
                         if (Config.ADM_LIST.contains(player.getName()) || Config.OPERADOR_LIST.contains(player.getName())) {
@@ -73,7 +74,7 @@ public class GrupoComando implements CommandExecutor {
                             inventoryCustom.getInventory().setItem(53, itemSalve);
                         }
                         player.openInventory(inventoryCustom.getInventory());
-                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.getTraducao(player.getLocale()) + " $e$lID: " + grupo.getID()));
+                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.getDsTraducao() + " $e$lID: " + grupo.getCdGrupo()));
                     } else {
                         player.sendMessage(Msg.Color("$2O grupo $e" + cmd + " $6não existe!"));
                     }
@@ -85,7 +86,8 @@ public class GrupoComando implements CommandExecutor {
                         player.sendMessage("=====================================================");
                         for (String grups : VGlobal.GRUPO_LIST_ITEM.get(Utils.ToItemStack(itemStack))) {
                             grupo = VGlobal.GRUPO_MAP_NAME.get(grups);
-                            player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.getTraducao(player.getLocale()) + " $e$lID: " + grupo.getID()));
+                            grupo.setDsLang(player);
+                            player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.getDsTraducao() + " $e$lID: " + grupo.getCdGrupo()));
                         }
                         player.sendMessage("=====================================================");
                     }
@@ -131,8 +133,9 @@ public class GrupoComando implements CommandExecutor {
                             grupo = VGlobal.GRUPO_MAP_NAME.get(cmd);
                         }
                         if (grupo != null) {
+                            grupo.setDsLang(player);
                             new GrupoConfig(grupo, Grupo.DELETE);
-                            player.sendMessage(Msg.Color("$eO grupo " + grupo.getTraducao(player.getLocale()) + " apagado com sucesso!"));
+                            player.sendMessage(Msg.Color("$eO grupo " + grupo.getDsTraducao() + " apagado com sucesso!"));
                             return true;
                         }
                     }else{
