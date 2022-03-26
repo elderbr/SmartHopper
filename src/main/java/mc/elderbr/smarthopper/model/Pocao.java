@@ -1,13 +1,11 @@
 package mc.elderbr.smarthopper.model;
 
-import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionEffectTypeWrapper;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
@@ -81,7 +79,7 @@ public class Pocao {
 
     public Item getItem() {
         Item item = new Item();
-        item.setName(name);
+        item.setDsItem(name);
         return item;
     }
 
@@ -122,13 +120,13 @@ public class Pocao {
 
     public Item toItem() {
         Item item = new Item();
-        item.setName(name);
+        item.setDsItem(name);
         return item;
     }
 
     public Item toItem(ItemStack itemStack) {
         Item item = new Item(itemStack);
-        item.setName(name);
+        item.setDsItem(name);
         return item;
     }
 

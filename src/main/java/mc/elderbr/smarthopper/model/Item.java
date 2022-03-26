@@ -15,6 +15,12 @@ public class Item extends Traducao {
 
     public Item() {
     }
+    public Item(String name) {
+        dsItem = name;
+    }
+    public Item(ItemStack itemStack) {
+        dsItem = itemStack.getType().getKey().getKey().replaceAll("_"," ").toLowerCase();
+    }
 
     public int getCdItem() {
         return cdItem;

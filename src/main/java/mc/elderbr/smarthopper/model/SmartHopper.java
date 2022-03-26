@@ -40,7 +40,7 @@ public class SmartHopper{
         this.hopper = (Hopper) block.getState();
     }
 
-    public String getDsGrupo() {
+    public String getDsItem() {
         return (hopper.getCustomName() != null ? hopper.getCustomName().toLowerCase().replaceAll("_", " ").trim() : "HOPPER");
     }
 
@@ -53,7 +53,7 @@ public class SmartHopper{
     }
 
     public Item getItem() {
-        nameItem = getDsGrupo().replaceAll("#", "").trim();
+        nameItem = getDsItem().replaceAll("#", "").trim();
         try {
             idItem = Integer.parseInt(nameItem.replace("i", ""));
             item = VGlobal.ITEM_MAP_ID.get(idItem);
@@ -71,7 +71,7 @@ public class SmartHopper{
         } catch (NumberFormatException e) {
             this.item = VGlobal.ITEM_MAP_NAME.get(nameItem);
         }
-        Msg.ServidorGreen("Item >> " + item.getDsGrupo(), getClass());
+        Msg.ServidorGreen("Item >> " + item.getDsItem(), getClass());
         return item;
     }
 
@@ -82,14 +82,14 @@ public class SmartHopper{
 
     public boolean equalsItem(Item item) {
         getItem();// BUSCA NO BANCO O NOME DO ITEM
-        if (this.item.getDsGrupo().equals(item.getDsGrupo())) {
+        if (this.item.getDsItem().equals(item.getDsItem())) {
             return true;
         }
         return false;
     }
 
     public boolean equalsITem(String item) {
-        return getDsGrupo().equals(new Item(item).getDsGrupo());
+        return getDsItem().equals(new Item(item).getDsItem());
     }
 
 
@@ -113,7 +113,7 @@ public class SmartHopper{
 
     public Grupo getGrupo() {
         if (isGrupo()) {
-            nameGrupo = getDsGrupo().replaceAll("[*#]", "").trim();// REMOVENDO A LETRA (#*)
+            nameGrupo = getDsItem().replaceAll("[*#]", "").trim();// REMOVENDO A LETRA (#*)
             try {
                 // CONVERTE PARA INTEIRO
                 idGrupo = Integer.parseInt(nameGrupo.replace("g", ""));
@@ -131,37 +131,37 @@ public class SmartHopper{
     }
 
     public boolean isGrupo() {
-        if (getDsGrupo().contains("*") || getDsGrupo().startsWith("g") || getDsGrupo().startsWith("#g")) {
+        if (getDsItem().contains("*") || getDsItem().startsWith("g") || getDsItem().startsWith("#g")) {
             return true;
         }
         return false;
     }
 
     public boolean isGrupoContains(Item item) {
-        this.item = VGlobal.ITEM_MAP_NAME.get(item.getDsGrupo());// BUSCA O ITEM PELO O NOME
+        this.item = VGlobal.ITEM_MAP_NAME.get(item.getDsItem());// BUSCA O ITEM PELO O NOME
 
-        grupo = parseGrupo(getDsGrupo());
+        grupo = parseGrupo(getDsItem());
 
         // VERICA SE O HOPPER CONTEM O * E SE ELE É IGUAL A NULO
         if (grupo == null) {
             return false;
         }
-        return grupo.getItemList().contains(this.item);// VERIFICAR SE EXISTE O ITEM NO GRUPO
+        return grupo.getListItem().contains(this.item);// VERIFICAR SE EXISTE O ITEM NO GRUPO
     }
 
 
     public boolean isContainerList() {
-        return getDsGrupo().contains(";");
+        return getDsItem().contains(";");
     }
 
     public boolean isItemGrupo(Item item) {
-        for (String args : getDsGrupo().split(";")) {
+        for (String args : getDsItem().split(";")) {
             if (parseItem(args) instanceof Item) {
                 Msg.ServidorGreen("Item type");
                 return parseItem(args).equals(item);
             } else if (parseGrupo(args) instanceof Grupo) {
                 Msg.ServidorGreen("grupo type");
-                return parseGrupo(args).getItemList().contains(item);
+                return parseGrupo(args).getListItem().contains(item);
             }
         }
         return false;
@@ -183,7 +183,7 @@ public class SmartHopper{
     }
 
     public Object getType() {
-        String name = getDsGrupo().replace("#", "");
+        String name = getDsItem().replace("#", "");
 
         // VERIFICA SE O HOPPER É ITEM
         try {
@@ -208,7 +208,8 @@ public class SmartHopper{
 
     /*============  SLOTS  =============================*/
     public Item getItem(int slot){
-        return new Item(hopper.getInventory().getItem(slot));
+        //return new Item(hopper.getInventory().getItem(slot));
+        return new Item();
     }
 
     public int firtEmpty(Item item){
@@ -235,11 +236,4 @@ public class SmartHopper{
         return -1;
     }
 
-    public int getAmount(Item item){
-        return getItem(firtEmpty(item)).getAmount();
-    }
-
-    public int getMaxStackSize(Item item){
-        return getItem(firtEmpty(item)).getMaxStackSize();
-    }
 }

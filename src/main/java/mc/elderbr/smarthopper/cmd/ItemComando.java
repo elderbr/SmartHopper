@@ -31,7 +31,7 @@ public class ItemComando implements CommandExecutor {
             cmd = Utils.NAME_ARRAY(args).toLowerCase();// PEGA O NOME DO ITEM DIGITADO
             itemStack = player.getInventory().getItemInMainHand();// PEGA O NOME DO ITEM NA MÃO
 
-            if (command.getDsGrupo().equalsIgnoreCase("item")) {
+            if (command.getName().equalsIgnoreCase("item")) {
 
                 if (cmd.length() == 0) {// VERIFICA SE NÃO FOI DIGITADO E SE O ITEM É DIFERENTE DE AR
 
@@ -43,7 +43,8 @@ public class ItemComando implements CommandExecutor {
                     // SE FOR LIVRO ENCANTADO
                     if (Utils.isEnchantment(itemStack).size() > 0) {
                         for (Item items : Utils.isEnchantment(itemStack)) {// PERCORRE TODOS OS ENCANTAMENTOS
-                            player.sendMessage("§9Item §bID: " + items.getCdGrupo() + " §e" + items.getTraducao(player.getLocale()));
+                            items.setDsLang(player);
+                            player.sendMessage("§9Item §bID: " + items.getCdItem() + " §e" + items.getDsTraducao());
                         }
                         player.sendMessage("-----------------------------------------------------");
                         return true;

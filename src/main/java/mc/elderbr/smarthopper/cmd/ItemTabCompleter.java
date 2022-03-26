@@ -30,7 +30,7 @@ public class ItemTabCompleter implements TabCompleter {
 
         if(sender instanceof Player) {
             player = (Player) sender;
-            if (command.getDsGrupo().equalsIgnoreCase("item")) {
+            if (command.getName().equalsIgnoreCase("item")) {
                 cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
                 if(cmd.length()>0){
                     itemList = new ArrayList<>();

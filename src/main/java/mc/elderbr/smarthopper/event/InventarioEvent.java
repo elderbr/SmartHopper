@@ -46,8 +46,8 @@ public class InventarioEvent implements Listener {
         if (event.getCurrentItem() == null
                 || event.getCurrentItem().getType() == Material.AIR
                 || inventory.getType() != InventoryType.CHEST
-                || !Config.ADM_LIST.contains(player.getDsGrupo())
-                && !Config.OPERADOR_LIST.contains(player.getDsGrupo())) {
+                || !Config.ADM_LIST.contains(player.getName())
+                && !Config.OPERADOR_LIST.contains(player.getName())) {
             return;
         }
 
@@ -72,16 +72,16 @@ public class InventarioEvent implements Listener {
             // SALVAR NOVO GRUPO
             if (event.isLeftClick() && itemClick.getItemMeta().getLore() != null && itemClick.getItemMeta().getLore().contains(Msg.Color("$3Salva novo grupo"))) {
                 grupoNovo = new Grupo();
-                grupoNovo.setID(Grupo.newID());
-                grupoNovo.setName(titulo.substring(Msg.Color("$5$lGrupo Novo: $r").length(), titulo.length()).trim());
-                grupoNovo.addTraducao(player.getLocale(), Utils.toUP(grupoNovo.getDsGrupo()));
+                grupoNovo.setCdGrupo(Grupo.newID());
+                grupoNovo.setDsGrupo(titulo.substring(Msg.Color("$5$lGrupo Novo: $r").length(), titulo.length()).trim());
+                //grupoNovo.addTraducao(player.getLocale(), Utils.toUP(grupoNovo.getDsGrupo()));
 
                 // ADICIONANDO OS ITEM AO GRUPO
                 List<String> grupoNovoList = new ArrayList<>();
                 for (ItemStack items : inventory.getContents()) {
                     if (items != null && !items.equals(itemBtnSalve)) {
-                        grupoNovo.addItemList(items);
-                        grupoNovoList.add(new Item(items).getDsGrupo());
+                        //grupoNovo.addItemList(items);
+                        //grupoNovoList.add(new Item(items).getDsGrupo());
                     }
                 }
 
@@ -89,7 +89,7 @@ public class InventarioEvent implements Listener {
                 VGlobal.GRUPO_MAP_ID.put(grupoNovo.getCdGrupo(), grupoNovo);// ADICIONANDO A BUSCA PELO ID
                 VGlobal.GRUPO_MAP_NAME.put(grupoNovo.getDsGrupo(), grupoNovo);// ADICIONANDO A BUSCA PELO NOME
                 VGlobal.GRUPO_NAME_LIST.add(grupoNovo.getDsGrupo());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
-                VGlobal.GRUPO_LANG_MAP.put(grupoNovo.getDsGrupo(), grupoNovo.getLang());// ADICIONANDO A BUSCA PELO LANG
+                //VGlobal.GRUPO_LANG_MAP.put(grupoNovo.getDsGrupo(), grupoNovo.getLang());// ADICIONANDO A BUSCA PELO LANG
                 VGlobal.GRUPO_MAP.put(grupoNovo.getDsGrupo(), grupoNovo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
                 VGlobal.GRUPO_ITEM_MAP_LIST.put(grupoNovo.getDsGrupo(), grupoNovoList);// LISTA GLOBAL DO GRUPO RETORNANDO A LISTA DE ITENS
 
@@ -105,21 +105,22 @@ public class InventarioEvent implements Listener {
                 nameGrupo = titulo.substring(Msg.Color("$8$lGrupo: $r").length(), titulo.indexOf(Msg.Color(" $lID"))).trim().toLowerCase();
                 grupo = VGlobal.GRUPO_MAP_NAME.get(VGlobal.GRUPO_MAP.get(nameGrupo));// BUSCA NO BANCO O GRUPO
 
-                grupo.getItemList().clear();// APAGANDO A LISTA DO GRUPO DOS ITENS
+                grupo.getListItem().clear();// APAGANDO A LISTA DO GRUPO DOS ITENS
                 VGlobal.GRUPO_ITEM_MAP_LIST.get(grupo.getDsGrupo()).clear();// APAGANDO A LISTA GLOBAL DO GRUPO OS ITENS
 
                 // ADICIONANDO OS ITEM AO GRUPO
                 List<String> grupoNovoList = new ArrayList<>();
                 for (ItemStack items : inventory.getContents()) {
                     if (items != null && !items.equals(itemBtnSalve)) {
-                        grupo.addItemList(items);
-                        VGlobal.GRUPO_ITEM_MAP_LIST.get(grupo.getDsGrupo()).add(new Item(items).getDsGrupo());// ADICIONANDO NA LISTA GLOBAL DO GRUPO OS ITENS
+                        //grupo.addItemList(items);
+                        //VGlobal.GRUPO_ITEM_MAP_LIST.get(grupo.getDsGrupo()).add(new Item(items).getDsGrupo());// ADICIONANDO NA LISTA GLOBAL DO GRUPO OS ITENS
                     }
                 }
 
                 new GrupoConfig(grupo, Grupo.UPGRADE);// ATUALIZA A LISTA DO ITENS DO GRUPO
                 player.closeInventory();
-                player.sendMessage(Msg.Color("$6Grupo $a$l" + grupo.getTraducao(player.getLocale()) + "$r$6 atualizado com sucesso!"));
+                grupo.setDsLang(player);
+                player.sendMessage(Msg.Color("$6Grupo $a$l" + grupo.getDsTraducao() + "$r$6 atualizado com sucesso!"));
 
             }
 

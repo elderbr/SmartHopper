@@ -37,7 +37,7 @@ public class LivroComando implements CommandExecutor {
 
             player = (Player) sender;
 
-            if (command.getDsGrupo().equalsIgnoreCase("livro")) {
+            if (command.getName().equalsIgnoreCase("livro")) {
                 itemStack = new ItemStack(Material.WRITTEN_BOOK);
                 bookMeta = (BookMeta) itemStack.getItemMeta();
                 bookMeta.setTitle("Grupos");
@@ -46,7 +46,8 @@ public class LivroComando implements CommandExecutor {
                 list = new ArrayList<>();
                 String lang = null;
                 for(Grupo grupos : VGlobal.GRUPO_MAP_NAME.values()){
-                    lang = Utils.ToUTF(grupos.getTraducao(player.getLocale()));
+                    grupos.setDsLang(player);
+                    lang = Utils.ToUTF(grupos.getDsTraducao());
                     if(lang!=null && !list.contains(lang)) {
                         list.add(lang);
                     }

@@ -79,13 +79,13 @@ public class MoveHopper implements Listener {
                     smartHopper = new SmartHopper(hoppers);
 
                     // BLOQUEIA A PASSAGEM DOS ITENS
-                    if (smartHopper.getDsGrupo().contains("#")) {
+                    if (smartHopper.getDsItem().contains("#")) {
 
                         isBloqueio = new ArrayList<>();
 
                         // VERIFICA SE EXISTEM MAIS DE UM ITEM OU GRUPO PARA O MESMO FUNIL
-                        if (smartHopper.getDsGrupo().contains(";")) {
-                            for (String items : smartHopper.getDsGrupo().split(";")) {
+                        if (smartHopper.getDsItem().contains(";")) {
+                            for (String items : smartHopper.getDsItem().split(";")) {
 
                                 smartHopperAux = smartHopper;
                                 smartHopperAux.setName(items);
@@ -124,9 +124,9 @@ public class MoveHopper implements Listener {
                     } else {
 
                         // VERIFICA SE EXISTEM MAIS DE UM ITEM OU GRUPO PARA O MESMO FUNIL
-                        if (smartHopper.getDsGrupo().contains(";")) {
+                        if (smartHopper.getDsItem().contains(";")) {
 
-                            for (String items : smartHopper.getDsGrupo().split(";")) {
+                            for (String items : smartHopper.getDsItem().split(";")) {
 
                                 smartHopperAux = smartHopper;
                                 smartHopperAux.setName(items);
@@ -163,7 +163,7 @@ public class MoveHopper implements Listener {
                 }
             }
 
-            if (destination.getType() == InventoryType.HOPPER && SmartHopper.ParseHopper(destination).getDsGrupo().equals("HOPPER")) {
+            if (destination.getType() == InventoryType.HOPPER && SmartHopper.ParseHopper(destination).getDsItem().equals("HOPPER")) {
                 event.setCancelled(false);// Ativa o movimento do item
             }
             if (destination.getType() != InventoryType.HOPPER) {

@@ -141,9 +141,9 @@ public class GrupoConfig {
                     // ITEM QUE NÃO FAZEM PARTE DA LISTA DO GRUPO
 
                     // ADICIONA NA LISTA DE ITEM DO GRUPO
-                    if (grupo.isContentItem(nameMaterial) && !grupo.getDsGrupo().contains("potion")) {
+                    /*if (grupo.isContentItem(nameMaterial) && !grupo.getDsGrupo().contains("potion")) {
                         itemStringList.add(nameMaterial);
-                    }
+                    }*/
 
                     // Adiciona o carvão vegetal ao grupo de carvão
                     if (grupo.getDsGrupo().equals("coal") && nameMaterial.equals("charcoal")) {

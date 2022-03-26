@@ -72,11 +72,11 @@ public class Msg {
 
     //========================== ITEM =================================================//
     public static void Item(Player player, Item item) {
-        player.sendMessage(Color("$2Item: $6" + item.getTraducao(player.getLocale()) + "$e ID: " + item.getCdGrupo()));
+        player.sendMessage(Color("$2Item: $6" + item.getDsTraducao() + "$e ID: " + item.getCdItem()));
     }
 
     public static void ItemNegar(Player player, Item item) {
-        player.sendMessage(Color("$cBloqueado$6 o item: " + item.getTraducao(player.getLocale()) + "$e ID: " + item.getCdGrupo()));
+        player.sendMessage(Color("$cBloqueado$6 o item: " + item.getDsTraducao() + "$e ID: " + item.getCdItem()));
     }
 
     public static void ItemNaoExiste(Player player, String name) {
@@ -85,7 +85,7 @@ public class Msg {
 
     //========================== GRUPO =================================================//
     public static void Grupo(Player player, Grupo grupo){
-        player.sendMessage(Color("$d$lGrupo: $e" + grupo.getTraducao(player.getLocale()) + " $6ID: " + grupo.getCdGrupo()));
+        player.sendMessage(Color("$d$lGrupo: $e" + grupo.getDsTraducao() + " $6ID: " + grupo.getCdGrupo()));
     }
 
     public static void GrupoNaoExiste(Player player, String name){
@@ -93,7 +93,7 @@ public class Msg {
     }
 
     public static void GrupoNegar(Player player, Grupo grupo) {
-        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.getTraducao(player.getLocale()) + "$e ID: " + grupo.getCdGrupo()));
+        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.getDsTraducao() + "$e ID: " + grupo.getCdGrupo()));
     }
 
 
