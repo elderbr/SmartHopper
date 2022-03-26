@@ -1,12 +1,10 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.file.Debugs;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Material;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,13 +59,14 @@ public class GrupoDao {
 
     public void createGrupo() {
 
+        Debugs.escrever("Criando grupos padrão!!!");
         String name = null;
         // NOMES DOS GRUPOS
         listNames = new ArrayList<>();
         // PERCORRENDO A LISTA DE MATERIAL PADÃO DO MINECRAFT
         item = new Item();
         for (Item itens : item.getListMaterial()) {
-            name = itens.getDsItem();
+            name = itens.getName();
             if (!listNames.contains(name)) {
                 listNames.add(name);
             }
@@ -128,6 +127,7 @@ public class GrupoDao {
         }
         // ADICIONAR GRUPO E SEU ITEM NO BANCO DE DADOS
         if (listNameGrupo.size() != selectAll().size()) {
+            Debugs.escrever("Adicionando novo grupo!!!");
             Msg.ServidorGold("....Criando grupos....");
             Collections.sort(listNameGrupo);
             listNameGrupo.forEach(gp -> {
@@ -135,59 +135,59 @@ public class GrupoDao {
                 grupo.setDsGrupo(gp);
                 if ((cdGrupo = insert(grupo)) > 0) {
                     grupo.setCdGrupo(cdGrupo);
-                    Msg.ServidorGold("Criando grupo " + grupo.getDsGrupo());
+                    Debugs.escrever("Adicionando grupo " + grupo.getDsGrupo());
                     for (Item item : VGlobal.LIST_ITEM) {
                         if (item.contains(grupo)) {
                             if (insertItem(grupo, item) > 0) {
-                                Msg.ServidorGold("Grupo " + grupo.getDsGrupo() + " - Item >> " + item.getDsItem());
+                                Debugs.escrever("Grupo " + grupo.getDsGrupo() + " - Item >> " + item.getName());
                             }
                         }
                         // Grupo de redstones
                         if (grupo.getDsGrupo().equals("redstone")) {
-                            if (item.getDsItem().contains("redstone")
-                                    || item.getDsItem().equals("dispenser")
-                                    || item.getDsItem().equals("note block")
-                                    || item.getDsItem().contains("piston")
-                                    || item.getDsItem().equals("lever")
-                                    || item.getDsItem().contains("pressure plate")
-                                    || item.getDsItem().contains("button")
-                                    || item.getDsItem().contains("trapdoor")
-                                    || item.getDsItem().contains("tripwire")
-                                    || item.getDsItem().contains("chest")
-                                    && !item.getDsItem().contains("chestplate")
-                                    || item.getDsItem().contains("daylight")
-                                    || item.getDsItem().contains("hopper")
-                                    || item.getDsItem().contains("drooper")
-                                    || item.getDsItem().contains("observer")
-                                    || item.getDsItem().contains("iron door")
-                                    || item.getDsItem().contains("comparator")
-                                    || item.getDsItem().contains("repeater")) {
+                            if (item.getName().contains("redstone")
+                                    || item.getName().equals("dispenser")
+                                    || item.getName().equals("note block")
+                                    || item.getName().contains("piston")
+                                    || item.getName().equals("lever")
+                                    || item.getName().contains("pressure plate")
+                                    || item.getName().contains("button")
+                                    || item.getName().contains("trapdoor")
+                                    || item.getName().contains("tripwire")
+                                    || item.getName().contains("chest")
+                                    && !item.getName().contains("chestplate")
+                                    || item.getName().contains("daylight")
+                                    || item.getName().contains("hopper")
+                                    || item.getName().contains("drooper")
+                                    || item.getName().contains("observer")
+                                    || item.getName().contains("iron door")
+                                    || item.getName().contains("comparator")
+                                    || item.getName().contains("repeater")) {
                                 insertItem(grupo, item);
                             }
                         }
                         // Grupo de flores
                         if (grupo.getDsGrupo().equals("flower")) {
-                            if (item.getDsItem().equals("grass")
-                                    || item.getDsItem().equals("fern")
-                                    || item.getDsItem().equals("dead bush")
-                                    || item.getDsItem().contains("seagrass")
-                                    || item.getDsItem().equals("sea pickle")
-                                    || item.getDsItem().equals("dandelion")
-                                    || item.getDsItem().equals("poppy")
-                                    || item.getDsItem().equals("blue orchid")
-                                    || item.getDsItem().equals("allium")
-                                    || item.getDsItem().equals("azure bluet")
-                                    || item.getDsItem().contains("tulip")
-                                    || item.getDsItem().equals("oxeye daisy")
-                                    || item.getDsItem().equals("cornflower")
-                                    || item.getDsItem().contains("lily")
-                                    || item.getDsItem().contains("rose")
-                                    || item.getDsItem().equals("vine")
-                                    || item.getDsItem().equals("sunflower")
-                                    || item.getDsItem().equals("lilac")
-                                    || item.getDsItem().equals("peony")
-                                    || item.getDsItem().equals("tall grass")
-                                    || item.getDsItem().equals("large fern")
+                            if (item.getName().equals("grass")
+                                    || item.getName().equals("fern")
+                                    || item.getName().equals("dead bush")
+                                    || item.getName().contains("seagrass")
+                                    || item.getName().equals("sea pickle")
+                                    || item.getName().equals("dandelion")
+                                    || item.getName().equals("poppy")
+                                    || item.getName().equals("blue orchid")
+                                    || item.getName().equals("allium")
+                                    || item.getName().equals("azure bluet")
+                                    || item.getName().contains("tulip")
+                                    || item.getName().equals("oxeye daisy")
+                                    || item.getName().equals("cornflower")
+                                    || item.getName().contains("lily")
+                                    || item.getName().contains("rose")
+                                    || item.getName().equals("vine")
+                                    || item.getName().equals("sunflower")
+                                    || item.getName().equals("lilac")
+                                    || item.getName().equals("peony")
+                                    || item.getName().equals("tall grass")
+                                    || item.getName().equals("large fern")
                             ) {
                                 insertItem(grupo, item);
                             }
@@ -246,63 +246,123 @@ public class GrupoDao {
     }
 
     public Grupo select(Grupo grupo) {
-        if (grupo == null) {
-            return null;
+        if( (this.grupo = selectTraducao(grupo))!=null){
+            return this.grupo;
         }
+        if( (this.grupo = selectName(grupo))!=null){
+            return this.grupo;
+        }
+        return selectCodigo(grupo);
+    }
+
+    public Grupo selectCodigo(Grupo gp) {
         try {
-            // BUSCA PELO CÓDIGO DO GRUPO E O TIPO DE LINGUAGEM
-            if (grupo.getCdGrupo() > 0) {
-                sql = "SELECT * FROM grupo g " +
-                        "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
-                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE g.cdGrupo = ? AND l.dsLang = ?;";
-                smt = Conexao.prepared(sql);
-                smt.setInt(1, grupo.getCdGrupo());
-                smt.setString(2, grupo.getDsLang());
-            } else {
-                // BUSCA PELO NOME DO GRUPO OU TRADUÇÃO
-                sql = "SELECT * FROM grupo g " +
-                        "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
-                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE lower(g.dsGrupo) = lower(?) OR lower(t.dsTraducao) = lower(?) AND lower(l.dsLang) = lower(?);";
-                smt = Conexao.prepared(sql);
-                smt.setString(1, grupo.getDsGrupo());
-                smt.setString(2, grupo.getDsGrupo());
-                smt.setString(3, grupo.getDsLang());
-            }
+            sql = "SELECT g.cdGrupo, g.dsGrupo, t.cdTraducao, t.dsTraducao, l.cdLang, l.dsLang FROM grupo g " +
+                    "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                    "WHERE g.cdGrupo = ? AND l.dsLang = ?;";
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, gp.getCdGrupo());
+            smt.setString(2, gp.getDsLang());
             rs = smt.executeQuery();
             while (rs.next()) {
-                this.grupo = new Grupo();
-                this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
-                this.grupo.setDsGrupo(rs.getString("dsGrupo"));
-                // LANG
-                this.grupo.setCdLang(rs.getInt("cdLang"));
-                this.grupo.setDsLang(rs.getString("dsLang"));
-                // TRADUÇÃO
-                this.grupo.setCdTraducao(rs.getInt("cdTraducao"));
-                this.grupo.setDsTraducao(rs.getString("dsTraducao"));
-                return this.grupo;
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                grupo.setCdLang(rs.getInt("cdLang"));
+                grupo.setDsLang(rs.getString("dsLang"));
+                grupo.setCdTraducao(rs.getInt("cdTraducao"));
+                grupo.setDsTraducao(rs.getString("dsTraducao"));
+                return grupo;
             }
+
+            smt.close();
+            rs.close();
+
+            sql = "SELECT * FROM grupo WHERE cdGrupo = ?;";
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, gp.getCdGrupo());
+            rs = smt.executeQuery();
+            while(rs.next()){
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                return grupo;
+            }
+
         } catch (SQLException e) {
-            Msg.ServidorErro(e, "select(Grupo grupo)", getClass());
-        } finally {
+            Msg.ServidorErro("Erro ao buscar o grupo pela sua tradução!", "selectTraducao(Grupo gp)", getClass(), e);
+        }finally {
             Conexao.desconect();
         }
-        // SELECT SIMPLES NO GRUPO BUSCANDO PELO O CÓDIGO OU NOME DO GRUPO OU SUA TRADUÇÃO
+        return null;
+    }
+
+    public Grupo selectName(Grupo gp) {
         try {
-            sql = "SELECT * FROM grupo g WHERE g.cdGrupo = ?";
+            sql = "SELECT g.cdGrupo, g.dsGrupo, t.cdTraducao, t.dsTraducao, l.cdLang, l.dsLang FROM grupo g " +
+                    "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                    "WHERE lower(g.dsGrupo) = lower(?) AND l.dsLang = ?;";
             smt = Conexao.prepared(sql);
-            smt.setInt(1, grupo.getCdGrupo());
+            smt.setString(1, gp.getDsGrupo());
+            smt.setString(2, gp.getDsLang());
             rs = smt.executeQuery();
             while (rs.next()) {
-                this.grupo = new Grupo();
-                this.grupo.setCdGrupo(rs.getInt("cdGrupo"));
-                this.grupo.setDsGrupo(rs.getString("dsGrupo"));
-                return this.grupo;
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                grupo.setCdLang(rs.getInt("cdLang"));
+                grupo.setDsLang(rs.getString("dsLang"));
+                grupo.setCdTraducao(rs.getInt("cdTraducao"));
+                grupo.setDsTraducao(rs.getString("dsTraducao"));
+                return grupo;
+            }
+
+            smt.close();
+            rs.close();
+
+            sql = "SELECT * FROM grupo WHERE lower(dsGrupo) = lower(?);";
+            smt = Conexao.prepared(sql);
+            smt.setString(1, gp.getDsGrupo());
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                return grupo;
             }
         } catch (SQLException e) {
-            Msg.ServidorErro(e, "select(Grupo grupo)", getClass());
-        } finally {
+            Msg.ServidorErro("Erro ao buscar o grupo pela sua tradução!", "selectName(Grupo gp)", getClass(), e);
+        }finally {
+            Conexao.desconect();
+        }
+        return null;
+    }
+
+    public Grupo selectTraducao(Grupo gp) {
+        try {
+            sql = "SELECT g.cdGrupo, g.dsGrupo, t.cdTraducao, t.dsTraducao, l.cdLang, l.dsLang FROM grupo g " +
+                    "LEFT JOIN traducao t ON g.cdGrupo = t.cdGrupo " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                    "WHERE lower(t.dsTraducao) = lower(?) AND l.dsLang = ?;";
+            smt = Conexao.prepared(sql);
+            smt.setString(1, gp.getDsGrupo());
+            smt.setString(2, gp.getDsLang());
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                grupo.setCdLang(rs.getInt("cdLang"));
+                grupo.setDsLang(rs.getString("dsLang"));
+                grupo.setCdTraducao(rs.getInt("cdTraducao"));
+                grupo.setDsTraducao(rs.getString("dsTraducao"));
+                return grupo;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao buscar o grupo pela sua tradução!", "selectTraducao(Grupo gp)", getClass(), e);
+        }finally {
             Conexao.desconect();
         }
         return null;
@@ -323,6 +383,7 @@ public class GrupoDao {
                 VGlobal.LIST_GRUPO.add(grupo);
                 VGlobal.GRUPO_ID_MAP.put(this.grupo.getCdGrupo(), this.grupo);
                 VGlobal.GRUPO_NAME_MAP.put(this.grupo.getDsGrupo(), this.grupo);
+                Debugs.escrever("Lendo o grupo " + grupo.getDsGrupo());
 
             }
         } catch (SQLException e) {
@@ -374,9 +435,9 @@ public class GrupoDao {
             sql = "INSERT INTO grupoItem (cdGrupo, cdItem) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM grupoItem WHERE cdGrupo = ? AND cdItem = ?);";
             smt = Conexao.prepared(sql);
             smt.setInt(1, grupo.getCdGrupo());
-            smt.setInt(2, item.getCdItem());
+            smt.setInt(2, item.getCodigo());
             smt.setInt(3, grupo.getCdGrupo());
-            smt.setInt(4, item.getCdItem());
+            smt.setInt(4, item.getCodigo());
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao adicionar item do grupo!!!", "", getClass(), e);
@@ -395,7 +456,7 @@ public class GrupoDao {
                     "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
                     "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
                     "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                    "WHERE i.cdItem = %d AND l.dsLang = \"%s\"", item.getCdItem(), item.getDsLang());
+                    "WHERE i.cdItem = %d AND l.dsLang = \"%s\"", item.getCodigo(), item.getDsLang());
             smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
             if (!rs.next()) {
@@ -404,7 +465,7 @@ public class GrupoDao {
                         "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
                         "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
                         "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE gi.cdItem = %d;", item.getCdItem());
+                        "WHERE gi.cdItem = %d;", item.getCodigo());
             }
             smt = Conexao.prepared(sql);
             rs = smt.executeQuery();
@@ -437,9 +498,11 @@ public class GrupoDao {
             rs = smt.executeQuery();
             while (rs.next()) {
                 Item item = new Item();
-                item.setCdItem(rs.getInt("cdItem"));
-                item.setDsItem(rs.getString("dsItem"));
-                listItem.add(item);
+                item.setCodigo(rs.getInt("cdItem"));
+                item.setName(rs.getString("dsItem"));
+                if(item.getCodigo()>0) {
+                    listItem.add(item);
+                }
             }
             return listItem;
         } catch (SQLException e) {

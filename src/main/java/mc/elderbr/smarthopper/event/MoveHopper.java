@@ -28,6 +28,7 @@ public class MoveHopper implements Listener {
     private Item item;
     private Pocao potion;
 
+    private Inventory initiator;
     private Inventory inventory;
     private Inventory destination;
 
@@ -45,6 +46,30 @@ public class MoveHopper implements Listener {
 
     @EventHandler
     public void moveItemHopper(InventoryMoveItemEvent event) {
+
+        destination = event.getDestination();
+        inventory = event.getSource();
+        itemStack = event.getItem();
+        item = new Item(itemStack);
+
+        if (inventory.getType() == InventoryType.HOPPER) {
+            blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            if (blockDown.getType() == Material.HOPPER) {
+                event.setCancelled(true);
+                isBlockDownHopper();
+                for (Hopper hoppers : hopperList) {
+                    smartHopper = new SmartHopper(hoppers);
+                    if(smartHopper.equals(item.getName())){
+                        event.setCancelled(false);
+                    }
+                }
+            }
+            smartHopper = new SmartHopper(destination);
+            if(smartHopper.getName().equals("chest") || smartHopper.getName().equals("hopper")){
+                event.setCancelled(false);
+            }
+
+        }
 
     }
 

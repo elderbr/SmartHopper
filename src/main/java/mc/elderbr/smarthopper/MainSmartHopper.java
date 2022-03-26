@@ -7,10 +7,7 @@ import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
-import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.file.GrupoFile;
-import mc.elderbr.smarthopper.file.ItemFile;
-import mc.elderbr.smarthopper.file.TraducaoConfig;
+import mc.elderbr.smarthopper.file.*;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -54,10 +51,14 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         }
 
         // Iniciando o config padrão dos YML
+        Debugs.escrever("Criando o arquivo config");
         saveDefaultConfig();
         config = new Config();
+        Debugs.escrever("Criando o arquivo item.yml");
         itemFile = new ItemFile();
+        Debugs.escrever("Criando o arquivo grupo.yml");
         grupoFile = new GrupoFile();
+
         Config.setVersion();// ATUALIZA A VERSÃO DO PLUGIN
 
 

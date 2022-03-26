@@ -6,7 +6,6 @@ import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Lang;
-import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.ChatColor;
@@ -53,16 +52,15 @@ public class ItemComando implements CommandExecutor {
                     item = new Item();
                     // VERIFICA SE É NÚMERO SE NÃO PESQUISA PELO NOME
                     try{
-                        Msg.ServidorGreen("cmd >> "+ cmd, getClass());
-                        item.setCdItem(Integer.parseInt(cmd));
+                        item.setCodigo(cmd);
                     }catch (NumberFormatException ex){
-                        item.setDsItem(cmd);
+                        item.setName(cmd);
                     }
                     item.setDsLang(langPlayer);
                     item = itemDao.select(item);
                 } else {
                     if (itemStack.getType() != Material.AIR) {
-                        item = new Item(itemStack);
+                        item = VGlobal.ITEM_NAME_MAP.get(Utils.toItem(itemStack));
                         item.setDsLang(langPlayer);
                         item = itemDao.select(item);
                     }
@@ -89,9 +87,9 @@ public class ItemComando implements CommandExecutor {
                 item.setDsLang(langPlayer);
                 item = itemDao.select(item);
                 item.setDsTraducao(Utils.NAME_ARRAY(args));
-                // VERIFICA SE JÁ EXISTE TRADUÇÃO PARA O ITEM E LANG
+                // VERIFICA SE JA EXISTE TRADUÇÃO PARA O ITEM E LANG
                 if (traducaoDao.selectItem(item) == null) {
-                    item.setLang(lang);
+                    item.setDsLang(lang);
                     if (traducaoDao.insert(item) > 0) {
                         Msg.PlayerGreen(player, "Tradução para o item " + item.getDsTraducao() + " adicionado com sucesso!");
                     } else {
@@ -104,7 +102,7 @@ public class ItemComando implements CommandExecutor {
                         Msg.PlayerRed(player, "Erro para atualizar a tradução do item " + ChatColor.GOLD + item.getDsTraducao() + ChatColor.GREEN + "!!!");
                     }
                 }
-                Msg.ServidorGreen("cdItem >> " + item.getCdItem() + " - item getDsItem >> " + item.getDsItem() + " - lang >> " + item.getDsLang() + " - traducao >> " + item.getDsTraducao());
+                Msg.ServidorGreen("cdItem >> " + item.getCodigo() + " - item getDsItem >> " + item.getName() + " - lang >> " + item.getDsLang() + " - traducao >> " + item.getDsTraducao());
             }
         }
         return false;

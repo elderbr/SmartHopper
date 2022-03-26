@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.file.Debugs;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -11,7 +12,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ItemDao {
 
@@ -21,6 +24,8 @@ public class ItemDao {
     private String sql;
     private PreparedStatement smt;
     private ResultSet rs;
+
+    private Map<Where, String> paramenters = new HashMap<>();
 
 
     public ItemDao() {
@@ -35,49 +40,141 @@ public class ItemDao {
         } finally {
             Conexao.desconect();
         }
+
+        // PARAMENTROS
+        paramenters.put(Where.CODIGO, "WHERE i.cdItem = %d AND l.dsLang = %s");
+        paramenters.put(Where.NAME, "WHERE lower(i.dsItem) = lower(%s) AND l.dsLang = %s");
+        paramenters.put(Where.TRADUCAO, "WHERE lower(t.dsTraducao) = lower(%s) AND l.dsLang = %s");
+
     }
 
-    public void create(){
+    public void create() {
         // Verifica se existe item na tabela do banco
         // Se a lista de material for maior que a lista da tabela item
+        Debugs.escrever("Criando itens!!!");
         if (VGlobal.LIST_MATERIAL.size() > selectList().size()) {
             // Percorrendo a lista de materias do jogo
             for (Material m : VGlobal.LIST_MATERIAL) {
-                Msg.ServidorGreen("Criando item " + Utils.ToMaterial(m));
+                Debugs.escrever("Criando item "+ Utils.ToMaterial(m));
                 insert(m);// Adicionando ao banco
             }
         }
     }
 
     public Item select(Item item) {
-        if (item == null) {
-            return null;
+        if( (this.item = selectTraducao(item) ) != null ){
+            return this.item;
         }
+        if( (this.item = selectCodigoTraducao(item))!=null) {
+            return this.item;
+        }
+        if( (this.item = selectCodigo(item))!=null) {
+            return this.item;
+        }
+        return selectName(item);
+    }
 
+    public Item selectCodigoTraducao(Item obj) {
+        sql = "SELECT * FROM item i " +
+                "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
+                "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                "WHERE i.cdItem = ? AND l.dsLang = ?";
         try {
-            if (item.getCdItem() > 0) {
-                sql = "SELECT * FROM item i " +
-                        "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
-                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE i.cdItem = ? AND l.dsLang = ?";
-                smt = Conexao.prepared(sql);
-                smt.setInt(1, item.getCdItem());
-                smt.setString(2, item.getDsLang());
-            } else {
-                sql = "SELECT * FROM item i " +
-                        "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
-                        "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
-                        "WHERE lower(i.dsItem) = lower(?) OR lower(t.dsTraducao) = lower(?) AND l.dsLang = ?";
-                smt = Conexao.prepared(sql);
-                smt.setString(1, item.getDsItem());
-                smt.setString(2, item.getDsItem());
-                smt.setString(3, item.getDsLang());
-            }
+            smt = Conexao.prepared(sql);
+            smt.setInt(1, obj.getCodigo());
+            smt.setString(2, obj.getDsLang());
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.item = new Item();
-                this.item.setCdItem(rs.getInt("cdItem"));
-                this.item.setDsItem(rs.getString("dsItem"));
+                this.item.setCodigo(rs.getInt("cdItem"));
+                this.item.setName(rs.getString("dsItem"));
+
+                // LINGUAGEM
+                this.item.setCdLang( rs.getInt("cdLang"));
+                this.item.setDsLang(rs.getString("dsLang"));
+
+                // TRADUÇÃO
+                this.item.setCdTraducao(rs.getInt("cdTraducao"));
+                this.item.setDsTraducao(rs.getString("dsTraducao"));
+
+                return this.item;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao buscar o item pelo codigo!", "selectCodigo(Object codigo)", getClass(), e);
+        } finally {
+            Conexao.desconect();
+        }
+        return null;
+    }
+
+    public Item selectCodigo(Object codigo) {
+        item = new Item();
+        if (codigo instanceof Integer) {
+            item.setCodigo((Integer) codigo);
+        }
+        if (codigo instanceof Item) {
+            item = (Item) codigo;
+        }
+        sql = "SELECT * FROM item WHERE cdItem = " + item.getCodigo();
+        try {
+            smt = Conexao.prepared(sql);
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                this.item = new Item();
+                this.item.setCodigo(rs.getInt("cdItem"));
+                this.item.setName(rs.getString("dsItem"));
+                return this.item;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao buscar o item pelo codigo!", "selectCodigo(Object codigo)", getClass(), e);
+        } finally {
+            Conexao.desconect();
+        }
+        return null;
+    }
+
+    public Item selectName(Object codigo) {
+        item = new Item();
+        if (codigo instanceof Integer) {
+            item.setCodigo((Integer) codigo);
+        }
+        if (codigo instanceof Item) {
+            item = (Item) codigo;
+        }
+        sql = "SELECT * FROM item WHERE lower(dsItem) = lower(?);";
+        try {
+            smt = Conexao.prepared(sql);
+            smt.setString(1, item.getName());
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                this.item = new Item();
+                this.item.setCodigo(rs.getInt("cdItem"));
+                this.item.setName(rs.getString("dsItem"));
+                return this.item;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao buscar o item pelo codigo!", "selectCodigo(Object codigo)", getClass(), e);
+        } finally {
+            Conexao.desconect();
+        }
+        return null;
+    }
+
+    public Item selectTraducao(Item item) {
+        try {
+
+            sql = "SELECT * FROM item i " +
+                    "LEFT JOIN traducao t ON i.cdItem = t.cdItem " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                    "WHERE lower(t.dsTraducao) = lower(?) AND l.dsLang = ?";
+            smt = Conexao.prepared(sql);
+            smt.setString(1, item.getName());
+            smt.setString(2, item.getDsLang());
+            rs = smt.executeQuery();
+            while (rs.next()) {
+                this.item = new Item();
+                this.item.setCodigo(rs.getInt("cdItem"));
+                this.item.setName(rs.getString("dsItem"));
                 // LINGUAGEM
                 this.item.setCdLang(rs.getInt("cdLang"));
                 this.item.setDsLang(rs.getString("dsLang"));
@@ -87,7 +184,7 @@ public class ItemDao {
                 return this.item;
             }
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao buscar o item!!!", "select(Item item)", getClass(), e);
+            Msg.ServidorErro("Erro ao buscar o item!!!", "selectTraducao(Item item)", getClass(), e);
         } finally {
             Conexao.desconect();
         }
@@ -102,14 +199,16 @@ public class ItemDao {
             rs = smt.executeQuery();
             while (rs.next()) {
                 this.item = new Item();
-                this.item.setCdItem(rs.getInt("cdItem"));
-                this.item.setDsItem(rs.getString("dsItem"));
+                this.item.setCodigo(rs.getInt("cdItem"));
+                this.item.setName(rs.getString("dsItem"));
                 listItem.add(this.item);
 
                 // ADICIONANDO NA VARIAVEL GLOBAL
                 VGlobal.LIST_ITEM.add(this.item);// ADICIONANDO NA LISTA GLOBAL
-                VGlobal.ITEM_ID_MAP.put(item.getCdItem(), item);
-                VGlobal.ITEM_NAME_MAP.put(item.getDsItem(), item);
+                VGlobal.ITEM_ID_MAP.put(item.getCodigo(), item);
+                VGlobal.ITEM_NAME_MAP.put(item.getName(), item);
+
+                Msg.ServidorGreen("Lendo o item "+ this.item.getName());
             }
         } catch (SQLException e) {
             Msg.ServidorErro(e, "selectList", getClass());
@@ -153,8 +252,8 @@ public class ItemDao {
         sql = "INSERT INTO item (cdItem, dsItem) VALUES (?,?);";
         try {
             smt = Conexao.prepared(sql);
-            smt.setInt(1, item.getCdItem());
-            smt.setString(2, item.getDsItem());
+            smt.setInt(1, item.getCodigo());
+            smt.setString(2, item.getName());
             return smt.executeUpdate();
         } catch (SQLException e) {
             if (e.getErrorCode() != 19)
@@ -188,8 +287,8 @@ public class ItemDao {
         sql = "UPDATE TABLE item SET dsItem = ? WHERE cdItem = ?;";
         try {
             smt = Conexao.prepared(sql);
-            smt.setString(1, item.getDsItem());
-            smt.setInt(2, item.getCdItem());
+            smt.setString(1, item.getName());
+            smt.setInt(2, item.getCodigo());
             return smt.executeUpdate();
         } catch (SQLException e) {
             Msg.ServidorErro(e, "update(Item item)", getClass());
@@ -213,5 +312,9 @@ public class ItemDao {
 
     public void setListItem(List<Item> listItem) {
         this.listItem = listItem;
+    }
+
+    private enum Where {
+        CODIGO, NAME, TRADUCAO;
     }
 }

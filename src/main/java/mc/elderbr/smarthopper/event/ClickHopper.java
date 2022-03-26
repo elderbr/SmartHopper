@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.event;
 
+import mc.elderbr.smarthopper.interfaces.Dados;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.model.Item;
@@ -8,6 +9,7 @@ import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,5 +39,20 @@ public class ClickHopper implements Listener {
 
         player = event.getPlayer();
         itemStack = player.getInventory().getItemInMainHand();
+        Hopper hopper = null;
+
+        if(itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK){
+            if(event.getClickedBlock().getState().getType()==Material.HOPPER) {
+                hopper = (Hopper) event.getClickedBlock().getState();
+                SmartHopper smartHopper = new SmartHopper(hopper);
+
+                if(smartHopper.getType()!=null) {
+                    Dados nameHopper = (Dados) smartHopper.getType();
+                    Msg.ServidorGreen("clicado com o graveto no bloco "+ nameHopper.getName(), getClass());
+                }else{
+                    Msg.ServidorGreen("não encontrado ", getClass());
+                }
+            }
+        }
     }
 }

@@ -5,7 +5,6 @@ import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
 
 import java.io.*;
@@ -56,7 +55,7 @@ public class TraducaoConfig {
 
                         // CRIANDO NOVO ITEM
                         item = new Item();
-                        item.setDsItem(itemsName[0]);
+                        item.setName(itemsName[0]);
                         item.setDsLang(lang);
                         // BUSCA O ITEM PEGANDO O SEU CÓDIGO
                         item = itemDao.select(item);

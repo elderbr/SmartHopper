@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.interfaces.Dados;
+import mc.elderbr.smarthopper.interfaces.Traducao;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -8,49 +10,90 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Item extends Traducao {
+public class Item implements Dados, Traducao {
 
     private int cdItem;
     private String dsItem;
-    private List<Item> listItem;
+    private int cdLang;
+    private String dsLang;
+    private int cdTraducao;
+    private String dsTraducao;
 
     public Item() {
     }
 
     public Item(ItemStack itemStack) {
-        if (itemStack != null)
-            dsItem = Utils.toItem(itemStack);
+        dsItem = Utils.toItem(itemStack);
     }
 
-    public Item(Material material) {
-        dsItem = Utils.ToMaterial(material);
-    }
 
-    public int getCdItem() {
+    @Override
+    public int getCodigo() {
         return cdItem;
     }
 
-    public void setCdItem(int cdItem) {
-        this.cdItem = cdItem;
+    @Override
+    public void setCodigo(int codigo) {
+        cdItem = codigo;
     }
 
-    public String getDsItem() {
+    public void setCodigo(String codigo) throws NumberFormatException {
+        cdItem = Integer.parseInt(codigo);
+    }
+
+    @Override
+    public String getName() {
         return dsItem;
     }
 
-    public void setDsItem(String dsItem) {
-        this.dsItem = dsItem;
+    @Override
+    public void setName(String name) {
+        dsItem = name;
     }
 
-    public List<Item> getListMaterial() {
-        listItem = new ArrayList<>();
-        for (Material m : Material.values()) {
-            Item i = new Item(m);
-            if (i.getDsItem() != null && !m.isAir() && m.isItem()) {
-                listItem.add(i);
-            }
-        }
-        return listItem;
+    @Override
+    public int getCdLang() {
+        return cdLang;
+    }
+
+    @Override
+    public void setCdLang(int lang) {
+        cdLang = lang;
+    }
+
+    @Override
+    public String getDsLang() {
+        return dsLang;
+    }
+
+    @Override
+    public void setDsLang(String lang) {
+        dsLang = lang;
+    }
+
+    public void setDsLang(Lang lang) {
+        cdLang = lang.getCdLang();
+        dsLang = lang.getDsLang();
+    }
+
+    @Override
+    public int getCdTraducao() {
+        return cdTraducao;
+    }
+
+    @Override
+    public void setCdTraducao(int codigo) {
+        cdTraducao = codigo;
+    }
+
+    @Override
+    public String getDsTraducao() {
+        return dsTraducao;
+    }
+
+    @Override
+    public void setDsTraducao(String traducao) {
+        dsTraducao = traducao;
     }
 
     public boolean contains(@NotNull Grupo grupo) {
@@ -90,7 +133,7 @@ public class Item extends Traducao {
                 }
             }
             if ((i + 5) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3] + " " + names[i + 4]+ " " + names[i + 5];
+                name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3] + " " + names[i + 4] + " " + names[i + 5];
                 if (name.equalsIgnoreCase(nameGrupo)) {
                     return true;
                 }
@@ -99,13 +142,22 @@ public class Item extends Traducao {
         return false;
     }
 
-    @Override
-    public String toString() {
-        return (getDsTraducao() != null ? getDsTraducao() : dsItem);
+    public List<Item> getListMaterial() {
+        List<Item> list = new ArrayList<>();
+        for (Material m : Material.values()) {
+            try {
+                ItemStack itemStack = new ItemStack(m);
+                if (itemStack != null) {
+                    list.add(new Item(itemStack));
+                }
+            } catch (Exception e) {
+            }
+        }
+        return list;
     }
 
-    public void setLang(Lang lang) {
-        setCdLang(lang.getCdLang());
-        setDsLang(lang.getDsLang());
+    @Override
+    public String toString() {
+        return (dsTraducao != null ? dsTraducao : dsItem);
     }
 }

@@ -20,7 +20,7 @@ public class InventoryCustom {
 
 
     public void create(Grupo grupo) {
-        this.name = VGlobal.GRUPO_INVENTORY + grupo.toString();
+        this.name = VGlobal.GRUPO_INVENTORY + grupo.toString()+" §8§lID: §r"+grupo.getCdGrupo();
         inventory = Bukkit.createInventory(null, 54, this.name);
     }
 
@@ -42,7 +42,7 @@ public class InventoryCustom {
     }
 
     public void addItem(Item item) {
-        inventory.addItem(new ItemStack(Utils.ParseItemStack(item.getDsItem())));
+        inventory.addItem(new ItemStack(Utils.ParseItemStack(item.getName())));
     }
 
     public void addItem(ItemStack item) {

@@ -29,9 +29,9 @@ public class ItemFile {
     public void ler() {
         for (String itens : config.getValues(false).keySet()) {
             item = new Item();
-            item.setCdItem(config.getInt(itens.concat(".item_id")));
-            item.setDsItem(config.getString(itens.concat(".item_name")));
-            Msg.ServidorGreen("Criando item " + item.getDsItem());
+            item.setCodigo(config.getInt(itens.concat(".item_id")));
+            item.setName(config.getString(itens.concat(".item_name")));
+            Msg.ServidorGreen("Criando item " + item.getName());
             itemDao.insertCodigo(item);
         }
     }
@@ -42,13 +42,13 @@ public class ItemFile {
 
         config.setComments("absorption", list);
         for(Item itens : itemDao.selectList()){
-            String name = itens.getDsItem();
-            config.set(name.concat(".item_id"), itens.getCdItem());
+            String name = itens.getName();
+            config.set(name.concat(".item_id"), itens.getCodigo());
             config.set(name.concat(".item_name"), name);
             save();
 
-            VGlobal.ITEM_ID_MAP.put(itens.getCdItem(), itens);
-            VGlobal.ITEM_NAME_MAP.put(itens.getDsItem(), itens);
+            VGlobal.ITEM_ID_MAP.put(itens.getCodigo(), itens);
+            VGlobal.ITEM_NAME_MAP.put(itens.getName(), itens);
         }
     }
 

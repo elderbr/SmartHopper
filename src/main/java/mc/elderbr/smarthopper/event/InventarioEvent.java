@@ -114,7 +114,10 @@ public class InventarioEvent implements Listener {
                     }
                 }
                 if (event.isLeftClick() && lore.contains(VGlobal.GRUPO_UPDATE)) {
+
                     nameGrupo = titulo.replaceAll(VGlobal.GRUPO_INVENTORY, "");
+                    nameGrupo = nameGrupo.substring(0, nameGrupo.indexOf("§8§lID")).trim();
+                    Msg.ServidorGold("nome do grupo >> "+ nameGrupo, getClass());
                     lang  = VGlobal.LANG_NAME_MAP.get(player.getLocale());
 
                     grupo = new Grupo();

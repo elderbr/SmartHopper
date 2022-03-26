@@ -111,11 +111,14 @@ public class Config {
     }
 
     public static void setVersion(){
-        config.set("version", VGlobal.VERSION);
-        try {
-            config.save(FILE_CONFIG);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(VGlobal.VERSAO > Config.Version()) {
+            config.set("version", VGlobal.VERSION);
+            try {
+                Debugs.escrever("Alterando a versão do plugin");
+                config.save(FILE_CONFIG);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     

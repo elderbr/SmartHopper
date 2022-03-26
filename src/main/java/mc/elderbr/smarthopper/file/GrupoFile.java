@@ -5,22 +5,17 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class GrupoFile {
 
     private final File FILE = new File(VGlobal.ARQUIVO, "grupo.yml");
-    private final YamlConfiguration config= YamlConfiguration.loadConfiguration(FILE);
+    private final YamlConfiguration config = YamlConfiguration.loadConfiguration(FILE);
 
     private Grupo grupo;
     private GrupoDao grupoDao = new GrupoDao();
@@ -29,7 +24,7 @@ public class GrupoFile {
 
     public GrupoFile() {
 
-        if(!FILE.exists()){
+        if (!FILE.exists()) {
             try {
                 FILE.createNewFile();
             } catch (IOException e) {
@@ -37,19 +32,23 @@ public class GrupoFile {
             }
         }
         // SE A VERSÃO DO PLUGIN FOR MENOR QUE A VERSÃO ATUAL
-        if(VGlobal.VERSAO > Config.Version()) {
+        if (VGlobal.VERSAO > Config.Version()) {
             ler();
+            createGrupo();
+        }
+        if (VGlobal.LIST_GRUPO.size() > grupoDao.selectAll().size()) {
+            createGrupo();
         }
     }
 
     // LER O ARQUIVO grupo.yml E SALVA NO BANCO DE DADOS COM OS SEUS ITENS
-    public void ler(){
-        for( String values : config.getValues(false).keySet()){
+    public void ler() {
+        for (String values : config.getValues(false).keySet()) {
             grupo = new Grupo();
-            grupo.setDsGrupo( config.getString(values.concat(".grupo_name")));
             grupo.setCdGrupo(config.getInt(values.concat(".grupo_id")));
+            grupo.setDsGrupo(config.getString(values.concat(".grupo_name")));
             // SE O GRUPO FOR SALVO
-            if(grupoDao.insertID(grupo)>0) {
+            if (grupoDao.insertID(grupo) > 0) {
                 // ADICIONANDO LISTA DE ITEM
                 listItem = new ArrayList<>();
                 for (Object items : config.getList(values.concat(".grupo_item"))) {

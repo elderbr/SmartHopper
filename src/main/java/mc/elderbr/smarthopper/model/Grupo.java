@@ -1,12 +1,21 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.interfaces.Traducao;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Grupo extends Traducao {
+public class Grupo implements Traducao {
 
     private int cdGrupo;
     private String dsGrupo;
+
+    private int cdLang;
+    private String dsLang;
+
+    private int cdTraducao;
+    private String dsTraducao;
     private List<Item> listItem;
 
     public Grupo() {
@@ -20,6 +29,10 @@ public class Grupo extends Traducao {
         this.cdGrupo = cdGrupo;
     }
 
+    public void setCdGrupo(String cdGrupo) throws NumberFormatException {
+        this.cdGrupo = Integer.parseInt(cdGrupo);
+    }
+
     public String getDsGrupo() {
         return dsGrupo;
     }
@@ -29,9 +42,6 @@ public class Grupo extends Traducao {
     }
 
     public List<Item> getListItem() {
-        if (listItem == null) {
-            listItem = new ArrayList<>();
-        }
         return listItem;
     }
 
@@ -39,55 +49,58 @@ public class Grupo extends Traducao {
         this.listItem = listItem;
     }
 
-    public List<Item> addItem(Item item) {
-        if (listItem == null) {
-            listItem = new ArrayList<>();
-        }
-        listItem.add(item);
-        return listItem;
+    @Override
+    public int getCdLang() {
+        return cdLang;
     }
 
-    public boolean contains(Item item) {
-        String name = null;
-        String[] names = item.getDsItem().split("\\s");
+    @Override
+    public void setCdLang(int lang) {
+        cdLang = lang;
+    }
 
-        if(dsGrupo.equalsIgnoreCase(item.getDsItem())) return true;
+    @Override
+    public String getDsLang() {
+        return dsLang;
+    }
 
-        for (int i = 0; i < names.length; i++) {
-            if (names[i].equalsIgnoreCase(dsGrupo)) {
-                return true;
-            }
-            if ((i + 1) < names.length) {
-                name = names[i] + " " + names[i + 1];
-                if (name.equalsIgnoreCase(dsGrupo)) return true;
-            }
-            if ((i + 2) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2];
-                if (name.equalsIgnoreCase(dsGrupo)) return true;
-            }
-            if ((i + 3) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2]+ " " + names[i + 3];
-                if (name.equalsIgnoreCase(dsGrupo)) return true;
-            }
-            if ((i + 4) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2]+ " " + names[i + 3]+ " " + names[i + 4];
-                if (name.equalsIgnoreCase(dsGrupo)) return true;
-            }
-            if ((i + 5) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2]+ " " + names[i + 3]+ " " + names[i + 4]+ " " + names[i + 5];
-                if (name.equalsIgnoreCase(dsGrupo)) return true;
-            }
-        }
-        return false;
+    @Override
+    public void setDsLang(String lang) {
+        dsLang = lang;
+    }
+
+    @Override
+    public int getCdTraducao() {
+        return cdTraducao;
+    }
+
+    @Override
+    public void setCdTraducao(int codigo) {
+        cdTraducao = codigo;
+    }
+
+    @Override
+    public String getDsTraducao() {
+        return dsTraducao;
+    }
+
+    @Override
+    public void setDsTraducao(String traducao) {
+        dsTraducao = traducao;
+    }
+
+    public void addItem(Item item) {
+        if (listItem == null) listItem = new ArrayList<>();
+        listItem.add(item);
     }
 
     public void setLang(Lang lang) {
-        setCdLang(lang.getCdLang());
-        setDsLang(lang.getDsLang());
+        cdLang = lang.getCdLang();
+        dsLang = lang.getDsLang();
     }
 
     @Override
     public String toString() {
-        return (getDsTraducao() != null ? getDsTraducao() : dsGrupo);
+        return (dsTraducao != null ? dsTraducao : dsGrupo);
     }
 }

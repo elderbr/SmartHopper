@@ -96,14 +96,14 @@ public class Msg {
     public static void Item(@NotNull Item item, @NotNull Class classe) {
         Bukkit.getServer().getConsoleSender().sendMessage(
                 ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.toString()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCdItem() + "\n§r - classe: " + classe.getName()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCodigo() + "\n§r - classe: " + classe.getSimpleName()
         );
     }
 
     public static void ItemPlayer(@NotNull Player player, Item item) {
         player.sendMessage(
                 ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.toString()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCdItem()
+                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCodigo()
         );
     }
 
@@ -118,7 +118,7 @@ public class Msg {
                         + " - Nome: " + grupo.getDsGrupo()
                         +" - Linguagem: "+ grupo.getDsLang()
                         + " - Tradução: " + grupo.getDsTraducao()
-                        + " - §rclasse: " + classe.getName()
+                        + " - §rclasse: " + classe.getSimpleName()
         );
     }
 
@@ -127,9 +127,7 @@ public class Msg {
     }
 
     public static void GrupoPlayer(@NotNull Player player, Grupo grupo) {
-        player.sendMessage(
-                ChatColor.AQUA + "Grupo: " + ChatColor.YELLOW + (grupo.getDsTraducao() == null ? grupo.getDsGrupo() : grupo.getDsTraducao())
-                        + ChatColor.AQUA + " - ID: " + ChatColor.YELLOW + grupo.getCdGrupo());
+        player.sendMessage(Color("$3$lGrupo: $r"+ grupo +" - $3$lID: $r"+grupo.getCdGrupo()));
     }
 
 

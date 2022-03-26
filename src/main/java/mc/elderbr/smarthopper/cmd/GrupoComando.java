@@ -3,11 +3,11 @@ package mc.elderbr.smarthopper.cmd;
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.dao.TraducaoDao;
+import mc.elderbr.smarthopper.interfaces.Traducao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.*;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,7 +39,6 @@ public class GrupoComando implements CommandExecutor {
     private List<Item> listItem;
 
     // Tradução
-    private Traducao traducao;
     private TraducaoDao traducaoDao;
 
     // LANG
@@ -47,6 +46,7 @@ public class GrupoComando implements CommandExecutor {
     private LangDao langDao;
 
     private InventoryCustom inventory;
+    private Traducao traducao;
 
 
     public GrupoComando() {
@@ -77,8 +77,7 @@ public class GrupoComando implements CommandExecutor {
             if (command.getName().equalsIgnoreCase("grupo")) {
                 grupo = new Grupo();
                 // LANG DO PLAYER DO BANCO
-                grupo.setCdLang(lang.getCdLang());
-                grupo.setDsLang(lang.getDsLang());
+                grupo.setLang(lang);
 
                 // SE O PLAYER DIGITAR O CÓDIGO DO GRUPO OU NOME
                 if (cmd.length() > 0) {
@@ -95,7 +94,7 @@ public class GrupoComando implements CommandExecutor {
                         // CRIAR UM INVENTARIO COM TODOS OS ITENS DO GRUPO
                         inventory = new InventoryCustom();
                         inventory.create(grupo);
-                        if (!listItem.isEmpty()) {
+                        if (listItem.size()>0) {
                             listItem.forEach(items -> {
                                 inventory.addItem(items);
                             });
@@ -236,16 +235,7 @@ public class GrupoComando implements CommandExecutor {
                 return false;
             }
             if (cmd.length() > 0) {
-                grupo = new Grupo();
-                grupo.setDsGrupo(cmd);
-                grupo.setCdLang(lang.getCdLang());
-                grupo.setDsLang(lang.getDsLang());
-                try {
-                    grupo.setCdGrupo(Integer.parseInt(cmd));
-                } catch (NumberFormatException e) {
-                    grupo.setDsGrupo(cmd);
-                }
-                grupo = grupoDao.select(grupo);
+                grupo = VGlobal.GRUPO_NAME_MAP.get(cmd);
                 if (grupo != null) {
                     if (grupoDao.delete(grupo)) {
                         grupoDao.deleteItem(grupo);// APAGA OS ITEM DO GRUPO
@@ -275,8 +265,7 @@ public class GrupoComando implements CommandExecutor {
                 listName.append(args[i] + " ");
             }
             grupo.setDsTraducao(listName.toString().trim());
-            grupo.setCdLang(lang.getCdLang());
-            grupo.setDsLang(lang.getDsLang());
+            grupo.setLang(lang);
         }
     }
 }

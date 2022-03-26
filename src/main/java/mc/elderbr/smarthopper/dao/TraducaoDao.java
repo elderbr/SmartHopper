@@ -1,8 +1,7 @@
 package mc.elderbr.smarthopper.dao;
 
-import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Traducao;
+import mc.elderbr.smarthopper.interfaces.Traducao;
+import mc.elderbr.smarthopper.model.*;
 import mc.elderbr.smarthopper.utils.Msg;
 
 import java.sql.Connection;
@@ -49,31 +48,29 @@ public class TraducaoDao {
 
     public int insert(Object traducao) {
 
-        if (traducao instanceof Item || traducao instanceof Grupo) {
-            try {
-                if (traducao instanceof Item) {
-                    item = (Item) traducao;
-                    sql = "INSERT INTO traducao (dsTraducao, cdLang, cdItem) VALUES (?,?,?);";
-                    smt = Conexao.prepared(sql);
-                    smt.setString(1, item.getDsTraducao());
-                    smt.setInt(2, item.getCdLang());
-                    smt.setInt(3, item.getCdItem());
-                } else if (traducao instanceof Grupo) {
-                    grupo = (Grupo) traducao;
-                    sql = "INSERT INTO traducao (dsTraducao, cdLang, cdGrupo) VALUES (?,?,?);";
-                    smt = Conexao.prepared(sql);
-                    smt.setString(1, grupo.getDsTraducao());
-                    smt.setInt(2, grupo.getCdLang());
-                    smt.setInt(3, grupo.getCdGrupo());
-                } else {
-                    return 0;
-                }
-                return smt.executeUpdate();
-            } catch (SQLException e) {
-                Msg.ServidorErro("Erro ao adicionar tradução do item/grupo!!!", "insert(Object traducao)", getClass(), e);
-            } finally {
-                Conexao.desconect();
+        try {
+            if (traducao instanceof Item) {
+                item = (Item) traducao;
+                sql = "INSERT INTO traducao (dsTraducao, cdLang, cdItem) VALUES (?,?,?);";
+                smt = Conexao.prepared(sql);
+                smt.setString(1, item.getDsTraducao());
+                smt.setInt(2, item.getCdLang());
+                smt.setInt(3, item.getCodigo());
+            } else if (traducao instanceof Grupo) {
+                grupo = (Grupo) traducao;
+                sql = "INSERT INTO traducao (dsTraducao, cdLang, cdGrupo) VALUES (?,?,?);";
+                smt = Conexao.prepared(sql);
+                smt.setString(1, grupo.getDsTraducao());
+                smt.setInt(2, grupo.getCdLang());
+                smt.setInt(3, grupo.getCdGrupo());
+            } else {
+                return 0;
             }
+            return smt.executeUpdate();
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao adicionar tradução do item/grupo!!!", "insert(Object traducao)", getClass(), e);
+        } finally {
+            Conexao.desconect();
         }
         return 0;
     }
@@ -85,20 +82,20 @@ public class TraducaoDao {
             try {
 
                 if (item instanceof Item) {
-                    if (((Item) item).getCdItem() > 0) {
+                    if (((Item) item).getCodigo() > 0) {
                         sql = "SELECT * FROM traducao t INNER JOIN item i ON i.cdItem = t.cdItem LEFT JOIN lang l ON t.cdLang = l.cdLang WHERE t.cdItem = ? AND l.cdlang = ?";
                         smt = Conexao.prepared(sql);
-                        smt.setInt(1, ((Item) item).getCdItem());
+                        smt.setInt(1, ((Item) item).getCodigo());
                         smt.setInt(2, ((Item) item).getCdLang());
                     } else {
                         sql = "SELECT * FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.dsItem = ? COLLATE NOCASE";
                         smt = Conexao.prepared(sql);
-                        smt.setString(1, ((Item) item).getDsItem());
+                        smt.setString(1, ((Item) item).getName());
                     }
                 } else if (item instanceof Integer) {
                     sql = "SELECT * FROM item i INNER JOIN traducao t ON i.cdItem = t.cdItem WHERE i.cdItem = ?";
                     smt = Conexao.prepared(sql);
-                    smt.setInt(1, ((Item) item).getCdItem());
+                    smt.setInt(1, ((Item) item).getCodigo());
                 } else if (item instanceof String) {
                     sql = "SELECT * FROM item i " +
                             "INNER JOIN traducao t ON i.cdItem = t.cdItem " +
@@ -113,8 +110,8 @@ public class TraducaoDao {
                 rs = smt.executeQuery();
                 while (rs.next()) {
                     this.item = new Item();
-                    this.item.setCdItem(rs.getInt("cdItem"));
-                    this.item.setDsItem(rs.getString("dsItem"));
+                    this.item.setCodigo(rs.getInt("cdItem"));
+                    this.item.setName(rs.getString("dsItem"));
                     this.item.setCdLang(rs.getInt("cdLang"));
                     this.item.setDsLang(rs.getString("dsLang"));
                     this.item.setCdTraducao(rs.getInt("cdTraducao"));
@@ -154,7 +151,7 @@ public class TraducaoDao {
                 // Tradução
                 grupo.setCdTraducao(rs.getInt("cdTraducao"));
                 grupo.setDsTraducao(rs.getString("dsTraducao"));
-                this.traducao = new Traducao();
+                //this.traducao = new TraducaoDao();
                 this.traducao.setCdTraducao(rs.getInt("cdTraducao"));
                 this.traducao.setDsTraducao(rs.getString("dsTraducao"));
                 return this.traducao;
@@ -216,7 +213,7 @@ public class TraducaoDao {
         return 0;
     }
 
-    private void addParameters(){
+    private void addParameters() {
         parameters.put(CODIGO, "g.cdGrupo = " + grupo.getCdGrupo() + " AND l.cdLang = " + grupo.getCdLang());
         parameters.put(NAME, "g.dsGrupo = \"" + grupo.getDsGrupo() + "\"" + " AND l.cdLang = " + grupo.getCdLang());
     }
