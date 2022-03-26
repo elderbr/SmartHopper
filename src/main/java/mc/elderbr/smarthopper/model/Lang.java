@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
+import org.bukkit.entity.Player;
+
 public class Lang {
     private int cdLang;
     private String dsLang;
@@ -21,6 +23,10 @@ public class Lang {
 
     public void setDsLang(String dsLang) {
         this.dsLang = dsLang;
+    }
+
+    public void setDsLang(Player player){
+        dsLang = player.getLocale();
     }
 
     @Override
