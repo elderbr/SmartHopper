@@ -12,7 +12,6 @@ public class Item extends Traducao {
 
     private int cdItem = 0;
     private String dsItem;
-    private ItemStack itemStack;
 
     public Item() {
     }
@@ -51,6 +50,13 @@ public class Item extends Traducao {
     public Item setItemName(ItemStack itemStack) {
         dsItem = itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
         return this;
+    }
+
+    public ItemStack parseItemStack(Item item){
+        return new ItemStack(Material.getMaterial(item.getDsItem().replaceAll("\\s","_").toUpperCase()));
+    }
+    public ItemStack getItemStack(){
+        return new ItemStack(Material.getMaterial(dsItem.replaceAll("\\s","_").toUpperCase()));
     }
 
 }
