@@ -1,7 +1,7 @@
 name: SmartHopper
-version: 3.5.1
+version: 4.0.0
 main: mc.elderbr.smarthopper.MainSmartHopper
-api-version: 1.17
+api-version: 1.18
 authors: [ ElderBR ]
 commands:
   item:
