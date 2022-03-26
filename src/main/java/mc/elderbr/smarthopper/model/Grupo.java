@@ -3,11 +3,7 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.configuration.MemorySection;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,152 +12,47 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 
-public class Grupo implements Dados {
+public class Grupo extends Traducao{
 
-    private int id;
-    private String name;
-    private List<Item> itemList = new ArrayList<>();
-    private Map<String, String> langMap = new HashMap<>();
+    private int cdGrupo;
+    private String dsGrupo;
+    private Map<String, Traducao> traducaoMap = new HashMap<>();
+    private List<Item> listItem = new ArrayList<>();
     public final static int NEW = 0, UPGRADE = 1, DELETE = 2;
-    private Location location;
 
     public Grupo() {
     }
 
-    @Override
-    public int getID() {
-        return id;
+    public int getCdGrupo() {
+        return cdGrupo;
     }
 
-    @Override
-    public void setID(int id) {
-        this.id = id;
+    public void setCdGrupo(int cdGrupo) {
+        this.cdGrupo = cdGrupo;
     }
 
-    @Override
-    public String getName() {
-        return name;
+    public String getDsGrupo() {
+        return dsGrupo;
     }
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
+    public void setDsGrupo(String dsGrupo) {
+        this.dsGrupo = dsGrupo;
     }
 
-    @Override
-    public void setLang(Map<String, String> lang) {
-        this.langMap = lang;
+    public List<Item> getListItem() {
+        return listItem;
     }
 
-    @Override
-    public void setLang(MemorySection memorySection) {
-        if (memorySection == null) return;
-        for (Map.Entry<String, Object> me : memorySection.getValues(false).entrySet()) {
-            langMap.put(me.getKey(), me.getValue().toString());
-        }
+    public void setListItem(List<Item> listItem) {
+        this.listItem = listItem;
     }
 
-    @Override
-    public Map<String, String> getLang() {
-        return langMap;
+    public Map<String, Traducao> getTraducaoMap() {
+        return traducaoMap;
     }
 
-    @Override
-    public String getTraducao(String langKey) {
-        langMap = VGlobal.GRUPO_LANG_MAP.get(getName());
-        if (langMap == null || langMap.get(langKey) == null) {
-            return name;
-        }
-        return langMap.get(langKey);
-    }
-
-    @Override
-    public void addTraducao(String lang, String traducao) {
-        langMap.put(lang, traducao);
-    }
-
-    public List<Item> getItemList() {
-        return itemList;
-    }
-
-    public boolean isContentItem(Item item) {
-        for (Item items : itemList) {
-            if (items.getName().equals(item.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void setItemList(List<Item> itemList) {
-        this.itemList = itemList;
-    }
-
-    public void addItemList(Item item) {
-        itemList.add(item);
-    }
-
-    public void addItemList(ItemStack itemStack) {
-        itemList.add(new Item(itemStack));
-    }
-
-    public void removeItemList(ItemStack itemStack) {
-        itemList.remove(new Item(itemStack));
-    }
-
-    public boolean isItemGrupo(String material) {
-
-        List<String> list = new ArrayList<>();
-        switch (getName()) {
-            case "stone":
-                list.add("cobble");
-                list.add("sandstone");
-                list.add("redstone");
-                list.add("blackstone");
-                list.add("glowstone");
-                list.add("brick");
-                list.add("bricks");
-                list.add("grindstone");
-                list.add("end stone");
-                list.add("lodestone");
-                list.add("stonecutter");
-                break;
-            case "oak":
-                list.add("dark oak");
-                break;
-            case "blue":
-                list.add("light blue");
-                break;
-            case "gray":
-                list.add("light gray");
-                break;
-            case "sand":
-                list.add("sandstone");
-                break;
-            case "sandstone":
-                list.add("red sandstone");
-                break;
-            case "egg":
-                list.add("leggings");
-                break;
-        }
-        for (String items : list) {
-            if (material.contains(items)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public Location getLocation() {
-        return location;
-    }
-
-    @Override
-    public void setLocation(Block block) {
-        location = block.getLocation();// ADICIONANDO A LOCATION
-        VGlobal.LOCATION_LIST.add(location);// ADICIONANDO LOCATION NA LISTA GLOBAL
+    public void setTraducaoMap(Map<String, Traducao> traducaoMap) {
+        this.traducaoMap = traducaoMap;
     }
 
     public void createGrupos() {
@@ -224,14 +115,14 @@ public class Grupo implements Dados {
      */
     public boolean isContentItem(String item) {
         // Se o nome do grupo conter mais do que nome
-        if (this.name.split("\\s").length > 1) {
-            if (item.contains(name)) {
+        if (this.dsGrupo.split("\\s").length > 1) {
+            if (item.contains(dsGrupo)) {
                 return true;
             }
         } else {
             //Percorre o nome do item e ver se o nome do grupo existe
             for (String nameItem : item.split("\\s")) {
-                if (nameItem.equals(this.name)) {
+                if (nameItem.equals(this.dsGrupo)) {
                     return true;
                 }
             }

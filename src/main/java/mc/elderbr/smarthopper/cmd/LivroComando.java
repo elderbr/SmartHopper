@@ -37,7 +37,7 @@ public class LivroComando implements CommandExecutor {
 
             player = (Player) sender;
 
-            if (command.getName().equalsIgnoreCase("livro")) {
+            if (command.getDsGrupo().equalsIgnoreCase("livro")) {
                 itemStack = new ItemStack(Material.WRITTEN_BOOK);
                 bookMeta = (BookMeta) itemStack.getItemMeta();
                 bookMeta.setTitle("Grupos");

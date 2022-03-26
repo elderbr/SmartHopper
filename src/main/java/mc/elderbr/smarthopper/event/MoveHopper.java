@@ -70,7 +70,7 @@ public class MoveHopper implements Listener {
                 // SE FOR POÇÕES
                 if (itemStack.getType() == Material.POTION || itemStack.getType() == Material.SPLASH_POTION || itemStack.getType() == Material.LINGERING_POTION) {
                     potion = new Pocao(itemStack);
-                    item = VGlobal.ITEM_MAP_NAME.get(potion.getName());
+                    item = VGlobal.ITEM_MAP_NAME.get(potion.getDsGrupo());
                 }
 
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
@@ -79,13 +79,13 @@ public class MoveHopper implements Listener {
                     smartHopper = new SmartHopper(hoppers);
 
                     // BLOQUEIA A PASSAGEM DOS ITENS
-                    if (smartHopper.getName().contains("#")) {
+                    if (smartHopper.getDsGrupo().contains("#")) {
 
                         isBloqueio = new ArrayList<>();
 
                         // VERIFICA SE EXISTEM MAIS DE UM ITEM OU GRUPO PARA O MESMO FUNIL
-                        if (smartHopper.getName().contains(";")) {
-                            for (String items : smartHopper.getName().split(";")) {
+                        if (smartHopper.getDsGrupo().contains(";")) {
+                            for (String items : smartHopper.getDsGrupo().split(";")) {
 
                                 smartHopperAux = smartHopper;
                                 smartHopperAux.setName(items);
@@ -124,9 +124,9 @@ public class MoveHopper implements Listener {
                     } else {
 
                         // VERIFICA SE EXISTEM MAIS DE UM ITEM OU GRUPO PARA O MESMO FUNIL
-                        if (smartHopper.getName().contains(";")) {
+                        if (smartHopper.getDsGrupo().contains(";")) {
 
-                            for (String items : smartHopper.getName().split(";")) {
+                            for (String items : smartHopper.getDsGrupo().split(";")) {
 
                                 smartHopperAux = smartHopper;
                                 smartHopperAux.setName(items);
@@ -163,7 +163,7 @@ public class MoveHopper implements Listener {
                 }
             }
 
-            if (destination.getType() == InventoryType.HOPPER && SmartHopper.ParseHopper(destination).getName().equals("HOPPER")) {
+            if (destination.getType() == InventoryType.HOPPER && SmartHopper.ParseHopper(destination).getDsGrupo().equals("HOPPER")) {
                 event.setCancelled(false);// Ativa o movimento do item
             }
             if (destination.getType() != InventoryType.HOPPER) {

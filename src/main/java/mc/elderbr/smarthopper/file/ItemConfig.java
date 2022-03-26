@@ -135,12 +135,12 @@ public class ItemConfig {
             }
 
             // ADICIONANDO NO MAPs GLOBAIS
-            VGlobal.ITEM_MAP_NAME.put(item.getName(), item);// ADICIONANDO O ITEM PARA SER BUSCADO PELO O NOME
-            VGlobal.ITEM_MAP_ID.put(item.getID(), item);// ADICIONANDO O ITEM PARA SER BUSCADO PELO ID
-            VGlobal.ITEM_MAP.put(item.getName(), item.getName());// ADICIONANDO O NOME DO ITEM TRADUZIDOS
-            VGlobal.ITEM_NAME_LIST.add(item.getName());// ADICIONA NA LISTA DE NOMES DE ITENS
+            VGlobal.ITEM_MAP_NAME.put(item.getDsGrupo(), item);// ADICIONANDO O ITEM PARA SER BUSCADO PELO O NOME
+            VGlobal.ITEM_MAP_ID.put(item.getCdGrupo(), item);// ADICIONANDO O ITEM PARA SER BUSCADO PELO ID
+            VGlobal.ITEM_MAP.put(item.getDsGrupo(), item.getDsGrupo());// ADICIONANDO O NOME DO ITEM TRADUZIDOS
+            VGlobal.ITEM_NAME_LIST.add(item.getDsGrupo());// ADICIONA NA LISTA DE NOMES DE ITENS
 
-            //Debug.WriteMsg("Item carregando >> " + item.getName());
+            //Debug.WriteMsg("Item carregando >> " + item.getDsGrupo());
         }
         Debug.WriteMsg("Items carregados com sucesso!!!");
 
@@ -166,7 +166,7 @@ public class ItemConfig {
         Debug.Write("Percorrendo as poções...");
         Pocao pocao = new Pocao();
         for (Pocao potion : pocao.getListPocao()) {
-            list.add(potion.getName());// Lista dos itens
+            list.add(potion.getDsGrupo());// Lista dos itens
         }
         Debug.Write("Percorrido as poções!!!");
     }

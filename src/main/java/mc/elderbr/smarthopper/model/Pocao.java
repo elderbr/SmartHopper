@@ -63,7 +63,7 @@ public class Pocao {
     }
 
 
-    public String getName() {
+    public String getDsGrupo() {
         return name;
     }
 

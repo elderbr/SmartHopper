@@ -52,8 +52,8 @@ public class ClickHopper implements Listener {
         if (itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK) {
 
             // VERIFICA SE EXISTE MAIS DE UM ITEM OU GRUPO SETADO NO HOPPER
-            if (smartHopper.getName().contains(";")) {
-                for (String hopperName : smartHopper.getName().split(";")) {
+            if (smartHopper.getDsGrupo().contains(";")) {
+                for (String hopperName : smartHopper.getDsGrupo().split(";")) {
                     if (Utils.getHopperType(hopperName) instanceof Item) {
                         if (hopperName.contains("#")) {
                             Msg.ItemNegar(player, (Item) Utils.getHopperType(hopperName));
@@ -73,7 +73,7 @@ public class ClickHopper implements Listener {
 
             // SE O HOPPER FOR DO TIPO ITEM
             if (smartHopper.getType() instanceof Item) {
-                if (smartHopper.getName().contains("#")) {
+                if (smartHopper.getDsGrupo().contains("#")) {
                     Msg.ItemNegar(player, smartHopper.getItem());
                 }else {
                     Msg.Item(player, smartHopper.getItem());
@@ -88,13 +88,13 @@ public class ClickHopper implements Listener {
 
                 // CRIANDO O INVENTARIO DO GRUPO
                 inventory = new InventoryCustom();
-                inventory.create(grupo.getTraducao(player.getLocale()).concat(" §e§lID:"+grupo.getID()));// NO DO INVENTARIO
+                inventory.create(grupo.getTraducao(player.getLocale()).concat(" §e§lID:"+grupo.getCdGrupo()));// NO DO INVENTARIO
                 for (Item items : grupo.getItemList()) {// ADICIONANDO OS ITENS NO INVENTARIO
                     inventory.addItem(items.getType());
                 }
 
                 // VERIFICA SE O JOGAR É OPERADOR
-                if (Config.ADM_LIST.contains(player.getName()) || Config.OPERADOR_LIST.contains(player.getName())) {
+                if (Config.ADM_LIST.contains(player.getDsGrupo()) || Config.OPERADOR_LIST.contains(player.getDsGrupo())) {
                     // CRIANDO O BOTÃO PARA SALVAR
                     itemSalve = new ItemStack(Material.LIME_WOOL);
                     meta = itemSalve.getItemMeta();
@@ -106,7 +106,7 @@ public class ClickHopper implements Listener {
                     inventory.getInventory().setItem(53, itemSalve);
                 }
                 player.openInventory(inventory.getInventory());
-                if (smartHopper.getName().contains("#")) {
+                if (smartHopper.getDsGrupo().contains("#")) {
                     Msg.GrupoNegar(player, grupo);
                 } else {
                     Msg.Grupo(player, grupo);
@@ -114,7 +114,7 @@ public class ClickHopper implements Listener {
                 return;
             }
             // SE O HOPPER NÃO ESTIVER CONFIGURADO
-            if (smartHopper.getName().equals("HOPPER")) {
+            if (smartHopper.getDsGrupo().equals("HOPPER")) {
                 player.sendMessage("§6O hopper §4não §6configurado!!!");
             }
         }

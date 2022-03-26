@@ -17,7 +17,7 @@ public class ConfigModel {
         operador = new ArrayList<>();
     }
 
-    public String getName() {
+    public String getDsGrupo() {
         return name;
     }
 

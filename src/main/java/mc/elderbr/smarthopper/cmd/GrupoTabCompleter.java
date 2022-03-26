@@ -28,7 +28,7 @@ public class GrupoTabCompleter implements TabCompleter {
 
         if (sender instanceof Player) {
             player = (Player) sender;
-            switch (command.getName().toLowerCase()){
+            switch (command.getDsGrupo().toLowerCase()){
                 case "grupo":
                 case "addgrupo":
                 case "removegrupo":
