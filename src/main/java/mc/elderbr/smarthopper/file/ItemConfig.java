@@ -127,20 +127,20 @@ public class ItemConfig {
         for (String items : config.getValues(false).keySet()) {
 
             item = new Item();
-            item.setID(config.getInt(items.concat(".item_id")));
-            item.setName(config.getString(items.concat(".item_name")));
+            item.setCdItem(config.getInt(items.concat(".item_id")));
+            item.setDsItem(config.getString(items.concat(".item_name")));
 
             if ((config.get(items.concat(".lang"))) instanceof MemorySection) {
-                item.setLang(((MemorySection) config.get(items.concat(".lang"))));
+                //item.setLang(((MemorySection) config.get(items.concat(".lang"))));
             }
 
             // ADICIONANDO NO MAPs GLOBAIS
-            VGlobal.ITEM_MAP_NAME.put(item.getDsGrupo(), item);// ADICIONANDO O ITEM PARA SER BUSCADO PELO O NOME
-            VGlobal.ITEM_MAP_ID.put(item.getCdGrupo(), item);// ADICIONANDO O ITEM PARA SER BUSCADO PELO ID
-            VGlobal.ITEM_MAP.put(item.getDsGrupo(), item.getDsGrupo());// ADICIONANDO O NOME DO ITEM TRADUZIDOS
-            VGlobal.ITEM_NAME_LIST.add(item.getDsGrupo());// ADICIONA NA LISTA DE NOMES DE ITENS
+            VGlobal.ITEM_MAP_NAME.put(item.getDsItem(), item);// ADICIONANDO O ITEM PARA SER BUSCADO PELO O NOME
+            VGlobal.ITEM_MAP_ID.put(item.getCdItem(), item);// ADICIONANDO O ITEM PARA SER BUSCADO PELO ID
+            VGlobal.ITEM_MAP.put(item.getDsItem(), item.getDsItem());// ADICIONANDO O NOME DO ITEM TRADUZIDOS
+            VGlobal.ITEM_NAME_LIST.add(item.getDsItem());// ADICIONA NA LISTA DE NOMES DE ITENS
 
-            //Debug.WriteMsg("Item carregando >> " + item.getDsGrupo());
+            //Debug.WriteMsg("Item carregando >> " + item.getDsItem());
         }
         Debug.WriteMsg("Items carregados com sucesso!!!");
 
@@ -166,7 +166,7 @@ public class ItemConfig {
         Debug.Write("Percorrendo as poções...");
         Pocao pocao = new Pocao();
         for (Pocao potion : pocao.getListPocao()) {
-            list.add(potion.getDsGrupo());// Lista dos itens
+            //list.add(potion.getDsItem());// Lista dos itens
         }
         Debug.Write("Percorrido as poções!!!");
     }
