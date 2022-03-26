@@ -10,17 +10,16 @@ import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Material;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static mc.elderbr.smarthopper.model.Grupo.DELETE;
 
@@ -67,8 +66,6 @@ public class GrupoConfig {
         }
         Debug.Write("Carregando o arquivo grupo.yml");
         config = YamlConfiguration.loadConfiguration(fileConfig);
-
-        carregar();
     }
 
     public GrupoConfig(Grupo grupo, int event) {
@@ -78,111 +75,33 @@ public class GrupoConfig {
         switch (event) {
             case Grupo.NEW:
                 // ADICIONANDO O NOME DO GRUPO
-                config.set(grupo.getName().concat(".grupo_id"), grupo.getID());
-                config.set(grupo.getName().concat(".grupo_name"), grupo.getName());
+                config.set(grupo.getDsGrupo().concat(".grupo_id"), grupo.getCdGrupo());
+                config.set(grupo.getDsGrupo().concat(".grupo_name"), grupo.getDsGrupo());
                 // ADICIONANDO A LINGUAGEM
-                config.set(grupo.getName().concat(".lang"), grupo.getLang());
                 break;
             case DELETE:
                 // ADICIONANDO O NOME DO GRUPO
-                config.set(grupo.getName(), null);
+                config.set(grupo.getDsGrupo(), null);
 
                 // REMOVE A VARIAL GLOBAL
-                VGlobal.GRUPO_MAP_ID.remove(grupo.getID());// ADICIONANDO A BUSCA PELO ID
-                VGlobal.GRUPO_MAP_NAME.remove(grupo.getName());// ADICIONANDO A BUSCA PELO NOME
-                VGlobal.GRUPO_NAME_LIST.remove(grupo.getName());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
-                VGlobal.GRUPO_LANG_MAP.remove(grupo.getName());// ADICIONANDO A BUSCA PELO LANG
-                VGlobal.GRUPO_MAP.remove(grupo.getName());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
-                VGlobal.GRUPO_ITEM_MAP_LIST.remove(grupo.getName());// LISTA DE ITEM DO GRUPO EM TEXTO
+                VGlobal.GRUPO_MAP_ID.remove(grupo.getCdGrupo());// ADICIONANDO A BUSCA PELO ID
+                VGlobal.GRUPO_MAP_NAME.remove(grupo.getDsGrupo());// ADICIONANDO A BUSCA PELO NOME
+                VGlobal.GRUPO_NAME_LIST.remove(grupo.getDsGrupo());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
+                VGlobal.GRUPO_LANG_MAP.remove(grupo.getDsGrupo());// ADICIONANDO A BUSCA PELO LANG
+                VGlobal.GRUPO_MAP.remove(grupo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
+                VGlobal.GRUPO_ITEM_MAP_LIST.remove(grupo.getDsGrupo());// LISTA DE ITEM DO GRUPO EM TEXTO
                 break;
 
         }
         // ADICIONANDO ITENS DO GRUPO
         if (event != DELETE) {
             itemStringList = new ArrayList<>();
-            for (Item items : grupo.getItemList()) {
-                itemStringList.add(items.getName());
+            for (Item items : grupo.getListItem()) {
+                itemStringList.add(items.getDsItem());
             }
-            config.set(grupo.getName().concat(".grupo_item"), itemStringList);
+            config.set(grupo.getDsGrupo().concat(".grupo_item"), itemStringList);
         }
         save();
-    }
-
-
-    private void carregar() {
-
-        Debug.WriteMsg("Carregando grupos...");
-
-        // REMOVENDO ITEM COM A NOMENCLATURA DIFERENTE
-        List<String> list = (List<String>) config.getList("grass.grupo_item");
-        list.remove("grass path");
-        config.set("grass.grupo_item", list);
-        save();
-
-        for (String grups : config.getValues(false).keySet()) {
-
-            grupo = new Grupo();
-            grupo.setID(config.getInt(grups.concat(".grupo_id")));
-            grupo.setName(config.getString(grups.concat(".grupo_name")));
-            grupo.setLang(((MemorySection) config.get(grups.concat(".lang"))));
-
-            // LISTA DE LANGS
-            for (Map.Entry<String, String> langs : grupo.getLang().entrySet()) {
-                VGlobal.GRUPO_NAME_LIST.add(langs.getKey().toLowerCase());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
-                VGlobal.GRUPO_MAP.put(langs.getValue().toString(), grupo.getName());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
-                VGlobal.GRUPO_LANG_MAP.put(grupo.getName(), new HashMap<String, String>() {{
-                    put(langs.getKey(), langs.getValue().toString());
-                }});
-            }
-
-
-            // LISTA DE ITENS
-            List<String> grupoStringItem = new ArrayList<>();
-            itemStringList = config.getStringList(grups.concat(".grupo_item"));
-            if (!itemStringList.isEmpty()) {
-                for (String items : itemStringList) {
-                    // CRIANDO NO ITEM
-
-                    // Se for Poção
-                    if (grupo.getName().contains("potion")) {
-                        if (potion.parseItemStack(items).getType() != Material.AIR) {
-                            item = new Item(potion.parseItemStack(items));
-                        }else{
-                            continue;
-                        }
-                    } else {
-                        try {
-                            item = new Item(items);
-                        }catch (Exception e){
-                            return;
-                        }
-
-                    }
-                    grupo.addItemList(item);// ADICIONA O ITEM NA LISTA DO GRUPO
-                    grupoStringItem.add(item.getName());
-
-                    // CRIANDO LISTA DE ITEM QUE RETORNA O NOME DO GRUPO
-                    if (VGlobal.GRUPO_LIST_ITEM.get(item.getName()) == null) {
-                        VGlobal.GRUPO_LIST_ITEM.put(item.getName(), new ArrayList(Arrays.asList(grupo.getName())));
-                    } else {
-                        VGlobal.GRUPO_LIST_ITEM.get(item.getName()).add(grupo.getName());
-                    }
-                }
-            }
-
-            // ADICIONANDO A VARIAL GLOBAL
-            VGlobal.GRUPO_MAP_ID.put(grupo.getID(), grupo);// ADICIONANDO A BUSCA PELO ID
-            VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);// ADICIONANDO A BUSCA PELO NOME
-            VGlobal.GRUPO_NAME_LIST.add(grupo.getName());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
-            VGlobal.GRUPO_LANG_MAP.put(grupo.getName(), grupo.getLang());// ADICIONANDO A BUSCA PELO LANG
-            VGlobal.GRUPO_MAP.put(grupo.getName(), grupo.getName());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
-            VGlobal.GRUPO_ITEM_MAP_LIST.put(grupo.getName(), grupoStringItem);// LISTA DE ITEM DO GRUPO EM TEXTO
-
-            Debug.Write("Carregando o grupo >> " + grupo.getName());
-
-
-        }
-        Debug.WriteMsg("Grupos carregado com sucesso!");
     }
 
     private void createDefault() {
@@ -200,8 +119,8 @@ public class GrupoConfig {
                 value = txtReader.substring(txtReader.indexOf(":") + 2, txtReader.length());
 
                 grupo = new Grupo();
-                grupo.setID(idGrupo);
-                grupo.setName(key);
+                grupo.setCdGrupo(idGrupo);
+                grupo.setDsGrupo(key);
 
                 /* CRIANDO O YML DO GRUPO */
 
@@ -222,32 +141,32 @@ public class GrupoConfig {
                     // ITEM QUE NÃO FAZEM PARTE DA LISTA DO GRUPO
 
                     // ADICIONA NA LISTA DE ITEM DO GRUPO
-                    if (grupo.isItemGrupo(nameMaterial) && grupo.isContentItem(nameMaterial) && !grupo.getName().contains("potion")) {
+                    if (grupo.isContentItem(nameMaterial) && !grupo.getDsGrupo().contains("potion")) {
                         itemStringList.add(nameMaterial);
                     }
 
                     // Adiciona o carvão vegetal ao grupo de carvão
-                    if (grupo.getName().equals("coal") && nameMaterial.equals("charcoal")) {
+                    if (grupo.getDsGrupo().equals("coal") && nameMaterial.equals("charcoal")) {
                         itemStringList.add(nameMaterial);
                     }
 
                     // Adiciona a batata no grupo de assados
-                    if (grupo.getName().equals("cooked") && nameMaterial.equals("baked potato")) {
+                    if (grupo.getDsGrupo().equals("cooked") && nameMaterial.equals("baked potato")) {
                         itemStringList.add(nameMaterial);
                     }
 
                     // Adiciona todos os tipos de fornalhas no grupo fornalhas
-                    if (grupo.getName().equals("furnace") && nameMaterial.equals("smoker")) {
+                    if (grupo.getDsGrupo().equals("furnace") && nameMaterial.equals("smoker")) {
                         itemStringList.add(nameMaterial);
                     }
 
                     // Adiconando cortado de pedras no grupo mes de trabalho
-                    if (grupo.getName().equals("table") && nameMaterial.equals("stonecutter")) {
+                    if (grupo.getDsGrupo().equals("table") && nameMaterial.equals("stonecutter")) {
                         itemStringList.add(nameMaterial);
                     }
 
                     // Grupo de redstones
-                    if (grupo.getName().equals("redstones")) {
+                    if (grupo.getDsGrupo().equals("redstones")) {
                         if (nameMaterial.contains("redstone")
                                 || nameMaterial.equals("dispenser")
                                 || nameMaterial.equals("note block")
@@ -271,7 +190,7 @@ public class GrupoConfig {
                     }
 
                     // Grupo de flores
-                    if (grupo.getName().equals("flowers")) {
+                    if (grupo.getDsGrupo().equals("flowers")) {
                         if (nameMaterial.equals("grass")
                                 || nameMaterial.equals("fern")
                                 || nameMaterial.equals("dead bush")
@@ -298,21 +217,21 @@ public class GrupoConfig {
                         }
                     }
                     // Poções
-                    if (grupo.getName().equals("potion")) {
+                    if (grupo.getDsGrupo().equals("potion")) {
                         for (String potions : listPotion) {
                             if (!potions.contains("lingering") && !potions.contains("splash") && !itemStringList.contains(potions)) {
                                 itemStringList.add(potions);
                             }
                         }
                     }
-                    if (grupo.getName().contains("splash")) {
+                    if (grupo.getDsGrupo().contains("splash")) {
                         for (String potions : listPotion) {
                             if (potions.contains("splash") && !itemStringList.contains(potions)) {
                                 itemStringList.add(potions);
                             }
                         }
                     }
-                    if (grupo.getName().contains("lingering")) {
+                    if (grupo.getDsGrupo().contains("lingering")) {
                         for (String potions : listPotion) {
                             if (potions.contains("lingering") && !itemStringList.contains(potions)) {
                                 itemStringList.add(potions);
@@ -323,7 +242,7 @@ public class GrupoConfig {
                 }// FIM DO MATERIALS
 
                 // Ferramentas de Pedras
-                if (grupo.getName().equals("stone tools")) {
+                if (grupo.getDsGrupo().equals("stone tools")) {
                     itemStringList.add("stone sword");
                     itemStringList.add("stone shovel");
                     itemStringList.add("stone pickaxe");
@@ -332,7 +251,7 @@ public class GrupoConfig {
                 }
 
                 // Ferramentas de ferro
-                if (grupo.getName().equals("iron tools")) {
+                if (grupo.getDsGrupo().equals("iron tools")) {
                     itemStringList.add("iron sword");
                     itemStringList.add("iron shovel");
                     itemStringList.add("iron pickaxe");
@@ -341,7 +260,7 @@ public class GrupoConfig {
                 }
 
                 // Ferramentas de ouro
-                if (grupo.getName().equals("golden tools")) {
+                if (grupo.getDsGrupo().equals("golden tools")) {
                     itemStringList.add("golden sword");
                     itemStringList.add("golden shovel");
                     itemStringList.add("golden pickaxe");
@@ -350,7 +269,7 @@ public class GrupoConfig {
                 }
 
                 // Ferramentas de diamante
-                if (grupo.getName().equals("diamond tools")) {
+                if (grupo.getDsGrupo().equals("diamond tools")) {
                     itemStringList.add("diamond sword");
                     itemStringList.add("diamond shovel");
                     itemStringList.add("diamond pickaxe");
@@ -359,7 +278,7 @@ public class GrupoConfig {
                 }
 
                 // Ferramentas de netherite
-                if (grupo.getName().equals("netherite tools")) {
+                if (grupo.getDsGrupo().equals("netherite tools")) {
                     itemStringList.add("netherite sword");
                     itemStringList.add("netherite shovel");
                     itemStringList.add("netherite pickaxe");
@@ -368,7 +287,7 @@ public class GrupoConfig {
                 }
 
                 // ITENS PARA SEREM ASSADOS
-                if (grupo.getName().equals("carne crua")) {
+                if (grupo.getDsGrupo().equals("carne crua")) {
                     itemStringList.add("potato");
                     itemStringList.add("beef");
                     itemStringList.add("porkchop");
