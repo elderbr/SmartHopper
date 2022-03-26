@@ -8,7 +8,6 @@ import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
-import mc.elderbr.smarthopper.file.ItemTraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import org.bukkit.Bukkit;
@@ -19,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MainSmartHopper extends JavaPlugin implements Listener {
 
     private Config config;
-    private ItemTraducaoConfig itemTraducaoConfig;
     private ItemConfig itemConfig;
     private GrupoConfig grupoConfig;
 
@@ -38,7 +36,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         saveDefaultConfig();
         config = new Config();
 
-        itemTraducaoConfig = new ItemTraducaoConfig();
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();
         Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
