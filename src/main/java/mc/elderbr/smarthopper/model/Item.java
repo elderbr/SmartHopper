@@ -19,7 +19,7 @@ public class Item extends Traducao {
         dsItem = name;
     }
     public Item(ItemStack itemStack) {
-        dsItem = itemStack.getType().getKey().getKey().replaceAll("_"," ").toLowerCase();
+        setItemName(itemStack);
     }
 
     public int getCdItem() {
