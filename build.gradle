@@ -7,8 +7,8 @@ plugins {
 group = 'mc.elderbr'
 version = '4.0.0'
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = "16"
+targetCompatibility = "16"
 
 repositories {
     mavenCentral()
@@ -19,6 +19,8 @@ repositories {
 dependencies {
     implementation 'org.jetbrains:annotations:20.1.0'
     compileOnly('org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT')
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.32.3.2'
 }
 
 

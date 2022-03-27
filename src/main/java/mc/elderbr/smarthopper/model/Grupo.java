@@ -18,9 +18,13 @@ public class Grupo extends Traducao {
     private String dsGrupo;
     private Map<String, Traducao> traducaoMap = new HashMap<>();
     private List<Item> listItem = new ArrayList<>();
+
+    // AULIXIAR
     public final static int NEW = 0, UPGRADE = 1, DELETE = 2;
+    private List<String> grupoList = new ArrayList<>();
 
     public Grupo() {
+        createGrupos();// CRIA GRUPO PADRÃO
     }
 
     public int getCdGrupo() {
@@ -47,6 +51,14 @@ public class Grupo extends Traducao {
         this.listItem = listItem;
     }
 
+    public Grupo addList(Item item){
+        if(listItem == null){
+            listItem = new ArrayList<>();
+        }
+        listItem.add(item);
+        return this;
+    }
+
     public Map<String, Traducao> getTraducaoMap() {
         return traducaoMap;
     }
@@ -55,8 +67,8 @@ public class Grupo extends Traducao {
         this.traducaoMap = traducaoMap;
     }
 
-    public void createGrupos() {
-        List<String> grupoList = new ArrayList<>();
+    public List<String> createGrupos() {
+        grupoList = new ArrayList<>();
 
         for (String item : VGlobal.ITEM_NAME_LIST) {
             if (item.split("\\s").length > 0) {
@@ -103,7 +115,32 @@ public class Grupo extends Traducao {
                 }
             }
         }
+        createGrupoItem();
+        return grupoList;
+    }
 
+    /***
+     * Adiciona item na lista do grupo
+     */
+    public void createGrupoItem(){
+        Collections.sort(createGrupos());
+        for(String nameGrupo : grupoList){
+            Grupo grupo = new Grupo();
+            grupo.setDsGrupo(nameGrupo);
+            grupo.setDsLang("en_us");
+            grupo.setDsTraducao(nameGrupo);
+            for(String nameItem : VGlobal.ITEM_NAME_LIST){
+                Item item = new Item(nameItem);
+                if(grupo.contentItem(item)){
+                    grupo.addList(item);
+                }
+            }
+            // LISTA DE NOMES DE GRUPO GLOBAL
+            if(!VGlobal.GRUPO_NAME_LIST.contains(grupo.dsGrupo)) {
+                VGlobal.GRUPO_NAME_LIST.add(grupo.dsGrupo);
+                VGlobal.GRUPO_LIST.add(grupo);
+            }
+        }
     }
 
     /***

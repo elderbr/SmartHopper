@@ -25,6 +25,8 @@ public interface VGlobal {
     Map<String, String> GRUPO_MAP = new HashMap<>();
     // TODOS OS NOMES DO GRUPO
     List<String> GRUPO_NAME_LIST = new ArrayList<>();
+    // LISTA DE GRUPO
+    List<Grupo> GRUPO_LIST = new ArrayList<>();
     // ADICIONA LISTA DE ITEM AO NOME DO GRUPO
     Map<String, List<String>> GRUPO_ITEM_MAP_LIST = new HashMap<>();
     // CRIANDO LISTA DE ITEM QUE RETORNA O NOME DO GRUPO
