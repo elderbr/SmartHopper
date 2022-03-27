@@ -17,8 +17,11 @@ import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,17 +54,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         Conexao.CREATE_TABLES();
         Item.CreateItem();
         ItemDao.CreateDefault();
-
-        ItemStack itemStack = new ItemStack(Material.SPLASH_POTION);
-        PotionData potionData = new PotionData(PotionType.NIGHT_VISION);
-        PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
-        meta.setBasePotionData(potionData);
-        itemStack.setItemMeta(meta);
-
-        Item item = new Item();
-        item.parseItem(itemStack);
-        Msg.ServidorBlue("Nome da poção >> "+item.getDsItem(), getClass());
-
 
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();
