@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.dao;
 
 import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.utils.Msg;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,10 +15,24 @@ public class LangDao {
     private static ResultSet rs = null;
     private static String sql;
 
-    public static int insert(Lang lang) {
+    public LangDao() {
+        insert("en_us");
+    }
+
+    public static int insert(@NotNull Object lang) {
+        stm = null;
         try {
-            stm = Conexao.repared("INSERT INTO lang (dsLang) VALUES (?);");
-            stm.setString(1, lang.getDsLang());
+            if (lang instanceof String name) {
+                sql = String.format("INSERT INTO lang (dsLang) VALUES (%s);", name);
+                stm = Conexao.repared(sql);
+            }
+            if (lang instanceof Lang linguagem) {
+                sql = String.format("INSERT INTO lang (dsLang) VALUES (%s);", linguagem.getDsLang());
+                stm = Conexao.repared(sql);
+            }
+            if (stm == null) {
+                return 0;
+            }
             stm.execute();
             rs = stm.getGeneratedKeys();
             if (rs.next()) {
@@ -25,7 +40,7 @@ public class LangDao {
             }
         } catch (SQLException e) {
             if (e.getErrorCode() != 19)
-                Msg.ServidorErro("Erro ao adicionar nova linguagem!!!", "", LangDao.class, e);
+                Msg.ServidorErro("Erro ao adicionar nova linguagem!!!", "insert(@NotNull Object lang)", LangDao.class, e);
         } finally {
             Conexao.desconect();
             close();
@@ -33,26 +48,26 @@ public class LangDao {
         return 0;
     }
 
-    public static Lang select(Object lang) {
+    public static Lang select(@NotNull Object lang) {
         stm = null;
         try {
-            if(lang instanceof Integer code){
+            if (lang instanceof Integer code) {
                 sql = String.format("SELECT * FROM lang WHERE cdLang = %d;", code);
                 stm = Conexao.repared(sql);
             }
-            if(lang instanceof Lang languagem){
-                if(languagem.getCdLang()>0) {
+            if (lang instanceof Lang languagem) {
+                if (languagem.getCdLang() > 0) {
                     sql = String.format("SELECT * FROM lang WHERE cdLang = %d;", languagem.getCdLang());
-                }else{
+                } else {
                     sql = String.format("SELECT * FROM lang WHERE dsLang = %s;", languagem.getDsLang());
                 }
                 stm = Conexao.repared(sql);
             }
-            if(lang instanceof String nome){
+            if (lang instanceof String nome) {
                 sql = String.format("SELECT * FROM lang WHERE dsLang = %s;", nome);
                 stm = Conexao.repared(sql);
             }
-            if(stm==null){
+            if (stm == null) {
                 return null;
             }
             rs = stm.executeQuery();
@@ -63,7 +78,7 @@ public class LangDao {
                 return languagem;
             }
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao buscar linguagem!!!", "select(String lang)", LangDao.class, e);
+            Msg.ServidorErro("Erro ao buscar linguagem!!!", "select(@NotNull Object lang)", LangDao.class, e);
         } finally {
             Conexao.desconect();
             close();
