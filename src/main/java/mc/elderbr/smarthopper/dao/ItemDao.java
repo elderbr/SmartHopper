@@ -53,7 +53,7 @@ public class ItemDao {
         Debug.Write("Criando a tabela de item");
         for (String item : list) {
             try {
-                Debug.Write("Criando o item " + item);
+                Debug.WriteMsg("Criando o item " + item);
                 PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
                 stm.setString(1, item);
                 stm.execute();
