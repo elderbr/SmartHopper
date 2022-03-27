@@ -47,24 +47,41 @@ public class ItemDao {
         return 0;
     }
 
+    public static int size() {
+        try {
+            PreparedStatement preparedStatement = Conexao.repared("SELECT count(cdItem) FROM item");
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao verificar o tanho da lista de item!!!", "", ItemDao.class, e);
+        } finally {
+            Conexao.desconect();
+        }
+        return 0;
+    }
+
 
     public static void CreateDefault() {
         List<String> list = VGlobal.ITEM_NAME_LIST;
-        Debug.Write("Criando a tabela de item");
-        for (String item : list) {
-            try {
-                Debug.WriteMsg("Criando o item " + item);
-                PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
-                stm.setString(1, item);
-                stm.execute();
-            } catch (SQLException e) {
-                if (e.getErrorCode() != 19)
-                    Msg.ServidorErro("Erro ao criar item padrão!!!", "", ItemDao.class, e);
-            } finally {
-                Conexao.desconect();
+        if (VGlobal.ITEM_NAME_LIST.size() > size()) {
+            Debug.Write("Criando a tabela de item");
+            for (String item : list) {
+                try {
+                    Debug.WriteMsg("Criando o item " + item);
+                    PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
+                    stm.setString(1, item);
+                    stm.execute();
+                } catch (SQLException e) {
+                    if (e.getErrorCode() != 19)
+                        Msg.ServidorErro("Erro ao criar item padrão!!!", "", ItemDao.class, e);
+                } finally {
+                    Conexao.desconect();
+                }
             }
+            Debug.Write("Tabela de item criadas");
         }
-        Debug.Write("Tabela de item criadas");
     }
 
     private void close() {

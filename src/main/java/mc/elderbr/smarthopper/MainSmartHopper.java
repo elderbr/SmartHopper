@@ -12,7 +12,6 @@ import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Pocao;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,7 +41,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         Conexao.CREATE_TABLES();
         Item.CreateItem();
-        Pocao.CreateDefault();
         ItemDao.CreateDefault();
 
         itemConfig = new ItemConfig();

@@ -2,7 +2,9 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -49,6 +51,26 @@ public class Item extends Traducao {
                 if (!VGlobal.ITEM_NAME_LIST.contains(item.getDsItem())) {
                     VGlobal.ITEM_NAME_LIST.add(item.getDsItem());
                 }
+            }
+        }
+        // POÇÕES E SEU EFEITOS
+        for (PotionType potion : PotionType.values()) {
+            String name = potion.name().replaceAll("_", " ").toLowerCase();
+            if(!VGlobal.ITEM_NAME_LIST.contains(name)) {
+                VGlobal.ITEM_NAME_LIST.add(name);
+            }
+            if(!VGlobal.ITEM_NAME_LIST.contains("splash " + name)) {
+                VGlobal.ITEM_NAME_LIST.add("splash " + name);
+            }
+            if(!VGlobal.ITEM_NAME_LIST.contains("lingering " + name)) {
+                VGlobal.ITEM_NAME_LIST.add("lingering " + name);
+            }
+        }
+        // LIVRO ENCANTADOS
+        for (Enchantment enchantment : Enchantment.values()) {
+            String name = enchantment.getKey().getKey().replaceAll("_", " ");
+            if (!VGlobal.ITEM_NAME_LIST.contains(name)) {
+                VGlobal.ITEM_NAME_LIST.add(name);
             }
         }
         Collections.sort(VGlobal.ITEM_NAME_LIST);

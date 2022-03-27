@@ -4,7 +4,6 @@ package mc.elderbr.smarthopper.file;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Pocao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
@@ -42,7 +41,6 @@ public class GrupoConfig {
     private List<String> itemStringList;
     private String nameMaterial;
 
-    private Pocao potion;
     private ItemStack itemPotion;
     private PotionMeta potionMeta;
     private List<String> listPotion;

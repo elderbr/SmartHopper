@@ -2,7 +2,6 @@ package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Pocao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
@@ -10,12 +9,10 @@ import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -148,13 +145,6 @@ public class ItemConfig {
             list.add(Utils.toEnchantment(enchantments));// Lista dos itens
         }
         Debug.Write("PERCORRIDO OS ENCANTAMENTOS!!!");
-
-        Debug.Write("Percorrendo as poções...");
-        Pocao pocao = new Pocao();
-        for (Pocao potion : pocao.getListPocao()) {
-            //list.add(potion.getDsItem());// Lista dos itens
-        }
-        Debug.Write("Percorrido as poções!!!");
     }
 
     private void save() {
