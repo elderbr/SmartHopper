@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Item extends Traducao {
@@ -38,7 +39,7 @@ public class Item extends Traducao {
         this.dsItem = dsItem;
     }
 
-    public List<Item> create_item() {
+    public static List<Item> CreateItem() {
         List<Item> list = new ArrayList<>();
         for (Material m : Material.values()) {
             ItemStack itemStack = new ItemStack(m);
@@ -50,6 +51,7 @@ public class Item extends Traducao {
                 }
             }
         }
+        Collections.sort(VGlobal.ITEM_NAME_LIST);
         return list;
     }
 

@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper;
 
 import mc.elderbr.smarthopper.cmd.*;
 import mc.elderbr.smarthopper.dao.Conexao;
+import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
@@ -10,6 +11,7 @@ import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,17 +29,19 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
     public void onEnable() {
 
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN +
-                "\n+------------------------+\n" +
+                "\n+---------------------------+\n" +
                 "| Smart Hopper           |\n" +
                 "| Version " + VGlobal.VERSION + "            |\n" +
                 "| Dircord: ElderBR#5398  |\n" +
-                "+------------------------+");
+                "+---------------------------+");
 
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
         config = new Config();
 
         Conexao.CREATE_TABLES();
+        Item.CreateItem();
+        ItemDao.CreateDefault();
 
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();

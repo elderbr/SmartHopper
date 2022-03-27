@@ -101,20 +101,8 @@ public class ItemConfig {
         Debug.WriteMsg("Criando os item...");
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
 
-        itemList();// PEGA TODOS OS ITENS DO JOGO
 
-        // CRIANDO O ARQUIVO item.yml
-        Collections.sort(list);// ORGANIZANDO EM ORDEM ALFABETICA
-        for (String items : list) {
-            config.set(items + ".item_id", idItem);
-            config.set(items + ".item_name", items);
-            config.set(items + ".lang", VGlobal.ITEM_LANG_MAP.get(items));
-            save();
-            Debug.Write("Criando item >> " + items);
-            idItem++;
 
-            VGlobal.ITEM_NAME_LIST.add(items);
-        }
         Debug.WriteMsg("Itens criados com sucesso!!!");
     }
 
