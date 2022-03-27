@@ -57,55 +57,53 @@ public class Grupo extends Traducao {
 
     public void createGrupos() {
         List<String> grupoList = new ArrayList<>();
-        File file = new File(VGlobal.ARQUIVO, "grupo_names.txt");
 
-        List<String> grupoNot = new ArrayList<>();
-        grupoNot.add("on");
-        grupoNot.add("a");
-        grupoNot.add("o");
-        grupoNot.add("of");
-        grupoNot.add("the");
-        grupoNot.add("and");
-
-        Map<String, String> grupoMap = new HashMap<>();
-
-        for (Material materials : Material.values()) {
-            if (materials.isItem() && !materials.isAir()) {
-                for (String grupo : Utils.ToMaterial(materials).split("\\s")) {
-                    if (grupoNot.contains(grupo)) continue;
+        for (String item : VGlobal.ITEM_NAME_LIST) {
+            if (item.split("\\s").length > 0) {
+                String[] name = item.split("\\s");
+                for (int i = 0; i < name.length; i++) {
+                    String grupo = name[i];
                     if (!grupoList.contains(grupo)) {
                         grupoList.add(grupo);
-                        grupoMap.put(grupo, VGlobal.ITEM_LANG_MAP.get(Utils.ToMaterial(materials)).get("pt_br"));
                     }
+                    if ((i + 1) <= name.length) {
+                        grupo = name[i] + " " + name[i + 1];
+                        if (!grupoList.contains(grupo)) {
+                            grupoList.add(grupo);
+                        }
+                    }
+                    if ((i + 2) <= name.length) {
+                        grupo = name[i] + " " + name[i + 1] + " " + name[i + 2];
+                        if (!grupoList.contains(grupo)) {
+                            grupoList.add(grupo);
+                        }
+                    }
+                    if ((i + 3) <= name.length) {
+                        grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3];
+                        if (!grupoList.contains(grupo)) {
+                            grupoList.add(grupo);
+                        }
+                    }
+                    if ((i + 4) <= name.length) {
+                        grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4];
+                        if (!grupoList.contains(grupo)) {
+                            grupoList.add(grupo);
+                        }
+                    }
+                    if ((i + 5) <= name.length) {
+                        grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4] + " " + name[i + 5];
+                        if (!grupoList.contains(grupo)) {
+                            grupoList.add(grupo);
+                        }
+                    }
+                }
+            }else{
+                if (!grupoList.contains(item)) {
+                    grupoList.add(item);
                 }
             }
         }
 
-        grupoList = new ArrayList<>(grupoMap.keySet());
-        Collections.sort(grupoList);
-
-        TreeMap<String, String> map = new TreeMap<>();
-        map.putAll(grupoMap);
-
-        try (BufferedWriter escrever = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
-            for (Map.Entry<String, String> grupMap : map.entrySet()) {
-                escrever.write(grupMap.getKey().concat(": ").concat(Utils.ToUTF(grupMap.getValue())));
-                escrever.newLine();
-                escrever.flush();
-            }
-        } catch (IOException e) {
-            Msg.ServidorErro(e, "createGrupos()", getClass());
-        }
-    }
-
-    public static int newID() {
-        int newId = 0;
-        for (int id : VGlobal.GRUPO_MAP_ID.keySet()) {
-            if (id > newId) {
-                newId = id;
-            }
-        }
-        return (newId + 1);
     }
 
     /***
@@ -113,7 +111,7 @@ public class Grupo extends Traducao {
      * @param item nome do item
      * @return falso ou verdadeiro
      */
-    public boolean isContentItem(Item item) {
+    public boolean contentItem(Item item) {
         // Se o nome do grupo conter mais do que nome
         if (dsGrupo.equals(item.getDsItem())) return true;
         if (item.getDsItem().split("\\s").length > 0) {
@@ -142,13 +140,13 @@ public class Grupo extends Traducao {
                     }
                 }
                 if ((i + 4) <= name.length) {
-                    names = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3]+ " " + name[i + 4];
+                    names = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4];
                     if (names.equals(dsGrupo)) {
                         return true;
                     }
                 }
                 if ((i + 5) <= name.length) {
-                    names = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3]+ " " + name[i + 4]+ " " + name[i + 5];
+                    names = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4] + " " + name[i + 5];
                     if (names.equals(dsGrupo)) {
                         return true;
                     }

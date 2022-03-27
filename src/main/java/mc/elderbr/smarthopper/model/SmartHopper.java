@@ -127,7 +127,7 @@ public class SmartHopper{
     }
 
     public boolean equalsGrupo(Item item) {
-        return getGrupo().isContentItem(item);
+        return getGrupo().contentItem(item);
     }
 
     public boolean isGrupo() {
