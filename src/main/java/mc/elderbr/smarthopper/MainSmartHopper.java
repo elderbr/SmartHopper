@@ -13,10 +13,19 @@ import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
 
@@ -30,9 +39,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN +
                 "\n+---------------------------+\n" +
-                "| Smart Hopper           |\n" +
-                "| Version " + VGlobal.VERSION + "            |\n" +
-                "| Dircord: ElderBR#5398  |\n" +
+                "| Smart Hopper              |\n" +
+                "| Version " + VGlobal.VERSION + "             |\n" +
+                "| Dircord: ElderBR#5398     |\n" +
                 "+---------------------------+");
 
         // Iniciando o config padrão dos YML
@@ -42,6 +51,17 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         Conexao.CREATE_TABLES();
         Item.CreateItem();
         ItemDao.CreateDefault();
+
+        ItemStack itemStack = new ItemStack(Material.SPLASH_POTION);
+        PotionData potionData = new PotionData(PotionType.NIGHT_VISION);
+        PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+        meta.setBasePotionData(potionData);
+        itemStack.setItemMeta(meta);
+
+        Item item = new Item();
+        item.parseItem(itemStack);
+        Msg.ServidorBlue("Nome da poção >> "+item.getDsItem(), getClass());
+
 
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();

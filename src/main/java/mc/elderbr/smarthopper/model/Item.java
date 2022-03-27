@@ -1,9 +1,12 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,11 +21,12 @@ public class Item extends Traducao {
 
     public Item() {
     }
+
     public Item(String name) {
         dsItem = name;
     }
+
     public Item(ItemStack itemStack) {
-        parseItem(itemStack);
     }
 
     public int getCdItem() {
@@ -56,13 +60,13 @@ public class Item extends Traducao {
         // POÇÕES E SEU EFEITOS
         for (PotionType potion : PotionType.values()) {
             String name = potion.name().replaceAll("_", " ").toLowerCase();
-            if(!VGlobal.ITEM_NAME_LIST.contains(name)) {
+            if (!VGlobal.ITEM_NAME_LIST.contains(name)) {
                 VGlobal.ITEM_NAME_LIST.add(name);
             }
-            if(!VGlobal.ITEM_NAME_LIST.contains("splash " + name)) {
+            if (!VGlobal.ITEM_NAME_LIST.contains("splash " + name)) {
                 VGlobal.ITEM_NAME_LIST.add("splash " + name);
             }
-            if(!VGlobal.ITEM_NAME_LIST.contains("lingering " + name)) {
+            if (!VGlobal.ITEM_NAME_LIST.contains("lingering " + name)) {
                 VGlobal.ITEM_NAME_LIST.add("lingering " + name);
             }
         }
@@ -78,20 +82,37 @@ public class Item extends Traducao {
     }
 
     public Item parseItem(@NotNull ItemStack itemStack) {
+        if (itemStack.getType() == Material.POTION || itemStack.getType() == Material.SPLASH_POTION || itemStack.getType() == Material.LINGERING_POTION) {
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+            String potion = potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
+            switch (itemStack.getType()) {
+                case LINGERING_POTION:
+                    dsItem = "lingering " + potion;
+                    break;
+                case SPLASH_POTION:
+                    dsItem = "splash " + potion;
+                    break;
+                default:
+                    dsItem = potion;
+                    break;
+            }
+            return this;
+        }
         dsItem = itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
         return this;
     }
-    
-    public Item parseItem(@NotNull Material material){
-        dsItem = material.getKey().getKey().replaceAll("_"," ").toLowerCase();
+
+    public Item parseItem(@NotNull Material material) {
+        dsItem = material.getKey().getKey().replaceAll("_", " ").toLowerCase();
         return this;
     }
 
-    public ItemStack parseItemStack(@NotNull Item item){
-        return new ItemStack(Material.getMaterial(item.getDsItem().replaceAll("\\s","_").toUpperCase()));
+    public ItemStack parseItemStack(@NotNull Item item) {
+        return new ItemStack(Material.getMaterial(item.getDsItem().replaceAll("\\s", "_").toUpperCase()));
     }
-    public ItemStack getItemStack(){
-        return new ItemStack(Material.getMaterial(dsItem.replaceAll("\\s","_").toUpperCase()));
+
+    public ItemStack getItemStack() {
+        return new ItemStack(Material.getMaterial(dsItem.replaceAll("\\s", "_").toUpperCase()));
     }
 
 }
