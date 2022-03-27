@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.sqlite.SQLiteConfig;
 
@@ -18,7 +19,7 @@ public class Conexao {
 
     public static Connection connected() {
 
-        String url = "jdbc:sqlite:SmartHopper/smarthopper.db";
+        String url = "jdbc:sqlite:plugins/SmartHopper/smarthopper.db";
         try {
             Class.forName("org.sqlite.JDBC");
             SQLiteConfig config = new SQLiteConfig();
@@ -35,7 +36,7 @@ public class Conexao {
 
     public static boolean desconect() {
         try {
-            if (conexao.isClosed() == false) {
+            if (conexao != null) {
                 conexao.close();
             }
         } catch (SQLException e) {
@@ -59,6 +60,7 @@ public class Conexao {
                 "CREATE TABLE IF NOT EXISTS grupo (cdGrupo INTEGER PRIMARY KEY AUTOINCREMENT, dsGrupo TEXT NOT NULL UNIQUE);",
                 "CREATE TABLE IF NOT EXISTS grupoItem (cdGpItem INTEGER PRIMARY KEY AUTOINCREMENT, cdGrupo INTEGER NOT NULL, cdItem INTEGER NOT NULL, cdTraducao INTEGER NOT NULL, cdLang INTEGER NOT NULL);"
         };
+        Debug.Write("Criando tabelas");
         for (String sql : query) {
             try {
                 stm = repared(sql);
