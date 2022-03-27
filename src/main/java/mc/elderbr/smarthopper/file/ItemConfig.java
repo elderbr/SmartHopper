@@ -38,7 +38,6 @@ public class ItemConfig {
             try {
                 Debug.Write("Criando o arquivo item.yml");
                 ITEM_FILE.createNewFile();
-                createDefault();// CRIA TODOS OS ITENS
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,7 +45,6 @@ public class ItemConfig {
 
         Debug.Write("Carregando o arquivo item.yml");
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-        carregar();
     }
 
     private void update() {

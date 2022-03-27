@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper;
 
 import mc.elderbr.smarthopper.cmd.*;
+import mc.elderbr.smarthopper.dao.Conexao;
 import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
@@ -35,6 +36,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
         config = new Config();
+
+        Conexao.CREATE_TABLES();
 
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();

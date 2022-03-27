@@ -18,7 +18,7 @@ public class Conexao {
 
     public static Connection connected() {
 
-        String url = "jdbc:sqlite:escala.db";
+        String url = "jdbc:sqlite:SmartHopper/smarthopper.db";
         try {
             Class.forName("org.sqlite.JDBC");
             SQLiteConfig config = new SQLiteConfig();

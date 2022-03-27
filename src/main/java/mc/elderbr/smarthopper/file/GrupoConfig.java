@@ -49,11 +49,6 @@ public class GrupoConfig {
 
     public GrupoConfig() {
 
-        // POÇÕES
-        potion = new Pocao();
-        listPotion = potion.getListPotion();
-
-
         Debug.Write("Verificando se existe o arquivo grupo.yml");
         if (!fileConfig.exists()) {
             try {
@@ -62,7 +57,6 @@ public class GrupoConfig {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            createDefault();// CRIANDO O GRUPO DOS ITENS
         }
         Debug.Write("Carregando o arquivo grupo.yml");
         config = YamlConfiguration.loadConfiguration(fileConfig);
