@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -42,6 +43,22 @@ public class Pocao {
             listPotion.add("lingering " + name);// Lista dos itens
         }
         Collections.sort(listPotion);// ORGANIZANDO EM ORDEM ALFABETICA
+    }
+
+    public static void CreateDefault(){
+        for (PotionType potion : PotionType.values()) {
+            String name = potion.name().replaceAll("_", " ").toLowerCase();
+            if(!VGlobal.ITEM_NAME_LIST.contains(name)) {
+                VGlobal.ITEM_NAME_LIST.add(name);
+            }
+            if(!VGlobal.ITEM_NAME_LIST.contains("splash " + name)) {
+                VGlobal.ITEM_NAME_LIST.add("splash " + name);
+            }
+            if(!VGlobal.ITEM_NAME_LIST.contains("lingering " + name)) {
+                VGlobal.ITEM_NAME_LIST.add("lingering " + name);
+            }
+        }
+        Collections.sort(VGlobal.ITEM_NAME_LIST);
     }
 
     public String getPotion(ItemStack itemStack) {

@@ -11,12 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="12109b36-73cd-4704-a5ea-8e7e064a0b38" name="Default Changelist" comment="Alterando a versão do plugin para 3.4">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/MainSmartHopper.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/MainSmartHopper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/ItemConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/ItemConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Item.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Item.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/MainSmartHopper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/MainSmartHopper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/ItemConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/ItemConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/model/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/model/Pocao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/model/Pocao.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
