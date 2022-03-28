@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.dao;
 
 import mc.elderbr.smarthopper.file.TraducaoConfig;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
@@ -18,13 +19,20 @@ public class TraducaoDao {
     private String sql;
 
     TraducaoConfig traducaoConfig = new TraducaoConfig();
+    private Traducao traducao;
+    private Item item;
 
     public TraducaoDao() {
     }
 
     public void createBR() {
-        for (Map.Entry<String, Object> keys : traducaoConfig.configBR().getValues(false).entrySet()) {
-
+        for (Map.Entry<String, Object> values : traducaoConfig.configBR().getValues(false).entrySet()) {
+            item = VGlobal.ITEM_MAP_NAME.get(values.getKey());
+            if(item != null) {
+                item.setCdLang(2);
+                item.setDsTraducao(values.getValue().toString());
+                insert(item);
+            }
         }
     }
 
@@ -53,7 +61,11 @@ public class TraducaoDao {
                 }
             }
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao adicionar tradução!!!", "insert(Object value)", getClass(), e);
+            if (e.getErrorCode() != 19)
+                Msg.ServidorErro("Erro ao adicionar tradução!!!", "insert(Object value)", getClass(), e);
+        } finally {
+            Conexao.desconect();
+            close();
         }
         return 0;
     }
