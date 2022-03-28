@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class TraducaoConfig {
-    private final File directoryFile = new File(VGlobal.ARQUIVO.getAbsolutePath());
+    private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
 
     private BufferedWriter escrever;
     private BufferedReader reader;
@@ -22,6 +22,9 @@ public class TraducaoConfig {
     private File filePT = new File(directoryFile, "pt_pt.yml");
 
     public TraducaoConfig() {
+        if(!directoryFile.exists()){
+            directoryFile.mkdir();
+        }
         if(!fileBR.exists()) {
             createBR();
         }
