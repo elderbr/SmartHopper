@@ -17,7 +17,6 @@ public class LangDao {
     private static String sql;
 
     public LangDao() {
-        insert("en_us");
     }
 
     public static int insert(@NotNull Object lang) {
@@ -42,6 +41,24 @@ public class LangDao {
         } catch (SQLException e) {
             if (e.getErrorCode() != 19)
                 Msg.ServidorErro("Erro ao adicionar nova linguagem!!!", "insert(@NotNull Object lang)", LangDao.class, e);
+        } finally {
+            Conexao.desconect();
+            close();
+        }
+        return 0;
+    }
+
+    public static int INSERT_DEFAULT() {
+        try {
+            stm = Conexao.repared("INSERT INTO lang (dsLang) VALUES (\"en_us\"), (\"pt_br\"), (\"pt_tp\");");
+            stm.execute();
+            rs = stm.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 19)
+                Msg.ServidorErro("Erro ao adicionar nova linguagem!!!", "INSERT_DEFAULT", LangDao.class, e);
         } finally {
             Conexao.desconect();
             close();
@@ -87,22 +104,22 @@ public class LangDao {
         return null;
     }
 
-    public static void SELECT_ALL(){
+    public static void SELECT_ALL() {
         try {
             PreparedStatement stm = Conexao.repared("SELECT * FROM lang");
             ResultSet rs = stm.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Lang lang = new Lang();
                 lang.setCdLang(rs.getInt(1));
                 lang.setDsLang(rs.getString(2));
-                if(!VGlobal.LANG_LIST.contains(lang)){
+                if (!VGlobal.LANG_LIST.contains(lang)) {
                     VGlobal.LANG_LIST.add(lang);
                     VGlobal.LANG_MAP.put(lang.getDsLang(), lang);
                 }
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             Msg.ServidorErro("Erro ao buscar todos os Langs!!!", "SELECT_ALL()", LangDao.class, e);
-        }finally {
+        } finally {
             Conexao.desconect();
         }
     }

@@ -62,8 +62,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();
 
-        // LANGS CARREGA A LISTA DE LANGS DO BANCO DE DADOS
-        LangDao.SELECT_ALL();
+        // LANGS
+        LangDao.INSERT_DEFAULT();
+        LangDao.SELECT_ALL();// LANGS CARREGA A LISTA DE LANGS DO BANCO DE DADOS
         new TraducaoDao().createBR();
         Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
