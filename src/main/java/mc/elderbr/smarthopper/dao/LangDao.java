@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.jetbrains.annotations.NotNull;
@@ -84,6 +85,26 @@ public class LangDao {
             close();
         }
         return null;
+    }
+
+    public static void SELECT_ALL(){
+        try {
+            PreparedStatement stm = Conexao.repared("SELECT * FROM lang");
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                Lang lang = new Lang();
+                lang.setCdLang(rs.getInt(1));
+                lang.setDsLang(rs.getString(2));
+                if(!VGlobal.LANG_LIST.contains(lang)){
+                    VGlobal.LANG_LIST.add(lang);
+                    VGlobal.LANG_MAP.put(lang.getDsLang(), lang);
+                }
+            }
+        }catch (SQLException e){
+            Msg.ServidorErro("Erro ao buscar todos os Langs!!!", "SELECT_ALL()", LangDao.class, e);
+        }finally {
+            Conexao.desconect();
+        }
     }
 
     private static void close() {

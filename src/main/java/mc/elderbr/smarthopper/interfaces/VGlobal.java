@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.interfaces;
 
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
@@ -40,7 +41,9 @@ public interface VGlobal {
     Map<String, String> ITEM_MAP = new HashMap<>();
     List<String> ITEM_NAME_LIST = new ArrayList<>();
 
-    List<Location> LOCATION_LIST = new ArrayList<>();
+    // LISTA DO LANGS DISPONIVEL
+    List<Lang> LANG_LIST = new ArrayList<>();
+    Map<String, Lang> LANG_MAP = new HashMap<>();
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();

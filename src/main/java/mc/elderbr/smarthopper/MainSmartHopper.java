@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper;
 import mc.elderbr.smarthopper.cmd.*;
 import mc.elderbr.smarthopper.dao.Conexao;
 import mc.elderbr.smarthopper.dao.ItemDao;
+import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
@@ -59,6 +60,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();
+
+        // LANGS CARREGA A LISTA DE LANGS DO BANCO DE DADOS
+        LangDao.SELECT_ALL();
         TraducaoConfig traducaoConfig = new TraducaoConfig();
         Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
