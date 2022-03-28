@@ -53,6 +53,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
         config = new Config();
+        Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
         Conexao.CREATE_TABLES();
         Item.CreateItem();
@@ -65,8 +66,11 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // LANGS
         LangDao.INSERT_DEFAULT();
         LangDao.SELECT_ALL();// LANGS CARREGA A LISTA DE LANGS DO BANCO DE DADOS
-        new TraducaoDao().createBR();
-        Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
+
+        // TRADUÇÃO
+        TraducaoDao.createBR();
+        TraducaoDao.createPT();
+
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);
