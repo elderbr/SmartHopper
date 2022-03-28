@@ -7,9 +7,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Map;
 
-public class LangConfig {
+public class TraducaoConfig {
     private final File directoryFile = new File(VGlobal.ARQUIVO.getAbsolutePath());
 
     private BufferedWriter escrever;
@@ -22,7 +21,7 @@ public class LangConfig {
     private File fileBR = new File(directoryFile, "pt_br.yml");
     private File filePT = new File(directoryFile, "pt_pt.yml");
 
-    public LangConfig() {
+    public TraducaoConfig() {
         if(!fileBR.exists()) {
             createBR();
         }
