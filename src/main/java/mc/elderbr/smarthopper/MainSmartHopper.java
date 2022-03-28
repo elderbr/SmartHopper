@@ -10,6 +10,7 @@ import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
+import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
@@ -58,6 +59,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();
+        TraducaoConfig traducaoConfig = new TraducaoConfig();
         Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
         // ADICIONANDO OS EVENTOS
