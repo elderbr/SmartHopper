@@ -47,6 +47,26 @@ public class ItemDao {
         return 0;
     }
 
+    public void selectAll() {
+        try {
+            stm = Conexao.repared("SELECT * FROM item");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Item item = new Item();
+                item.setCdItem(rs.getInt(1));
+                item.setDsItem(rs.getString(2));
+                // ADICIONANDO NO OBJETO GLOBAL
+                VGlobal.ITEM_MAP_ID.put(item.getCdItem(), item);
+                VGlobal.ITEM_MAP_NAME.put(item.getDsItem(), item);
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao carregar todos os itens do banco!!!", "", getClass(), e);
+        } finally {
+            Conexao.desconect();
+            close();
+        }
+    }
+
     public static int size() {
         try {
             PreparedStatement preparedStatement = Conexao.repared("SELECT count(cdItem) FROM item");
@@ -64,10 +84,9 @@ public class ItemDao {
 
 
     public static void CreateDefault() {
-        List<String> list = VGlobal.ITEM_NAME_LIST;
-        if (VGlobal.ITEM_NAME_LIST.size() > size()) {
+        if (VGlobal.ITEM_NAME_LIST.size() > size()+1) {
             Debug.Write("Criando a tabela de item");
-            for (String item : list) {
+            for (String item : VGlobal.ITEM_NAME_LIST) {
                 try {
                     Debug.WriteMsg("Criando o item " + item);
                     PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");

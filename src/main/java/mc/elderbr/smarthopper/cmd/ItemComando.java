@@ -33,28 +33,21 @@ public class ItemComando implements CommandExecutor {
                 if (cmd.length() == 0) {// VERIFICA SE NÃO FOI DIGITADO E SE O ITEM É DIFERENTE DE AR
 
                     if (itemStack.getType() == Material.AIR) {
-                        player.sendMessage("§cSelecione um item ou escreva o nome ou ID!!!");
+                        player.sendMessage("§cSegure um item na mão ou escreva o nome ou ID!!!");
                         return true;
                     }
+                    // CONVERTE ITEM STACK PARA ITEM
+                    item = new Item(itemStack);
 
-                    // SE FOR LIVRO ENCANTADO
-                    if (Utils.isEnchantment(itemStack).size() > 0) {
-                        for (Item items : Utils.isEnchantment(itemStack)) {// PERCORRE TODOS OS ENCANTAMENTOS
-                            items.setDsLang(player);
-                            player.sendMessage("§9Item §bID: " + items.getCdItem() + " §e" + items.getDsTraducao());
-                        }
-                        player.sendMessage("-----------------------------------------------------");
-                        return true;
-                    }
                 } else {
                     try {
                         item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(cmd));//BUSCA O ITEM PELO O SEU ID
                     } catch (NumberFormatException e) {
-                        Msg.ServidorGreen("item name >> " + VGlobal.ITEM_MAP.get(cmd));
                         item = VGlobal.ITEM_MAP_NAME.get(VGlobal.ITEM_MAP.get(cmd));//BUSCA O ITEM PELO O NOME
                     }
                 }
                 if (item != null) {
+                    item = VGlobal.ITEM_MAP_NAME.get(item.getDsItem());
                     // MOSTRA MENSAGEM PARA O JOGADOR COM TODAS AS INFORMAÇÕES DO ITEM
                     Msg.Item(player, item);// Mostra o nome do item e seu ID
                 } else {

@@ -48,13 +48,11 @@ public class Item extends Traducao {
         this.dsItem = dsItem;
     }
 
-    public static List<Item> CreateItem() {
-        List<Item> list = new ArrayList<>();
+    public static void CreateItem() {
         for (Material m : Material.values()) {
             ItemStack itemStack = new ItemStack(m);
             if (itemStack != null && itemStack.getType() != Material.AIR) {
                 Item item = new Item().parseItem(itemStack);
-                list.add(item);
                 if (!VGlobal.ITEM_NAME_LIST.contains(item.getDsItem())) {
                     VGlobal.ITEM_NAME_LIST.add(item.getDsItem());
                 }
@@ -81,7 +79,6 @@ public class Item extends Traducao {
             }
         }
         Collections.sort(VGlobal.ITEM_NAME_LIST);
-        return list;
     }
 
     public Item parseItem(@NotNull ItemStack itemStack) {
@@ -97,7 +94,7 @@ public class Item extends Traducao {
                 case SPLASH_POTION:
                     dsItem = "splash " + potion;
                     break;
-                default:
+                case POTION:
                     dsItem = "potion "+potion;
                     break;
             }

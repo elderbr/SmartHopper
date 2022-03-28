@@ -54,6 +54,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         Conexao.CREATE_TABLES();
         Item.CreateItem();
         ItemDao.CreateDefault();
+        new ItemDao().selectAll();// CARREGA TODOS OS ITENS DO BANCO E ADICIONA NO OBJETO GLOBAL
 
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();

@@ -72,7 +72,7 @@ public class Msg {
 
     //========================== ITEM =================================================//
     public static void Item(Player player, Item item) {
-        player.sendMessage(Color("$2Item: $6" + item.getDsTraducao() + "$e ID: " + item.getCdItem()));
+        player.sendMessage(Color("$2Item: $6" + item.getDsItem() + "$e ID: " + item.getCdItem()));
     }
 
     public static void ItemNegar(Player player, Item item) {
