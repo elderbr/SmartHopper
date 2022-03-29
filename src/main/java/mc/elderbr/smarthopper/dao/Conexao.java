@@ -58,7 +58,7 @@ public class Conexao {
                 "CREATE TABLE IF NOT EXISTS traducao (cdTraducao INTEGER PRIMARY KEY AUTOINCREMENT, cdLang INTEGER NOT NULL, cdItem INTEGER NOT NULL DEFAULT 0, cdGrupo INTEGER NOT NULL DEFAULT 0, dsTraducao TEXT NOT NULL);",
                 "CREATE TABLE IF NOT EXISTS item (cdItem INTEGER PRIMARY KEY AUTOINCREMENT, dsItem TEXT NOT NULL UNIQUE);",
                 "CREATE TABLE IF NOT EXISTS grupo (cdGrupo INTEGER PRIMARY KEY AUTOINCREMENT, dsGrupo TEXT NOT NULL UNIQUE);",
-                "CREATE TABLE IF NOT EXISTS grupoItem (cdGpItem INTEGER PRIMARY KEY AUTOINCREMENT, cdGrupo INTEGER NOT NULL, cdItem INTEGER NOT NULL, cdTraducao INTEGER NOT NULL);"
+                "CREATE TABLE IF NOT EXISTS grupoItem (cdGpItem INTEGER PRIMARY KEY AUTOINCREMENT, cdGrupo INTEGER NOT NULL, cdItem INTEGER NOT NULL);"
         };
         Debug.Write("Criando tabelas");
         for (String sql : query) {
