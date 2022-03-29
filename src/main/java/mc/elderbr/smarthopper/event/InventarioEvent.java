@@ -93,7 +93,7 @@ public class InventarioEvent implements Listener {
                 VGlobal.GRUPO_MAP.put(grupoNovo.getDsGrupo(), grupoNovo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
                 VGlobal.GRUPO_ITEM_MAP_LIST.put(grupoNovo.getDsGrupo(), grupoNovoList);// LISTA GLOBAL DO GRUPO RETORNANDO A LISTA DE ITENS
 
-                new GrupoConfig(grupoNovo, Grupo.NEW);// ADICIONANDO O GRUPO NO BANCO
+                //new GrupoConfig(grupoNovo, Grupo.NEW);// ADICIONANDO O GRUPO NO BANCO
 
                 player.closeInventory();
                 player.sendMessage(Msg.Color("$6Grupo $a$l" + grupoNovo.getDsGrupo() + "$r$6 criado com sucesso!"));
@@ -117,7 +117,7 @@ public class InventarioEvent implements Listener {
                     }
                 }
 
-                new GrupoConfig(grupo, Grupo.UPGRADE);// ATUALIZA A LISTA DO ITENS DO GRUPO
+                //new GrupoConfig(grupo, Grupo.UPGRADE);// ATUALIZA A LISTA DO ITENS DO GRUPO
                 player.closeInventory();
                 grupo.setDsLang(player);
                 player.sendMessage(Msg.Color("$6Grupo $a$l" + grupo.getDsTraducao() + "$r$6 atualizado com sucesso!"));

@@ -24,10 +24,9 @@ public class Grupo implements Linguagem {
     private List<Item> listItem = new ArrayList<>();
 
     // AULIXIAR
-    private List<String> grupoList = new ArrayList<>();
+    private static List<String> grupoList = new ArrayList<>();
 
     public Grupo() {
-        createGrupos();// CRIA GRUPO PADRÃO
     }
 
     public int getCdGrupo() {
@@ -96,22 +95,22 @@ public class Grupo implements Linguagem {
         return dsTraducao;
     }
 
-    public Grupo addTraducao(String lang, String traducao){
+    public Grupo addTraducao(String lang, String traducao) {
         traducaoMap.put(lang, traducao);
         return this;
     }
 
-    public String toTraducao(){
+    public String toTraducao() {
         dsTraducao = traducaoMap.get(dsLang);
-        return ( dsTraducao == null ? dsGrupo : dsTraducao );
+        return (dsTraducao == null ? dsGrupo : dsTraducao);
     }
 
     public List<Item> getListItem() {
         return listItem;
     }
 
-    public Grupo addList(Item item){
-        if(listItem == null){
+    public Grupo addList(Item item) {
+        if (listItem == null) {
             listItem = new ArrayList<>();
         }
         listItem.add(item);
@@ -119,8 +118,7 @@ public class Grupo implements Linguagem {
     }
 
 
-
-    public List<String> createGrupos() {
+    public static List<String> CreateGrupos() {
         grupoList = new ArrayList<>();
 
         for (String item : VGlobal.ITEM_NAME_LIST) {
@@ -131,38 +129,38 @@ public class Grupo implements Linguagem {
                     if (!grupoList.contains(grupo)) {
                         grupoList.add(grupo);
                     }
-                    if ((i + 1) <= name.length) {
+                    if ((i + 1) < name.length) {
                         grupo = name[i] + " " + name[i + 1];
                         if (!grupoList.contains(grupo)) {
                             grupoList.add(grupo);
                         }
                     }
-                    if ((i + 2) <= name.length) {
+                    if ((i + 2) < name.length) {
                         grupo = name[i] + " " + name[i + 1] + " " + name[i + 2];
                         if (!grupoList.contains(grupo)) {
                             grupoList.add(grupo);
                         }
                     }
-                    if ((i + 3) <= name.length) {
+                    if ((i + 3) < name.length) {
                         grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3];
                         if (!grupoList.contains(grupo)) {
                             grupoList.add(grupo);
                         }
                     }
-                    if ((i + 4) <= name.length) {
+                    if ((i + 4) < name.length) {
                         grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4];
                         if (!grupoList.contains(grupo)) {
                             grupoList.add(grupo);
                         }
                     }
-                    if ((i + 5) <= name.length) {
+                    if ((i + 5) < name.length) {
                         grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4] + " " + name[i + 5];
                         if (!grupoList.contains(grupo)) {
                             grupoList.add(grupo);
                         }
                     }
                 }
-            }else{
+            } else {
                 if (!grupoList.contains(item)) {
                     grupoList.add(item);
                 }
@@ -175,21 +173,21 @@ public class Grupo implements Linguagem {
     /***
      * Adiciona item na lista do grupo
      */
-    public void createGrupoItem(){
-        Collections.sort(createGrupos());
-        for(String nameGrupo : grupoList){
+    private static void createGrupoItem() {
+        Collections.sort(grupoList);
+        for (String nameGrupo : grupoList) {
             Grupo grupo = new Grupo();
             grupo.setDsGrupo(nameGrupo);
             grupo.setDsLang("en_us");
             grupo.setDsTraducao(nameGrupo);
-            for(String nameItem : VGlobal.ITEM_NAME_LIST){
+            for (String nameItem : VGlobal.ITEM_NAME_LIST) {
                 Item item = new Item(nameItem);
-                if(grupo.contentItem(item)){
+                if (grupo.contentItem(item)) {
                     grupo.addList(item);
                 }
             }
             // LISTA DE NOMES DE GRUPO GLOBAL
-            if(!VGlobal.GRUPO_NAME_LIST.contains(grupo.dsGrupo)) {
+            if (!VGlobal.GRUPO_NAME_LIST.contains(grupo.dsGrupo)) {
                 VGlobal.GRUPO_NAME_LIST.add(grupo.dsGrupo);
                 VGlobal.GRUPO_LIST.add(grupo);
             }
@@ -211,31 +209,31 @@ public class Grupo implements Linguagem {
                 if (names.equals(dsGrupo)) {
                     return true;
                 }
-                if ((i + 1) <= name.length) {
+                if ((i + 1) < name.length) {
                     names = name[i] + " " + name[i + 1];
                     if (names.equals(dsGrupo)) {
                         return true;
                     }
                 }
-                if ((i + 2) <= name.length) {
+                if ((i + 2) < name.length) {
                     names = name[i] + " " + name[i + 1] + " " + name[i + 2];
                     if (names.equals(dsGrupo)) {
                         return true;
                     }
                 }
-                if ((i + 3) <= name.length) {
+                if ((i + 3) < name.length) {
                     names = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3];
                     if (names.equals(dsGrupo)) {
                         return true;
                     }
                 }
-                if ((i + 4) <= name.length) {
+                if ((i + 4) < name.length) {
                     names = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4];
                     if (names.equals(dsGrupo)) {
                         return true;
                     }
                 }
-                if ((i + 5) <= name.length) {
+                if ((i + 5) < name.length) {
                     names = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4] + " " + name[i + 5];
                     if (names.equals(dsGrupo)) {
                         return true;

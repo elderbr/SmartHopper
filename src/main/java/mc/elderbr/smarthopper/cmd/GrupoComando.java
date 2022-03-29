@@ -134,7 +134,7 @@ public class GrupoComando implements CommandExecutor {
                         }
                         if (grupo != null) {
                             grupo.setDsLang(player);
-                            new GrupoConfig(grupo, Grupo.DELETE);
+
                             player.sendMessage(Msg.Color("$eO grupo " + grupo.getDsTraducao() + " apagado com sucesso!"));
                             return true;
                         }

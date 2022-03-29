@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static mc.elderbr.smarthopper.model.Grupo.DELETE;
-
 public class GrupoConfig {
 
     private File fileConfig = new File(VGlobal.ARQUIVO, "grupo.yml");
@@ -61,39 +59,7 @@ public class GrupoConfig {
     }
 
     public GrupoConfig(Grupo grupo, int event) {
-
         config = YamlConfiguration.loadConfiguration(fileConfig);
-
-        switch (event) {
-            case Grupo.NEW:
-                // ADICIONANDO O NOME DO GRUPO
-                config.set(grupo.getDsGrupo().concat(".grupo_id"), grupo.getCdGrupo());
-                config.set(grupo.getDsGrupo().concat(".grupo_name"), grupo.getDsGrupo());
-                // ADICIONANDO A LINGUAGEM
-                break;
-            case DELETE:
-                // ADICIONANDO O NOME DO GRUPO
-                config.set(grupo.getDsGrupo(), null);
-
-                // REMOVE A VARIAL GLOBAL
-                VGlobal.GRUPO_MAP_ID.remove(grupo.getCdGrupo());// ADICIONANDO A BUSCA PELO ID
-                VGlobal.GRUPO_MAP_NAME.remove(grupo.getDsGrupo());// ADICIONANDO A BUSCA PELO NOME
-                VGlobal.GRUPO_NAME_LIST.remove(grupo.getDsGrupo());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
-                VGlobal.GRUPO_LANG_MAP.remove(grupo.getDsGrupo());// ADICIONANDO A BUSCA PELO LANG
-                VGlobal.GRUPO_MAP.remove(grupo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
-                VGlobal.GRUPO_ITEM_MAP_LIST.remove(grupo.getDsGrupo());// LISTA DE ITEM DO GRUPO EM TEXTO
-                break;
-
-        }
-        // ADICIONANDO ITENS DO GRUPO
-        if (event != DELETE) {
-            itemStringList = new ArrayList<>();
-            for (Item items : grupo.getListItem()) {
-                itemStringList.add(items.getDsItem());
-            }
-            config.set(grupo.getDsGrupo().concat(".grupo_item"), itemStringList);
-        }
-        save();
     }
 
     private void createDefault() {

@@ -14,6 +14,7 @@ import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -72,6 +73,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // TRADUÇÃO
         TraducaoDao.createBR();
         TraducaoDao.createPT();
+
+        // GRUPO
+        Grupo.CreateGrupos();
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);
