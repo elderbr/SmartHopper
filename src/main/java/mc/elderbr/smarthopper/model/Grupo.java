@@ -326,6 +326,7 @@ public class Grupo implements Linguagem {
         list.add("on");
         list.add("on a");
         list.add("the");
+        list.add("on a stick");
         return list;
     }
 
