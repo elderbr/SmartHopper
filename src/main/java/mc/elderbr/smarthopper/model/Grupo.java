@@ -189,6 +189,9 @@ public class Grupo implements Linguagem {
         Collections.sort(grupoList);
         for (String nameGrupo : grupoList) {
 
+            // NÃO É NOME VALIDO DE GRUPOS
+            if(NotGrupo().contains(nameGrupo)) continue;
+
             Grupo grupo = new Grupo();
             grupo.setDsGrupo(nameGrupo);
             for (String nameItem : VGlobal.ITEM_NAME_LIST) {
@@ -312,6 +315,18 @@ public class Grupo implements Linguagem {
             }
         }
         return false;
+    }
+
+    private static List<String> NotGrupo(){
+        List<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("a stick");
+        list.add("of");
+        list.add("of the");
+        list.add("on");
+        list.add("on a");
+        list.add("the");
+        return list;
     }
 
 }
