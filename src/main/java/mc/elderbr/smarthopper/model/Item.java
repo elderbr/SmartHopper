@@ -129,7 +129,7 @@ public class Item implements Linguagem {
     public static void CreateItem() {
         for (Material m : Material.values()) {
             ItemStack itemStack = new ItemStack(m);
-            if (itemStack != null && itemStack.getType() != Material.AIR) {
+            if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.getType().isItem()) {
                 Item item = new Item().parseItem(itemStack);
                 if (!VGlobal.ITEM_NAME_LIST.contains(item.getDsItem())) {
                     VGlobal.ITEM_NAME_LIST.add(item.getDsItem());

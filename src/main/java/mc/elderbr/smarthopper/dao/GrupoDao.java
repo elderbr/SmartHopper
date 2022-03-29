@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.utils.Msg;
 
@@ -10,6 +11,13 @@ import java.sql.SQLException;
 public class GrupoDao {
 
     public GrupoDao() {
+    }
+
+    public static void CREATE_GRUPO(){
+        for(Grupo grupo : VGlobal.GRUPO_LIST){
+            Msg.ServidorGold("Grupo nome >>> "+ grupo.getDsGrupo()+"\nLista de item \n"+ grupo.getListItem().toString());
+            Msg.PularLinha(GrupoDao.class);
+        }
     }
 
     public static void SELECT_ALL(){

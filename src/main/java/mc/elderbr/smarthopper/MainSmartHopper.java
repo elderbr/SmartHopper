@@ -1,10 +1,7 @@
 package mc.elderbr.smarthopper;
 
 import mc.elderbr.smarthopper.cmd.*;
-import mc.elderbr.smarthopper.dao.Conexao;
-import mc.elderbr.smarthopper.dao.ItemDao;
-import mc.elderbr.smarthopper.dao.LangDao;
-import mc.elderbr.smarthopper.dao.TraducaoDao;
+import mc.elderbr.smarthopper.dao.*;
 import mc.elderbr.smarthopper.event.AnvilCreate;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
@@ -76,6 +73,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // GRUPO
         Grupo.CreateGrupos();
+        GrupoDao.CREATE_GRUPO();
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);

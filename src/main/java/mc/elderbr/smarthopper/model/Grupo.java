@@ -166,6 +166,18 @@ public class Grupo implements Linguagem {
                 }
             }
         }
+
+        // Grupos extras
+        grupoList.add("redstones");
+        grupoList.add("flowers");
+        grupoList.add("stone tools");
+        grupoList.add("iron tools");
+        grupoList.add("golden tools");
+        grupoList.add("diamond tools");
+        grupoList.add("netherite tools");
+        grupoList.add("carne crua");
+
+
         createGrupoItem();
         return grupoList;
     }
@@ -176,18 +188,76 @@ public class Grupo implements Linguagem {
     private static void createGrupoItem() {
         Collections.sort(grupoList);
         for (String nameGrupo : grupoList) {
+
             Grupo grupo = new Grupo();
             grupo.setDsGrupo(nameGrupo);
-            grupo.setDsLang("en_us");
-            grupo.setDsTraducao(nameGrupo);
             for (String nameItem : VGlobal.ITEM_NAME_LIST) {
                 Item item = new Item(nameItem);
                 if (grupo.contentItem(item)) {
                     grupo.addList(item);
                 }
             }
+
+            // Ferramentas de Pedras
+            if (grupo.getDsGrupo().equals("stone tools")) {
+                grupo.addList(new Item("stone sword"));
+                grupo.addList(new Item("stone shovel"));
+                grupo.addList(new Item("stone pickaxe"));
+                grupo.addList(new Item("stone axe"));
+                grupo.addList(new Item("stone hoe"));
+            }
+
+            // Ferramentas de Ferro
+            if (grupo.getDsGrupo().equals("iron tools")) {
+                grupo.addList(new Item("iron sword"));
+                grupo.addList(new Item("iron shovel"));
+                grupo.addList(new Item("iron pickaxe"));
+                grupo.addList(new Item("iron axe"));
+                grupo.addList(new Item("iron hoe"));
+            }
+
+            // Ferramentas de Ouro
+            if (grupo.getDsGrupo().equals("golden tools")) {
+                grupo.addList(new Item("golden sword"));
+                grupo.addList(new Item("golden shovel"));
+                grupo.addList(new Item("golden pickaxe"));
+                grupo.addList(new Item("golden axe"));
+                grupo.addList(new Item("golden hoe"));
+            }
+
+            // Ferramentas de Diamante
+            if (grupo.getDsGrupo().equals("diamond tools")) {
+                grupo.addList(new Item("diamond sword"));
+                grupo.addList(new Item("diamond shovel"));
+                grupo.addList(new Item("diamond pickaxe"));
+                grupo.addList(new Item("diamond axe"));
+                grupo.addList(new Item("diamond hoe"));
+            }
+
+            // Ferramentas de netherite
+            if (grupo.getDsGrupo().equals("netherite tools")) {
+                grupo.addList(new Item("netherite sword"));
+                grupo.addList(new Item("netherite shovel"));
+                grupo.addList(new Item("netherite pickaxe"));
+                grupo.addList(new Item("netherite axe"));
+                grupo.addList(new Item("netherite hoe"));
+            }
+
+            // ITENS PARA SEREM ASSADOS
+            if (grupo.getDsGrupo().equals("carne crua")) {
+                grupo.addList(new Item("potato"));
+                grupo.addList(new Item("beef"));
+                grupo.addList(new Item("porkchop"));
+                grupo.addList(new Item("mutton"));
+                grupo.addList(new Item("chicken"));
+                grupo.addList(new Item("rabbit"));
+                grupo.addList(new Item("cod"));
+                grupo.addList(new Item("salmon"));
+                grupo.addList(new Item("kelp"));
+            }
+
             // LISTA DE NOMES DE GRUPO GLOBAL
-            if (!VGlobal.GRUPO_NAME_LIST.contains(grupo.dsGrupo)) {
+            if (grupo.getListItem().size() > 1 && !VGlobal.GRUPO_NAME_LIST.contains(grupo.dsGrupo)) {
                 VGlobal.GRUPO_NAME_LIST.add(grupo.dsGrupo);
                 VGlobal.GRUPO_LIST.add(grupo);
             }
