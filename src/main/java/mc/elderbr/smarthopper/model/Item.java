@@ -2,18 +2,18 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.Linguagem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Item implements Linguagem {
 
@@ -74,6 +74,7 @@ public class Item implements Linguagem {
         return this;
     }
 
+    @Override
     public Item setDsLang(Player player) {
         dsLang = player.getLocale();
         return this;

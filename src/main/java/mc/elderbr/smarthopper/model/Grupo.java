@@ -1,26 +1,29 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.interfaces.Linguagem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.*;
 
-public class Grupo extends Traducao {
+public class Grupo implements Linguagem {
 
     private int cdGrupo;
     private String dsGrupo;
-    private Map<String, Traducao> traducaoMap = new HashMap<>();
+
+    // LANG
+    private int cdLang;
+    private String dsLang;
+
+    // TRADUCAO
+    private int cdTraducao;
+    private String dsTraducao;
+
+    // LISTA DO TRADUÇÃO
+    private Map<String, String> traducaoMap = new HashMap<>();
     private List<Item> listItem = new ArrayList<>();
 
     // AULIXIAR
-    public final static int NEW = 0, UPGRADE = 1, DELETE = 2;
     private List<String> grupoList = new ArrayList<>();
 
     public Grupo() {
@@ -43,12 +46,68 @@ public class Grupo extends Traducao {
         this.dsGrupo = dsGrupo;
     }
 
-    public List<Item> getListItem() {
-        return listItem;
+    @Override
+    public Grupo setCdLang(int codigo) {
+        cdLang = codigo;
+        return this;
     }
 
-    public void setListItem(List<Item> listItem) {
-        this.listItem = listItem;
+    @Override
+    public int getCdLang() {
+        return cdLang;
+    }
+
+    @Override
+    public Grupo setDsLang(String lang) {
+        dsLang = lang;
+        return this;
+    }
+
+    @Override
+    public Grupo setDsLang(Player player) {
+        dsLang = player.getLocale();
+        return this;
+    }
+
+    @Override
+    public String getDsLang() {
+        return dsLang;
+    }
+
+    @Override
+    public Grupo setCdTraducao(int codigo) {
+        cdTraducao = codigo;
+        return this;
+    }
+
+    @Override
+    public int getCdTraducao() {
+        return cdTraducao;
+    }
+
+    @Override
+    public Grupo setDsTraducao(String traducao) {
+        dsTraducao = traducao;
+        return this;
+    }
+
+    @Override
+    public String getDsTraducao() {
+        return dsTraducao;
+    }
+
+    public Grupo addTraducao(String lang, String traducao){
+        traducaoMap.put(lang, traducao);
+        return this;
+    }
+
+    public String toTraducao(){
+        dsTraducao = traducaoMap.get(dsLang);
+        return ( dsTraducao == null ? dsGrupo : dsTraducao );
+    }
+
+    public List<Item> getListItem() {
+        return listItem;
     }
 
     public Grupo addList(Item item){
@@ -59,13 +118,7 @@ public class Grupo extends Traducao {
         return this;
     }
 
-    public Map<String, Traducao> getTraducaoMap() {
-        return traducaoMap;
-    }
 
-    public void setTraducaoMap(Map<String, Traducao> traducaoMap) {
-        this.traducaoMap = traducaoMap;
-    }
 
     public List<String> createGrupos() {
         grupoList = new ArrayList<>();
