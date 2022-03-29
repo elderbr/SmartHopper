@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.dao;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 
@@ -22,6 +23,11 @@ public class GrupoDao {
                 stm.setString(1, grupo.getDsGrupo());
                 stm.execute();
                 Debug.WriteMsg("Adicionado o grupo "+ grupo.getDsGrupo());
+                ResultSet rs = stm.getGeneratedKeys();
+                if(rs.next()){
+                    grupo.setCdGrupo(rs.getInt(1));
+                    INSERT_GRUPO_ITEM(grupo);
+                }
             } catch (SQLException e) {
                 if(e.getErrorCode()!=19)
                     Msg.ServidorErro("Erro ao adicionar grupo!!!", "CREATE_GRUPO", GrupoDao.class, e);
@@ -30,6 +36,21 @@ public class GrupoDao {
             }
         }
         Debug.WriteMsg("Fim de adicionado o grupo no banco");
+    }
+
+    public static void INSERT_GRUPO_ITEM(Grupo grupo){
+        for(Item item : grupo.getListItem()){
+            try {
+                PreparedStatement stm = Conexao.repared("INSERT INTO grupoItem (cdGrupo, cdItem) VALUES (?,?);");
+                stm.setInt(1, grupo.getCdGrupo());
+                stm.setInt(2, item.getCdItem());
+                stm.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }finally {
+                Conexao.desconect();
+            }
+        }
     }
 
     public static void SELECT_ALL() {

@@ -194,8 +194,8 @@ public class Grupo implements Linguagem {
 
             Grupo grupo = new Grupo();
             grupo.setDsGrupo(nameGrupo);
-            for (String nameItem : VGlobal.ITEM_NAME_LIST) {
-                Item item = new Item(nameItem);
+            for (Item item : VGlobal.ITEM_MAP_NAME.values()) {
+                if(item == null ) continue;
                 if (grupo.contentItem(item)) {
                     grupo.addList(item);
                 }
