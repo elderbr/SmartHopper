@@ -1,9 +1,11 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.interfaces.Linguagem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -11,15 +13,21 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Item extends Traducao {
+public class Item implements Linguagem {
 
     private int cdItem = 0;
     private String dsItem;
+    // LANG
+    private int cdLang;
+    private String dsLang;
+    // TRADUCAO
+    private int cdTraducao;
+    private String dsTraducao;
+
+    // LISTA DE TRADUÇÃO
+    private Map<String, String> traducao = new HashMap<>();
 
     public Item() {
     }
@@ -31,6 +39,7 @@ public class Item extends Traducao {
     public Item(ItemStack itemStack) {
         parseItem(itemStack);
     }
+
 
     public int getCdItem() {
         return cdItem;
@@ -46,6 +55,74 @@ public class Item extends Traducao {
 
     public void setDsItem(String dsItem) {
         this.dsItem = dsItem;
+    }
+
+    @Override
+    public Item setCdLang(int codigo) {
+        cdLang = codigo;
+        return this;
+    }
+
+    @Override
+    public int getCdLang() {
+        return cdLang;
+    }
+
+    @Override
+    public Item setDsLang(String lang) {
+        dsLang = lang;
+        return this;
+    }
+
+    public Item setDsLang(Player player) {
+        dsLang = player.getLocale();
+        return this;
+    }
+
+    @Override
+    public String getDsLang() {
+        return dsLang;
+    }
+
+    @Override
+    public Item setCdTraducao(int codigo) {
+        cdTraducao = codigo;
+        return this;
+    }
+
+    @Override
+    public int getCdTraducao() {
+        return cdTraducao;
+    }
+
+    @Override
+    public Item setDsTraducao(String traducao) {
+        dsTraducao = traducao;
+        return this;
+    }
+
+    @Override
+    public String getDsTraducao() {
+        return dsTraducao;
+    }
+
+    public Map<String, String> getTraducao() {
+        return traducao;
+    }
+
+    public void addTraducao(String lang, String traducao) {
+        if(this.traducao == null) this.traducao = new HashMap<>();
+        this.traducao.put(lang, traducao);
+    }
+
+    public String toTraducao(){
+        dsTraducao = traducao.get(dsLang);
+        return ( dsTraducao == null ? dsItem : dsTraducao );
+    }
+
+    @Override
+    public String toString() {
+        return dsItem;
     }
 
     public static void CreateItem() {

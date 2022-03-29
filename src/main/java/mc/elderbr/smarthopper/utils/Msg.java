@@ -72,10 +72,12 @@ public class Msg {
 
     //========================== ITEM =================================================//
     public static void Item(Player player, Item item) {
-        player.sendMessage(Color("$2Item: $6" + item.getDsItem() + "$e ID: " + item.getCdItem()));
+        item.setDsLang(player);
+        player.sendMessage(Color("$2Item: $6" + item.toTraducao() + "$e ID: " + item.getCdItem()));
     }
 
     public static void ItemNegar(Player player, Item item) {
+        item.setDsLang(player);
         player.sendMessage(Color("$cBloqueado$6 o item: " + item.getDsTraducao() + "$e ID: " + item.getCdItem()));
     }
 

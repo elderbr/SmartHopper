@@ -50,7 +50,7 @@ public class LangDao {
 
     public static int INSERT_DEFAULT() {
         try {
-            stm = Conexao.repared("INSERT INTO lang (dsLang) VALUES (\"en_us\"), (\"pt_br\"), (\"pt_tp\");");
+            stm = Conexao.repared("INSERT INTO lang (dsLang) VALUES (\"en_us\"), (\"pt_br\"), (\"pt_pt\");");
             stm.execute();
             rs = stm.getGeneratedKeys();
             if (rs.next()) {

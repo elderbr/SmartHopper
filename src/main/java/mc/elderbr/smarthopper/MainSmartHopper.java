@@ -33,6 +33,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
+import java.util.Map;
+
 public class MainSmartHopper extends JavaPlugin implements Listener {
 
     private Config config;
@@ -58,7 +60,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         Conexao.CREATE_TABLES();
         Item.CreateItem();
         ItemDao.CreateDefault();
-        new ItemDao().selectAll();// CARREGA TODOS OS ITENS DO BANCO E ADICIONA NO OBJETO GLOBAL
+        ItemDao.selectAll();// CARREGA TODOS OS ITENS DO BANCO E ADICIONA NO OBJETO GLOBAL
 
         itemConfig = new ItemConfig();
         grupoConfig = new GrupoConfig();
@@ -70,7 +72,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // TRADUÇÃO
         TraducaoDao.createBR();
         TraducaoDao.createPT();
-
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);

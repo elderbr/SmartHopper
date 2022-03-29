@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.dao;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 
@@ -47,23 +48,81 @@ public class ItemDao {
         return 0;
     }
 
-    public void selectAll() {
+    public Item select(Item item) {
         try {
-            stm = Conexao.repared("SELECT * FROM item");
+            stm = Conexao.repared("SELECT * FROM item i " +
+                    "LEFT JOIN traducao t ON t.cdItem = i.cdItem " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                    "WHERE i.cdItem = ? AND dsLang = ?");
+            stm.setInt(1, item.getCdItem());
+            stm.setString(2, item.getDsLang());
             rs = stm.executeQuery();
-            while (rs.next()) {
-                Item item = new Item();
-                item.setCdItem(rs.getInt(1));
-                item.setDsItem(rs.getString(2));
-                // ADICIONANDO NO OBJETO GLOBAL
-                VGlobal.ITEM_MAP_ID.put(item.getCdItem(), item);
-                VGlobal.ITEM_MAP_NAME.put(item.getDsItem(), item);
+            if (rs.next()) {
+                Item it = new Item();
+                it.setCdItem(rs.getInt("cdItem"));
+                it.setDsItem(rs.getString("dsItem"));
+                // LANG
+                it.setCdLang(rs.getInt("cdLang"));
+                it.setDsLang(rs.getString("dsLang"));
+                // TRADUÇÃO
+                it.setCdTraducao(rs.getInt("cdTraducao"));
+                it.setDsTraducao(rs.getString("dsTraducao"));
+                return it;
+            }
+            stm = Conexao.repared("SELECT * FROM item WHERE cdItem = ?");
+            stm.setInt(1, item.getCdItem());
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                Item it = new Item();
+                it.setCdItem(rs.getInt("cdItem"));
+                it.setDsItem(rs.getString("dsItem"));
+                return it;
             }
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao carregar todos os itens do banco!!!", "", getClass(), e);
+
         } finally {
             Conexao.desconect();
             close();
+        }
+        return null;
+    }
+
+    public static void selectAll() {
+        Item item = null;
+        try {
+            PreparedStatement stm = Conexao.repared("SELECT * FROM item i " +
+                    "LEFT JOIN traducao t ON t.cdItem = i.cdItem " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang");
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                item = new Item();
+                item.setCdItem(rs.getInt("cdItem"));
+                item.setDsItem(rs.getString("dsItem"));
+            }
+
+            while (rs.next()) {
+
+                if (!item.getDsItem().equals(rs.getString("dsItem"))) {
+
+                    // ADICIONANDO NO OBJETO GLOBAL
+                    VGlobal.ITEM_MAP_ID.put(item.getCdItem(), item);
+                    VGlobal.ITEM_MAP_NAME.put(item.getDsItem(), item);
+
+                    item = new Item();
+                    item.setCdItem(rs.getInt("cdItem"));
+                    item.setDsItem(rs.getString("dsItem"));
+                }
+
+                // LANG
+                if (rs.getString("dsLang") != null) {
+                    item.addTraducao(rs.getString("dsLang"), rs.getString("dsTraducao"));
+                }
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao carregar todos os itens do banco!!!", "", ItemDao.class, e);
+        } finally {
+            Conexao.desconect();
         }
     }
 
@@ -84,7 +143,7 @@ public class ItemDao {
 
 
     public static void CreateDefault() {
-        if (VGlobal.ITEM_NAME_LIST.size() > size()+1) {
+        if (VGlobal.ITEM_NAME_LIST.size() > size() + 1) {
             Debug.Write("Criando a tabela de item");
             for (String item : VGlobal.ITEM_NAME_LIST) {
                 try {
