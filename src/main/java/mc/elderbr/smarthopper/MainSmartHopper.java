@@ -74,6 +74,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // GRUPO
         Grupo.CreateGrupos();
         GrupoDao.CREATE_GRUPO();
+        GrupoDao.SELECT_ALL();
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);

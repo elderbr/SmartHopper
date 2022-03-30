@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
@@ -26,6 +27,7 @@ public class GrupoComando implements CommandExecutor {
     private String cmd;
 
     private Grupo grupo;
+    private List<Grupo> listGrupo;
     private ItemStack itemStack;
     private InventoryCustom inventory;
     private ItemStack itemSalve;
@@ -51,13 +53,12 @@ public class GrupoComando implements CommandExecutor {
                     try {
                         grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
                     } catch (NumberFormatException e) {
-                        grupo = VGlobal.GRUPO_MAP_NAME.get(VGlobal.GRUPO_MAP.get(cmd));
+                        grupo = VGlobal.GRUPO_MAP_NAME.get(cmd);
                     }
                     if (grupo != null) {
-
                         grupo.setDsLang(player);
                         inventoryCustom = new InventoryCustom();
-                        inventoryCustom.create(grupo.getDsTraducao().concat(Msg.Color(" $lID:$r"+ grupo.getCdGrupo())));
+                        inventoryCustom.create(grupo.toTraducao().concat(Msg.Color(" $lID:$r" + grupo.getCdGrupo())));
                         for (Item items : grupo.getListItem()) {
                             inventoryCustom.addItem(items.getItemStack());
                         }
@@ -74,23 +75,27 @@ public class GrupoComando implements CommandExecutor {
                             inventoryCustom.getInventory().setItem(53, itemSalve);
                         }
                         player.openInventory(inventoryCustom.getInventory());
-                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.getDsTraducao() + " $e$lID: " + grupo.getCdGrupo()));
+                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.toTraducao() + " $e$lID: " + grupo.getCdGrupo()));
                     } else {
                         player.sendMessage(Msg.Color("$2O grupo $e" + cmd + " $6não existe!"));
                     }
                 } else {
 
-                    if (VGlobal.GRUPO_LIST_ITEM.get(Utils.ToItemStack(itemStack)) == null) {
-                        player.sendMessage(Msg.Color("$2Não existe grupo para o item $e" + Utils.ToItemStack(itemStack) + "!"));
-                    } else {
-                        player.sendMessage("=====================================================");
-                        for (String grups : VGlobal.GRUPO_LIST_ITEM.get(Utils.ToItemStack(itemStack))) {
-                            grupo = VGlobal.GRUPO_MAP_NAME.get(grups);
-                            grupo.setDsLang(player);
-                            player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.getDsTraducao() + " $e$lID: " + grupo.getCdGrupo()));
-                        }
-                        player.sendMessage("=====================================================");
+                    Item item = new Item(itemStack);
+                    item.setDsLang(player);
+
+                    listGrupo = GrupoDao.SELECT_GRUPO_ITEM(VGlobal.ITEM_MAP_NAME.get(item.getDsItem()));
+
+                    if (listGrupo.isEmpty()) {
+                        player.sendMessage(Msg.Color("$2Não existe grupo para o item $e" + item.toTraducao() + "!"));
+                        return false;
                     }
+
+                    for (Grupo grupo : listGrupo) {
+                        grupo.setDsLang(player);
+                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.toTraducao() + " $e$lID: " + grupo.getCdGrupo()));
+                    }
+                    player.sendMessage("=====================================================");
                 }
 
             }
@@ -127,9 +132,9 @@ public class GrupoComando implements CommandExecutor {
             if (command.getName().contentEquals("removegrupo")) {
                 if (Config.ADM_LIST.contains(player.getName()) || Config.OPERADOR_LIST.contains(player.getName())) {
                     if (cmd.length() > 0) {
-                        try{
+                        try {
                             grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
-                        }catch (NumberFormatException e) {
+                        } catch (NumberFormatException e) {
                             grupo = VGlobal.GRUPO_MAP_NAME.get(cmd);
                         }
                         if (grupo != null) {
@@ -138,7 +143,7 @@ public class GrupoComando implements CommandExecutor {
                             player.sendMessage(Msg.Color("$eO grupo " + grupo.getDsTraducao() + " apagado com sucesso!"));
                             return true;
                         }
-                    }else{
+                    } else {
                         player.sendMessage("Escreva o nome do grupo que deseja apagar!!!\n/removegrupo <grupo>");
                         return false;
                     }

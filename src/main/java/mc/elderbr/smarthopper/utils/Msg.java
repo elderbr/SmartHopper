@@ -87,7 +87,7 @@ public class Msg {
 
     //========================== GRUPO =================================================//
     public static void Grupo(Player player, Grupo grupo){
-        player.sendMessage(Color("$d$lGrupo: $e" + grupo.getDsTraducao() + " $6ID: " + grupo.getCdGrupo()));
+        player.sendMessage(Color("$d$lGrupo: $e" + grupo.toTraducao() + " $6ID: " + grupo.getCdGrupo()));
     }
 
     public static void GrupoNaoExiste(Player player, String name){

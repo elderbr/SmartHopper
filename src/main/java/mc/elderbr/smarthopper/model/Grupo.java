@@ -203,60 +203,60 @@ public class Grupo implements Linguagem {
 
             // Ferramentas de Pedras
             if (grupo.getDsGrupo().equals("stone tools")) {
-                grupo.addList(new Item("stone sword"));
-                grupo.addList(new Item("stone shovel"));
-                grupo.addList(new Item("stone pickaxe"));
-                grupo.addList(new Item("stone axe"));
-                grupo.addList(new Item("stone hoe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("stone sword"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("stone shovel"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("stone pickaxe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("stone axe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("stone hoe"));
             }
 
             // Ferramentas de Ferro
             if (grupo.getDsGrupo().equals("iron tools")) {
-                grupo.addList(new Item("iron sword"));
-                grupo.addList(new Item("iron shovel"));
-                grupo.addList(new Item("iron pickaxe"));
-                grupo.addList(new Item("iron axe"));
-                grupo.addList(new Item("iron hoe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("iron sword"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("iron shovel"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("iron pickaxe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("iron axe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("iron hoe"));
             }
 
             // Ferramentas de Ouro
             if (grupo.getDsGrupo().equals("golden tools")) {
-                grupo.addList(new Item("golden sword"));
-                grupo.addList(new Item("golden shovel"));
-                grupo.addList(new Item("golden pickaxe"));
-                grupo.addList(new Item("golden axe"));
-                grupo.addList(new Item("golden hoe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("golden sword"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("golden shovel"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("golden pickaxe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("golden axe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("golden hoe"));
             }
 
             // Ferramentas de Diamante
             if (grupo.getDsGrupo().equals("diamond tools")) {
-                grupo.addList(new Item("diamond sword"));
-                grupo.addList(new Item("diamond shovel"));
-                grupo.addList(new Item("diamond pickaxe"));
-                grupo.addList(new Item("diamond axe"));
-                grupo.addList(new Item("diamond hoe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("diamond sword"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("diamond shovel"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("diamond pickaxe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("diamond axe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("diamond hoe"));
             }
 
             // Ferramentas de netherite
             if (grupo.getDsGrupo().equals("netherite tools")) {
-                grupo.addList(new Item("netherite sword"));
-                grupo.addList(new Item("netherite shovel"));
-                grupo.addList(new Item("netherite pickaxe"));
-                grupo.addList(new Item("netherite axe"));
-                grupo.addList(new Item("netherite hoe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("netherite sword"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("netherite shovel"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("netherite pickaxe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("netherite axe"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("netherite hoe"));
             }
 
             // ITENS PARA SEREM ASSADOS
             if (grupo.getDsGrupo().equals("carne crua")) {
-                grupo.addList(new Item("potato"));
-                grupo.addList(new Item("beef"));
-                grupo.addList(new Item("porkchop"));
-                grupo.addList(new Item("mutton"));
-                grupo.addList(new Item("chicken"));
-                grupo.addList(new Item("rabbit"));
-                grupo.addList(new Item("cod"));
-                grupo.addList(new Item("salmon"));
-                grupo.addList(new Item("kelp"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("potato"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("beef"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("porkchop"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("mutton"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("chicken"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("rabbit"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("cod"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("salmon"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("kelp"));
             }
 
             // LISTA DE NOMES DE GRUPO GLOBAL
