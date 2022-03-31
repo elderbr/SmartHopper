@@ -71,9 +71,11 @@ public class SmartHopper {
                 }
             }
             Msg.PulaPlayer(player);
+            return;
         }else{
             if(getType() instanceof Item item){
                 Msg.Item(player, item);
+                return;
             }
             if(getType() instanceof Grupo grupo){
                 // CRIANDO O INVENTARIO DO GRUPO
@@ -84,9 +86,10 @@ public class SmartHopper {
                 }
                 player.openInventory(inventory.getInventory());
                 Msg.Grupo(player, grupo);
+                return;
             }
+            Msg.PlayerGold(player, Msg.Color("Funil $cNÃO $rfoi configurado!!!"));
         }
-
     }
 
     public boolean igual(Item item) {
