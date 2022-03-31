@@ -97,7 +97,9 @@ public class Msg {
     public static void GrupoNegar(Player player, Grupo grupo) {
         player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.getDsTraducao() + "$e ID: " + grupo.getCdGrupo()));
     }
-
+    public static void PulaPlayer(Player player) {
+        player.sendMessage("=====================================================");
+    }
 
     //======================= ERRROS ====================================================//
 
@@ -126,5 +128,6 @@ public class Msg {
     public static String Color(String text) {
         return ChatColor.translateAlternateColorCodes('$', text);
     }
+
 
 }

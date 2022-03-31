@@ -3,237 +3,147 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
+public class SmartHopper {
 
-public class SmartHopper{
-
-    private Hopper hopper;
-
-    // ITEM
-    private int idItem;
-    private String nameItem;
-    private Item item;
-
-
-    // GRUPO
-    private int idGrupo;
-    private String nameGrupo;
-    private Grupo grupo;
+    private Hopper hopper = null;
+    private int code;
+    private String name;
+    private String nameHopper;
+    private String silaba;
 
     public SmartHopper(Hopper hopper) {
         this.hopper = hopper;
     }
 
     public SmartHopper(Inventory inventory) {
-        this.hopper = (Hopper) inventory.getLocation().getBlock().getState();
+        if (inventory.getType() == InventoryType.HOPPER) {
+            this.hopper = (Hopper) inventory;
+        }
     }
 
     public SmartHopper(Block block) {
-        this.hopper = (Hopper) block.getState();
-    }
-
-    public String getDsItem() {
-        return (hopper.getCustomName() != null ? hopper.getCustomName().toLowerCase().replaceAll("_", " ").trim() : "HOPPER");
-    }
-
-    public void setName(String name) {
-        this.hopper.setCustomName(name);
-    }
-
-    public static SmartHopper ParseHopper(Inventory inventory) {
-        return new SmartHopper(inventory);
-    }
-
-    public Item getItem() {
-        nameItem = getDsItem().replaceAll("#", "").trim();
-        try {
-            idItem = Integer.parseInt(nameItem.replace("i", ""));
-            item = VGlobal.ITEM_MAP_ID.get(idItem);
-        } catch (NumberFormatException e) {
-            item = VGlobal.ITEM_MAP_NAME.get(nameItem);
+        if (block.getType() == Material.HOPPER) {
+            this.hopper = (Hopper) block.getState();
         }
-        return item;
     }
 
-    public Item parseItem(String name) {
-        nameItem = name.replace("#", "");
-        try {
-            idItem = Integer.parseInt(nameItem.replace("i", ""));
-            this.item = VGlobal.ITEM_MAP_ID.get(idItem);
-        } catch (NumberFormatException e) {
-            this.item = VGlobal.ITEM_MAP_NAME.get(nameItem);
+    private SmartHopper(Block block, String name) {
+        hopper = (Hopper) block.getState();
+        hopper.setCustomName(name);
+    }
+
+    public String getNameHopper(){
+        nameHopper = (hopper.getCustomName() != null ? hopper.getCustomName().toLowerCase().replaceAll("_", " ").trim() : "HOPPER");
+        return nameHopper;
+    }
+
+    public String toSmartHopper() {
+        if(getType() instanceof Item item){
+            return  item.toTraducao();
         }
-        Msg.ServidorGreen("Item >> " + item.getDsItem(), getClass());
-        return item;
-    }
-
-    public boolean isItem() {
-        getItem();// BUSCA NO BANCO O NOME DO ITEM
-        return (item != null);
-    }
-
-    public boolean equalsItem(Item item) {
-        getItem();// BUSCA NO BANCO O NOME DO ITEM
-        if (this.item.getDsItem().equals(item.getDsItem())) {
-            return true;
+        if(getType() instanceof Grupo grupo){
+            return grupo.toTraducao();
         }
-        return false;
+        return "Hopper";
     }
 
-    public boolean equalsITem(String item) {
-        return getDsItem().equals(new Item(item).getDsItem());
-    }
-
-
-    /**
-     * GRUPO
-     **/
-
-    public Grupo parseGrupo(String hopper) {
-
-        nameGrupo = hopper.replaceAll("[*#]", "");// REMOVENDO A LETRA (G e * )
-
-        try {
-            // CONVERTE PARA INTEIRO
-            idGrupo = Integer.parseInt(nameGrupo.replace("g", ""));
-            grupo = VGlobal.GRUPO_MAP_ID.get(idGrupo);// BUSCA GRUPO PELO ID
-        } catch (NumberFormatException e) {
-            grupo = VGlobal.GRUPO_MAP_NAME.get(nameGrupo);// BUSCA PELO NOME DO GRUPO
-        }
-        return grupo;
-    }
-
-    public Grupo getGrupo() {
-        if (isGrupo()) {
-            nameGrupo = getDsItem().replaceAll("[*#]", "").trim();// REMOVENDO A LETRA (#*)
-            try {
-                // CONVERTE PARA INTEIRO
-                idGrupo = Integer.parseInt(nameGrupo.replace("g", ""));
-                grupo = VGlobal.GRUPO_MAP_ID.get(idGrupo);// BUSCA GRUPO PELO ID
-            } catch (NumberFormatException e) {
-                grupo = VGlobal.GRUPO_MAP_NAME.get(nameGrupo);// BUSCA PELO NOME DO GRUPO
+    public void msgPlayerSmartHopper(Player player) {
+        getNameHopper();
+        if (nameHopper.contains(";")) {
+            String[] lista = nameHopper.split(";");
+            Msg.PulaPlayer(player);
+            for (String values : lista) {
+                SmartHopper smart = new SmartHopper(hopper.getBlock(), values);
+                if(smart.getType() instanceof Item items){
+                    Msg.Item(player, items);
+                }
+                if(smart.getType() instanceof Grupo grupo){
+                    Msg.Grupo(player, grupo);
+                }
             }
-            return grupo;
-        }
-        return null;
-    }
-
-    public boolean equalsGrupo(Item item) {
-        return getGrupo().contentItem(item);
-    }
-
-    public boolean isGrupo() {
-        if (getDsItem().contains("*") || getDsItem().startsWith("g") || getDsItem().startsWith("#g")) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isGrupoContains(Item item) {
-        this.item = VGlobal.ITEM_MAP_NAME.get(item.getDsItem());// BUSCA O ITEM PELO O NOME
-
-        grupo = parseGrupo(getDsItem());
-
-        // VERICA SE O HOPPER CONTEM O * E SE ELE É IGUAL A NULO
-        if (grupo == null) {
-            return false;
-        }
-        return grupo.getListItem().contains(this.item);// VERIFICAR SE EXISTE O ITEM NO GRUPO
-    }
-
-
-    public boolean isContainerList() {
-        return getDsItem().contains(";");
-    }
-
-    public boolean isItemGrupo(Item item) {
-        for (String args : getDsItem().split(";")) {
-            if (parseItem(args) instanceof Item) {
-                Msg.ServidorGreen("Item type");
-                return parseItem(args).equals(item);
-            } else if (parseGrupo(args) instanceof Grupo) {
-                Msg.ServidorGreen("grupo type");
-                return parseGrupo(args).getListItem().contains(item);
+            Msg.PulaPlayer(player);
+        }else{
+            if(getType() instanceof Item item){
+                Msg.Item(player, item);
+            }
+            if(getType() instanceof Grupo grupo){
+                // CRIANDO O INVENTARIO DO GRUPO
+                InventoryCustom inventory = new InventoryCustom();
+                inventory.create(grupo.toTraducao().concat(" §e§lID:"+grupo.getCdGrupo()));// NO DO INVENTARIO
+                for (Item items : grupo.getListItem()) {// ADICIONANDO OS ITENS NO INVENTARIO
+                    inventory.addItem(items.getItemStack());
+                }
+                player.openInventory(inventory.getInventory());
+                Msg.Grupo(player, grupo);
             }
         }
-        return false;
+
     }
 
-    /*** CRIANDO FILTRO ***/
-    public void addLore(String name) {
-        ItemStack itemStack = new ItemStack(hopper.getType());
-        ItemMeta meta = itemStack.getItemMeta();
-        List<String> list = new ArrayList<>();
-        list.add(name);
-        meta.setLore(list);
-        itemStack.setItemMeta(meta);
-        hopper.setType(itemStack.getType());
-    }
+    public boolean igual(Item item) {
+        getNameHopper();
+        if (nameHopper.contains(";")) {
+            String[] lista = nameHopper.split(";");
+            for (String values : lista) {
+                SmartHopper smart = new SmartHopper(hopper.getBlock(), values);
+                if(smart.getType() instanceof Item items){
+                    if(items.getCdItem() == item.getCdItem()) return false;
+                }
+                if(smart.getType() instanceof Grupo grupo){
+                    if(grupo.getListItem().contains(item)) return false;
+                }
+            }
+        }
 
-    public Hopper getHopper() {
-        return hopper;
+        SmartHopper smart = new SmartHopper(hopper.getBlock());
+        if(smart.getType() instanceof Item items){
+            if(items.getCdItem() == item.getCdItem()) return false;
+        }
+        if(smart.getType() instanceof Grupo grupo){
+            if(grupo.getListItem().contains(item)) return false;
+        }
+
+        if(nameHopper.equalsIgnoreCase("hopper")) return false;
+
+        return true;
     }
 
     public Object getType() {
-        String name = getDsItem().replace("#", "");
+        getNameHopper();
 
-        // VERIFICA SE O HOPPER É ITEM
-        try {
-            item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(name.replace("i", "")));
-        } catch (NumberFormatException e) {
-            item = VGlobal.ITEM_MAP_NAME.get(name);
-        }
+        silaba = nameHopper.replaceAll("[#\\*]", "").substring(0, 1);
+        name = nameHopper.replaceAll("[#\\*]", "");
 
-        // VERIFICA SE O HOPPER É ITEM
-        try {
-            grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(name.replaceAll("[g*]", "")));
-        } catch (NumberFormatException e) {
-            grupo = VGlobal.GRUPO_MAP_NAME.get(name.replaceAll("[*]", ""));
-        }
-        // SE O ITEM FOR DIFERENTE DE NULL RETORNA O ITEM
-        if (item != null) {
-            return item;
-        } else {// SE NÃO RETORNA O RESULTADO DO GRUPO
-            return grupo;
-        }
-    }
-
-    /*============  SLOTS  =============================*/
-    public Item getItem(int slot){
-        //return new Item(hopper.getInventory().getItem(slot));
-        return new Item();
-    }
-
-    public int firtEmpty(Item item){
-        int position = 0;
-        for(ItemStack items : hopper.getInventory().getContents()){
-            if(items.getType() != Material.AIR){
-                if(items.equals(item)){
-                    return position;
-                }
+        // VERIFICA SE É ITEM OU GRUPO
+        if (silaba.equalsIgnoreCase("i") || silaba.equalsIgnoreCase("g")) {
+            name = nameHopper.replaceAll("#", "").replaceAll("\\*", "").substring(1, nameHopper.length());
+            try {
+                code = Integer.parseInt(name);
+            } catch (NumberFormatException e) {
             }
-            position++;
         }
-        return -1;
-    }
 
-    public int firstEmpty(){
-        int position = 0;
-        for(ItemStack items : hopper.getInventory().getContents()){
-            if(items.getType() == Material.AIR){
-                    return position;
+        // RETORNA O GRUPO
+        if (nameHopper.contains("*") || silaba.equalsIgnoreCase("g")) {
+            if (code > 0) {
+                return VGlobal.GRUPO_MAP_ID.get(code);
             }
-            position++;
+            return VGlobal.GRUPO_MAP_NAME.get(name);
         }
-        return -1;
-    }
 
+        // RETORNA O ITEM
+        if (code > 0) {
+            return VGlobal.ITEM_MAP_ID.get(code);
+        }
+        return VGlobal.ITEM_MAP_NAME.get(name);
+    }
 }

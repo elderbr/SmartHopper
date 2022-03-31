@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.event;
 
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.SmartHopper;
@@ -46,7 +47,7 @@ public class MoveHopper implements Listener {
 
             // Item que está sendo transferido
             itemStack = event.getItem();
-            item = new Item(itemStack);
+            item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
 
             // Pegando o inventorio onde está o item
             inventory = event.getSource();
@@ -59,110 +60,12 @@ public class MoveHopper implements Listener {
 
             if (blockDown.getState().getType() == Material.HOPPER) {// Verifica se o bloco de baixo é um hopper
 
-                // SE FOR LIVRO ENCANTADO
-                if (itemStack.getType() == Material.ENCHANTED_BOOK) {
-                    item = Utils.isEnchantment(itemStack).get(0);
-                }
-                // SE FOR POÇÕES
-                if (itemStack.getType() == Material.POTION || itemStack.getType() == Material.SPLASH_POTION || itemStack.getType() == Material.LINGERING_POTION) {
-
-                }
-
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
                 for (Hopper hoppers : hopperList) {
-
                     smartHopper = new SmartHopper(hoppers);
-
-                    // BLOQUEIA A PASSAGEM DOS ITENS
-                    if (smartHopper.getDsItem().contains("#")) {
-
-                        isBloqueio = new ArrayList<>();
-
-                        // VERIFICA SE EXISTEM MAIS DE UM ITEM OU GRUPO PARA O MESMO FUNIL
-                        if (smartHopper.getDsItem().contains(";")) {
-                            for (String items : smartHopper.getDsItem().split(";")) {
-
-                                smartHopperAux = smartHopper;
-                                smartHopperAux.setName(items);
-
-                                // SE O HOPPER FOR ITEM
-                                if (smartHopperAux.getType() instanceof Item) {// VERIFICA SE O HOPPER ESTA CONFIGURADO PARA O ITEM
-                                    isBloqueio.add(smartHopperAux.equalsItem(item));
-                                }
-
-                                // SE O HOPPER FOR GRUPO
-                                if (smartHopperAux.getType() instanceof Grupo) {// VERIFICA SE O HOPPER ESTA CONFIGURADO PARA O GRUPO
-                                    isBloqueio.add(smartHopperAux.equalsGrupo(item));
-                                }
-                                // SE O ITEM FOR IGUAL AO HOPPER TRAVA A PASSAGEM
-                                if (isBloqueio.contains(true)) {
-                                    event.setCancelled(true);
-                                } else {// LIBERA A PASSAGEM DO ITEM
-                                    event.setCancelled(false);
-                                }
-                            }
-                        } else {
-                            // VERIFICA SE O HOPPER ESTA CONFIGURADO PARA O ITEM
-                            if (smartHopper.getType() instanceof Item) {
-                                isBloqueio.add(smartHopper.equalsItem(item));
-                            }
-                            // VERIFICA SE O HOPPER ESTA CONFIGURADO PARA O GRUPO
-                            if (smartHopper.getType() instanceof Grupo) {
-                                isBloqueio.add(smartHopper.equalsGrupo(item));
-                            }
-                            if (isBloqueio.contains(true)) {
-                                event.setCancelled(true);
-                            } else {// LIBERA A PASSAGEM DO ITEM
-                                event.setCancelled(false);
-                            }
-                        }
-                    } else {
-
-                        // VERIFICA SE EXISTEM MAIS DE UM ITEM OU GRUPO PARA O MESMO FUNIL
-                        if (smartHopper.getDsItem().contains(";")) {
-
-                            for (String items : smartHopper.getDsItem().split(";")) {
-
-                                smartHopperAux = smartHopper;
-                                smartHopperAux.setName(items);
-
-                                // SMARTHOPPER É ITEM
-                                if (smartHopperAux.getType() instanceof Item) {
-                                    if (smartHopperAux.equalsItem(item)) {// VERIFICA SE O ID DO HOPPER É IGUAL DO ITEM
-                                        event.setCancelled(false);
-                                    }
-                                }
-                                // SMARTHOPPER É GRUPO
-                                if (smartHopperAux.getType() instanceof Grupo) {
-                                    if (smartHopperAux.equalsGrupo(item)) {// VERIFICA SE ITEM COMTÉM NO GRUPO
-                                        event.setCancelled(false);
-                                    }
-                                }
-                            }
-                        }
-
-                        // SMARTHOPPER É ITEM
-                        if (smartHopper.getType() instanceof Item) {
-                            if (smartHopper.equalsItem(item)) {// VERIFICA SE O ID DO HOPPER É IGUAL DO ITEM
-                                event.setCancelled(false);
-                            }
-                        }
-
-                        // SMARTHOPPER É GRUPO
-                        if (smartHopper.getType() instanceof Grupo) {
-                            if (smartHopper.equalsGrupo(item)) {// VERIFICA SE ITEM COMTÉM NO GRUPO
-                                event.setCancelled(false);
-                            }
-                        }
-                    }
+                    event.setCancelled(smartHopper.igual(item));
                 }
-            }
 
-            if (destination.getType() == InventoryType.HOPPER && SmartHopper.ParseHopper(destination).getDsItem().equals("HOPPER")) {
-                event.setCancelled(false);// Ativa o movimento do item
-            }
-            if (destination.getType() != InventoryType.HOPPER) {
-                event.setCancelled(false);// Ativa o movimento do item
             }
         } catch (Exception e) {
             event.setCancelled(false);

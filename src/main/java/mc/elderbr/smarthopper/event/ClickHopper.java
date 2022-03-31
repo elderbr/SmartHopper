@@ -27,6 +27,9 @@ public class ClickHopper implements Listener {
     private Block block;
     private SmartHopper smartHopper;
     private InventoryCustom inventory;
+
+    private Item item;
+
     private Grupo grupo;
     private String nameGrupo;
     private ItemStack itemSalve;
@@ -39,6 +42,7 @@ public class ClickHopper implements Listener {
 
         player = event.getPlayer();
         itemStack = player.getInventory().getItemInMainHand();
+        item = new Item(itemStack);
 
         // RETORN SE O BLOCO CLICADO FOR DIFERENTE DO HOPPER OU SE
         if (event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.HOPPER) {
@@ -51,73 +55,8 @@ public class ClickHopper implements Listener {
         // SE FOR CLICADO NO HOPPER COM GRAVETO NA MÃO
         if (itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK) {
 
-            // VERIFICA SE EXISTE MAIS DE UM ITEM OU GRUPO SETADO NO HOPPER
-            if (smartHopper.getDsItem().contains(";")) {
-                for (String hopperName : smartHopper.getDsItem().split(";")) {
-                    if (Utils.getHopperType(hopperName) instanceof Item) {
-                        if (hopperName.contains("#")) {
-                            Msg.ItemNegar(player, (Item) Utils.getHopperType(hopperName));
-                        }else {
-                            Msg.Item(player, (Item) Utils.getHopperType(hopperName));
-                        }
-                    }
-                    if (Utils.getHopperType(hopperName) instanceof Grupo) {
-                        if (hopperName.contains("#")) {
-                            Msg.GrupoNegar(player, (Grupo) Utils.getHopperType(hopperName));
-                        } else {
-                            Msg.Grupo(player, (Grupo) Utils.getHopperType(hopperName));
-                        }
-                    }
-                }
-            }
-
-            // SE O HOPPER FOR DO TIPO ITEM
-            if (smartHopper.getType() instanceof Item) {
-                if (smartHopper.getDsItem().contains("#")) {
-                    Msg.ItemNegar(player, smartHopper.getItem());
-                }else {
-                    Msg.Item(player, smartHopper.getItem());
-                }
-                return;
-            }
-
-            // SE O HOPPER FOR DO TIPO GRUPO
-            if (smartHopper.getType() instanceof Grupo) {
-
-                grupo = smartHopper.getGrupo();// PEGA O ITEM
-                grupo.setDsLang(player);
-
-                // CRIANDO O INVENTARIO DO GRUPO
-                inventory = new InventoryCustom();
-                inventory.create(grupo.getDsTraducao().concat(" §e§lID:"+grupo.getCdGrupo()));// NO DO INVENTARIO
-                for (Item items : grupo.getListItem()) {// ADICIONANDO OS ITENS NO INVENTARIO
-                    inventory.addItem(items.getItemStack());
-                }
-
-                // VERIFICA SE O JOGAR É OPERADOR
-                if (Config.ADM_LIST.contains(player.getName()) || Config.OPERADOR_LIST.contains(player.getName())) {
-                    // CRIANDO O BOTÃO PARA SALVAR
-                    itemSalve = new ItemStack(Material.LIME_WOOL);
-                    meta = itemSalve.getItemMeta();
-                    meta.setDisplayName("§aSalva");
-                    lore = new ArrayList<>();
-                    lore.add("§3Salvar e atualiza o grupo");
-                    meta.setLore(lore);
-                    itemSalve.setItemMeta(meta);
-                    inventory.getInventory().setItem(53, itemSalve);
-                }
-                player.openInventory(inventory.getInventory());
-                if (smartHopper.getDsItem().contains("#")) {
-                    Msg.GrupoNegar(player, grupo);
-                } else {
-                    Msg.Grupo(player, grupo);
-                }
-                return;
-            }
-            // SE O HOPPER NÃO ESTIVER CONFIGURADO
-            if (smartHopper.getDsItem().equals("HOPPER")) {
-                player.sendMessage("§6O hopper §4não §6configurado!!!");
-            }
+            // SE EXISTIR MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL
+            smartHopper.msgPlayerSmartHopper(player);
         }
     }
 }
