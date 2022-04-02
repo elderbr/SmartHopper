@@ -26,7 +26,7 @@ public class SmartHopper {
 
     public SmartHopper(Inventory inventory) {
         if (inventory.getType() == InventoryType.HOPPER) {
-            this.hopper = (Hopper) inventory;
+            this.hopper = (Hopper) inventory.getLocation().getBlock().getState();
         }
     }
 
@@ -41,16 +41,16 @@ public class SmartHopper {
         hopper.setCustomName(name);
     }
 
-    public String getNameHopper(){
+    public String getNameHopper() {
         nameHopper = (hopper.getCustomName() != null ? hopper.getCustomName().toLowerCase().replaceAll("_", " ").trim() : "HOPPER");
         return nameHopper;
     }
 
     public String toSmartHopper() {
-        if(getType() instanceof Item item){
-            return  item.toTraducao();
+        if (getType() instanceof Item item) {
+            return item.toTraducao();
         }
-        if(getType() instanceof Grupo grupo){
+        if (getType() instanceof Grupo grupo) {
             return grupo.toTraducao();
         }
         return "Hopper";
@@ -63,24 +63,24 @@ public class SmartHopper {
             Msg.PulaPlayer(player);
             for (String values : lista) {
                 SmartHopper smart = new SmartHopper(hopper.getBlock(), values);
-                if(smart.getType() instanceof Item items){
+                if (smart.getType() instanceof Item items) {
                     Msg.Item(player, items);
                 }
-                if(smart.getType() instanceof Grupo grupo){
+                if (smart.getType() instanceof Grupo grupo) {
                     Msg.Grupo(player, grupo);
                 }
             }
             Msg.PulaPlayer(player);
             return;
-        }else{
-            if(getType() instanceof Item item){
+        } else {
+            if (getType() instanceof Item item) {
                 Msg.Item(player, item);
                 return;
             }
-            if(getType() instanceof Grupo grupo){
+            if (getType() instanceof Grupo grupo) {
                 // CRIANDO O INVENTARIO DO GRUPO
                 InventoryCustom inventory = new InventoryCustom();
-                inventory.create(grupo.toTraducao().concat(" §e§lID:"+grupo.getCdGrupo()));// NO DO INVENTARIO
+                inventory.create(grupo.toTraducao().concat(" §e§lID:" + grupo.getCdGrupo()));// NO DO INVENTARIO
                 for (Item items : grupo.getListItem()) {// ADICIONANDO OS ITENS NO INVENTARIO
                     inventory.addItem(items.getItemStack());
                 }
@@ -98,25 +98,28 @@ public class SmartHopper {
             String[] lista = nameHopper.split(";");
             for (String values : lista) {
                 SmartHopper smart = new SmartHopper(hopper.getBlock(), values);
-                if(smart.getType() instanceof Item items){
-                    if(items.getCdItem() == item.getCdItem()) return false;
+                if (smart.getType() instanceof Item items) {
+                    if (items.getDsItem().equalsIgnoreCase(item.getDsItem())) {
+                        return false;
+                    }
                 }
-                if(smart.getType() instanceof Grupo grupo){
-                    if(grupo.getListItem().contains(item)) return false;
+                if (smart.getType() instanceof Grupo grupo) {
+                    if (grupo.getListItem().contains(item)) {
+                        return false;
+                    }
                 }
             }
         }
 
-        SmartHopper smart = new SmartHopper(hopper.getBlock());
-        if(smart.getType() instanceof Item items){
-            if(items.getCdItem() == item.getCdItem()) return false;
+        SmartHopper smart = new SmartHopper(hopper);
+        if (smart.getType() instanceof Item items) {
+            if (items.getCdItem() == item.getCdItem())
+                return false;
         }
-        if(smart.getType() instanceof Grupo grupo){
-            if(grupo.getListItem().contains(item)) return false;
+        if (smart.getType() instanceof Grupo grupo) {
+            if (grupo.getListItem().contains(item))
+                return false;
         }
-
-        if(nameHopper.equalsIgnoreCase("hopper")) return false;
-
         return true;
     }
 

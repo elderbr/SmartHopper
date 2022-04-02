@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.SmartHopper;
+import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -59,13 +60,47 @@ public class MoveHopper implements Listener {
             blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
             if (blockDown.getState().getType() == Material.HOPPER) {// Verifica se o bloco de baixo é um hopper
-
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
                 for (Hopper hoppers : hopperList) {
                     smartHopper = new SmartHopper(hoppers);
-                    event.setCancelled(smartHopper.igual(item));
-                }
 
+                    String[] lista = smartHopper.getNameHopper().split(";");
+                    for (String values : lista) {
+                        SmartHopper smart = new SmartHopper(hoppers);
+                        if (smart.getType() instanceof Item items) {
+                            if (items.getDsItem().equalsIgnoreCase(item.getDsItem())) {
+                                event.setCancelled(false);
+                                return;
+                            }
+                        }
+                        if (smart.getType() instanceof Grupo grupo) {
+                            if (grupo.getListItem().contains(item)) {
+                                event.setCancelled(false);
+                                return;
+                            }
+                        }
+                    }
+
+
+                    if(smartHopper.getType() instanceof Item itemSmart){
+                        if(item.getCdItem() == itemSmart.getCdItem()){
+                            event.setCancelled(false);
+                            return;
+                        }
+                    }
+                    if(smartHopper.getType() instanceof Grupo grupoSmart){
+                        if(grupoSmart.contentItem(item)) {
+                            event.setCancelled(false);
+                            return;
+                        }
+                    }
+                }
+            }
+            if (destination.getType() == InventoryType.HOPPER && new SmartHopper(destination).toSmartHopper().equalsIgnoreCase("HOPPER")) {
+                event.setCancelled(false);// Ativa o movimento do item
+            }
+            if (destination.getType() != InventoryType.HOPPER) {
+                event.setCancelled(false);// Ativa o movimento do item
             }
         } catch (Exception e) {
             event.setCancelled(false);
