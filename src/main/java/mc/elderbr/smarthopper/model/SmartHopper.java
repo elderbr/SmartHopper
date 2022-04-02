@@ -92,37 +92,6 @@ public class SmartHopper {
         }
     }
 
-    public boolean igual(Item item) {
-        getNameHopper();
-        if (nameHopper.contains(";")) {
-            String[] lista = nameHopper.split(";");
-            for (String values : lista) {
-                SmartHopper smart = new SmartHopper(hopper.getBlock(), values);
-                if (smart.getType() instanceof Item items) {
-                    if (items.getDsItem().equalsIgnoreCase(item.getDsItem())) {
-                        return false;
-                    }
-                }
-                if (smart.getType() instanceof Grupo grupo) {
-                    if (grupo.getListItem().contains(item)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        SmartHopper smart = new SmartHopper(hopper);
-        if (smart.getType() instanceof Item items) {
-            if (items.getCdItem() == item.getCdItem())
-                return false;
-        }
-        if (smart.getType() instanceof Grupo grupo) {
-            if (grupo.getListItem().contains(item))
-                return false;
-        }
-        return true;
-    }
-
     public Object getType() {
         getNameHopper();
 
