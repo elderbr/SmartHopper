@@ -99,7 +99,7 @@ public class GrupoDao {
     public static void SELECT_ALL() {
         Grupo grupo = null;
         try {
-            PreparedStatement stm = Conexao.repared("SELECT * FROM grupoItem gi " +
+            PreparedStatement stm = Conexao.repared("SELECT gi.cdGpItem, g.cdGrupo, g.dsGrupo, i.cdItem, i.dsItem, l.cdLang, l.dsLang, t.cdTraducao, t.dsTraducao FROM grupoItem gi " +
                     "LEFT JOIN grupo g ON g.cdGrupo = gi.cdGrupo " +
                     "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
                     "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
@@ -122,6 +122,8 @@ public class GrupoDao {
                     grupo.setCdGrupo(rs.getInt("cdGrupo"));
                     grupo.setDsGrupo(rs.getString("dsGrupo"));
                 }
+
+                // ADICIONANDO AS TRADUÇÕES DO GRUPO
                 grupo.addTraducao(rs.getString("dsLang"), rs.getString("dsTraducao"));
 
                 // ADICIONANDO ITEM NA LISTA DO GRUPO

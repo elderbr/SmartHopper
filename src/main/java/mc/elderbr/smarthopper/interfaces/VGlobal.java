@@ -24,8 +24,6 @@ public interface VGlobal {
     // TODOS OS NOMES DO GRUPO QUE RETORNA O NOME EM INGLÊS
     Map<String, Grupo> GRUPO_MAP_NAME = new HashMap<>();
     // TODOS OS NOMES DO GRUPOS PEGANDO O LANG KEY E TRADUÇÃO
-    Map<String, Map<String, String>> GRUPO_LANG_MAP = new HashMap<>();
-    // TODOS OS NOMES DO GRUPOS E SUA TRADUÇÃO
     Map<String, String> GRUPO_MAP = new HashMap<>();
     // TODOS OS NOMES DO GRUPO
     List<String> GRUPO_NAME_LIST = new ArrayList<>();
@@ -46,7 +44,7 @@ public interface VGlobal {
 
     // LISTA DE TRADUCAO
     Map<Integer, Traducao> TRADUCAO_MAP_ITEM_NAME = new HashMap<>();
-    Map<String, Traducao> TRADUCAO_MAP_GRUPO_NAME = new HashMap<>();
+    Map<Integer, Traducao> TRADUCAO_MAP_GRUPO_NAME = new HashMap<>();
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();

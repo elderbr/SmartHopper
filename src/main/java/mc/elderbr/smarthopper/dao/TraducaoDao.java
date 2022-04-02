@@ -93,6 +93,30 @@ public class TraducaoDao {
         return 0;
     }
 
+    public static int INSERT(Grupo grupo) {
+        try {
+            PreparedStatement stm = Conexao.repared("INSERT INTO traducao (cdLang, cdGrupo, dsTraducao) SELECT ?, ?, ? " +
+                    "WHERE NOT EXISTS (SELECT 1 FROM traducao WHERE cdLang = ? AND cdGrupo = ?); ");
+            stm.setInt(1, grupo.getCdLang());
+            stm.setInt(2, grupo.getCdGrupo());
+            stm.setString(3, grupo.getDsTraducao());
+
+            stm.setInt(4, grupo.getCdLang());
+            stm.setInt(5, grupo.getCdGrupo());
+            stm.execute();
+            ResultSet rs = stm.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 19)
+                Msg.ServidorErro("Erro ao adicionar tradução!!!", "INSERT(Grupo grupo)", TraducaoDao.class, e);
+        } finally {
+            Conexao.desconect();
+        }
+        return 0;
+    }
+
     public static boolean UPDATE(Item item) {
         try {
             PreparedStatement stm = Conexao.repared("UPDATE traducao SET dsTraducao = ? WHERE cdTraducao = ?");
@@ -111,7 +135,8 @@ public class TraducaoDao {
 
     public static void SELECT_ALL(){
         try{
-           PreparedStatement stm = Conexao.repared("SELECT * FROM traducao t LEFT JOIN lang l ON l.cdLang = t.cdLang");
+           PreparedStatement stm = Conexao.repared("SELECT * FROM traducao t " +
+                   "LEFT JOIN lang l ON l.cdLang = t.cdLang");
            ResultSet rs = stm.executeQuery();
            while(rs.next()){
                if(rs.getInt("cdItem")>0){
@@ -133,7 +158,7 @@ public class TraducaoDao {
                    traducao.setCdLang(rs.getInt("cdLang"));
                    traducao.setDsLang(rs.getString("dsLang"));
 
-                   VGlobal.TRADUCAO_MAP_GRUPO_NAME.put(rs.getString("dsTraducao"), traducao);
+                   VGlobal.TRADUCAO_MAP_GRUPO_NAME.put(rs.getInt("cdGrupo"), traducao);
                }
            }
         }catch (SQLException e){

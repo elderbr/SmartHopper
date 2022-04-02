@@ -100,6 +100,10 @@ public class Grupo implements Linguagem {
         return this;
     }
 
+    public Map<String, String> getTraducaoMap(){
+        return traducaoMap;
+    }
+
     public String toTraducao() {
         dsTraducao = traducaoMap.get(dsLang);
         return (dsTraducao == null ? dsGrupo : dsTraducao);
