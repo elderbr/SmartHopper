@@ -67,7 +67,6 @@ public class TraducaoComando implements CommandExecutor {
                     } else {
                         Msg.PlayerGold(player, "Digite o código do grupo e a seu tradução!!!");
                     }
-
                     return false;
                 }
 

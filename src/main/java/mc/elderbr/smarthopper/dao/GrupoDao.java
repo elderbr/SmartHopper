@@ -127,7 +127,10 @@ public class GrupoDao {
                 grupo.addTraducao(rs.getString("dsLang"), rs.getString("dsTraducao"));
 
                 // ADICIONANDO ITEM NA LISTA DO GRUPO
-                grupo.addList(VGlobal.ITEM_MAP_ID.get(rs.getInt("cdItem")));
+                Item item = VGlobal.ITEM_MAP_ID.get(rs.getInt("cdItem"));
+                if(!grupo.getListItem().contains(item)) {
+                    grupo.addList(item);
+                }
 
 
             }
