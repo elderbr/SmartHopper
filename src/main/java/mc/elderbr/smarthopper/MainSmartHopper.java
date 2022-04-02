@@ -76,6 +76,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // TRADUÇÃO
         TraducaoDao.createBR();
         TraducaoDao.createPT();
+        itemConfig.createDefault();
 
         // GRUPO
         Grupo.CreateGrupos();

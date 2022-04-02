@@ -13,6 +13,7 @@ import org.bukkit.enchantments.Enchantment;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -93,12 +94,21 @@ public class ItemConfig {
         Debug.WriteMsg("Novos itens adicionados com sucesso!!!");
     }
 
-    private void createDefault() {
+    public void createDefault() {
 
         Debug.WriteMsg("Criando os item...");
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
 
-
+        for (Map.Entry<String, Item> items : VGlobal.ITEM_MAP_NAME.entrySet()) {
+            Item item = items.getValue();
+            config.set(item.getDsItem(), null);// Limpa os dados
+            config.set(item.getDsItem().concat(".code"), item.getCdItem());
+            config.set(item.getDsItem().concat(".name"), item.getDsItem());
+            if(!item.getTraducao().isEmpty()) {
+                config.set(item.getDsItem().concat(".traducao"), item.getTraducao());
+            }
+            save();
+        }
 
         Debug.WriteMsg("Itens criados com sucesso!!!");
     }

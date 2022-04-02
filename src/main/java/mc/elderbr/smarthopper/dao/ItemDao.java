@@ -48,15 +48,15 @@ public class ItemDao {
         return 0;
     }
 
-    public Item select(Item item) {
+    public static Item SELECT(Item item) {
         try {
-            stm = Conexao.repared("SELECT * FROM item i " +
+            PreparedStatement stm = Conexao.repared("SELECT * FROM item i " +
                     "LEFT JOIN traducao t ON t.cdItem = i.cdItem " +
                     "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
                     "WHERE i.cdItem = ? AND dsLang = ?");
             stm.setInt(1, item.getCdItem());
             stm.setString(2, item.getDsLang());
-            rs = stm.executeQuery();
+            ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Item it = new Item();
                 it.setCdItem(rs.getInt("cdItem"));
@@ -79,10 +79,9 @@ public class ItemDao {
                 return it;
             }
         } catch (SQLException e) {
-
+            Msg.ServidorErro("Erro ao buscar o item!!!", "SELECT(Item item)", ItemDao.class, e);
         } finally {
             Conexao.desconect();
-            close();
         }
         return null;
     }
