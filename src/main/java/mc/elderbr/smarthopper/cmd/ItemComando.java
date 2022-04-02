@@ -54,6 +54,7 @@ public class ItemComando implements CommandExecutor {
                     Msg.ItemNaoExiste(player, cmd);// O item não existe
                 }
             }
+
         }
         return false;
     }
