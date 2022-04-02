@@ -91,6 +91,7 @@ public class GrupoComando implements CommandExecutor {
                         return false;
                     }
 
+                    player.sendMessage("=====================================================");
                     for (Grupo grupo : listGrupo) {
                         grupo.setDsLang(player);
                         player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.toTraducao() + " $e$lID: " + grupo.getCdGrupo()));
