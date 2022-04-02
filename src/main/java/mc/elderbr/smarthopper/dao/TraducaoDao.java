@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -68,7 +69,7 @@ public class TraducaoDao {
         return 0;
     }
 
-    private static int INSERT(Item item) {
+    public static int INSERT(Item item) {
         try {
             PreparedStatement stm = Conexao.repared("INSERT INTO traducao (cdLang, cdItem, dsTraducao) SELECT ?, ?, ? " +
                     "WHERE NOT EXISTS (SELECT 1 FROM traducao WHERE cdLang = ? AND cdItem = ?); ");
@@ -90,6 +91,56 @@ public class TraducaoDao {
             Conexao.desconect();
         }
         return 0;
+    }
+
+    public static boolean UPDATE(Item item) {
+        try {
+            PreparedStatement stm = Conexao.repared("UPDATE traducao SET dsTraducao = ? WHERE cdTraducao = ?");
+            stm.setString(1, item.getDsTraducao());
+            stm.setInt(2, item.getCdTraducao());
+            if (stm.executeUpdate() > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao atualizar tradução!!!", " UPDATE(Item item)", TraducaoDao.class, e);
+        } finally {
+            Conexao.desconect();
+        }
+        return false;
+    }
+
+    public static void SELECT_ALL(){
+        try{
+           PreparedStatement stm = Conexao.repared("SELECT * FROM traducao t LEFT JOIN lang l ON l.cdLang = t.cdLang");
+           ResultSet rs = stm.executeQuery();
+           while(rs.next()){
+               if(rs.getInt("cdItem")>0){
+
+                   Traducao traducao = new Traducao();
+                   traducao.setCdTraducao(rs.getInt("cdTraducao"));
+                   traducao.setDsTraducao(rs.getString("dsTraducao"));
+
+                   traducao.setCdLang(rs.getInt("cdLang"));
+                   traducao.setDsLang(rs.getString("dsLang"));
+
+                   VGlobal.TRADUCAO_MAP_ITEM_NAME.put(rs.getInt("cdItem"), traducao);
+               }
+               if(rs.getInt("cdGrupo") > 0){
+                   Traducao traducao = new Traducao();
+                   traducao.setCdTraducao(rs.getInt("cdTraducao"));
+                   traducao.setDsTraducao(rs.getString("dsTraducao"));
+
+                   traducao.setCdLang(rs.getInt("cdLang"));
+                   traducao.setDsLang(rs.getString("dsLang"));
+
+                   VGlobal.TRADUCAO_MAP_GRUPO_NAME.put(rs.getString("dsTraducao"), traducao);
+               }
+           }
+        }catch (SQLException e){
+
+        }finally {
+            Conexao.desconect();
+        }
     }
 
     public static void createBR() {

@@ -16,6 +16,8 @@ commands:
       description: Adiciona Administrador para o SmartHopper
   removerAdm:
     description: Adiciona Operador para o SmartHopper
+  addTraducao:
+    description: Adiciona nova tradução para o item ou grupo
   livro:
     aliases: [ book, livro ]
     description: Recebe um livro com os nomes de todos os grupos

@@ -13,6 +13,7 @@ import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
@@ -76,6 +77,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // TRADUÇÃO
         TraducaoDao.createBR();
         TraducaoDao.createPT();
+        TraducaoDao.SELECT_ALL();
         itemConfig.createDefault();
 
         // GRUPO
@@ -110,6 +112,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getCommand("addAdm").setTabCompleter(new AdminstradorTabCompleter());
         getCommand("removerAdm").setExecutor(new AdminstradorComando());
         getCommand("removerAdm").setTabCompleter(new AdminstradorTabCompleter());
+
+        // TRADUÇÃO DO ITEM OU GRUPO
+        getCommand("addTraducao").setExecutor(new TraducaoComando());
 
         getCommand("livro").setExecutor(new LivroComando());
 

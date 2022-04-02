@@ -13,15 +13,17 @@ public class Traducao extends Lang {
         return cdTraducao;
     }
 
-    public void setCdTraducao(int cdTraducao) {
+    public Traducao setCdTraducao(int cdTraducao) {
         this.cdTraducao = cdTraducao;
+        return this;
     }
 
     public String getDsTraducao() {
         return dsTraducao;
     }
 
-    public void setDsTraducao(String dsTraducao) {
+    public Traducao setDsTraducao(String dsTraducao) {
         this.dsTraducao = dsTraducao;
+        return this;
     }
 }
