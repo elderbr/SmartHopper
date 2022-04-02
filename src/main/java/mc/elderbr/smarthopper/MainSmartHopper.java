@@ -56,8 +56,14 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
         Conexao.CREATE_TABLES();
-        Item.CreateItem();
-        ItemDao.CreateDefault();
+
+        // ADM E OPERADORES
+        AdmDao.getListJogador();// PEGA A LISTA DE ADM E OPERADORES
+
+
+        // CRIANDO ITENS E SALVANDO NO BANCO
+        Item.CreateItem();// CRIANDO ITENS
+        ItemDao.CreateDefault();// SALVANDO NO BANCO
         ItemDao.selectAll();// CARREGA TODOS OS ITENS DO BANCO E ADICIONA NO OBJETO GLOBAL
 
         itemConfig = new ItemConfig();
@@ -97,6 +103,12 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // REMOVE O GRUPO
         getCommand("removegrupo").setExecutor(new GrupoComando());
         getCommand("removegrupo").setTabCompleter(new GrupoTabCompleter());
+
+        // ADICIONA OU REMOVER ADMINISTRADOR
+        getCommand("addAdm").setExecutor(new AdminstradorComando());
+        getCommand("addAdm").setTabCompleter(new AdminstradorTabCompleter());
+        getCommand("removerAdm").setExecutor(new AdminstradorComando());
+        getCommand("removerAdm").setTabCompleter(new AdminstradorTabCompleter());
 
         getCommand("livro").setExecutor(new LivroComando());
 

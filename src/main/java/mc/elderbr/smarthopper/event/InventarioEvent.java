@@ -91,7 +91,6 @@ public class InventarioEvent implements Listener {
                 VGlobal.GRUPO_NAME_LIST.add(grupoNovo.getDsGrupo());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
                 //VGlobal.GRUPO_LANG_MAP.put(grupoNovo.getDsGrupo(), grupoNovo.getLang());// ADICIONANDO A BUSCA PELO LANG
                 VGlobal.GRUPO_MAP.put(grupoNovo.getDsGrupo(), grupoNovo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
-                VGlobal.GRUPO_ITEM_MAP_LIST.put(grupoNovo.getDsGrupo(), grupoNovoList);// LISTA GLOBAL DO GRUPO RETORNANDO A LISTA DE ITENS
 
                 //new GrupoConfig(grupoNovo, Grupo.NEW);// ADICIONANDO O GRUPO NO BANCO
 
@@ -106,7 +105,6 @@ public class InventarioEvent implements Listener {
                 grupo = VGlobal.GRUPO_MAP_NAME.get(VGlobal.GRUPO_MAP.get(nameGrupo));// BUSCA NO BANCO O GRUPO
 
                 grupo.getListItem().clear();// APAGANDO A LISTA DO GRUPO DOS ITENS
-                VGlobal.GRUPO_ITEM_MAP_LIST.get(grupo.getDsGrupo()).clear();// APAGANDO A LISTA GLOBAL DO GRUPO OS ITENS
 
                 // ADICIONANDO OS ITEM AO GRUPO
                 List<String> grupoNovoList = new ArrayList<>();

@@ -15,6 +15,8 @@ import java.util.Map;
 
 public interface VGlobal {
 
+    List<Jogador> JOGADOR_LIST = new ArrayList<>();
+
     // Grupo
     // TODOS OS IDs DO GRUPO QUE RETORNA O NOME EM INGLÊS
     Map<Integer, Grupo> GRUPO_MAP_ID = new HashMap<>();
@@ -28,10 +30,6 @@ public interface VGlobal {
     List<String> GRUPO_NAME_LIST = new ArrayList<>();
     // LISTA DE GRUPO
     List<Grupo> GRUPO_LIST = new ArrayList<>();
-    // ADICIONA LISTA DE ITEM AO NOME DO GRUPO
-    Map<String, List<String>> GRUPO_ITEM_MAP_LIST = new HashMap<>();
-    // CRIANDO LISTA DE ITEM QUE RETORNA O NOME DO GRUPO
-    Map<String, List<String>> GRUPO_LIST_ITEM = new HashMap<>();
 
     // Items
     Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();

@@ -1,10 +1,12 @@
 package mc.elderbr.smarthopper.utils;
 
+import mc.elderbr.smarthopper.interfaces.Jogador;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class Msg {
 
@@ -45,7 +47,7 @@ public class Msg {
     }
 
     public static void ServidorBlue(String msg, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE +" SmartHopper >> " + msg + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + " SmartHopper >> " + msg + " - Class: " + getClass.getSimpleName());
     }
 
     /**
@@ -70,6 +72,18 @@ public class Msg {
         player.sendMessage(ChatColor.RED + msg);
     }
 
+    //========================== JOGADOR =================================================//
+    public static void Jogador(@NotNull Jogador jogador, @NotNull Class classe) {
+        Bukkit.getServer().getConsoleSender().sendMessage(
+                "Codigo: " + jogador.getCdJogador()
+                        + "\nNome: " + jogador.getDsJogador()
+                        + "\nUUID: " + jogador.getUUID()
+                        + "\nTipo: " + jogador.toType()
+                        + "\nClasse: " + classe.getSimpleName()
+
+        );
+    }
+
     //========================== ITEM =================================================//
     public static void Item(Player player, Item item) {
         item.setDsLang(player);
@@ -86,17 +100,18 @@ public class Msg {
     }
 
     //========================== GRUPO =================================================//
-    public static void Grupo(Player player, Grupo grupo){
+    public static void Grupo(Player player, Grupo grupo) {
         player.sendMessage(Color("$d$lGrupo: $e" + grupo.toTraducao() + " $6ID: " + grupo.getCdGrupo()));
     }
 
-    public static void GrupoNaoExiste(Player player, String name){
+    public static void GrupoNaoExiste(Player player, String name) {
         player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
     }
 
     public static void GrupoNegar(Player player, Grupo grupo) {
         player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.getDsTraducao() + "$e ID: " + grupo.getCdGrupo()));
     }
+
     public static void PulaPlayer(Player player) {
         player.sendMessage("=====================================================");
     }
