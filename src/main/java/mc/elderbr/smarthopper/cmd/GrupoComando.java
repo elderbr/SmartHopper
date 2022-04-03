@@ -81,10 +81,10 @@ public class GrupoComando implements CommandExecutor {
                     }
                 } else {
 
-                    Item item = new Item(itemStack);
+                    Item item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
                     item.setDsLang(player);
 
-                    listGrupo = GrupoDao.SELECT_GRUPO_ITEM(VGlobal.ITEM_MAP_NAME.get(item.getDsItem()));
+                    listGrupo = GrupoDao.SELECT_GRUPO_ITEM(item);
 
                     if (listGrupo.isEmpty()) {
                         player.sendMessage(Msg.Color("$2Não existe grupo para o item $e" + item.toTraducao() + "!"));

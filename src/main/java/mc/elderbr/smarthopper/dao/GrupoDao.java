@@ -66,26 +66,20 @@ public class GrupoDao {
                     "WHERE gi.cdItem = ?");
             stm.setInt(1, item.getCdItem());
             ResultSet rs = stm.executeQuery();
-            if(rs.next()) {
-                grupo = new Grupo();
-                grupo.setCdGrupo(rs.getInt("cdGrupo"));
-                grupo.setDsGrupo(rs.getString("dsGrupo"));
-            }
 
             while (rs.next()) {
 
-                if(!grupo.getDsGrupo().equals(rs.getString("dsGrupo"))) {
-                    list.add(grupo);
-                    grupo = new Grupo();
-                    grupo.setCdGrupo(rs.getInt("cdGrupo"));
-                    grupo.setDsGrupo(rs.getString("dsGrupo"));
-                }
+                grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
                 // LANG
                 grupo.setCdLang(rs.getInt("cdLang"));
                 grupo.setDsLang(rs.getString("dsLang"));
                 // Tradução
                 grupo.setCdTraducao(rs.getInt("cdTraducao"));
                 grupo.setDsTraducao(rs.getString("dsTraducao"));
+
+                list.add(grupo);
 
             }
         } catch (SQLException e) {
@@ -128,7 +122,7 @@ public class GrupoDao {
 
                 // ADICIONANDO ITEM NA LISTA DO GRUPO
                 Item item = VGlobal.ITEM_MAP_ID.get(rs.getInt("cdItem"));
-                if(!grupo.getListItem().contains(item)) {
+                if (!grupo.getListItem().contains(item)) {
                     grupo.addList(item);
                 }
 
