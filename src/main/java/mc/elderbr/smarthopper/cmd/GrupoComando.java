@@ -104,7 +104,7 @@ public class GrupoComando implements CommandExecutor {
             /************  ADICIONA NOVO GRUPO     ************/
             if (command.getName().contentEquals("addgrupo")) {
 
-                if (Config.ADM_LIST.contains(player.getName()) || Config.OPERADOR_LIST.contains(player.getName())) {
+                if (Config.ADM_LIST.contains(player.getName())) {
                     if (cmd.length() > 4) {
                         inventory = new InventoryCustom();
                         inventory.createNewGrupo(cmd);

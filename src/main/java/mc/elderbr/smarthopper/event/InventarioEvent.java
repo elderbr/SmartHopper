@@ -1,7 +1,7 @@
 package mc.elderbr.smarthopper.event;
 
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
@@ -13,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -72,30 +71,21 @@ public class InventarioEvent implements Listener {
             // SALVAR NOVO GRUPO
             if (event.isLeftClick() && itemClick.getItemMeta().getLore() != null && itemClick.getItemMeta().getLore().contains(Msg.Color("$3Salva novo grupo"))) {
                 grupoNovo = new Grupo();
-                grupoNovo.setCdGrupo(0);
                 grupoNovo.setDsGrupo(titulo.substring(Msg.Color("$5$lGrupo Novo: $r").length(), titulo.length()).trim());
-                //grupoNovo.addTraducao(player.getLocale(), Utils.toUP(grupoNovo.getDsGrupo()));
+                grupoNovo.addTraducao(player.getLocale(), Utils.toUP(grupoNovo.getDsGrupo()));
 
                 // ADICIONANDO OS ITEM AO GRUPO
                 List<String> grupoNovoList = new ArrayList<>();
-                for (ItemStack items : inventory.getContents()) {
-                    if (items != null && !items.equals(itemBtnSalve)) {
-                        //grupoNovo.addItemList(items);
-                        //grupoNovoList.add(new Item(items).getDsGrupo());
+                for (ItemStack itemStack : inventory.getContents()) {
+                    if (itemStack != null && !itemStack.equals(itemBtnSalve)) {
+                        Item item = new Item(itemStack);
+                        grupoNovo.addList(item);
                     }
                 }
-
-                // ADICIONANDO A VARIAL GLOBAL
-                VGlobal.GRUPO_MAP_ID.put(grupoNovo.getCdGrupo(), grupoNovo);// ADICIONANDO A BUSCA PELO ID
-                VGlobal.GRUPO_MAP_NAME.put(grupoNovo.getDsGrupo(), grupoNovo);// ADICIONANDO A BUSCA PELO NOME
-                VGlobal.GRUPO_NAME_LIST.add(grupoNovo.getDsGrupo());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
-                //VGlobal.GRUPO_LANG_MAP.put(grupoNovo.getDsGrupo(), grupoNovo.getLang());// ADICIONANDO A BUSCA PELO LANG
-                VGlobal.GRUPO_MAP.put(grupoNovo.getDsGrupo(), grupoNovo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
-
-                //new GrupoConfig(grupoNovo, Grupo.NEW);// ADICIONANDO O GRUPO NO BANCO
-
                 player.closeInventory();
-                player.sendMessage(Msg.Color("$6Grupo $a$l" + grupoNovo.getDsGrupo() + "$r$6 criado com sucesso!"));
+                if (GrupoDao.INSERT(grupoNovo)) {
+                    player.sendMessage(Msg.Color("$6Grupo $a$l" + grupoNovo.getDsGrupo() + "$r$6 criado com sucesso!"));
+                }
             }
 
             // ALTERANDO GRUPO

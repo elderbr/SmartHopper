@@ -40,6 +40,33 @@ public class GrupoDao {
         Debug.WriteMsg("Fim de adicionado o grupo no banco");
     }
 
+    public static boolean INSERT(Grupo grupo) {
+        try {
+            PreparedStatement stm = Conexao.repared("INSERT INTO grupo (dsGrupo) VALUES (?)");
+            stm.setString(1, grupo.getDsGrupo());
+            stm.execute();
+            ResultSet rs = stm.getGeneratedKeys();
+            if (rs.next()) {
+                grupo.setCdGrupo(rs.getInt(1));
+                TraducaoDao.INSERT(grupo);
+                INSERT_GRUPO_ITEM(grupo);
+
+                // ADICIONANDO A VARIAL GLOBAL
+                VGlobal.GRUPO_MAP_ID.put(grupo.getCdGrupo(), grupo);// ADICIONANDO A BUSCA PELO ID
+                VGlobal.GRUPO_MAP_NAME.put(grupo.getDsGrupo(), grupo);// ADICIONANDO A BUSCA PELO NOME
+                VGlobal.GRUPO_NAME_LIST.add(grupo.getDsGrupo());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
+                VGlobal.GRUPO_MAP.put(grupo.getDsGrupo(), grupo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
+
+                return true;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao adicionar grupo!!!", "INSERT(Grupo grupo)", GrupoDao.class, e);
+        } finally {
+            Conexao.desconect();
+        }
+        return false;
+    }
+
     public static void INSERT_GRUPO_ITEM(Grupo grupo) {
         for (Item item : grupo.getListItem()) {
             try {
@@ -111,6 +138,7 @@ public class GrupoDao {
 
                     VGlobal.GRUPO_MAP_ID.put(grupo.getCdGrupo(), grupo);
                     VGlobal.GRUPO_MAP_NAME.put(grupo.getDsGrupo(), grupo);
+                    VGlobal.GRUPO_NAME_LIST.add(grupo.getDsGrupo());
 
                     grupo = new Grupo();
                     grupo.setCdGrupo(rs.getInt("cdGrupo"));
