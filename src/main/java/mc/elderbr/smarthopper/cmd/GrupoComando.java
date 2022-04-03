@@ -131,7 +131,7 @@ public class GrupoComando implements CommandExecutor {
 
             /************  REMOVER GRUPO     ************/
             if (command.getName().contentEquals("removegrupo")) {
-                if (Config.ADM_LIST.contains(player.getName()) || Config.OPERADOR_LIST.contains(player.getName())) {
+                if (Config.ADM_LIST.contains(player.getName())) {
                     if (cmd.length() > 0) {
                         try {
                             grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
@@ -139,9 +139,10 @@ public class GrupoComando implements CommandExecutor {
                             grupo = VGlobal.GRUPO_MAP_NAME.get(cmd);
                         }
                         if (grupo != null) {
-                            grupo.setDsLang(player);
-
-                            player.sendMessage(Msg.Color("$eO grupo " + grupo.getDsTraducao() + " apagado com sucesso!"));
+                            if (GrupoDao.DELETE(grupo)) {
+                                grupo.setDsLang(player);
+                                player.sendMessage(Msg.Color("$eO grupo " + grupo.getDsTraducao() + " apagado com sucesso!"));
+                            }
                             return true;
                         }
                     } else {

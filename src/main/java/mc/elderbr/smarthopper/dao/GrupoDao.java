@@ -67,6 +67,42 @@ public class GrupoDao {
         return false;
     }
 
+    public static boolean DELETE(Grupo grupo) {
+        try {
+            PreparedStatement stm = Conexao.repared("DELETE FROM grupo WHERE cdGrupo = ?");
+            stm.setInt(1, grupo.getCdGrupo());
+            if (stm.executeUpdate() > 0) {
+                DELETE_GRUPO_ITEM(grupo);
+
+                VGlobal.GRUPO_MAP_ID.remove(grupo.getCdGrupo());
+                VGlobal.GRUPO_MAP_NAME.remove(grupo.getDsGrupo());
+                VGlobal.GRUPO_NAME_LIST.remove(grupo.getDsGrupo());
+
+                return true;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao deleta o grupo!!!", "DELETE(Grupo grupo)", GrupoDao.class, e);
+        } finally {
+            Conexao.desconect();
+        }
+        return false;
+    }
+
+    private static boolean DELETE_GRUPO_ITEM(Grupo grupo) {
+        try {
+            PreparedStatement stm = Conexao.repared("DELETE FROM grupoItem WHERE cdGrupo = ?");
+            stm.setInt(1, grupo.getCdGrupo());
+            if (stm.executeUpdate() > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao deleta os item do grupo!!!", "DELETE_GRUPO_ITEM(Grupo grupo)", GrupoDao.class, e);
+        } finally {
+            Conexao.desconect();
+        }
+        return false;
+    }
+
     public static void INSERT_GRUPO_ITEM(Grupo grupo) {
         for (Item item : grupo.getListItem()) {
             try {

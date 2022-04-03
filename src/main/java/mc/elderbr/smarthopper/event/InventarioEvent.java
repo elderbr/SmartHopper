@@ -78,12 +78,12 @@ public class InventarioEvent implements Listener {
                 List<String> grupoNovoList = new ArrayList<>();
                 for (ItemStack itemStack : inventory.getContents()) {
                     if (itemStack != null && !itemStack.equals(itemBtnSalve)) {
-                        Item item = new Item(itemStack);
-                        grupoNovo.addList(item);
+                        grupoNovo.addList(VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem()));
                     }
                 }
                 player.closeInventory();
                 if (GrupoDao.INSERT(grupoNovo)) {
+                    grupoNovo.setDsGrupo(titulo.substring(Msg.Color("$5$lGrupo Novo: $r").length(), titulo.length()).trim());
                     player.sendMessage(Msg.Color("$6Grupo $a$l" + grupoNovo.getDsGrupo() + "$r$6 criado com sucesso!"));
                 }
             }
