@@ -63,7 +63,7 @@ public class GrupoComando implements CommandExecutor {
                             inventoryCustom.addItem(items.getItemStack());
                         }
                         // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
-                        if (Config.ADM_LIST.contains(player.getName()) || Config.OPERADOR_LIST.contains(player.getName())) {
+                        if (VGlobal.ADM_LIST.contains(player.getName())) {
                             // CRIANDO O BOTÃO PARA SALVAR
                             itemSalve = new ItemStack(Material.LIME_WOOL);
                             meta = itemSalve.getItemMeta();
@@ -104,7 +104,7 @@ public class GrupoComando implements CommandExecutor {
             /************  ADICIONA NOVO GRUPO     ************/
             if (command.getName().contentEquals("addgrupo")) {
 
-                if (Config.ADM_LIST.contains(player.getName())) {
+                if (VGlobal.ADM_LIST.contains(player.getName())) {
                     if (cmd.length() > 4) {
                         inventory = new InventoryCustom();
                         inventory.createNewGrupo(cmd);
@@ -131,7 +131,7 @@ public class GrupoComando implements CommandExecutor {
 
             /************  REMOVER GRUPO     ************/
             if (command.getName().contentEquals("removegrupo")) {
-                if (Config.ADM_LIST.contains(player.getName())) {
+                if (VGlobal.ADM_LIST.contains(player.getName())) {
                     if (cmd.length() > 0) {
                         try {
                             grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));

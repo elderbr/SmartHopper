@@ -45,8 +45,8 @@ public class InventarioEvent implements Listener {
         if (event.getCurrentItem() == null
                 || event.getCurrentItem().getType() == Material.AIR
                 || inventory.getType() != InventoryType.CHEST
-                || !Config.ADM_LIST.contains(player.getName())
-                && !Config.OPERADOR_LIST.contains(player.getName())) {
+                || !VGlobal.ADM_LIST.contains(player.getName())
+                ) {
             return;
         }
 

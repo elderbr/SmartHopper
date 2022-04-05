@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.file;
 
+import mc.elderbr.smarthopper.dao.AdmDao;
+import mc.elderbr.smarthopper.interfaces.Jogador;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.ConfigModel;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -12,6 +14,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,21 +27,11 @@ public class Config {
     private static YamlConfiguration YML;
     public static ConfigModel CONFIG_MODEL;
 
-    public static List<String> ADM_LIST;
-    public static List<String> OPERADOR_LIST;
-    public static List<String> LANG_LIST = new ArrayList<>();
-
-
     public Config() {
 
         CONFIG_MODEL = new ConfigModel();
 
         try {
-
-            // Se o diretorio não existir cria
-            if (!directoryFile.exists()) {
-                //directoryFile.mkdir();
-            }
             // Se o arquivo não existir cria
             if (!FILE_CONFIG.exists()) {
                 FILE_CONFIG.createNewFile();
@@ -48,99 +41,84 @@ public class Config {
             e.printStackTrace();
         }
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
-        ADM_LIST = YML.getStringList("adm");// Pega a lista de adm
-        OPERADOR_LIST = YML.getStringList("operador");// Pega a lista dos operadores
-        LANG_LIST = YML.getStringList("lang");// Pega lista de linguagem
     }
 
     //=================== VERSAO DO PLUGIN ===============================/
-    public static double VERSION(){
-        return Double.parseDouble(YML.getString("version").replaceAll(".",""));
+    public static double VERSION() {
+        return Double.parseDouble(YML.getString("version").replaceAll(".", ""));
     }
 
-    public static void SET_VERSION(String version) throws IOException {
-        YML.set("version", version);
+    public static void SET_VERSION(String version) {
+        try {
+            YML.setComments("version", Arrays.asList("Versão atual do plugin"));
+            YML.set("version", version);
+            SAVE();
+        } catch (IOException e) {
+            Msg.ServidorErro("Erro ao salvar a versão do plugin!!!", "", Config.class, e);
+        }
+    }
+
+    //=================== ADMINISTRADORES DO SMART HOPPER ===============================/
+    public static void ADD_ADM() {
+        try {
+            YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+            Collections.sort(VGlobal.ADM_LIST);
+            YML.setComments("adm", Arrays.asList("Administradores do SmartHopper"));
+            YML.set("adm", VGlobal.ADM_LIST);
+            SAVE();
+            Msg.ServidorGreen("Adicionando novo adm", Config.class);
+        } catch (IOException e) {
+            Msg.ServidorErro("Erro ao salvar a lista de administrador no arquivo config", "ADD_ADM", Config.class, e);
+        }
+    }
+
+    public static void REMOVER_ADM() {
+        try {
+            YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+            Collections.sort(VGlobal.ADM_LIST);
+            YML.setComments("adm", Arrays.asList("Administradores do SmartHopper"));
+            YML.set("adm", VGlobal.ADM_LIST);
+            SAVE();
+        } catch (IOException e) {
+            Msg.ServidorErro("Erro ao remover a lista de administrador no arquivo config", "REMOVER_ADM", Config.class, e);
+        }
+    }
+
+
+    //=================== LINGUAGENS USADAS NO JOGO ===============================/
+    public static void ADD_LANG() {
+        try {
+            YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+            Collections.sort(VGlobal.LANG_NAME_LIST);
+            YML.setComments("lang", Arrays.asList("Linguagens usadas na tradução"));
+            YML.set("lang", VGlobal.LANG_NAME_LIST);
+            SAVE();
+        } catch (IOException e) {
+            Msg.ServidorErro("Erro ao adicionar a lista de linguagem no arquivo config", "ADD_LANG", Config.class, e);
+        }
+    }
+
+    public static void REMOVER_LANG() {
+        try {
+            YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+            Collections.sort(VGlobal.LANG_NAME_LIST);
+            YML.setComments("lang", Arrays.asList("Linguagens usadas na tradução"));
+            YML.set("lang", VGlobal.LANG_NAME_LIST);
+            SAVE();
+        } catch (IOException e) {
+            Msg.ServidorErro("Erro ao remover a lista de linguagem no arquivo config", "ADD_LANG", Config.class, e);
+        }
+    }
+
+    private static void SAVE() throws IOException {
         YML.save(FILE_CONFIG);
-    }
-
-    //=================== ADMINSTRADORES ===============================/
-
-    public static boolean AddAdmList(String player) throws IOException {
-        if (!ADM_LIST.contains(player)) {// Se o player não estiver na lista adiciona
-            ADM_LIST.add(player);
-            Collections.sort(ADM_LIST);
-            YML.set("adm", ADM_LIST);
-            YML.save(FILE_CONFIG);
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean RemoveAddList(String player) throws IOException {
-        if (ADM_LIST.contains(player)) {
-            ADM_LIST.remove(player);// Remove da lista do adm
-            Collections.sort(ADM_LIST);
-            YML.set("adm", ADM_LIST);
-            YML.save(FILE_CONFIG);
-            return true;
-        }
-        return false;
-    }
-
-    //=================== OPERADORES ===============================/
-
-    public static boolean AddOperadorList(String player) throws IOException {
-        if (!OPERADOR_LIST.contains(player)) {
-            OPERADOR_LIST.add(player);
-            Collections.sort(OPERADOR_LIST);
-            YML.set("operador", OPERADOR_LIST);
-            YML.save(FILE_CONFIG);
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean RemoveOperadorList(String player) throws IOException {
-        if (OPERADOR_LIST.contains(player)) {
-            OPERADOR_LIST.remove(player);
-            Collections.sort(OPERADOR_LIST);
-            YML.set("operador", OPERADOR_LIST);
-            YML.save(FILE_CONFIG);
-            return true;
-        }
-        return false;
-    }
-
-    //================== LANGUAGEM ================================/
-
-    public List<String> getLangList() {
-        return LANG_LIST;
-    }
-
-    public static boolean AddLangList(String lang) throws IOException {
-        if (!LANG_LIST.contains(lang)) {
-            LANG_LIST.add(lang);
-            Collections.sort(LANG_LIST);
-            YML.set("lang", LANG_LIST);
-            YML.save(FILE_CONFIG);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean removerLangList(String lang) {
-        if (LANG_LIST.contains(lang)) {// Verifica se existe a linguagem na lista
-            LANG_LIST.remove(lang);// Remove da lista da linguagem
-            return true;
-        }
-        return false;
     }
 
     private void saveDefault() {
 
         CONFIG_MODEL = new ConfigModel();
         CONFIG_MODEL.setName("Separador inteligente - SmartHopper");
-        CONFIG_MODEL.setVersao(4.0);
+        CONFIG_MODEL.setVersao(VERSION());
 
         List<String> adm = new ArrayList<>();
         adm.add("ElderBR");
@@ -213,10 +191,7 @@ public class Config {
         CONFIG_MODEL.setVersao(4.0);
 
         // Adicionar Adm
-        CONFIG_MODEL.setAdm(ADM_LIST);
-
-        // Adicionar Operador
-        CONFIG_MODEL.setOperador(OPERADOR_LIST);
+        CONFIG_MODEL.setAdm(VGlobal.ADM_LIST);
 
         try {
 
@@ -273,11 +248,11 @@ public class Config {
         }
     }
 
-    public static YamlConfiguration GET_CONFIG(){
+    public static YamlConfiguration GET_CONFIG() {
         return YML;
     }
 
-    public static void REMOVER(){
+    public static void REMOVER() {
         // REMOVE OS CAMPOS DESNECESSARIOS
         YML.set("isUpgradeItem", null);
         YML.set("isUpgradeGrupo", null);

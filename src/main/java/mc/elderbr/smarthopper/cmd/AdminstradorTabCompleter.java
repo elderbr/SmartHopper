@@ -38,8 +38,8 @@ public class AdminstradorTabCompleter implements TabCompleter {
                     return list;
                 case "removeradm":
                     list = new ArrayList<>();
-                    for (Jogador jogador : VGlobal.JOGADOR_LIST) {
-                        list.add(jogador.getDsJogador());
+                    for (String jogador : VGlobal.ADM_LIST) {
+                        list.add(jogador);
                     }
                     return list;
             }

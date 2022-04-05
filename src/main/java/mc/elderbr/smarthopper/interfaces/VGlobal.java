@@ -17,6 +17,7 @@ import java.util.Map;
 public interface VGlobal {
 
     List<Jogador> JOGADOR_LIST = new ArrayList<>();
+    List<String> ADM_LIST = new ArrayList<>();
 
     // Grupo
     // TODOS OS IDs DO GRUPO QUE RETORNA O NOME EM INGLÊS
@@ -40,6 +41,7 @@ public interface VGlobal {
 
     // LISTA DO LANGS DISPONIVEL
     List<Lang> LANG_LIST = new ArrayList<>();
+    List<String> LANG_NAME_LIST = new ArrayList<>();
     Map<String, Lang> LANG_MAP = new HashMap<>();
 
     // LISTA DE TRADUCAO

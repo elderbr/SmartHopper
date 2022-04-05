@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -114,9 +115,11 @@ public class LangDao {
                 lang.setDsLang(rs.getString(2));
                 if (!VGlobal.LANG_LIST.contains(lang)) {
                     VGlobal.LANG_LIST.add(lang);
+                    VGlobal.LANG_NAME_LIST.add(lang.getDsLang());
                     VGlobal.LANG_MAP.put(lang.getDsLang(), lang);
                 }
             }
+            Config.ADD_LANG();// ADICIONANDO O LANG NO ARQUIVO CONFIG
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao buscar todos os Langs!!!", "SELECT_ALL()", LangDao.class, e);
         } finally {

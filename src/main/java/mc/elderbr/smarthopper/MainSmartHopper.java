@@ -9,30 +9,14 @@ import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
-import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
-
-import java.util.Map;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
 
@@ -54,12 +38,11 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
         config = new Config();
-        Config.GET_CONFIG().set("version", VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
         Conexao.CREATE_TABLES();
 
         // ADM E OPERADORES
-        AdmDao.getListJogador();// PEGA A LISTA DE ADM E OPERADORES
+        AdmDao.SELECT_ALL();// PEGA A LISTA DE ADM E OPERADORES
 
 
         // CRIANDO ITENS E SALVANDO NO BANCO
@@ -84,6 +67,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         Grupo.CreateGrupos();
         GrupoDao.CREATE_GRUPO();
         GrupoDao.SELECT_ALL();
+
+        config.SET_VERSION(VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
         // ADICIONANDO OS EVENTOS
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);
