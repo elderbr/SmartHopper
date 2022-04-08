@@ -50,6 +50,7 @@ public interface VGlobal {
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();
+    int VERSION_INT = Integer.parseInt(VERSION.replaceAll("[.]",""));
 
     File ARQUIVO = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper").getDataFolder().getAbsoluteFile();
     File FILE_LANG = new File(ARQUIVO+File.separator+"langs");

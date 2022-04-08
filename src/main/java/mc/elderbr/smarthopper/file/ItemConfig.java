@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.file;
 
+import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Debug;
@@ -13,7 +14,6 @@ import org.bukkit.enchantments.Enchantment;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -74,8 +74,6 @@ public class ItemConfig {
 
             }
         }
-        // ALTERA O NÚMERO DA VERSÃO DO PLUGIN
-        Config.REMOVER();// REMOVE OS CAMPOS DESNECESSARIOS
 
         idItem = config.getValues(false).size() + 1;// PEGA O TAMANHO A LISTA
         Debug.WriteMsg("Adicionando novos itens...");
@@ -96,21 +94,27 @@ public class ItemConfig {
 
     public void createDefault() {
 
-        Debug.WriteMsg("Criando os item...");
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
 
-        for (Map.Entry<String, Item> items : VGlobal.ITEM_MAP_NAME.entrySet()) {
-            Item item = items.getValue();
-            config.set(item.getDsItem(), null);// Limpa os dados
-            config.set(item.getDsItem().concat(".code"), item.getCdItem());
-            config.set(item.getDsItem().concat(".name"), item.getDsItem());
-            if(!item.getTraducao().isEmpty()) {
-                config.set(item.getDsItem().concat(".traducao"), item.getTraducao());
-            }
-            save();
-        }
+        // SALVA O ITEM DO ARQUIVO ITEM.YML NO BANCO
+        if (Config.VERSION() < VGlobal.VERSION_INT) {
+            Debug.WriteMsg("Criando os item...");
+            for (Map.Entry<String, Object> values : config.getValues(false).entrySet()) {
+                Item item = new Item();
+                item.setCdItem( config.getInt(values.getKey().concat(".item_id")));
+                item.setDsItem( config.getString(values.getKey().concat(".item_name")));
 
-        Debug.WriteMsg("Itens criados com sucesso!!!");
+                Msg.ServidorGreen("ITEM DO ARQUIVO >> "+ item.getDsItem(), getClass());
+
+                if ((config.get(values.getKey().concat(".lang"))) instanceof MemorySection) {
+                    MemorySection memorySection = ((MemorySection) config.get(values.getKey().concat(".lang")));
+                    for(Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()){
+                        item.addTraducao(langs.getKey(),langs.getValue().toString());
+                    }
+                }
+                ItemDao.INSERT(item);
+            }
+        }
     }
 
     private void carregar() {

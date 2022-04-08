@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class ItemDao {
 
@@ -44,6 +45,30 @@ public class ItemDao {
         } finally {
             Conexao.desconect();
             close();
+        }
+        return 0;
+    }
+
+    public static int INSERT(Item item){
+        try {
+            PreparedStatement stm = Conexao.repared("INSERT INTO item (cdItem, dsItem) VALUES (?,?)");
+            stm.setInt(1, item.getCdItem());
+            stm.setString(2, item.getDsItem());
+            stm.execute();
+            ResultSet rs = stm.getGeneratedKeys();
+            if(rs.next()){
+                int code = rs.getInt(1);
+                for(Map.Entry<String, String> values : item.getTraducao().entrySet()){
+                    item.setCdLang(VGlobal.LANG_MAP.get(values.getKey()).getCdLang());
+                    item.setDsTraducao(values.getValue());
+                    TraducaoDao.INSERT(item);
+                }
+                return code;
+            }
+        }catch (SQLException e){
+            Msg.ServidorErro("Erro ao adicionar novo item","", ItemDao.class, e);
+        }finally {
+            Conexao.desconect();
         }
         return 0;
     }

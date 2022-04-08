@@ -9,6 +9,7 @@ import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
+import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
@@ -23,7 +24,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
     private Config config;
     private ItemConfig itemConfig;
     private GrupoConfig grupoConfig;
-
+    private TraducaoConfig traducaoConfig;
 
     @Override
     public void onEnable() {
@@ -39,7 +40,17 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         saveDefaultConfig();
         config = new Config();
 
+        // CRIANDO TODAS AS TABELAS NO BANCO DE DADOS
         Conexao.CREATE_TABLES();
+
+        // Tradução dos itens
+        traducaoConfig = new TraducaoConfig();
+
+        // ARQUIVO ITEM.YML
+        itemConfig = new ItemConfig();
+        itemConfig.createDefault();
+
+        grupoConfig = new GrupoConfig();
 
         // ADM E OPERADORES
         AdmDao.SELECT_ALL();// PEGA A LISTA DE ADM E OPERADORES
@@ -49,9 +60,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         Item.CreateItem();// CRIANDO ITENS
         ItemDao.CreateDefault();// SALVANDO NO BANCO
         ItemDao.selectAll();// CARREGA TODOS OS ITENS DO BANCO E ADICIONA NO OBJETO GLOBAL
-
-        itemConfig = new ItemConfig();
-        grupoConfig = new GrupoConfig();
 
         // LANGS
         LangDao.INSERT_DEFAULT();
