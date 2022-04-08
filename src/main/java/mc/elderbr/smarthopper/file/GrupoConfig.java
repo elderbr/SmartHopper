@@ -12,13 +12,11 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GrupoConfig {
 
@@ -58,236 +56,39 @@ public class GrupoConfig {
         config = YamlConfiguration.loadConfiguration(fileConfig);
     }
 
-    public GrupoConfig(Grupo grupo, int event) {
-        config = YamlConfiguration.loadConfiguration(fileConfig);
-    }
-
-    private void createDefault() {
-
+    public void createYml() {
         Debug.WriteMsg("Criando grupos...");
-
-        inputStream = getClass().getResourceAsStream("/grupo.yml");
         config = YamlConfiguration.loadConfiguration(fileConfig);
-        try {
-
-            reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            while ((txtReader = reader.readLine()) != null) {
-
-                key = txtReader.substring(0, txtReader.indexOf(":"));
-                value = txtReader.substring(txtReader.indexOf(":") + 2, txtReader.length());
-
-                grupo = new Grupo();
-                grupo.setCdGrupo(idGrupo);
-                grupo.setDsGrupo(key);
-
-                /* CRIANDO O YML DO GRUPO */
-
-                // ADICIONANDO O NOME DO GRUPO
-                config.set(key.concat(".grupo_id"), idGrupo);
-                config.set(key.concat(".grupo_name"), key);
-                // ADICIONANDO LANG NA LISTA
-                langMap = new HashMap<>();
-                langMap.put("pt_br", StringEscapeUtils.unescapeJava(value));
-                config.set(key.concat(".lang"), langMap);
-
-                // ADICIONANDO OS ITEM AO GRUPO
-                itemStringList = new ArrayList<>();
-                for (Material materials : Material.values()) {
-
-                    nameMaterial = Utils.ToMaterial(materials);// CONVERTE MATERIAL PARA STRING
-
-                    // ITEM QUE NÃO FAZEM PARTE DA LISTA DO GRUPO
-
-                    // ADICIONA NA LISTA DE ITEM DO GRUPO
-                    /*if (grupo.isContentItem(nameMaterial) && !grupo.getDsGrupo().contains("potion")) {
-                        itemStringList.add(nameMaterial);
-                    }*/
-
-                    // Adiciona o carvão vegetal ao grupo de carvão
-                    if (grupo.getDsGrupo().equals("coal") && nameMaterial.equals("charcoal")) {
-                        itemStringList.add(nameMaterial);
-                    }
-
-                    // Adiciona a batata no grupo de assados
-                    if (grupo.getDsGrupo().equals("cooked") && nameMaterial.equals("baked potato")) {
-                        itemStringList.add(nameMaterial);
-                    }
-
-                    // Adiciona todos os tipos de fornalhas no grupo fornalhas
-                    if (grupo.getDsGrupo().equals("furnace") && nameMaterial.equals("smoker")) {
-                        itemStringList.add(nameMaterial);
-                    }
-
-                    // Adiconando cortado de pedras no grupo mes de trabalho
-                    if (grupo.getDsGrupo().equals("table") && nameMaterial.equals("stonecutter")) {
-                        itemStringList.add(nameMaterial);
-                    }
-
-                    // Grupo de redstones
-                    if (grupo.getDsGrupo().equals("redstones")) {
-                        if (nameMaterial.contains("redstone")
-                                || nameMaterial.equals("dispenser")
-                                || nameMaterial.equals("note block")
-                                || nameMaterial.contains("piston")
-                                || nameMaterial.equals("lever")
-                                || nameMaterial.contains("pressure plate")
-                                || nameMaterial.contains("button")
-                                || nameMaterial.contains("trapdoor")
-                                || nameMaterial.contains("tripwire")
-                                || nameMaterial.contains("chest")
-                                && !nameMaterial.contains("chestplate")
-                                || nameMaterial.contains("daylight")
-                                || nameMaterial.contains("hopper")
-                                || nameMaterial.contains("drooper")
-                                || nameMaterial.contains("observer")
-                                || nameMaterial.contains("iron door")
-                                || nameMaterial.contains("comparator")
-                                || nameMaterial.contains("repeater")) {
-                            itemStringList.add(nameMaterial);
-                        }
-                    }
-
-                    // Grupo de flores
-                    if (grupo.getDsGrupo().equals("flowers")) {
-                        if (nameMaterial.equals("grass")
-                                || nameMaterial.equals("fern")
-                                || nameMaterial.equals("dead bush")
-                                || nameMaterial.contains("seagrass")
-                                || nameMaterial.equals("sea pickle")
-                                || nameMaterial.equals("dandelion")
-                                || nameMaterial.equals("poppy")
-                                || nameMaterial.equals("blue orchid")
-                                || nameMaterial.equals("allium")
-                                || nameMaterial.equals("azure bluet")
-                                || nameMaterial.contains("tulip")
-                                || nameMaterial.equals("oxeye daisy")
-                                || nameMaterial.equals("cornflower")
-                                || nameMaterial.contains("lily")
-                                || nameMaterial.contains("rose")
-                                || nameMaterial.equals("vine")
-                                || nameMaterial.equals("sunflower")
-                                || nameMaterial.equals("lilac")
-                                || nameMaterial.equals("peony")
-                                || nameMaterial.equals("tall grass")
-                                || nameMaterial.equals("large fern")
-                        ) {
-                            itemStringList.add(nameMaterial);
-                        }
-                    }
-                    // Poções
-                    if (grupo.getDsGrupo().equals("potion")) {
-                        for (String potions : listPotion) {
-                            if (!potions.contains("lingering") && !potions.contains("splash") && !itemStringList.contains(potions)) {
-                                itemStringList.add(potions);
-                            }
-                        }
-                    }
-                    if (grupo.getDsGrupo().contains("splash")) {
-                        for (String potions : listPotion) {
-                            if (potions.contains("splash") && !itemStringList.contains(potions)) {
-                                itemStringList.add(potions);
-                            }
-                        }
-                    }
-                    if (grupo.getDsGrupo().contains("lingering")) {
-                        for (String potions : listPotion) {
-                            if (potions.contains("lingering") && !itemStringList.contains(potions)) {
-                                itemStringList.add(potions);
-                            }
-                        }
-                    }
-
-                }// FIM DO MATERIALS
-
-                // Ferramentas de Pedras
-                if (grupo.getDsGrupo().equals("stone tools")) {
-                    itemStringList.add("stone sword");
-                    itemStringList.add("stone shovel");
-                    itemStringList.add("stone pickaxe");
-                    itemStringList.add("stone axe");
-                    itemStringList.add("stone hoe");
-                }
-
-                // Ferramentas de ferro
-                if (grupo.getDsGrupo().equals("iron tools")) {
-                    itemStringList.add("iron sword");
-                    itemStringList.add("iron shovel");
-                    itemStringList.add("iron pickaxe");
-                    itemStringList.add("iron axe");
-                    itemStringList.add("iron hoe");
-                }
-
-                // Ferramentas de ouro
-                if (grupo.getDsGrupo().equals("golden tools")) {
-                    itemStringList.add("golden sword");
-                    itemStringList.add("golden shovel");
-                    itemStringList.add("golden pickaxe");
-                    itemStringList.add("golden axe");
-                    itemStringList.add("golden hoe");
-                }
-
-                // Ferramentas de diamante
-                if (grupo.getDsGrupo().equals("diamond tools")) {
-                    itemStringList.add("diamond sword");
-                    itemStringList.add("diamond shovel");
-                    itemStringList.add("diamond pickaxe");
-                    itemStringList.add("diamond axe");
-                    itemStringList.add("diamond hoe");
-                }
-
-                // Ferramentas de netherite
-                if (grupo.getDsGrupo().equals("netherite tools")) {
-                    itemStringList.add("netherite sword");
-                    itemStringList.add("netherite shovel");
-                    itemStringList.add("netherite pickaxe");
-                    itemStringList.add("netherite axe");
-                    itemStringList.add("netherite hoe");
-                }
-
-                // ITENS PARA SEREM ASSADOS
-                if (grupo.getDsGrupo().equals("carne crua")) {
-                    itemStringList.add("potato");
-                    itemStringList.add("beef");
-                    itemStringList.add("porkchop");
-                    itemStringList.add("mutton");
-                    itemStringList.add("chicken");
-                    itemStringList.add("rabbit");
-                    itemStringList.add("cod");
-                    itemStringList.add("salmon");
-                    itemStringList.add("kelp");
-                }
-                config.set(key.concat(".grupo_item"), itemStringList);
-                save();
-
-                idGrupo++;
-            }// FIM WHILE
-
-        } catch (IOException e) {
-            Msg.ServidorErro(e, "createDefault()", getClass());
-            Debug.Write("Erro ao criar o arquivo de grupo.yml:\nErro: " + e.getMessage());
+        for (Map.Entry<String, Grupo> grupos : VGlobal.GRUPO_MAP_NAME.entrySet()) {
+            add(grupos.getValue());
         }
         Debug.WriteMsg("Grupos criados com sucesso!");
     }
 
-    private void update() {
-
-        Msg.ServidorGold("Verificando se precisa atualizar os grupos...");
-
-        for (Map.Entry<String, Object> grups : config.getValues(true).entrySet()) {
-            key = grups.getKey().toString();
-            value = grups.getValue().toString();
-
-            if (!key.contains("id") && !key.contains("name") && !key.contains("item") && !value.contains("Memory")) {
-                String grupName = key.substring(0, key.indexOf("."));
-                Msg.ServidorGold("Atualizando o grupo: " + grupName);
-                String lang = key.substring(key.indexOf(".") + 1, key.length());
-                config.set(key, null);
-                config.set(grupName.concat(".lang." + lang), value);
-                save();
-            }
-
+    public void loadYML() {
+        if (config == null) {
+            config = YamlConfiguration.loadConfiguration(fileConfig);
         }
-        Msg.ServidorGold("Verificando se precisa atualizar os grupos finalizada!!!");
+        for (Map.Entry<String, Object> grups : config.getValues(false).entrySet()) {
+            grupo = new Grupo();
+            grupo.setCdGrupo(config.getInt(grups.getKey().concat(".grupo_id")));
+            grupo.setDsGrupo(config.getString(grups.getKey().concat(".grupo_name")));
+        }
+    }
+
+    public void update() {
+
+        if (config == null) {
+            config = YamlConfiguration.loadConfiguration(fileConfig);
+        }
+
+        Msg.ServidorGold("Atualizando grupos...");
+
+        for (Map.Entry<String, Grupo> grups : VGlobal.GRUPO_MAP_NAME.entrySet()) {
+            config.set(grups.getValue().getDsGrupo(), null);
+            add(grups.getValue());
+        }
+        Msg.ServidorGold("Grupos atualizados com sucesso!!!");
     }
 
     private void save() {
@@ -298,24 +99,29 @@ public class GrupoConfig {
         }
     }
 
-    private void createNameGrupo() {
-        List<String> grupoList = new ArrayList<>();
-        String name = null;
-        for (Material material : Material.values()) {
-            name = Utils.ToMaterial(material);
-            if (material.isItem() && !material.isAir()) {
-                if (name.contains("\\s")) {
-                    for (String names : name.split("\\s")) {
-                        if (!grupoList.contains(names)) {
-                            grupoList.add(names);
-                        }
-                    }
-                } else {
-                    if (!grupoList.contains(name)) {
-                        grupoList.add(name);
-                    }
-                }
-            }
+    private void add(@NotNull Grupo grupo) {
+        String key = grupo.getDsGrupo();
+        List<String> listItem = new ArrayList<>();
+
+        config.set(key.concat(".grupo_id"), grupo.getCdGrupo());
+        config.set(key.concat(".grupo_name"), grupo.getDsGrupo());
+        if(!grupo.getTraducaoMap().isEmpty()) {
+            config.set(key.concat(".lang"), grupo.getTraducaoMap());
         }
+        for (Item item : grupo.getListItem()) {
+            listItem.add(item.getDsItem());
+        }
+        Collections.sort(listItem);
+        config.set(key.concat(".grupo_item"), listItem);
+        Msg.ServidorGold("Criando o grupo " + grupo.getDsGrupo() + " no arquivo grupo.yml");
+        save();
+    }
+
+    private void add(@NotNull String key, @NotNull String value, List<String> comentario) {
+        if (comentario != null) {
+            config.setComments(key, comentario);
+        }
+        config.set(key, value);
+        save();
     }
 }

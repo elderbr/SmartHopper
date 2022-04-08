@@ -52,6 +52,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         grupoConfig = new GrupoConfig();
 
+
         // ADM E OPERADORES
         AdmDao.SELECT_ALL();// PEGA A LISTA DE ADM E OPERADORES
 
@@ -76,6 +77,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         GrupoDao.CREATE_GRUPO();
         GrupoDao.SELECT_ALL();
 
+        grupoConfig.createYml();
+        grupoConfig.update();
         config.SET_VERSION(VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
         // ADICIONANDO OS EVENTOS
