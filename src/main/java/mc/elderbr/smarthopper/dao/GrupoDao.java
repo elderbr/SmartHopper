@@ -266,7 +266,9 @@ public class GrupoDao {
                 list.add(item);
             }
         } catch (SQLException e) {
-
+            Msg.ServidorErro("Erro ao buscar os item do grupo!!!", "", GrupoDao.class, e);
+        } finally {
+            Conexao.desconect();
         }
         return list;
     }
