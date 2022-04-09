@@ -1,7 +1,9 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,22 +30,27 @@ public class GrupoTabCompleter implements TabCompleter {
 
         if (sender instanceof Player) {
             player = (Player) sender;
-            switch (command.getName().toLowerCase()){
+
+
+            switch (command.getName().toLowerCase()) {
                 case "grupo":
                 case "addgrupo":
                 case "removegrupo":
-                cmd = Utils.NAME_ARRAY(args);
-                if (cmd.length() > 0) {
-                    grupoList = new ArrayList<>();
-                    for(String grups : VGlobal.GRUPO_NAME_LIST){
-                        if(grups.contains(cmd)){
-                            grupoList.add(grups);
+                    cmd = Utils.NAME_ARRAY(args);
+
+                    if (args.length == 1) {
+
+                        List<Grupo> listGrupo = GrupoDao.SELECT_CONTEM(cmd);
+
+                        grupoList = new ArrayList<>();
+                        for (Grupo grups : listGrupo) {
+                            grups.setDsLang(player.getLocale());
+                            grupoList.add(grups.toTraducao());
                         }
+                        return grupoList;
                     }
-                    return grupoList;
-                }
             }
         }
-        return Arrays.asList("");
+        return null;
     }
 }

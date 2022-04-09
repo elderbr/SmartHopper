@@ -105,7 +105,9 @@ public class Grupo implements Linguagem {
     }
 
     public String toTraducao() {
-        dsTraducao = traducaoMap.get(dsLang);
+        if(!traducaoMap.isEmpty()) {
+            dsTraducao = traducaoMap.get(dsLang);
+        }
         return (dsTraducao == null ? dsGrupo : dsTraducao);
     }
 

@@ -149,6 +149,42 @@ public class GrupoDao {
         }
     }
 
+    public static List<Grupo> SELECT_CONTEM(String grupoName) {
+        List<Grupo> list = new ArrayList<>();
+        try {
+            PreparedStatement stm = Conexao.repared("SELECT * FROM grupo g " +
+                    "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                    "WHERE lower(g.dsGrupo) LIKE lower(?) OR lower(t.dsTraducao) LIKE lower(?)");
+            stm.setString(1, "%"+grupoName+"%");
+            stm.setString(2, "%"+grupoName+"%");
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+
+                Grupo grupo = new Grupo();
+                grupo.setCdGrupo(rs.getInt("cdGrupo"));
+                grupo.setDsGrupo(rs.getString("dsGrupo"));
+                // LANG
+                grupo.setCdLang(rs.getInt("cdLang"));
+                grupo.setDsLang(rs.getString("dsLang"));
+                // Tradução
+                grupo.setCdTraducao(rs.getInt("cdTraducao"));
+                grupo.setDsTraducao(rs.getString("dsTraducao"));
+
+                grupo.addTraducao(rs.getString("dsLang"), rs.getString("dsTraducao"));
+
+                list.add(grupo);
+
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao pesquisar por grupo que contém o nome do grupo ou a tradução!!!", "SELECT_CONTEM(Grupo grupo)", GrupoDao.class, e);
+        } finally {
+            Conexao.desconect();
+        }
+        return list;
+    }
+
     public static List<Grupo> SELECT_GRUPO_ITEM(Item item) {
         List<Grupo> list = new ArrayList<>();
         Grupo grupo = null;
