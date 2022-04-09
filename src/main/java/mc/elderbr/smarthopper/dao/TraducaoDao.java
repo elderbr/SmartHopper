@@ -12,6 +12,8 @@ import mc.elderbr.smarthopper.utils.Msg;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TraducaoDao {
@@ -131,6 +133,33 @@ public class TraducaoDao {
             Conexao.desconect();
         }
         return false;
+    }
+
+    public static List<Traducao> SELECT(Grupo grupo){
+        List<Traducao> list = new ArrayList<>();
+        try {
+            PreparedStatement stm = Conexao.repared("SELECT * FROM traducao t " +
+                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
+                    "WHERE cdGrupo = ?");
+            stm.setInt(1, grupo.getCdGrupo());
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                Traducao traducao = new Traducao();
+
+                traducao.setCdLang(rs.getInt("cdLang"));
+                traducao.setDsLang(rs.getString("dsLang"));
+
+                traducao.setCdTraducao(rs.getInt("cdTraducao"));
+                traducao.setDsTraducao(rs.getString("dsTraducao"));
+
+                list.add(traducao);
+            }
+        }catch (SQLException e){
+            Msg.ServidorErro("Erro ao buscar pela a tradução do grupo!!!", "", TraducaoDao.class, e);
+        }finally {
+            Conexao.desconect();
+        }
+        return list;
     }
 
     public static void SELECT_ALL(){

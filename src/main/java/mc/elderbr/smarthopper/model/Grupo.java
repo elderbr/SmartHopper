@@ -95,6 +95,11 @@ public class Grupo implements Linguagem {
         return dsTraducao;
     }
 
+    public Grupo addTraducao(Traducao traducao) {
+        traducaoMap.put(traducao.getDsLang(), traducao.getDsTraducao());
+        return this;
+    }
+
     public Grupo addTraducao(String lang, String traducao) {
         traducaoMap.put(lang, traducao);
         return this;

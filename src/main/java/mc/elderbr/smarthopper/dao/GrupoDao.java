@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.dao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 
@@ -154,7 +155,6 @@ public class GrupoDao {
         try {
             PreparedStatement stm = Conexao.repared("SELECT * FROM grupo g " +
                     "LEFT JOIN traducao t ON t.cdGrupo = g.cdGrupo " +
-                    "LEFT JOIN lang l ON l.cdLang = t.cdLang " +
                     "WHERE lower(g.dsGrupo) LIKE lower(?) OR lower(t.dsTraducao) LIKE lower(?)");
             stm.setString(1, "%"+grupoName+"%");
             stm.setString(2, "%"+grupoName+"%");
@@ -165,15 +165,10 @@ public class GrupoDao {
                 Grupo grupo = new Grupo();
                 grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 grupo.setDsGrupo(rs.getString("dsGrupo"));
-                // LANG
-                grupo.setCdLang(rs.getInt("cdLang"));
-                grupo.setDsLang(rs.getString("dsLang"));
                 // Tradução
-                grupo.setCdTraducao(rs.getInt("cdTraducao"));
-                grupo.setDsTraducao(rs.getString("dsTraducao"));
-
-                grupo.addTraducao(rs.getString("dsLang"), rs.getString("dsTraducao"));
-
+                for(Traducao traducao : TraducaoDao.SELECT(grupo)){
+                    grupo.addTraducao(traducao);
+                }
                 list.add(grupo);
 
             }
