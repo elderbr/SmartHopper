@@ -1,8 +1,6 @@
 package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.dao.GrupoDao;
-import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -53,7 +51,7 @@ public class GrupoComando implements CommandExecutor {
                     try {
                         grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
                     } catch (NumberFormatException e) {
-                        grupo = VGlobal.GRUPO_MAP_NAME.get(cmd);
+                        grupo = VGlobal.TRADUCAO_GRUPO_LIST.get(cmd);
                     }
                     if (grupo != null) {
                         grupo.setDsLang(player);

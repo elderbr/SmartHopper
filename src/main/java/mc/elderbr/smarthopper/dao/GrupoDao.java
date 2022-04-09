@@ -218,8 +218,7 @@ public class GrupoDao {
     public static void SELECT_ALL() {
         Grupo grupo = null;
         try {
-            PreparedStatement stm = Conexao.repared("SELECT * FROM grupoItem gi " +
-                    "LEFT JOIN grupo g ON g.cdGrupo = gi.cdGrupo ");
+            PreparedStatement stm = Conexao.repared("SELECT * FROM grupo");
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
@@ -227,6 +226,8 @@ public class GrupoDao {
                 grupo = new Grupo();
                 grupo.setCdGrupo(rs.getInt("cdGrupo"));
                 grupo.setDsGrupo(rs.getString("dsGrupo"));
+
+                VGlobal.TRADUCAO_GRUPO_LIST.put(grupo.getDsGrupo().toLowerCase(), grupo);
 
                 // ADICIONANDO OS ITENS DO GRUPO
                 for (Item item : SELECT_GRUPO_ITEM(grupo)) {
@@ -236,6 +237,7 @@ public class GrupoDao {
                 // ADICIONANDO A TRADUÇÃO DO GRUPO
                 for (Traducao traducao : TraducaoDao.SELECT(grupo)) {
                     grupo.addTraducao(traducao);
+                    VGlobal.TRADUCAO_GRUPO_LIST.put(traducao.getDsTraducao().toLowerCase(), grupo);
                 }
 
                 VGlobal.GRUPO_NAME_LIST.add(grupo.getDsGrupo());
@@ -255,7 +257,7 @@ public class GrupoDao {
         List<Item> list = new ArrayList<>();
         try {
             PreparedStatement stm = Conexao.repared("SELECT * FROM grupoItem gi " +
-                    "LEFT JOIN item i ON i.cdItem = gi.cdItem" +
+                    "LEFT JOIN item i ON i.cdItem = gi.cdItem " +
                     "WHERE cdGrupo = ?");
             stm.setInt(1, grupo.getCdGrupo());
             ResultSet rs = stm.executeQuery();
