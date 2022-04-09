@@ -43,42 +43,44 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // CRIANDO TODAS AS TABELAS NO BANCO DE DADOS
         Conexao.CREATE_TABLES();
 
+        // LANGS
+        LangDao.INSERT_DEFAULT();
+        LangDao.SELECT_ALL();// LANGS CARREGA A LISTA DE LANGS DO BANCO DE DADOS
+
         // Tradução dos itens
         traducaoConfig = new TraducaoConfig();
 
         // ARQUIVO ITEM.YML
         itemConfig = new ItemConfig();
-        itemConfig.createDefault();
+        itemConfig.loadYmlAddBanco();
 
         grupoConfig = new GrupoConfig();
 
-
         // ADM E OPERADORES
         AdmDao.SELECT_ALL();// PEGA A LISTA DE ADM E OPERADORES
-
 
         // CRIANDO ITENS E SALVANDO NO BANCO
         Item.CreateItem();// CRIANDO ITENS
         ItemDao.CreateDefault();// SALVANDO NO BANCO
         ItemDao.selectAll();// CARREGA TODOS OS ITENS DO BANCO E ADICIONA NO OBJETO GLOBAL
-
-        // LANGS
-        LangDao.INSERT_DEFAULT();
-        LangDao.SELECT_ALL();// LANGS CARREGA A LISTA DE LANGS DO BANCO DE DADOS
+        itemConfig.updateYML();
 
         // TRADUÇÃO
         TraducaoDao.createBR();
         TraducaoDao.createPT();
         TraducaoDao.SELECT_ALL();
-        itemConfig.createDefault();
 
         // GRUPO
+        // Verifica se a versão do plugin e inferior a 4.0.0 se for ler o arquivo grupo.yml e salva no banco de dados
+        grupoConfig.loadYmlAddBanco();
+        // Cria grupos atraves do nome dos itens
         Grupo.CreateGrupos();
+        // Salva os grupos no banco de dados
         GrupoDao.CREATE_GRUPO();
+        // Ler todos os grupos salvos no banco
         GrupoDao.SELECT_ALL();
+        grupoConfig.updateYML();
 
-        grupoConfig.createYml();
-        grupoConfig.update();
         config.SET_VERSION(VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
         // ADICIONANDO OS EVENTOS

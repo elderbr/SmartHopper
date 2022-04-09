@@ -40,8 +40,8 @@ public class Config {
     }
 
     //=================== VERSAO DO PLUGIN ===============================/
-    public static double VERSION() {
-        return Double.parseDouble(YML.getString("version").replaceAll("[.]", ""));
+    public static int VERSION() {
+        return Integer.parseInt(YML.getString("version").replaceAll("[.]", ""));
     }
 
     public static void SET_VERSION(String version) {

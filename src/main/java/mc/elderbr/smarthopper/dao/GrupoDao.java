@@ -60,7 +60,38 @@ public class GrupoDao {
                 return true;
             }
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao adicionar grupo!!!", "INSERT(Grupo grupo)", GrupoDao.class, e);
+            if (e.getErrorCode() != 19)
+                Msg.ServidorErro("Erro ao adicionar grupo!!!", "INSERT(Grupo grupo)", GrupoDao.class, e);
+        } finally {
+            Conexao.desconect();
+        }
+        return false;
+    }
+
+    public static boolean INSERT_ID(Grupo grupo) {
+        try {
+            PreparedStatement stm = Conexao.repared("INSERT INTO grupo (cdGrupo, dsGrupo) VALUES (?,?)");
+            stm.setInt(1, grupo.getCdGrupo());
+            stm.setString(2, grupo.getDsGrupo());
+            stm.execute();
+            ResultSet rs = stm.getGeneratedKeys();
+            if (rs.next()) {
+
+                grupo.setCdGrupo(rs.getInt(1));
+
+                // Salvando os itens do grupo
+                INSERT_GRUPO_ITEM(grupo);
+
+                // ADICIONANDO A VARIAL GLOBAL
+                VGlobal.GRUPO_MAP_ID.put(grupo.getCdGrupo(), grupo);// ADICIONANDO A BUSCA PELO ID
+                VGlobal.GRUPO_MAP_NAME.put(grupo.getDsGrupo(), grupo);// ADICIONANDO A BUSCA PELO NOME
+                VGlobal.GRUPO_NAME_LIST.add(grupo.getDsGrupo());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
+                VGlobal.GRUPO_MAP.put(grupo.getDsGrupo(), grupo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
+
+                return true;
+            }
+        } catch (SQLException e) {
+            Msg.ServidorErro("Erro ao adicionar grupo!!!", "INSERT_ID(Grupo grupo)", GrupoDao.class, e);
         } finally {
             Conexao.desconect();
         }
@@ -111,7 +142,7 @@ public class GrupoDao {
                 stm.setInt(2, item.getCdItem());
                 stm.execute();
             } catch (SQLException e) {
-                e.printStackTrace();
+                Msg.ServidorErro("Erro ao adicionar item do grupo!!!", "", GrupoDao.class, e);
             } finally {
                 Conexao.desconect();
             }
@@ -172,9 +203,10 @@ public class GrupoDao {
             while (rs.next()) {
                 if (!grupo.getDsGrupo().equals(rs.getString("dsGrupo"))) {
 
+                    VGlobal.GRUPO_NAME_LIST.add(grupo.getDsGrupo());
+                    VGlobal.GRUPO_LIST.add(grupo);
                     VGlobal.GRUPO_MAP_ID.put(grupo.getCdGrupo(), grupo);
                     VGlobal.GRUPO_MAP_NAME.put(grupo.getDsGrupo(), grupo);
-                    VGlobal.GRUPO_NAME_LIST.add(grupo.getDsGrupo());
 
                     grupo = new Grupo();
                     grupo.setCdGrupo(rs.getInt("cdGrupo"));

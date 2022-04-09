@@ -100,7 +100,7 @@ public class Grupo implements Linguagem {
         return this;
     }
 
-    public Map<String, String> getTraducaoMap(){
+    public Map<String, String> getTraducaoMap() {
         return traducaoMap;
     }
 
@@ -194,13 +194,13 @@ public class Grupo implements Linguagem {
         for (String nameGrupo : grupoList) {
 
             // NÃO É NOME VALIDO DE GRUPOS
-            if(NotGrupo().contains(nameGrupo)) continue;
+            if (NotGrupo().contains(nameGrupo)) continue;
 
             Grupo grupo = new Grupo();
             grupo.setDsGrupo(nameGrupo);
             for (Item item : VGlobal.ITEM_MAP_NAME.values()) {
-                if(item == null ) continue;
-                if (grupo.contentItem(item)) {
+                if (item == null) continue;
+                if (pertence(grupo, item) && grupo.contentItem(item)) {
                     grupo.addList(item);
                 }
             }
@@ -321,7 +321,7 @@ public class Grupo implements Linguagem {
         return false;
     }
 
-    private static List<String> NotGrupo(){
+    private static List<String> NotGrupo() {
         List<String> list = new ArrayList<>();
         list.add("a");
         list.add("a stick");
@@ -332,6 +332,41 @@ public class Grupo implements Linguagem {
         list.add("the");
         list.add("on a stick");
         return list;
+    }
+
+    /***
+     * Verifica se o item pertence ao grupo como por exemplo o grupo stone não pode conter o item stone pickaxe
+     * @param grupo da classe Grupo
+     * @param item da classe item
+     * @return boolean
+     */
+    private static boolean pertence(Grupo grupo, Item item) {
+        switch (grupo.getDsGrupo()) {
+            case "stone":
+                List<String> list = new ArrayList<>();
+                list.add("stone shovel");
+                list.add("stone pickaxe");
+                list.add("stone axe");
+                list.add("stone hoe");
+                list.add("stone brick");
+                list.add("stone bricks");
+                list.add("end stone");
+                for (String items : list) {
+                    if (item.getDsItem().contains(items)) {
+                        return false;
+                    }
+                }
+            case "oak":
+                if (item.getDsItem().contains("dark oak")) {
+                    return false;
+                }
+            case "sandstone":
+                if (item.getDsItem().contains("red sandstone")) {
+                    return false;
+                }
+            default:
+                return true;
+        }
     }
 
 }

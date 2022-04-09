@@ -104,6 +104,14 @@ public class Msg {
         player.sendMessage(Color("$d$lGrupo: $e" + grupo.toTraducao() + " $6ID: " + grupo.getCdGrupo()));
     }
 
+    public static void Grupo(Grupo grupo, @NotNull Class classe) {
+        Bukkit.getServer().getConsoleSender().sendMessage(
+                "Grupo ID: " + grupo.getCdGrupo()
+                        + "\nnome: " + grupo.getDsGrupo()
+                        + "\nTraducao: " + grupo.getTraducaoMap().values()
+        );
+    }
+
     public static void GrupoNaoExiste(Player player, String name) {
         player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
     }
