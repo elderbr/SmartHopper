@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class GrupoTabCompleter implements TabCompleter {
 
@@ -39,13 +40,13 @@ public class GrupoTabCompleter implements TabCompleter {
                     cmd = Utils.NAME_ARRAY(args);
 
                     if (args.length == 1) {
-
-                        List<Grupo> listGrupo = GrupoDao.SELECT_CONTEM(cmd);
-
                         grupoList = new ArrayList<>();
-                        for (Grupo grups : listGrupo) {
-                            grups.setDsLang(player.getLocale());
-                            grupoList.add(grups.toTraducao());
+                        for (Map.Entry<String, Grupo> grups : VGlobal.TRADUCAO_GRUPO_LIST.entrySet()) {
+                            if(grups.getKey().contains(cmd)) {
+                                Grupo grupo = grups.getValue();
+                                grupo.setDsLang(player.getLocale());
+                                grupoList.add(grupo.toTraducao());
+                            }
                         }
                         return grupoList;
                     }
