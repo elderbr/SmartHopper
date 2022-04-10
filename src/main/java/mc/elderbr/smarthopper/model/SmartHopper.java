@@ -62,17 +62,29 @@ public class SmartHopper {
             for (String values : lista) {
                 SmartHopper smart = new SmartHopper(hopper.getBlock(), values);
                 if (smart.getType() instanceof Item items) {
-                    Msg.Item(player, items);
+                    if (values.contains("#")) {
+                        Msg.ItemNegar(player, items);
+                    } else {
+                        Msg.Item(player, items);
+                    }
                 }
                 if (smart.getType() instanceof Grupo grupo) {
-                    Msg.Grupo(player, grupo);
+                    if (values.contains("#")) {
+                        Msg.GrupoNegar(player, grupo);
+                    } else {
+                        Msg.Grupo(player, grupo);
+                    }
                 }
             }
             Msg.PulaPlayer(player);
             return;
         } else {
             if (getType() instanceof Item item) {
-                Msg.Item(player, item);
+                if (nameHopper.contains("#")) {
+                    Msg.ItemNegar(player, item);
+                } else {
+                    Msg.Item(player, item);
+                }
                 return;
             }
             if (getType() instanceof Grupo grupo) {
@@ -83,7 +95,11 @@ public class SmartHopper {
                     inventory.addItem(items.getItemStack());
                 }
                 player.openInventory(inventory.getInventory());
-                Msg.Grupo(player, grupo);
+                if(nameHopper.contains("#")){
+                    Msg.GrupoNegar(player, grupo);
+                }else {
+                    Msg.Grupo(player, grupo);
+                }
                 return;
             }
             Msg.PlayerGold(player, Msg.Color("Funil $cNÃO $rfoi configurado!!!"));
@@ -98,7 +114,7 @@ public class SmartHopper {
 
         // VERIFICA SE É ITEM OU GRUPO
         if (silaba.equalsIgnoreCase("i") || silaba.equalsIgnoreCase("g")) {
-            name = nameHopper.replaceAll("#", "").replaceAll("\\*", "").substring(1, nameHopper.length());
+            name = name.substring(1, name.length());
             try {
                 code = Integer.parseInt(name);
             } catch (NumberFormatException e) {

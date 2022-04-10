@@ -9,8 +9,6 @@ import mc.elderbr.smarthopper.utils.Msg;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class ItemDao {
@@ -126,7 +124,7 @@ public class ItemDao {
 
                 VGlobal.TRADUCAO_ITEM_LIST.put(item.getDsItem().toLowerCase(), item);
 
-                for(Traducao traducao : TraducaoDao.SELECT(item)){
+                for (Traducao traducao : TraducaoDao.SELECT(item)) {
                     item.addTraducao(traducao.getDsLang(), traducao.getDsTraducao());
                     VGlobal.TRADUCAO_ITEM_LIST.put(traducao.getDsTraducao().toLowerCase(), item);
                 }
@@ -160,23 +158,21 @@ public class ItemDao {
 
 
     public static void CreateDefault() {
-        if (VGlobal.ITEM_NAME_LIST.size() > size() + 1) {
-            Debug.Write("Criando a tabela de item");
-            for (String item : VGlobal.ITEM_NAME_LIST) {
-                try {
-                    Debug.WriteMsg("Criando o item " + item);
-                    PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
-                    stm.setString(1, item);
-                    stm.execute();
-                } catch (SQLException e) {
-                    if (e.getErrorCode() != 19)
-                        Msg.ServidorErro("Erro ao criar item padrão!!!", "", ItemDao.class, e);
-                } finally {
-                    Conexao.desconect();
-                }
+        Debug.Write("Criando a tabela de item");
+        for (String item : VGlobal.ITEM_NAME_LIST) {
+            try {
+                Debug.WriteMsg("Criando o item " + item);
+                PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
+                stm.setString(1, item);
+                stm.execute();
+            } catch (SQLException e) {
+                if (e.getErrorCode() != 19)
+                    Msg.ServidorErro("Erro ao criar item padrão!!!", "", ItemDao.class, e);
+            } finally {
+                Conexao.desconect();
             }
-            Debug.Write("Tabela de item criadas");
         }
+        Debug.Write("Tabela de item criadas");
     }
 
     private void close() {

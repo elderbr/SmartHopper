@@ -92,7 +92,7 @@ public class Msg {
 
     public static void ItemNegar(Player player, Item item) {
         item.setDsLang(player);
-        player.sendMessage(Color("$cBloqueado$6 o item: " + item.getDsTraducao() + "$e ID: " + item.getCdItem()));
+        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao() + "$e ID: " + item.getCdItem()));
     }
 
     public static void ItemNaoExiste(Player player, String name) {
@@ -117,7 +117,8 @@ public class Msg {
     }
 
     public static void GrupoNegar(Player player, Grupo grupo) {
-        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.getDsTraducao() + "$e ID: " + grupo.getCdGrupo()));
+        grupo.setDsLang(player);
+        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.toTraducao() + "$e ID: " + grupo.getCdGrupo()));
     }
 
     public static void PulaPlayer(Player player) {
