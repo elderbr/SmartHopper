@@ -120,7 +120,7 @@ public class GrupoDao {
         return false;
     }
 
-    private static boolean DELETE_GRUPO_ITEM(Grupo grupo) {
+    public static boolean DELETE_GRUPO_ITEM(Grupo grupo) {
         try {
             PreparedStatement stm = Conexao.repared("DELETE FROM grupoItem WHERE cdGrupo = ?");
             stm.setInt(1, grupo.getCdGrupo());

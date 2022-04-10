@@ -45,7 +45,6 @@ public class InventarioEvent implements Listener {
         if (event.getCurrentItem() == null
                 || event.getCurrentItem().getType() == Material.AIR
                 || inventory.getType() != InventoryType.CHEST
-                || !VGlobal.ADM_LIST.contains(player.getName())
                 ) {
             return;
         }
@@ -53,16 +52,19 @@ public class InventarioEvent implements Listener {
 
         titulo = event.getView().getTitle();// NOME DO INVENTARIO
         if (titulo.contains(Msg.Color("$5$lGrupo Novo")) || titulo.contains(Msg.Color("$8$lGrupo"))) {
+
+            event.setCancelled(true);
+
             itemClick = event.getCurrentItem();// ITEM CLICADO
             itemStack = new ItemStack(itemClick.getType());// PEGANDO O TIPO DE ITEM QUE FOI CLICADO
             itemBtnSalve = player.getOpenInventory().getItem(53);// BOTÃO DE SALVAR OU ATUALIZAR VAI SER A LÃ DA COR LIMÃO COM LORE
 
             // ADICIONA NOVOS ITENS
-            if (event.isLeftClick() && !itemClick.equals(itemBtnSalve) && !inventory.contains(itemStack)) {// CLICADO COM O BOTÃO ESQUERDO ADICIONA O NOVO ITEM
+            if (event.isLeftClick() && !itemClick.equals(itemBtnSalve) && !inventory.contains(itemStack)  && VGlobal.ADM_LIST.contains(player.getName())) {// CLICADO COM O BOTÃO ESQUERDO ADICIONA O NOVO ITEM
                 inventory.addItem(new ItemStack(itemStack.getType()));
             }
             // REMOVE ITENS
-            if (event.isRightClick()) {// CLICADO COM O BOTÃO DIREITO REMOVE O ITEM
+            if (event.isRightClick() && VGlobal.ADM_LIST.contains(player.getName())) {// CLICADO COM O BOTÃO DIREITO REMOVE O ITEM
                 if (itemStack.getItemMeta().getLore() == null) {
                     inventory.remove(itemStack);// REMOVE O ITEM DO INVENTARIO
                 }
@@ -92,23 +94,25 @@ public class InventarioEvent implements Listener {
             if (event.getClick().isLeftClick() && itemClick.getItemMeta().getLore() != null && itemClick.getItemMeta().getLore().contains(Msg.Color("$3Salvar"))) {
 
                 nameGrupo = titulo.substring(Msg.Color("$8$lGrupo: $r").length(), titulo.indexOf(Msg.Color(" $lID"))).trim().toLowerCase();
-                grupo = VGlobal.GRUPO_MAP_NAME.get(VGlobal.GRUPO_MAP.get(nameGrupo));// BUSCA NO BANCO O GRUPO
+                grupo = VGlobal.GRUPO_MAP_NAME.get(nameGrupo);// BUSCA NO BANCO O GRUPO
 
                 grupo.getListItem().clear();// APAGANDO A LISTA DO GRUPO DOS ITENS
+                GrupoDao.DELETE_GRUPO_ITEM(grupo);// APAGANGO A LISTA DE ITEM DO GRUPO NO BANCO DE DADOS
+
+                player.closeInventory();
 
                 // ADICIONANDO OS ITEM AO GRUPO
                 List<String> grupoNovoList = new ArrayList<>();
                 for (ItemStack items : inventory.getContents()) {
-                    if (items != null && !items.equals(itemBtnSalve)) {
-                        //grupo.addItemList(items);
-                        //VGlobal.GRUPO_ITEM_MAP_LIST.get(grupo.getDsGrupo()).add(new Item(items).getDsGrupo());// ADICIONANDO NA LISTA GLOBAL DO GRUPO OS ITENS
+                    if (items != null && !items.getType().isAir() && !items.equals(itemBtnSalve)) {
+                        Item item = new Item(items);
+                        grupo.addList(VGlobal.ITEM_MAP_NAME.get(item.getDsItem()));
                     }
                 }
+                GrupoDao.INSERT_GRUPO_ITEM(grupo);// ADICIONANDO OS ITEM DO GRUPO
 
-                //new GrupoConfig(grupo, Grupo.UPGRADE);// ATUALIZA A LISTA DO ITENS DO GRUPO
-                player.closeInventory();
                 grupo.setDsLang(player);
-                player.sendMessage(Msg.Color("$6Grupo $a$l" + grupo.getDsTraducao() + "$r$6 atualizado com sucesso!"));
+                player.sendMessage(Msg.Color("$6Grupo $a$l" + grupo.toTraducao() + "$r$6 atualizado com sucesso!"));
 
             }
 
