@@ -43,7 +43,7 @@ public class ItemComando implements CommandExecutor {
                     try {
                         item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(cmd));//BUSCA O ITEM PELO O SEU ID
                     } catch (NumberFormatException e) {
-                        item = VGlobal.ITEM_MAP_NAME.get(VGlobal.ITEM_MAP.get(cmd));//BUSCA O ITEM PELO O NOME
+                        item = VGlobal.TRADUCAO_ITEM_LIST.get(cmd);//BUSCA O ITEM PELO O NOME
                     }
                 }
                 if (item != null) {

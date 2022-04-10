@@ -115,34 +115,26 @@ public class ItemDao {
     public static void selectAll() {
         Item item = null;
         try {
-            PreparedStatement stm = Conexao.repared("SELECT * FROM item i " +
-                    "LEFT JOIN traducao t ON t.cdItem = i.cdItem " +
-                    "LEFT JOIN lang l ON l.cdLang = t.cdLang");
+            PreparedStatement stm = Conexao.repared("SELECT * FROM item");
             ResultSet rs = stm.executeQuery();
-
-            if (rs.next()) {
-                item = new Item();
-                item.setCdItem(rs.getInt("cdItem"));
-                item.setDsItem(rs.getString("dsItem"));
-            }
 
             while (rs.next()) {
 
-                if (!item.getDsItem().equals(rs.getString("dsItem"))) {
+                item = new Item();
+                item.setCdItem(rs.getInt("cdItem"));
+                item.setDsItem(rs.getString("dsItem"));
 
-                    // ADICIONANDO NO OBJETO GLOBAL
-                    VGlobal.ITEM_MAP_ID.put(item.getCdItem(), item);
-                    VGlobal.ITEM_MAP_NAME.put(item.getDsItem(), item);
+                VGlobal.TRADUCAO_ITEM_LIST.put(item.getDsItem().toLowerCase(), item);
 
-                    item = new Item();
-                    item.setCdItem(rs.getInt("cdItem"));
-                    item.setDsItem(rs.getString("dsItem"));
+                for(Traducao traducao : TraducaoDao.SELECT(item)){
+                    item.addTraducao(traducao.getDsLang(), traducao.getDsTraducao());
+                    VGlobal.TRADUCAO_ITEM_LIST.put(traducao.getDsTraducao().toLowerCase(), item);
                 }
 
-                // LANG
-                if (rs.getString("dsLang") != null) {
-                    item.addTraducao(rs.getString("dsLang"), rs.getString("dsTraducao"));
-                }
+                // ADICIONANDO NO OBJETO GLOBAL
+                VGlobal.ITEM_MAP_ID.put(item.getCdItem(), item);
+                VGlobal.ITEM_MAP_NAME.put(item.getDsItem(), item);
+
             }
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao carregar todos os itens do banco!!!", "", ItemDao.class, e);

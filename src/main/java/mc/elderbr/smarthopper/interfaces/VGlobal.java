@@ -46,6 +46,7 @@ public interface VGlobal {
 
     // LISTA DE TRADUCAO
     Map<Integer, Traducao> TRADUCAO_MAP_ITEM_NAME = new HashMap<>();
+    Map<String, Item> TRADUCAO_ITEM_LIST = new HashMap<>();
     Map<Integer, Traducao> TRADUCAO_MAP_GRUPO_NAME = new HashMap<>();
     Map<String, Grupo> TRADUCAO_GRUPO_LIST = new HashMap<>();
 

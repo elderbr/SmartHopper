@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class ItemTabCompleter implements TabCompleter {
 
@@ -34,9 +35,11 @@ public class ItemTabCompleter implements TabCompleter {
                 cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
                 if(cmd.length()>0){
                     itemList = new ArrayList<>();
-                    for (String items : VGlobal.ITEM_NAME_LIST){
-                        if(items.contains(cmd)){
-                            itemList.add(items);
+                    for (Map.Entry<String, Item> items : VGlobal.TRADUCAO_ITEM_LIST.entrySet()){
+                        if(items.getKey().contains(cmd)){
+                            Item item = items.getValue();
+                            item.setDsLang(player.getLocale());
+                            itemList.add(item.toTraducao());
                         }
                     }
                     return itemList;
@@ -44,6 +47,6 @@ public class ItemTabCompleter implements TabCompleter {
             }
         }
 
-        return Arrays.asList("");
+        return null;
     }
 }
