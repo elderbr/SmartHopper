@@ -82,14 +82,31 @@ public class MoveHopper implements Listener {
                     }
 
 
-                    if(smartHopper.getType() instanceof Item itemSmart){
-                        if(item.getCdItem() == itemSmart.getCdItem()){
+                    if (smartHopper.getType() instanceof Item itemSmart) {
+                        Msg.ServidorGreen("item negado >> "+ smartHopper.getNameHopper()+" - igual >> "+ (item.getCdItem() == itemSmart.getCdItem()), getClass());
+                        if (smartHopper.getNameHopper().contains("#")) {
+                            if (item.getCdItem() == itemSmart.getCdItem()) {
+                                event.setCancelled(true);
+                                return;
+                            }
+                            event.setCancelled(false);
+                            return;
+                        }
+                        if (item.getCdItem() == itemSmart.getCdItem()) {
                             event.setCancelled(false);
                             return;
                         }
                     }
-                    if(smartHopper.getType() instanceof Grupo grupoSmart){
-                        if(grupoSmart.contentItem(item)) {
+                    if (smartHopper.getType() instanceof Grupo grupoSmart) {
+                        if (smartHopper.getNameHopper().contains("#")) {
+                            if (grupoSmart.contentItem(item)) {
+                                event.setCancelled(true);
+                                return;
+                            }
+                            event.setCancelled(false);
+                            return;
+                        }
+                        if (grupoSmart.contentItem(item)) {
                             event.setCancelled(false);
                             return;
                         }
@@ -102,9 +119,11 @@ public class MoveHopper implements Listener {
             if (destination.getType() != InventoryType.HOPPER) {
                 event.setCancelled(false);// Ativa o movimento do item
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             event.setCancelled(false);
         }
+
     }
 
 
