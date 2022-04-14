@@ -32,10 +32,11 @@ public class MoveHopper implements Listener {
     private Block blockDown;
 
     private SmartHopper smartHopper;
-    private SmartHopper smartHopperAux;
     private List<Hopper> hopperList;
-    private List<Boolean> isBloqueio;
 
+    private SmartHopper smartHopperDestino;
+
+    private List<Boolean> bloqueia;
 
     public MoveHopper() {
 
@@ -55,6 +56,7 @@ public class MoveHopper implements Listener {
 
             // Destino do item
             destination = event.getDestination();// Inventorio de destino
+            smartHopperDestino = new SmartHopper(destination);
 
             // Pega o bloco de baixo de onde o item está
             blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
@@ -62,58 +64,86 @@ public class MoveHopper implements Listener {
             if (blockDown.getState().getType() == Material.HOPPER) {// Verifica se o bloco de baixo é um hopper
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
                 for (Hopper hoppers : hopperList) {
+
                     smartHopper = new SmartHopper(hoppers);
 
-                    String[] lista = smartHopper.getNameHopper().split(";");
-                    for (String values : lista) {
-                        SmartHopper smart = new SmartHopper(hoppers);
-                        if (smart.getType() instanceof Item items) {
-                            if (items.getDsItem().equalsIgnoreCase(item.getDsItem())) {
+                    // VERIFICA SE EXISTE MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL E SE FOI SETADO PARA BLOQUEIA
+                    if (smartHopper.getNameHopper().contains(";") && smartHopper.getNameHopper().contains("#")) {
+                        String[] lista = smartHopper.getNameHopper().split(";");
+                        bloqueia = new ArrayList<>();
+                        for (String values : lista) {
+
+                            SmartHopper smart = new SmartHopper(hoppers.getBlock(), values);
+
+                            if (smart.getNameHopper().contains("#")) {
+                                if (smart.getType() instanceof Item items) {
+                                    if (items.getCdItem() == item.getCdItem()) {
+                                        bloqueia.add(true);
+                                    }
+                                }
+                                if (smart.getType() instanceof Grupo grupo) {
+                                    if (grupo.contentsItem(item)) {
+                                        bloqueia.add(true);
+                                    }
+                                }
+                            }
+                        }
+                        if (bloqueia.contains(true)) {
+                            event.setCancelled(true);
+                        } else {
+                            event.setCancelled(false);
+                        }
+                    } else if (smartHopper.getNameHopper().contains(";")) {// VERIFICA SE EXISTE MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL
+                        String[] lista = smartHopper.getNameHopper().split(";");
+                        for (String values : lista) {
+
+                            SmartHopper smart = new SmartHopper(hoppers.getBlock(), values);
+
+                            if (smart.getType() instanceof Item items) {
+                                if (items.getCdItem() == item.getCdItem()) {
+                                    event.setCancelled(false);
+                                }
+                            }
+                            if (smart.getType() instanceof Grupo grupo) {
+                                if (grupo.contentsItem(item)) {
+                                    event.setCancelled(false);
+                                }
+                            }
+                        }
+                    } else {
+
+                        if (smartHopper.getType() instanceof Item itemSmart) {
+                            if (smartHopper.getNameHopper().contains("#")) {
+                                if (item.getCdItem() == itemSmart.getCdItem()) {
+                                    event.setCancelled(true);
+                                    return;
+                                }
+                                event.setCancelled(false);
+                                return;
+                            } else if (item.getCdItem() == itemSmart.getCdItem()) {
                                 event.setCancelled(false);
                                 return;
                             }
                         }
-                        if (smart.getType() instanceof Grupo grupo) {
-                            if (grupo.getListItem().contains(item)) {
-                                event.setCancelled(false);
-                                return;
-                            }
-                        }
-                    }
 
-
-                    if (smartHopper.getType() instanceof Item itemSmart) {
-                        Msg.ServidorGreen("item negado >> "+ smartHopper.getNameHopper()+" - igual >> "+ (item.getCdItem() == itemSmart.getCdItem()), getClass());
-                        if (smartHopper.getNameHopper().contains("#")) {
-                            if (item.getCdItem() == itemSmart.getCdItem()) {
-                                event.setCancelled(true);
-                                return;
+                        if (smartHopper.getType() instanceof Grupo grupoSmart) {
+                            if (smartHopper.getNameHopper().contains("#")) {
+                                if (grupoSmart.contentsItem(item)) {
+                                    event.setCancelled(true);
+                                }else {
+                                    event.setCancelled(false);
+                                }
+                            } else {
+                                if (grupoSmart.contentsItem(item)) {
+                                    event.setCancelled(false);
+                                    return;
+                                }
                             }
-                            event.setCancelled(false);
-                            return;
-                        }
-                        if (item.getCdItem() == itemSmart.getCdItem()) {
-                            event.setCancelled(false);
-                            return;
-                        }
-                    }
-                    if (smartHopper.getType() instanceof Grupo grupoSmart) {
-                        if (smartHopper.getNameHopper().contains("#")) {
-                            if (grupoSmart.contentItem(item)) {
-                                event.setCancelled(true);
-                                return;
-                            }
-                            event.setCancelled(false);
-                            return;
-                        }
-                        if (grupoSmart.contentItem(item)) {
-                            event.setCancelled(false);
-                            return;
                         }
                     }
                 }
             }
-            if (destination.getType() == InventoryType.HOPPER && new SmartHopper(destination).toSmartHopper().equalsIgnoreCase("HOPPER")) {
+            if (destination.getType() == InventoryType.HOPPER && smartHopperDestino.getNameHopper().equalsIgnoreCase("HOPPER")) {
                 event.setCancelled(false);// Ativa o movimento do item
             }
             if (destination.getType() != InventoryType.HOPPER) {

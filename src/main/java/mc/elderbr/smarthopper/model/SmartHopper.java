@@ -34,7 +34,7 @@ public class SmartHopper {
         }
     }
 
-    private SmartHopper(Block block, String name) {
+    public SmartHopper(Block block, String name) {
         hopper = (Hopper) block.getState();
         hopper.setCustomName(name);
     }
@@ -135,4 +135,21 @@ public class SmartHopper {
         }
         return VGlobal.ITEM_MAP_NAME.get(name);
     }
+
+    public boolean igualContem(Item item){
+        if(getType() instanceof Item it){
+            if(it.getCdItem() == item.getCdItem()){
+                return true;
+            }
+        }
+        if(getType() instanceof Grupo grupo){
+            for(Item items : grupo.getListItem()){
+                if(items.getCdItem() == item.getCdItem()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

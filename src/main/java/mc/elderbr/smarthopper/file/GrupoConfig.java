@@ -64,7 +64,7 @@ public class GrupoConfig {
      * e salvar no banco de dados
      */
     public void loadYmlAddBanco() {
-        if(VGlobal.VERSION_INT > Config.VERSION()) {
+        if (VGlobal.VERSION_INT > Config.VERSION()) {
             Debug.WriteMsg("Criando grupos...");
             if (config == null) {
                 config = YamlConfiguration.loadConfiguration(fileConfig);
@@ -85,9 +85,9 @@ public class GrupoConfig {
                     }
                 }
                 // Percorrendo a lista de item do grupo
-                for(String itens : (List<String>) config.getList(key.concat(".grupo_item"))){
+                for (String itens : (List<String>) config.getList(key.concat(".grupo_item"))) {
                     item = VGlobal.ITEM_MAP_NAME.get(itens);
-                    if(item == null) continue;
+                    if (item == null) continue;
                     grupo.addList(item);
                 }
 
@@ -111,29 +111,26 @@ public class GrupoConfig {
     }
 
     public void updateYML() {
-
-        if(VGlobal.VERSION_INT > Config.VERSION()) {
-            try {
-                fileConfig.delete();
-                fileConfig.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            if (config == null) {
-                config = YamlConfiguration.loadConfiguration(fileConfig);
-            }
-
-            Msg.ServidorGold("Atualizando o arquivo grupo.yml");
-
-            Collections.sort(VGlobal.GRUPO_NAME_LIST);
-            for (String name : VGlobal.GRUPO_NAME_LIST) {
-                grupo = VGlobal.GRUPO_MAP_NAME.get(name);
-                if (grupo == null) continue;
-                add(grupo);
-            }
-            Msg.ServidorGold("Finalizado atualização do arquivo grupo.yml!!!");
+        try {
+            fileConfig.delete();
+            fileConfig.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        if (config == null) {
+            config = YamlConfiguration.loadConfiguration(fileConfig);
+        }
+
+        Msg.ServidorGold("Atualizando o arquivo grupo.yml");
+
+        Collections.sort(VGlobal.GRUPO_NAME_LIST);
+        for (String name : VGlobal.GRUPO_NAME_LIST) {
+            grupo = VGlobal.GRUPO_MAP_NAME.get(name);
+            if (grupo == null) continue;
+            add(grupo);
+        }
+        Msg.ServidorGold("Finalizado atualização do arquivo grupo.yml!!!");
     }
 
     private void save() {

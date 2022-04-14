@@ -278,12 +278,23 @@ public class Grupo implements Linguagem {
         }
     }
 
+    public boolean contentsItem(Item item){
+        Grupo grupo = VGlobal.GRUPO_MAP_NAME.get(dsGrupo);
+        if(grupo == null) return false;
+        for(Item items : grupo.getListItem()){
+            if(items.getCdItem() == item.getCdItem()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /***
      * Percorre o nome do item verifica se contém espaço se sim compara os nomes separados
      * @param item nome do item
      * @return falso ou verdadeiro
      */
-    public boolean contentItem(Item item) {
+    private boolean contentItem(Item item) {
         // Se o nome do grupo conter mais do que nome
         if (dsGrupo.equals(item.getDsItem())) return true;
         if (item.getDsItem().split("\\s").length > 0) {
