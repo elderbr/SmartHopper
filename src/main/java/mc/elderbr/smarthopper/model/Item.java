@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.Linguagem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -11,9 +12,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Item implements Linguagem {
 
@@ -149,6 +148,8 @@ public class Item implements Linguagem {
                 VGlobal.ITEM_NAME_LIST.add("lingering " + name);
             }
         }
+
+
         // LIVRO ENCANTADOS
         for (Enchantment enchantment : Enchantment.values()) {
             String name = "book "+enchantment.getKey().getKey().replaceAll("_", " ");

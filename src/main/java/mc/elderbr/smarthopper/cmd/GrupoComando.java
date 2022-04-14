@@ -89,6 +89,31 @@ public class GrupoComando implements CommandExecutor {
                         return false;
                     }
 
+                    if(listGrupo.size() == 1){
+                        grupo = VGlobal.GRUPO_MAP_NAME.get(listGrupo.get(0).getDsGrupo());
+                        grupo.setDsLang(player);
+                        inventoryCustom = new InventoryCustom();
+                        inventoryCustom.create(grupo.toTraducao().concat(Msg.Color(" $lID:$r" + grupo.getCdGrupo())));
+                        for (Item items : grupo.getListItem()) {
+                            inventoryCustom.addItem(items.getItemStack());
+                        }
+                        // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
+                        if (VGlobal.ADM_LIST.contains(player.getName())) {
+                            // CRIANDO O BOTÃO PARA SALVAR
+                            itemSalve = new ItemStack(Material.LIME_WOOL);
+                            meta = itemSalve.getItemMeta();
+                            meta.setDisplayName(Msg.Color("$aAtualizar"));
+                            lore = new ArrayList<>();
+                            lore.add(Msg.Color("$3Salvar"));
+                            meta.setLore(lore);
+                            itemSalve.setItemMeta(meta);
+                            inventoryCustom.getInventory().setItem(53, itemSalve);
+                        }
+                        player.openInventory(inventoryCustom.getInventory());
+                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.toTraducao() + " $e$lID: " + grupo.getCdGrupo()));
+                        return false;
+                    }
+
                     player.sendMessage("=====================================================");
                     for (Grupo grupo : listGrupo) {
                         grupo.setDsLang(player);

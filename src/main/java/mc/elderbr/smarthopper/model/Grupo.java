@@ -188,6 +188,72 @@ public class Grupo implements Linguagem {
         grupoList.add("netherite tools");
         grupoList.add("carne crua");
 
+        // LIVROS ENCANTADOS
+        grupoList.add("aqua affinity");
+        grupoList.add("bane of arthropods");
+        grupoList.add("binding curse");
+        grupoList.add("blast protection");
+        grupoList.add("channeling");
+        grupoList.add("depth strider");
+        grupoList.add("efficiency");
+        grupoList.add("feather falling");
+        grupoList.add("fire aspect");
+        grupoList.add("fire protection");
+        grupoList.add("flame");
+        grupoList.add("fortune");
+        grupoList.add("frost walker");
+        grupoList.add("impaling");
+        grupoList.add("infinity");
+        grupoList.add("knockback");
+        grupoList.add("looting");
+        grupoList.add("loyalty");
+        grupoList.add("luck of the sea");
+        grupoList.add("lure");
+        grupoList.add("mending");
+        grupoList.add("multishot");
+        grupoList.add("piercing");
+        grupoList.add("power");
+        grupoList.add("projectile protection");
+        grupoList.add("protection");
+        grupoList.add("punch");
+        grupoList.add("quick charge");
+        grupoList.add("respiration");
+        grupoList.add("riptide");
+        grupoList.add("sharpness");
+        grupoList.add("silk touch");
+        grupoList.add("smite");
+        grupoList.add("soul speed");
+        grupoList.add("sweeping");
+        grupoList.add("thorns");
+        grupoList.add("unbreaking");
+        grupoList.add("vanishing curse");
+
+
+        // POÇÕES
+        grupoList.add("awkward");
+        grupoList.add("fire resistance");
+        grupoList.add("instant damage");
+        grupoList.add("instant heal");
+        grupoList.add("jump");
+        grupoList.add("luck");
+        grupoList.add("mundane");
+        grupoList.add("night vision");
+        grupoList.add("poison");
+        grupoList.add("regen");
+        grupoList.add("slow falling");
+        grupoList.add("slowness");
+        grupoList.add("speed");
+        grupoList.add("strength");
+        grupoList.add("thick");
+        grupoList.add("turtle master");
+        grupoList.add("uncraftable");
+        grupoList.add("water");
+        grupoList.add("water breathing");
+        grupoList.add("weakness");
+
+
+
+
 
         createGrupoItem();
         return grupoList;

@@ -60,26 +60,26 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         AdmDao.SELECT_ALL();// PEGA A LISTA DE ADM E OPERADORES
 
         // CRIANDO ITENS E SALVANDO NO BANCO
-        //Item.CreateItem();// CRIANDO ITENS
-        //ItemDao.CreateDefault();// SALVANDO NO BANCO
+        Item.CreateItem();// CRIANDO ITENS
+        ItemDao.CreateDefault();// SALVANDO NO BANCO
         ItemDao.selectAll();// CARREGA TODOS OS ITENS DO BANCO E ADICIONA NO OBJETO GLOBAL
-        //itemConfig.updateYML();
+        itemConfig.updateYML();
 
         // TRADUÇÃO
-        //TraducaoDao.createBR();
-        //TraducaoDao.createPT();
+        TraducaoDao.createBR();
+        TraducaoDao.createPT();
         TraducaoDao.SELECT_ALL();
 
         // GRUPO
         // Verifica se a versão do plugin e inferior a 4.0.0 se for ler o arquivo grupo.yml e salva no banco de dados
-        //grupoConfig.loadYmlAddBanco();
+        grupoConfig.loadYmlAddBanco();
         // Cria grupos atraves do nome dos itens
         Grupo.CreateGrupos();
         // Salva os grupos no banco de dados
         GrupoDao.CREATE_GRUPO();
         // Ler todos os grupos salvos no banco
         GrupoDao.SELECT_ALL();
-        //grupoConfig.updateYML();
+        grupoConfig.updateYML();
 
         config.SET_VERSION(VGlobal.VERSION);// ALTERA A VERSÃO DO PLUGIN NO CONFIG
 
