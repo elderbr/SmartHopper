@@ -14,6 +14,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -55,30 +57,33 @@ public class GrupoComando implements CommandExecutor {
                     }
                     if (grupo != null) {
                         grupo.setDsLang(player);
-                        inventoryCustom = new InventoryCustom();
-                        inventoryCustom.create(grupo.toTraducao().concat(Msg.Color(" $lID:$r" + grupo.getCdGrupo())));
-                        for (Item items : grupo.getListItem()) {
-                            inventoryCustom.addItem(items.getItemStack());
+
+                        if(!grupo.getListItem().isEmpty()) {
+                            inventoryCustom = new InventoryCustom();
+                            inventoryCustom.create(grupo.toTraducao().concat(Msg.Color(" $lID:$r" + grupo.getCdGrupo())));
+                            for (Item items : grupo.getListItem()) {
+                                Msg.ServidorGreen("item do grupo >> "+ items.getDsItem(), getClass());
+                                inventoryCustom.addItem(items.getItemStack());
+                            }
+                            // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
+                            if (VGlobal.ADM_LIST.contains(player.getName())) {
+                                // CRIANDO O BOTÃO PARA SALVAR
+                                itemSalve = new ItemStack(Material.LIME_WOOL);
+                                meta = itemSalve.getItemMeta();
+                                meta.setDisplayName(Msg.Color("$aAtualizar"));
+                                lore = new ArrayList<>();
+                                lore.add(Msg.Color("$3Salvar"));
+                                meta.setLore(lore);
+                                itemSalve.setItemMeta(meta);
+                                inventoryCustom.getInventory().setItem(53, itemSalve);
+                            }
+                            player.openInventory(inventoryCustom.getInventory());
                         }
-                        // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
-                        if (VGlobal.ADM_LIST.contains(player.getName())) {
-                            // CRIANDO O BOTÃO PARA SALVAR
-                            itemSalve = new ItemStack(Material.LIME_WOOL);
-                            meta = itemSalve.getItemMeta();
-                            meta.setDisplayName(Msg.Color("$aAtualizar"));
-                            lore = new ArrayList<>();
-                            lore.add(Msg.Color("$3Salvar"));
-                            meta.setLore(lore);
-                            itemSalve.setItemMeta(meta);
-                            inventoryCustom.getInventory().setItem(53, itemSalve);
-                        }
-                        player.openInventory(inventoryCustom.getInventory());
                         player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.toTraducao() + " $e$lID: " + grupo.getCdGrupo()));
                     } else {
                         player.sendMessage(Msg.Color("$2O grupo $e" + cmd + " $6não existe!"));
                     }
                 } else {
-
                     Item item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
                     item.setDsLang(player);
 
@@ -97,6 +102,7 @@ public class GrupoComando implements CommandExecutor {
                         for (Item items : grupo.getListItem()) {
                             inventoryCustom.addItem(items.getItemStack());
                         }
+
                         // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
                         if (VGlobal.ADM_LIST.contains(player.getName())) {
                             // CRIANDO O BOTÃO PARA SALVAR

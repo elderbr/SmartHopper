@@ -83,6 +83,8 @@ public class ItemConfig {
                 item.setCdItem(config.getInt(values.getKey().concat(".item_id")));
                 item.setDsItem(config.getString(values.getKey().concat(".item_name")));
 
+                if(item.getItemStack() == null ) continue;
+
                 Msg.ServidorGreen("ITEM DO ARQUIVO >> " + item.getDsItem(), getClass());
 
                 if ((config.get(values.getKey().concat(".lang"))) instanceof MemorySection) {

@@ -189,71 +189,67 @@ public class Grupo implements Linguagem {
         grupoList.add("carne crua");
 
         // LIVROS ENCANTADOS
-        grupoList.add("aqua affinity");
-        grupoList.add("bane of arthropods");
-        grupoList.add("binding curse");
-        grupoList.add("blast protection");
-        grupoList.add("channeling");
-        grupoList.add("depth strider");
-        grupoList.add("efficiency");
-        grupoList.add("feather falling");
-        grupoList.add("fire aspect");
-        grupoList.add("fire protection");
-        grupoList.add("flame");
-        grupoList.add("fortune");
-        grupoList.add("frost walker");
-        grupoList.add("impaling");
-        grupoList.add("infinity");
-        grupoList.add("knockback");
-        grupoList.add("looting");
-        grupoList.add("loyalty");
-        grupoList.add("luck of the sea");
-        grupoList.add("lure");
-        grupoList.add("mending");
-        grupoList.add("multishot");
-        grupoList.add("piercing");
-        grupoList.add("power");
-        grupoList.add("projectile protection");
-        grupoList.add("protection");
-        grupoList.add("punch");
-        grupoList.add("quick charge");
-        grupoList.add("respiration");
-        grupoList.add("riptide");
-        grupoList.add("sharpness");
-        grupoList.add("silk touch");
-        grupoList.add("smite");
-        grupoList.add("soul speed");
-        grupoList.add("sweeping");
-        grupoList.add("thorns");
-        grupoList.add("unbreaking");
-        grupoList.add("vanishing curse");
+        grupoList.add("enchanted book aqua affinity");
+        grupoList.add("enchanted book bane of arthropods");
+        grupoList.add("enchanted book binding curse");
+        grupoList.add("enchanted book blast protection");
+        grupoList.add("enchanted book channeling");
+        grupoList.add("enchanted book depth strider");
+        grupoList.add("enchanted book efficiency");
+        grupoList.add("enchanted book feather falling");
+        grupoList.add("enchanted book fire aspect");
+        grupoList.add("enchanted book fire protection");
+        grupoList.add("enchanted book flame");
+        grupoList.add("enchanted book fortune");
+        grupoList.add("enchanted book frost walker");
+        grupoList.add("enchanted book impaling");
+        grupoList.add("enchanted book infinity");
+        grupoList.add("enchanted book knockback");
+        grupoList.add("enchanted book looting");
+        grupoList.add("enchanted book loyalty");
+        grupoList.add("enchanted book luck of the sea");
+        grupoList.add("enchanted book lure");
+        grupoList.add("enchanted book mending");
+        grupoList.add("enchanted book multishot");
+        grupoList.add("enchanted book piercing");
+        grupoList.add("enchanted book power");
+        grupoList.add("enchanted book projectile protection");
+        grupoList.add("enchanted book protection");
+        grupoList.add("enchanted book punch");
+        grupoList.add("enchanted book quick charge");
+        grupoList.add("enchanted book respiration");
+        grupoList.add("enchanted book riptide");
+        grupoList.add("enchanted book sharpness");
+        grupoList.add("enchanted book silk touch");
+        grupoList.add("enchanted book smite");
+        grupoList.add("enchanted book oul speed");
+        grupoList.add("enchanted book sweeping");
+        grupoList.add("enchanted book horns");
+        grupoList.add("enchanted book unbreaking");
+        grupoList.add("enchanted book vanishing curse");
 
 
         // POÇÕES
-        grupoList.add("awkward");
-        grupoList.add("fire resistance");
-        grupoList.add("instant damage");
-        grupoList.add("instant heal");
-        grupoList.add("jump");
-        grupoList.add("luck");
-        grupoList.add("mundane");
-        grupoList.add("night vision");
-        grupoList.add("poison");
-        grupoList.add("regen");
-        grupoList.add("slow falling");
-        grupoList.add("slowness");
-        grupoList.add("speed");
-        grupoList.add("strength");
-        grupoList.add("thick");
-        grupoList.add("turtle master");
-        grupoList.add("uncraftable");
-        grupoList.add("water");
-        grupoList.add("water breathing");
-        grupoList.add("weakness");
-
-
-
-
+        grupoList.add("potion awkward");
+        grupoList.add("potion fire resistance");
+        grupoList.add("potion instant damage");
+        grupoList.add("potion instant heal");
+        grupoList.add("potion jump");
+        grupoList.add("potion luck");
+        grupoList.add("potion mundane");
+        grupoList.add("potion night vision");
+        grupoList.add("potion poison");
+        grupoList.add("potion regen");
+        grupoList.add("potion slow falling");
+        grupoList.add("potion slowness");
+        grupoList.add("potion speed");
+        grupoList.add("potion strength");
+        grupoList.add("potion thick");
+        grupoList.add("potion turtle master");
+        grupoList.add("potion uncraftable");
+        grupoList.add("potion water");
+        grupoList.add("potion water breathing");
+        grupoList.add("potion weakness");
 
         createGrupoItem();
         return grupoList;
@@ -334,6 +330,31 @@ public class Grupo implements Linguagem {
                 grupo.addList(VGlobal.ITEM_MAP_NAME.get("cod"));
                 grupo.addList(VGlobal.ITEM_MAP_NAME.get("salmon"));
                 grupo.addList(VGlobal.ITEM_MAP_NAME.get("kelp"));
+            }
+
+            // GRUPO DE FLORES
+            if(grupo.getDsGrupo().equals("flowers")){
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("grass"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("fern"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("dead bush"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("seagrass"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("sea pickle"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("dandelion"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("poppy"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("blue orchid"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("allium"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("azure bluet"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("tulip"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("oxeye daisy"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("cornflower"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("lily"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("rose"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("vine"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("sunflower"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("lilac"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("peony"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("tall grass"));
+                grupo.addList(VGlobal.ITEM_MAP_NAME.get("large fern"));
             }
 
             // LISTA DE NOMES DE GRUPO GLOBAL

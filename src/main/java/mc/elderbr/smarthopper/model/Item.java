@@ -7,8 +7,12 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +22,7 @@ public class Item implements Linguagem {
 
     private int cdItem = 0;
     private String dsItem;
+    private ItemStack itemStack;
     // LANG
     private int cdLang;
     private String dsLang;
@@ -137,9 +142,9 @@ public class Item implements Linguagem {
         }
         // POÇÕES E SEU EFEITOS
         for (PotionType potion : PotionType.values()) {
-            String name = potion.name().replaceAll("_", " ").toLowerCase();
+            String name = "potion "+potion.name().replaceAll("_", " ").toLowerCase();
             if (!VGlobal.ITEM_NAME_LIST.contains(name)) {
-                VGlobal.ITEM_NAME_LIST.add("potion "+name);
+                VGlobal.ITEM_NAME_LIST.add(name);
             }
             if (!VGlobal.ITEM_NAME_LIST.contains("splash " + name)) {
                 VGlobal.ITEM_NAME_LIST.add("splash " + name);
@@ -152,7 +157,7 @@ public class Item implements Linguagem {
 
         // LIVRO ENCANTADOS
         for (Enchantment enchantment : Enchantment.values()) {
-            String name = "book "+enchantment.getKey().getKey().replaceAll("_", " ");
+            String name = "enchanted book "+enchantment.getKey().getKey().replaceAll("_", " ");
             if (!VGlobal.ITEM_NAME_LIST.contains(name)) {
                 VGlobal.ITEM_NAME_LIST.add(name);
             }
@@ -168,10 +173,10 @@ public class Item implements Linguagem {
             String potion = potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
             switch (itemStack.getType()) {
                 case LINGERING_POTION:
-                    dsItem = "lingering " + potion;
+                    dsItem = "lingering potion " + potion;
                     break;
                 case SPLASH_POTION:
-                    dsItem = "splash " + potion;
+                    dsItem = "splash potion " + potion;
                     break;
                 case POTION:
                     dsItem = "potion "+potion;
@@ -184,7 +189,9 @@ public class Item implements Linguagem {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
             if(meta.getStoredEnchants().size()>0) {
                 for (Map.Entry<Enchantment, Integer> keys : meta.getStoredEnchants().entrySet()) {
-                    dsItem = "book "+keys.getKey().getKey().getKey().toLowerCase().replaceAll("_", " ");
+                    dsItem = "enchanted book "+keys.getKey().getKey().getKey().toLowerCase().replaceAll("_", " ");
+                    VGlobal.BOOK_ENCHANTMENTE_LIST.add(dsItem);// ADICIONANDO LIVRO DE ENCANTAMENTO NA VARIAVEL GLOBAL
+                    VGlobal.BOOK_ENCHANTEMENT_MAP.put(dsItem, keys.getKey());
                     break;
                 }
                 return this;
@@ -200,11 +207,50 @@ public class Item implements Linguagem {
     }
 
     public ItemStack parseItemStack(@NotNull Item item) {
-        return new ItemStack(Material.getMaterial(item.getDsItem().replaceAll("\\s", "_").toUpperCase()));
+        try {
+
+            if (item.dsItem.contains("splash")) {
+                String name = item.getDsItem().replaceAll("splash potion ", "").replaceAll(" ", "_").toUpperCase();
+                itemStack = new ItemStack(Material.SPLASH_POTION);
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                itemStack.setItemMeta(meta);
+                return itemStack;
+            }
+
+            if (item.dsItem.contains("lingering")) {
+                String name = item.getDsItem().replaceAll("lingering potion ", "").replaceAll(" ", "_").toUpperCase();
+                itemStack = new ItemStack(Material.LINGERING_POTION);
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                itemStack.setItemMeta(meta);
+                return itemStack;
+            }
+
+            if (item.dsItem.contains("potion")) {
+                String name = item.getDsItem().replaceAll("potion ", "").replaceAll(" ", "_").toUpperCase();
+                itemStack = new ItemStack(Material.POTION);
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                itemStack.setItemMeta(meta);
+                return itemStack;
+            }
+
+            if(item.getDsItem().contains("enchanted book")){
+                itemStack = new ItemStack(Material.ENCHANTED_BOOK);
+                BookMeta meta = (BookMeta) itemStack.getItemMeta();
+                meta.addEnchant(VGlobal.BOOK_ENCHANTEMENT_MAP.get(item.getDsItem()), 0, true);
+                itemStack.setItemMeta(meta);
+                return itemStack;
+            }
+            return new ItemStack(Material.getMaterial(item.getDsItem().replaceAll("\\s", "_").toUpperCase()));
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public ItemStack getItemStack() {
-        return new ItemStack(Material.getMaterial(dsItem.replaceAll("\\s", "_").toUpperCase()));
+        return parseItemStack(this);
     }
 
 }

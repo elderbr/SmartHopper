@@ -40,6 +40,7 @@ public class InventoryCustom {
     }
 
     public void addItem(ItemStack item) {
+        if(item == null) return;
         inventory.addItem(item);
     }
 
