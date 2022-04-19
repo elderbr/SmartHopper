@@ -1,7 +1,7 @@
 package mc.elderbr.smarthopper.event;
 
+import mc.elderbr.smarthopper.cmd.GrupoComando;
 import mc.elderbr.smarthopper.dao.GrupoDao;
-import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
@@ -96,10 +96,11 @@ public class InventarioEvent implements Listener {
             if (event.getClick().isLeftClick() && itemClick.getItemMeta().getLore() != null && itemClick.getItemMeta().getLore().contains(Msg.Color("$3Salvar"))) {
 
                 nameGrupo = titulo.substring(Msg.Color("$8$lGrupo: $r").length(), titulo.indexOf(Msg.Color(" $lID"))).trim().toLowerCase();
-                grupo = VGlobal.GRUPO_MAP_NAME.get(nameGrupo);// BUSCA NO BANCO O GRUPO
 
-                grupo.getListItem().clear();// APAGANDO A LISTA DO GRUPO DOS ITENS
+                grupo = GrupoComando.GRUPO;// BUSCA NO BANCO O GRUPO
+
                 GrupoDao.DELETE_GRUPO_ITEM(grupo);// APAGANGO A LISTA DE ITEM DO GRUPO NO BANCO DE DADOS
+                grupo.getListItem().clear();// APAGANDO A LISTA DO GRUPO DOS ITENS
 
                 player.closeInventory();
 

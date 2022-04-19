@@ -15,8 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ public class GrupoComando implements CommandExecutor {
     private Player player;
     private String cmd;
 
-    private Grupo grupo;
+    public static Grupo GRUPO;
     private List<Grupo> listGrupo;
     private ItemStack itemStack;
     private InventoryCustom inventory;
@@ -49,20 +47,20 @@ public class GrupoComando implements CommandExecutor {
 
             if (command.getName().equalsIgnoreCase("grupo")) {
 
-                grupo = null;
+                GRUPO = null;
                 if (cmd.length() > 0) {
                     try {
-                        grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
+                        GRUPO = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
                     } catch (NumberFormatException e) {
-                        grupo = VGlobal.TRADUCAO_GRUPO_LIST.get(cmd);
+                        GRUPO = VGlobal.TRADUCAO_GRUPO_LIST.get(cmd);
                     }
-                    if (grupo != null) {
-                        grupo.setDsLang(player);
+                    if (GRUPO != null) {
+                        GRUPO.setDsLang(player);
 
-                        if(!grupo.getListItem().isEmpty()) {
+                        if(!GRUPO.getListItem().isEmpty()) {
                             inventoryCustom = new InventoryCustom();
-                            inventoryCustom.create(grupo.toTraducao().concat(Msg.Color(" $lID:$r" + grupo.getCdGrupo())));
-                            for (Item items : grupo.getListItem()) {
+                            inventoryCustom.create(GRUPO.toTraducao().concat(Msg.Color(" $lID:$r" + GRUPO.getCdGrupo())));
+                            for (Item items : GRUPO.getListItem()) {
                                 Msg.ServidorGreen("item do grupo >> "+ items.getDsItem(), getClass());
                                 inventoryCustom.addItem(items.getItemStack());
                             }
@@ -80,7 +78,7 @@ public class GrupoComando implements CommandExecutor {
                             }
                             player.openInventory(inventoryCustom.getInventory());
                         }
-                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.toTraducao() + " $e$lID: " + grupo.getCdGrupo()));
+                        player.sendMessage(Msg.Color("$2Grupo: $6" + GRUPO.toTraducao() + " $e$lID: " + GRUPO.getCdGrupo()));
                     } else {
                         player.sendMessage(Msg.Color("$2O grupo $e" + cmd + " $6não existe!"));
                     }
@@ -96,11 +94,11 @@ public class GrupoComando implements CommandExecutor {
                     }
 
                     if(listGrupo.size() == 1){
-                        grupo = VGlobal.GRUPO_MAP_NAME.get(listGrupo.get(0).getDsGrupo());
-                        grupo.setDsLang(player);
+                        GRUPO = VGlobal.GRUPO_MAP_NAME.get(listGrupo.get(0).getDsGrupo());
+                        GRUPO.setDsLang(player);
                         inventoryCustom = new InventoryCustom();
-                        inventoryCustom.create(grupo.toTraducao().concat(Msg.Color(" $lID:$r" + grupo.getCdGrupo())));
-                        for (Item items : grupo.getListItem()) {
+                        inventoryCustom.create(GRUPO.toTraducao().concat(Msg.Color(" $lID:$r" + GRUPO.getCdGrupo())));
+                        for (Item items : GRUPO.getListItem()) {
                             inventoryCustom.addItem(items.getItemStack());
                         }
 
@@ -117,7 +115,7 @@ public class GrupoComando implements CommandExecutor {
                             inventoryCustom.getInventory().setItem(53, itemSalve);
                         }
                         player.openInventory(inventoryCustom.getInventory());
-                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.toTraducao() + " $e$lID: " + grupo.getCdGrupo()));
+                        player.sendMessage(Msg.Color("$2Grupo: $6" + GRUPO.toTraducao() + " $e$lID: " + GRUPO.getCdGrupo()));
                         return false;
                     }
 
@@ -164,15 +162,15 @@ public class GrupoComando implements CommandExecutor {
                 if (VGlobal.ADM_LIST.contains(player.getName())) {
                     if (cmd.length() > 0) {
                         try {
-                            grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
+                            GRUPO = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
                         } catch (NumberFormatException e) {
-                            grupo = VGlobal.GRUPO_MAP_NAME.get(cmd);
+                            GRUPO = VGlobal.GRUPO_MAP_NAME.get(cmd);
                         }
-                        if (grupo != null) {
-                            if (GrupoDao.DELETE(grupo)) {
-                                grupo.setDsLang(player);
-                                Bukkit.getServer().broadcastMessage(Msg.Color("$6O jogador "+ player.getName() +" deletou o grupo $a$l" + grupo.getDsGrupo() + "!"));
-                                player.sendMessage(Msg.Color("$eO grupo " + grupo.getDsTraducao() + " apagado com sucesso!"));
+                        if (GRUPO != null) {
+                            if (GrupoDao.DELETE(GRUPO)) {
+                                GRUPO.setDsLang(player);
+                                Bukkit.getServer().broadcastMessage(Msg.Color("$6O jogador "+ player.getName() +" deletou o grupo $a$l" + GRUPO.getDsGrupo() + "!"));
+                                player.sendMessage(Msg.Color("$eO grupo " + GRUPO.getDsTraducao() + " apagado com sucesso!"));
                             }
                             return true;
                         }
