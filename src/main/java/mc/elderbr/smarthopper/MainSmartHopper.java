@@ -14,18 +14,10 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.recipes.HopperRecipe;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.*;
-
-import java.util.Locale;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
 

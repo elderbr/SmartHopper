@@ -7,6 +7,7 @@ import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -170,6 +171,7 @@ public class GrupoComando implements CommandExecutor {
                         if (grupo != null) {
                             if (GrupoDao.DELETE(grupo)) {
                                 grupo.setDsLang(player);
+                                Bukkit.getServer().broadcastMessage(Msg.Color("$6O jogador "+ player.getName() +" deletou o grupo $a$l" + grupo.getDsGrupo() + "!"));
                                 player.sendMessage(Msg.Color("$eO grupo " + grupo.getDsTraducao() + " apagado com sucesso!"));
                             }
                             return true;

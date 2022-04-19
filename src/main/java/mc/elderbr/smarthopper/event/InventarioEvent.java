@@ -7,6 +7,7 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -86,6 +87,7 @@ public class InventarioEvent implements Listener {
                 player.closeInventory();
                 if (GrupoDao.INSERT(grupoNovo)) {
                     grupoNovo.setDsGrupo(titulo.substring(Msg.Color("$5$lGrupo Novo: $r").length(), titulo.length()).trim());
+                    Bukkit.getServer().broadcastMessage(Msg.Color("$6O jogador "+ player.getName() +" criou o grupo $a$l" + grupo.getDsGrupo() + "!"));
                     player.sendMessage(Msg.Color("$6Grupo $a$l" + grupoNovo.getDsGrupo() + "$r$6 criado com sucesso!"));
                 }
             }
@@ -112,6 +114,7 @@ public class InventarioEvent implements Listener {
                 GrupoDao.INSERT_GRUPO_ITEM(grupo);// ADICIONANDO OS ITEM DO GRUPO
 
                 grupo.setDsLang(player);
+                Bukkit.getServer().broadcastMessage(Msg.Color("$6O jogador "+ player.getName() +" atualizou o grupo $a$l" + grupo.getDsGrupo() + "!"));
                 player.sendMessage(Msg.Color("$6Grupo $a$l" + grupo.toTraducao() + "$r$6 atualizado com sucesso!"));
 
             }
