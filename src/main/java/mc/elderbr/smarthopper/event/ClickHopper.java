@@ -26,16 +26,8 @@ public class ClickHopper implements Listener {
     private ItemStack itemStack;
     private Block block;
     private SmartHopper smartHopper;
-    private InventoryCustom inventory;
 
     private Item item;
-
-    private Grupo grupo;
-    private String nameGrupo;
-    private ItemStack itemSalve;
-    private ItemMeta meta;
-    private List<String> lore;
-    private InventoryCustom inventoryCustom;
 
     @EventHandler
     public void clickHopper(PlayerInteractEvent event) {
@@ -54,7 +46,6 @@ public class ClickHopper implements Listener {
 
         // SE FOR CLICADO NO HOPPER COM GRAVETO NA MÃO
         if (itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK) {
-
             // SE EXISTIR MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL
             smartHopper.msgPlayerSmartHopper(player);
         }
