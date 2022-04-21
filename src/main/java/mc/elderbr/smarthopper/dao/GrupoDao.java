@@ -49,7 +49,7 @@ public class GrupoDao {
             ResultSet rs = stm.getGeneratedKeys();
             if (rs.next()) {
                 grupo.setCdGrupo(rs.getInt(1));
-                TraducaoDao.INSERT(grupo);
+                int codeTraduca = TraducaoDao.INSERT(grupo);
                 INSERT_GRUPO_ITEM(grupo);
 
                 // ADICIONANDO A VARIAL GLOBAL
@@ -57,6 +57,14 @@ public class GrupoDao {
                 VGlobal.GRUPO_MAP_NAME.put(grupo.getDsGrupo(), grupo);// ADICIONANDO A BUSCA PELO NOME
                 VGlobal.GRUPO_NAME_LIST.add(grupo.getDsGrupo());// ADICIONANDO NA LISTA DE NOMES DO GRUPO
                 VGlobal.GRUPO_MAP.put(grupo.getDsGrupo(), grupo.getDsGrupo());// ADICIONANDO NA LISTA DE LANG TRADUZIDO
+
+                VGlobal.TRADUCAO_GRUPO_LIST.put(grupo.getDsGrupo(), grupo);
+
+                Traducao traducao = new Traducao();
+                traducao.setCdTraducao(codeTraduca);
+                traducao.setDsTraducao(grupo.getDsTraducao());
+                traducao.setCdLang(grupo.getCdLang());
+                VGlobal.TRADUCAO_MAP_GRUPO_NAME.put(grupo.getCdGrupo(), traducao);
 
                 return true;
             }

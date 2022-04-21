@@ -73,8 +73,7 @@ public class InventarioEvent implements Listener {
 
             // SALVAR NOVO GRUPO
             if (event.isLeftClick() && itemClick.getItemMeta().getLore() != null && itemClick.getItemMeta().getLore().contains(Msg.Color("$3Salva novo grupo"))) {
-                grupoNovo = new Grupo();
-                grupoNovo.setDsGrupo(titulo.substring(Msg.Color("$5$lGrupo Novo: $r").length(), titulo.length()).trim());
+                grupoNovo = GrupoComando.GRUPO;
                 grupoNovo.addTraducao(player.getLocale(), Utils.toUP(grupoNovo.getDsGrupo()));
 
                 // ADICIONANDO OS ITEM AO GRUPO
@@ -86,9 +85,9 @@ public class InventarioEvent implements Listener {
                 }
                 player.closeInventory();
                 if (GrupoDao.INSERT(grupoNovo)) {
-                    grupoNovo.setDsGrupo(titulo.substring(Msg.Color("$5$lGrupo Novo: $r").length(), titulo.length()).trim());
-                    Bukkit.getServer().broadcastMessage(Msg.Color("$6O jogador "+ player.getName() +" criou o grupo $a$l" + grupo.getDsGrupo() + "!"));
-                    player.sendMessage(Msg.Color("$6Grupo $a$l" + grupoNovo.getDsGrupo() + "$r$6 criado com sucesso!"));
+                    Msg.PlayerTodos(Msg.Color("$6O jogador "+ player.getName() +" criou o grupo $a$l" + grupoNovo.getDsGrupo() + "!"));
+                }else{
+                    Msg.PlayerTodos(Msg.Color("$4Ocorreu um erro ao criar o grupo $e&l "+ grupoNovo.getDsGrupo()+"$r!!!"));
                 }
             }
 

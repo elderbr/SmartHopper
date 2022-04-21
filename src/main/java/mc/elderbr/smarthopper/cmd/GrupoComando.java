@@ -85,7 +85,7 @@ public class GrupoComando implements CommandExecutor {
                 } else {
 
                     if (itemStack.getType() == Material.AIR) {
-                        Msg.PlayerRed(player, "Segure um item na mão!!!");
+                        Msg.PlayerRed(player, "Segure um item na mão ou escreva o nome do grupo ou seu ID!!!");
                         return false;
                     }
 
@@ -140,6 +140,11 @@ public class GrupoComando implements CommandExecutor {
 
                 if (VGlobal.ADM_LIST.contains(player.getName())) {
                     if (cmd.length() > 4) {
+
+                        GRUPO = new Grupo();
+                        GRUPO.setDsGrupo(cmd);
+                        GRUPO.setDsTraducao(cmd);
+
                         inventory = new InventoryCustom();
                         inventory.createNewGrupo(cmd);
 
@@ -174,13 +179,18 @@ public class GrupoComando implements CommandExecutor {
                         }
                         if (GRUPO != null) {
                             if (GrupoDao.DELETE(GRUPO)) {
-                                Msg.PlayerTodos(Msg.Color("$6O jogador " + player.getName() + " deletou o grupo $a$l" + GRUPO.getDsGrupo() + "!"));
 
                                 // REMOVENDO O GRUPO DAS VARIAVEIS GLOBAL
                                 VGlobal.GRUPO_MAP_NAME.get(GRUPO.getDsGrupo());
                                 VGlobal.GRUPO_MAP_ID.get(GRUPO.getCdGrupo());
                                 VGlobal.GRUPO_MAP.get(GRUPO.getDsGrupo());
                                 VGlobal.GRUPO_NAME_LIST.remove(GRUPO.getDsGrupo());
+
+                                // TRADUÇÃO
+                                VGlobal.TRADUCAO_GRUPO_LIST.remove(GRUPO.getDsGrupo());
+                                VGlobal.TRADUCAO_MAP_GRUPO_NAME.remove(GRUPO.getCdGrupo());
+
+                                Msg.PlayerTodos(Msg.Color("$6O jogador " + player.getName() + " deletou o grupo $a$l" + GRUPO.getDsGrupo() + "!"));
                             }else{
                                 Msg.PlayerRed(player, "Ocorreu um erro ao deletar o grupo "+ GRUPO.getDsGrupo()+"!!!");
                             }
