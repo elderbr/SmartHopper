@@ -21,3 +21,6 @@ commands:
   livro:
     aliases: [ book, livro ]
     description: Recebe um livro com os nomes de todos os grupos
+  informacao:
+    aliases: [infor, tutorial]
+    description: Receberá um livro com os comandos basicos do Smart Hopper

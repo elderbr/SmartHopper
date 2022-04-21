@@ -118,6 +118,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         getCommand("livro").setExecutor(new LivroComando());
 
+        getCommand("informacao").setExecutor(new InformacaoComando());
+
         // ADICIONANDO NOVAS RECEITAS
         HopperRecipe recipes = new HopperRecipe();
         getServer().addRecipe(recipes.createSmartHopper());// SMARTHOPPER PERSONALIZADO
