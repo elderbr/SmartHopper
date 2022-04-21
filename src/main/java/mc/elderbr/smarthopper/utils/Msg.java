@@ -72,6 +72,10 @@ public class Msg {
         player.sendMessage(ChatColor.RED + msg);
     }
 
+    public static void PlayerTodos(String msg){
+        Bukkit.getServer().broadcastMessage(msg);
+    }
+
     //========================== JOGADOR =================================================//
     public static void Jogador(@NotNull Jogador jogador, @NotNull Class classe) {
         Bukkit.getServer().getConsoleSender().sendMessage(
