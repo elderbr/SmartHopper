@@ -71,16 +71,19 @@ ___
 
 ### Administradores
 - São responsáveis pelo os operadores e na criação, alterações ou remover os grupos.
-Os administradores podem adicionar novos operadores ou remove-los. 
+Os administradores podem adicionar novos operadores ou remove-los.
 
-### Para adicionar novo operador:
-> **/addoperador** ***nome do operador***
+---
 
-### Para remover operador:
-> **/removeoperador** ***nome do operador***
+## Livros
 
-### Operadores 
-- São responsáveis: pela criação, alterações ou remover os grupos.
+### Livro dos grupos
+- Digite **/livro** para receber o livro com os nomes de todos os grupos
+
+### Livro com informações do Smart Hopper
+- Digite **/config** para receber o livro com os comandos do Smart Hopper
+
+---
 
 ## Como usar
 
