@@ -61,7 +61,6 @@ public class GrupoComando implements CommandExecutor {
                             inventoryCustom = new InventoryCustom();
                             inventoryCustom.create(GRUPO.toTraducao().concat(Msg.Color(" $lID:$r" + GRUPO.getCdGrupo())));
                             for (Item items : GRUPO.getListItem()) {
-                                Msg.ServidorGreen("item do grupo >> " + items.getDsItem(), getClass());
                                 inventoryCustom.addItem(items.getItemStack());
                             }
                             // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
