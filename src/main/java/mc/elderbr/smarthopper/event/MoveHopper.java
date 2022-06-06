@@ -172,11 +172,47 @@ public class MoveHopper implements Listener {
                         if (inventory.getItem(i) != null) {
                             Item itemInventory = VGlobal.ITEM_MAP_NAME.get(new Item(inventory.getItem(i)).getDsItem());
 
+                            // VERIFICA SE CONTEM MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O HOPPER
+                            if (smartHopperDestino.getNameHopper().contains(";")) {
+                                // PEGANDO A LISTA DE NOMES CONFIGURADOS PARA O HOPPER
+                                String[] lista = smartHopperDestino.getNameHopper().split(";");
+                                // PERCORRENDO A LISTA DE NOMES DO HOPPER
+                                for (String hopperNameList : lista) {
+                                    SmartHopper smartHopper = new SmartHopper(destination.getLocation().getBlock(), hopperNameList);
+
+                                    // SE O HOPPER DE DESTINO FOI CONFIGURADO PARA ITEM
+                                    if (smartHopper.getType() instanceof Item itemHopperDestino) {
+                                        if (itemHopperDestino.getCdItem() == itemInventory.getCdItem()) {
+                                            destination.addItem(inventory.getItem(i));
+                                            inventory.removeItem(inventory.getItem(i));
+                                            return;
+                                        }
+                                    }
+                                    // SE O HOPPER DE DESTINO ESTIVER CONFIGURADO PARA GRUPO
+                                    if (smartHopper.getType() instanceof Grupo grupoHopperDestino) {
+                                        if (grupoHopperDestino.contentsItem(itemInventory)) {
+                                            destination.addItem(inventory.getItem(i));
+                                            inventory.removeItem(inventory.getItem(i));
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+
                             // SE O HOPPER DE DESTINO FOI CONFIGURADO PARA ITEM
-                            if(smartHopperDestino.getType() instanceof Item itemHopperDestino){
-                                if(itemHopperDestino.getCdItem() == itemInventory.getCdItem()){
+                            if (smartHopperDestino.getType() instanceof Item itemHopperDestino) {
+                                if (itemHopperDestino.getCdItem() == itemInventory.getCdItem()) {
                                     destination.addItem(inventory.getItem(i));
                                     inventory.removeItem(inventory.getItem(i));
+                                    return;
+                                }
+                            }
+                            // SE O HOPPER DE DESTINO ESTIVER CONFIGURADO PARA GRUPO
+                            if (smartHopperDestino.getType() instanceof Grupo grupoHopperDestino) {
+                                if (grupoHopperDestino.contentsItem(itemInventory)) {
+                                    destination.addItem(inventory.getItem(i));
+                                    inventory.removeItem(inventory.getItem(i));
+                                    return;
                                 }
                             }
                         }
