@@ -26,6 +26,7 @@ public class MoveHopper implements Listener {
 
     private Item item;
 
+    private Inventory inventoryInicial;
     private Inventory inventory;
     private Inventory destination;
 
@@ -37,6 +38,7 @@ public class MoveHopper implements Listener {
     private SmartHopper smartHopperDestino;
 
     private List<Boolean> bloqueia;
+
 
     public MoveHopper() {
 
@@ -54,12 +56,19 @@ public class MoveHopper implements Listener {
             // Pegando o inventorio onde está o item
             inventory = event.getSource();
 
+            // Primeiro inventario que o item vai
+            inventoryInicial = event.getInitiator();
+
             // Destino do item
             destination = event.getDestination();// Inventorio de destino
             smartHopperDestino = new SmartHopper(destination);
 
             // Pega o bloco de baixo de onde o item está
-            blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            if (inventory.getType() == InventoryType.CHEST) {
+                blockDown = inventoryInicial.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            } else {
+                blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            }
 
             if (blockDown.getState().getType() == Material.HOPPER) {// Verifica se o bloco de baixo é um hopper
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
@@ -130,7 +139,7 @@ public class MoveHopper implements Listener {
                             if (smartHopper.getNameHopper().contains("#")) {
                                 if (grupoSmart.contentsItem(item)) {
                                     event.setCancelled(true);
-                                }else {
+                                } else {
                                     event.setCancelled(false);
                                 }
                             } else {
@@ -143,12 +152,48 @@ public class MoveHopper implements Listener {
                     }
                 }
             }
+
+
+            if (smartHopperDestino.getType() instanceof Item itemHopper) {
+                if (itemHopper.getCdItem() == item.getCdItem()) {
+                    event.setCancelled(false);
+                }
+            }
+            if (smartHopperDestino.getType() instanceof Grupo grupoHopper) {
+                if (grupoHopper.contentsItem(item)) {
+                    event.setCancelled(false);
+                }
+            }
+
+            try {
+                // ITEM QUE SE MOVE PARA O HOPPER DO LADO
+                if (destination.getType() == InventoryType.HOPPER) {
+                    for (int i = 0; i < inventory.getSize(); i++) {
+                        if (inventory.getItem(i) != null) {
+                            Item itemInventory = VGlobal.ITEM_MAP_NAME.get(new Item(inventory.getItem(i)).getDsItem());
+
+                            // SE O HOPPER DE DESTINO FOI CONFIGURADO PARA ITEM
+                            if(smartHopperDestino.getType() instanceof Item itemHopperDestino){
+                                if(itemHopperDestino.getCdItem() == itemInventory.getCdItem()){
+                                    destination.addItem(inventory.getItem(i));
+                                    inventory.removeItem(inventory.getItem(i));
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Msg.ServidorErro("Erro ao buscar o item no funil!", "", getClass(), e);
+            }
+
+
             if (destination.getType() == InventoryType.HOPPER && smartHopperDestino.getNameHopper().equalsIgnoreCase("HOPPER")) {
                 event.setCancelled(false);// Ativa o movimento do item
             }
             if (destination.getType() != InventoryType.HOPPER) {
                 event.setCancelled(false);// Ativa o movimento do item
             }
+
         } catch (
                 Exception e) {
             event.setCancelled(false);
