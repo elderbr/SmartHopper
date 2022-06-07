@@ -46,8 +46,12 @@ public class InventoryCustom {
     }
 
     public void addItem(ItemStack item) {
+<<<<<<< HEAD
         potion = new Pocao();
         itemStack = new ItemStack(item);
+=======
+        if(item == null) return;
+>>>>>>> v4.0.0
         inventory.addItem(item);
     }
 

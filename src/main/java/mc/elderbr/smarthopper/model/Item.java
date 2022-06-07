@@ -1,54 +1,69 @@
 package mc.elderbr.smarthopper.model;
 
-import mc.elderbr.smarthopper.interfaces.Dados;
-import mc.elderbr.smarthopper.interfaces.Traducao;
-import mc.elderbr.smarthopper.utils.Utils;
+import mc.elderbr.smarthopper.interfaces.Linguagem;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Item implements Dados, Traducao {
+public class Item implements Linguagem {
 
-    private int cdItem;
+    private int cdItem = 0;
     private String dsItem;
+    private ItemStack itemStack;
+    // LANG
     private int cdLang;
     private String dsLang;
+    // TRADUCAO
     private int cdTraducao;
     private String dsTraducao;
+
+    // LISTA DE TRADUÇÃO
+    private Map<String, String> traducao = new HashMap<>();
 
     public Item() {
     }
 
+    public Item(String name) {
+        dsItem = name;
+    }
+
     public Item(ItemStack itemStack) {
-        dsItem = Utils.toItem(itemStack);
+        parseItem(itemStack);
     }
 
 
-    @Override
-    public int getCodigo() {
+    public int getCdItem() {
         return cdItem;
     }
 
-    @Override
-    public void setCodigo(int codigo) {
-        cdItem = codigo;
+    public void setCdItem(int cdItem) {
+        this.cdItem = cdItem;
     }
 
-    public void setCodigo(String codigo) throws NumberFormatException {
-        cdItem = Integer.parseInt(codigo);
-    }
-
-    @Override
-    public String getName() {
+    public String getDsItem() {
         return dsItem;
     }
 
+    public void setDsItem(String dsItem) {
+        this.dsItem = dsItem;
+    }
+
     @Override
-    public void setName(String name) {
-        dsItem = name;
+    public Item setCdLang(int codigo) {
+        cdLang = codigo;
+        return this;
     }
 
     @Override
@@ -57,8 +72,15 @@ public class Item implements Dados, Traducao {
     }
 
     @Override
-    public void setCdLang(int lang) {
-        cdLang = lang;
+    public Item setDsLang(String lang) {
+        dsLang = lang;
+        return this;
+    }
+
+    @Override
+    public Item setDsLang(Player player) {
+        dsLang = player.getLocale();
+        return this;
     }
 
     @Override
@@ -67,13 +89,9 @@ public class Item implements Dados, Traducao {
     }
 
     @Override
-    public void setDsLang(String lang) {
-        dsLang = lang;
-    }
-
-    public void setDsLang(Lang lang) {
-        cdLang = lang.getCdLang();
-        dsLang = lang.getDsLang();
+    public Item setCdTraducao(int codigo) {
+        cdTraducao = codigo;
+        return this;
     }
 
     @Override
@@ -82,8 +100,9 @@ public class Item implements Dados, Traducao {
     }
 
     @Override
-    public void setCdTraducao(int codigo) {
-        cdTraducao = codigo;
+    public Item setDsTraducao(String traducao) {
+        dsTraducao = traducao;
+        return this;
     }
 
     @Override
@@ -91,73 +110,146 @@ public class Item implements Dados, Traducao {
         return dsTraducao;
     }
 
-    @Override
-    public void setDsTraducao(String traducao) {
-        dsTraducao = traducao;
+    public Map<String, String> getTraducao() {
+        return traducao;
     }
 
-    public boolean contains(@NotNull Grupo grupo) {
-        String name = null;
-        String nameGrupo = grupo.getDsGrupo();
-
-        if (dsItem.equalsIgnoreCase(nameGrupo)) return true;
-
-        String[] names = dsItem.split("\\s");
-
-        for (int i = 0; i < names.length; i++) {
-            if (names[i].equalsIgnoreCase(nameGrupo)) {
-                return true;
-            }
-            if ((i + 1) < names.length) {
-                name = names[i] + " " + names[i + 1];
-                if (name.equalsIgnoreCase(nameGrupo)) {
-                    return true;
-                }
-            }
-            if ((i + 2) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2];
-                if (name.equalsIgnoreCase(nameGrupo)) {
-                    return true;
-                }
-            }
-            if ((i + 3) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3];
-                if (name.equalsIgnoreCase(nameGrupo)) {
-                    return true;
-                }
-            }
-            if ((i + 4) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3] + " " + names[i + 4];
-                if (name.equalsIgnoreCase(nameGrupo)) {
-                    return true;
-                }
-            }
-            if ((i + 5) < names.length) {
-                name = names[i] + " " + names[i + 1] + " " + names[i + 2] + " " + names[i + 3] + " " + names[i + 4] + " " + names[i + 5];
-                if (name.equalsIgnoreCase(nameGrupo)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public void addTraducao(String lang, String traducao) {
+        if(this.traducao == null) this.traducao = new HashMap<>();
+        this.traducao.put(lang, traducao);
     }
 
-    public List<Item> getListMaterial() {
-        List<Item> list = new ArrayList<>();
-        for (Material m : Material.values()) {
-            try {
-                ItemStack itemStack = new ItemStack(m);
-                if (itemStack != null) {
-                    list.add(new Item(itemStack));
-                }
-            } catch (Exception e) {
-            }
-        }
-        return list;
+    public String toTraducao(){
+        dsTraducao = traducao.get(dsLang);
+        return ( dsTraducao == null ? dsItem : dsTraducao );
     }
 
     @Override
     public String toString() {
-        return (dsTraducao != null ? dsTraducao : dsItem);
+        return dsItem;
     }
+
+    public static void CreateItem() {
+        for (Material m : Material.values()) {
+            ItemStack itemStack = new ItemStack(m);
+            if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.getType().isItem()) {
+                Item item = new Item().parseItem(itemStack);
+                if (!VGlobal.ITEM_NAME_LIST.contains(item.getDsItem())) {
+                    VGlobal.ITEM_NAME_LIST.add(item.getDsItem());
+                }
+            }
+        }
+        // POÇÕES E SEU EFEITOS
+        for (PotionType potion : PotionType.values()) {
+            String name = "potion "+potion.name().replaceAll("_", " ").toLowerCase();
+            if (!VGlobal.ITEM_NAME_LIST.contains(name)) {
+                VGlobal.ITEM_NAME_LIST.add(name);
+            }
+            if (!VGlobal.ITEM_NAME_LIST.contains("splash " + name)) {
+                VGlobal.ITEM_NAME_LIST.add("splash " + name);
+            }
+            if (!VGlobal.ITEM_NAME_LIST.contains("lingering " + name)) {
+                VGlobal.ITEM_NAME_LIST.add("lingering " + name);
+            }
+        }
+
+
+        // LIVRO ENCANTADOS
+        for (Enchantment enchantment : Enchantment.values()) {
+            String name = "enchanted book "+enchantment.getKey().getKey().replaceAll("_", " ");
+            if (!VGlobal.ITEM_NAME_LIST.contains(name)) {
+                VGlobal.ITEM_NAME_LIST.add(name);
+            }
+        }
+        Collections.sort(VGlobal.ITEM_NAME_LIST);
+    }
+
+    public Item parseItem(@NotNull ItemStack itemStack) {
+
+        // ITEM DE POÇAO
+        if (itemStack.getType() == Material.POTION || itemStack.getType() == Material.SPLASH_POTION || itemStack.getType() == Material.LINGERING_POTION) {
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+            String potion = potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
+            switch (itemStack.getType()) {
+                case LINGERING_POTION:
+                    dsItem = "lingering potion " + potion;
+                    break;
+                case SPLASH_POTION:
+                    dsItem = "splash potion " + potion;
+                    break;
+                case POTION:
+                    dsItem = "potion "+potion;
+                    break;
+            }
+            return this;
+        }
+        // LIVROS ENCANTADOS PEGA A PRIMEIRO ENCANTAMENTO DA LISTA DE ENCANTAMENTOS
+        if (itemStack.getType() == Material.ENCHANTED_BOOK) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            if(meta.getStoredEnchants().size()>0) {
+                for (Map.Entry<Enchantment, Integer> keys : meta.getStoredEnchants().entrySet()) {
+                    dsItem = "enchanted book "+keys.getKey().getKey().getKey().toLowerCase().replaceAll("_", " ");
+                    VGlobal.BOOK_ENCHANTMENTE_LIST.add(dsItem);// ADICIONANDO LIVRO DE ENCANTAMENTO NA VARIAVEL GLOBAL
+                    VGlobal.BOOK_ENCHANTEMENT_MAP.put(dsItem, keys.getKey());
+                    break;
+                }
+                return this;
+            }
+        }
+        dsItem = itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
+        return this;
+    }
+
+    public Item parseItem(@NotNull Material material) {
+        dsItem = material.getKey().getKey().replaceAll("_", " ").toLowerCase();
+        return this;
+    }
+
+    public ItemStack parseItemStack(@NotNull Item item) {
+        try {
+
+            if (item.dsItem.contains("splash")) {
+                String name = item.getDsItem().replaceAll("splash potion ", "").replaceAll(" ", "_").toUpperCase();
+                itemStack = new ItemStack(Material.SPLASH_POTION);
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                itemStack.setItemMeta(meta);
+                return itemStack;
+            }
+
+            if (item.dsItem.contains("lingering")) {
+                String name = item.getDsItem().replaceAll("lingering potion ", "").replaceAll(" ", "_").toUpperCase();
+                itemStack = new ItemStack(Material.LINGERING_POTION);
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                itemStack.setItemMeta(meta);
+                return itemStack;
+            }
+
+            if (item.dsItem.contains("potion")) {
+                String name = item.getDsItem().replaceAll("potion ", "").replaceAll(" ", "_").toUpperCase();
+                itemStack = new ItemStack(Material.POTION);
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                itemStack.setItemMeta(meta);
+                return itemStack;
+            }
+
+            if(item.getDsItem().contains("enchanted book")){
+                itemStack = new ItemStack(Material.ENCHANTED_BOOK);
+                BookMeta meta = (BookMeta) itemStack.getItemMeta();
+                meta.addEnchant(VGlobal.BOOK_ENCHANTEMENT_MAP.get(item.getDsItem()), 0, true);
+                itemStack.setItemMeta(meta);
+                return itemStack;
+            }
+            return new ItemStack(Material.getMaterial(item.getDsItem().replaceAll("\\s", "_").toUpperCase()));
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    public ItemStack getItemStack() {
+        return parseItemStack(this);
+    }
+
 }

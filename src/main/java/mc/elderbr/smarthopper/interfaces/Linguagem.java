@@ -1,8 +1,11 @@
 package mc.elderbr.smarthopper.interfaces;
 
+
+import mc.elderbr.smarthopper.model.Item;
+
 public interface Linguagem {
     int getCdLang();
-    void setCdLang(int lang);
+    Item setCdLang(int lang);
     String getDsLang();
-    void setDsLang(String lang);
+    Item setDsLang(String lang);
 }

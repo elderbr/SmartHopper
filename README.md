@@ -45,7 +45,7 @@ Vai receber uma mensagem com a confirmação do nome do item e seu **ID**.
 
 ## Grupo
 Grupo são vários itens da mesma família ou do mesmo seguimento. O plugin vem pré-configurado grupos.
-Para saber o ID do grupo segure o item na mão ou escreva o nome. 
+Para saber o ID do grupo segure o item na mão ou escreva o código ou nome. 
 
 O mesmo item pode está representa em mais de um grupo, o tronco de pinheiro pode está no grupo ***Troncos*** e ***Pinheiro***, escolha qual grupo deseja.
 Se não souber o nome do grupo pode obter uma lista de todos os nomes dos grupos usando o comando:
@@ -67,20 +67,27 @@ Apenas os **adm** e ***operadores*** do ***SmartHopper*** podem remover grupo.
 
 ___
 
-## Adminstrador e operadores
+## Adminstrador
 
-### Administradores
-- São responsáveis pelo os operadores e na criação, alterações ou remover os grupos.
-Os administradores podem adicionar novos operadores ou remove-los. 
+### Adicionar Administrador
+- São responsáveis pela a criação, alterações e remover dos grupos.
+- Para adicionar novo o jogador precisa ser operador do servidor, é usado o comando **/addadm** seguido do nome 
+do jogador. O jogador precisa está online para ser adicionado.
 
-### Para adicionar novo operador:
-> **/addoperador** ***nome do operador***
+### Remover Administrador
+- Para remover o administrador digite o comando **/removeadm** e o nome do jogador.
 
-### Para remover operador:
-> **/removeoperador** ***nome do operador***
+---
 
-### Operadores 
-- São responsáveis: pela criação, alterações ou remover os grupos.
+## Livros
+
+### Livro dos grupos
+- Digite **/livro** para receber o livro com os nomes de todos os grupos
+
+### Livro com informações do Smart Hopper
+- Digite **/config** para receber o livro com os comandos do Smart Hopper
+
+---
 
 ## Como usar
 

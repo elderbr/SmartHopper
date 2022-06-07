@@ -13,7 +13,7 @@ public class Velocity {
     public Velocity() {
     }
 
-    public int getId() {
+    public int getCdGrupo() {
         return id;
     }
 
@@ -21,7 +21,7 @@ public class Velocity {
         this.id = id;
     }
 
-    public String getName() {
+    public String getDsGrupo() {
         return name;
     }
 

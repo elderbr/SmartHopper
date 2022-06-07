@@ -1,14 +1,9 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.dao.ItemDao;
-import mc.elderbr.smarthopper.dao.LangDao;
-import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,90 +15,46 @@ import org.jetbrains.annotations.NotNull;
 public class ItemComando implements CommandExecutor {
 
     private Item item = null;
-    private ItemDao itemDao = new ItemDao();
-    private StringBuffer nameItem;
-
     private Player player;
     private String cmd;
-    private String langPlayer;
 
     private ItemStack itemStack;
-
-    private TraducaoDao traducaoDao = new TraducaoDao();
-
-    private Lang lang = new Lang();
-    private LangDao langDao = new LangDao();
-
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (sender instanceof Player) {
-
             player = (Player) sender;
-            cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
+            cmd = Utils.NAME_ARRAY(args).toLowerCase();// PEGA O NOME DO ITEM DIGITADO
             itemStack = player.getInventory().getItemInMainHand();// PEGA O NOME DO ITEM NA MÃO
-            langPlayer = player.getLocale();
-            lang = VGlobal.LANG_NAME_MAP.get(langPlayer);
-            item = null;
 
             if (command.getName().equalsIgnoreCase("item")) {
-                if (cmd.length() > 0) {
-                    item = new Item();
-                    // VERIFICA SE É NÚMERO SE NÃO PESQUISA PELO NOME
-                    try{
-                        item.setCodigo(cmd);
-                    }catch (NumberFormatException ex){
-                        item.setName(cmd);
+
+                if (cmd.length() == 0) {// VERIFICA SE NÃO FOI DIGITADO E SE O ITEM É DIFERENTE DE AR
+
+                    if (itemStack.getType() == Material.AIR) {
+                        player.sendMessage("§cSegure um item na mão ou escreva o nome ou ID!!!");
+                        return true;
                     }
-                    item.setDsLang(langPlayer);
-                    item = itemDao.select(item);
+                    // CONVERTE ITEM STACK PARA ITEM
+                    item = new Item(itemStack);
+
                 } else {
-                    if (itemStack.getType() != Material.AIR) {
-                        item = VGlobal.ITEM_NAME_MAP.get(Utils.toItem(itemStack));
-                        item.setDsLang(langPlayer);
-                        item = itemDao.select(item);
+                    try {
+                        item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(cmd));//BUSCA O ITEM PELO O SEU ID
+                    } catch (NumberFormatException e) {
+                        item = VGlobal.TRADUCAO_ITEM_LIST.get(cmd);//BUSCA O ITEM PELO O NOME
                     }
                 }
                 if (item != null) {
-                    Msg.ItemPlayer(player, item);
+                    item = VGlobal.ITEM_MAP_NAME.get(item.getDsItem());
+                    // MOSTRA MENSAGEM PARA O JOGADOR COM TODAS AS INFORMAÇÕES DO ITEM
+                    Msg.Item(player, item);// Mostra o nome do item e seu ID
                 } else {
-                    Msg.PlayerRed(player, "Não existe registro do item " + ChatColor.GOLD + cmd + ChatColor.RED + "!!!");
-
+                    Msg.ItemNaoExiste(player, cmd);// O item não existe
                 }
-                return false;
             }
 
-
-            // ADICIONANDO OU ATUALIZANDO A TRADUÇÃO DO ITEM
-            if (command.getName().equalsIgnoreCase("traducaoItem")) {
-
-                if (itemStack.getType() == Material.AIR) {
-                    Msg.PlayerGold(player, "Segure um item na mão!!!");
-                    return false;
-                }
-
-                item = new Item(itemStack);
-                item.setDsLang(langPlayer);
-                item = itemDao.select(item);
-                item.setDsTraducao(Utils.NAME_ARRAY(args));
-                // VERIFICA SE JA EXISTE TRADUÇÃO PARA O ITEM E LANG
-                if (traducaoDao.selectItem(item) == null) {
-                    item.setDsLang(lang);
-                    if (traducaoDao.insert(item) > 0) {
-                        Msg.PlayerGreen(player, "Tradução para o item " + item.getDsTraducao() + " adicionado com sucesso!");
-                    } else {
-                        Msg.PlayerRed(player, "Erro ao adicionar tradução do item " + item.getDsTraducao() + "!!!");
-                    }
-                } else {
-                    if (traducaoDao.update(item) > 0) {
-                        Msg.PlayerGreen(player, "Tradução para o item " + ChatColor.GOLD + item.getDsTraducao() + ChatColor.GREEN + " atualizada com sucesso!");
-                    } else {
-                        Msg.PlayerRed(player, "Erro para atualizar a tradução do item " + ChatColor.GOLD + item.getDsTraducao() + ChatColor.GREEN + "!!!");
-                    }
-                }
-                Msg.ServidorGreen("cdItem >> " + item.getCodigo() + " - item getDsItem >> " + item.getName() + " - lang >> " + item.getDsLang() + " - traducao >> " + item.getDsTraducao());
-            }
         }
         return false;
     }

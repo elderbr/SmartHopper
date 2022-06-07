@@ -13,7 +13,7 @@ public class ConfigModel {
         listAdm = new ArrayList<>();
     }
 
-    public String getName() {
+    public String getDsGrupo() {
         return name;
     }
 

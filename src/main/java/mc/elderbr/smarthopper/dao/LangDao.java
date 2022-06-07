@@ -1,165 +1,143 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Lang;
 import mc.elderbr.smarthopper.utils.Msg;
-import org.checkerframework.checker.units.qual.A;
+import org.jetbrains.annotations.NotNull;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class LangDao {
 
-    private Lang lang;
-    private List<Lang> listLang;
-
-    private Connection conexao;
-    private PreparedStatement smt;
-    private ResultSet rs;
-    private String sql;
+    private static PreparedStatement stm = null;
+    private static ResultSet rs = null;
+    private static String sql;
 
     public LangDao() {
-        createTable();
     }
 
-    private void createTable() {
-        sql = "CREATE TABLE IF NOT EXISTS lang (cdLang INTEGER PRIMARY KEY AUTOINCREMENT, dsLang NVARCHAR(30) UNIQUE NOT NULL)";
+    public static int insert(@NotNull Object lang) {
+        stm = null;
         try {
-            Conexao.create(sql);
-        } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao criar a tabela lang", "createTable", getClass(), e);
-        } finally {
-            Conexao.desconect();
-        }
-        // SE NÃO EXISTIR LANG CRIA O INGLÊS E PORTUGUÊS BRASIL
-        if (selectAll().size() == 0) {
-            lang = new Lang();
-            lang.setDsLang("en_us");
-            insert(lang);
-            lang = new Lang();
-            lang.setDsLang("pt_br");
-            insert(lang);
-        }
-    }
-
-    public long insert(Object languagem) {
-        lang = new Lang();
-        if (languagem instanceof String) {
-            lang.setDsLang( (String) languagem);
-        } else if (languagem instanceof Lang) {
-            lang = (Lang) languagem;
-        } else {
-            return 0;
-        }
-        try {
-            sql = "INSERT INTO lang (dsLang) VALUES (?);";
-            smt = Conexao.prepared(sql);
-            smt.setString(1, lang.getDsLang());
-            return smt.executeUpdate();
+            if (lang instanceof String name) {
+                sql = String.format("INSERT INTO lang (dsLang) VALUES (%s);", name);
+                stm = Conexao.repared(sql);
+            }
+            if (lang instanceof Lang linguagem) {
+                sql = String.format("INSERT INTO lang (dsLang) VALUES (%s);", linguagem.getDsLang());
+                stm = Conexao.repared(sql);
+            }
+            if (stm == null) {
+                return 0;
+            }
+            stm.execute();
+            rs = stm.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() != 19)
-                Msg.ServidorErro("Erro ao adicionar Lang!!!", "insert(Lang lang)", getClass(), e);
+                Msg.ServidorErro("Erro ao adicionar nova linguagem!!!", "insert(@NotNull Object lang)", LangDao.class, e);
         } finally {
             Conexao.desconect();
+            close();
         }
         return 0;
     }
 
-    public List<Lang> selectAll() {
-        listLang = new ArrayList<>();
+    public static int INSERT_DEFAULT() {
         try {
-            sql = "SELECT * FROM lang;";
-            smt = Conexao.prepared(sql);
-            rs = smt.executeQuery();
-            while (rs.next()) {
-                this.lang = new Lang();
-                this.lang.setCdLang(rs.getInt(1));
-                this.lang.setDsLang(rs.getString(2));
-                listLang.add(this.lang);
-                // Varivel Global com todos os langs
-                if (!VGlobal.LIST_LANG.contains(this.lang)) {
-                    VGlobal.LIST_LANG.add(this.lang);
-                }
-                VGlobal.LANG_NAME_MAP.put(this.lang.getDsLang(), this.lang);
+            stm = Conexao.repared("INSERT INTO lang (dsLang) VALUES (\"en_us\"), (\"pt_br\"), (\"pt_pt\");");
+            stm.execute();
+            rs = stm.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
             }
-            smt.close();
-            rs.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getErrorCode() != 19)
+                Msg.ServidorErro("Erro ao adicionar nova linguagem!!!", "INSERT_DEFAULT", LangDao.class, e);
         } finally {
             Conexao.desconect();
+            close();
         }
-        return listLang;
+        return 0;
     }
 
-    public Lang select(Object languagem) {
+    public static Lang select(@NotNull Object lang) {
+        stm = null;
         try {
-            // VERIFICA O TIPO DE OBJETO
-            lang = new Lang();
-            if (languagem instanceof Integer) {
-                lang.setCdLang((int) languagem);
-            } else if (languagem instanceof String) {
-                lang.setDsLang((String) languagem);
-            } else if (languagem instanceof Lang) {
-                lang = (Lang) languagem;
-            } else {
+            if (lang instanceof Integer code) {
+                sql = String.format("SELECT * FROM lang WHERE cdLang = %d;", code);
+                stm = Conexao.repared(sql);
+            }
+            if (lang instanceof Lang languagem) {
+                if (languagem.getCdLang() > 0) {
+                    sql = String.format("SELECT * FROM lang WHERE cdLang = %d;", languagem.getCdLang());
+                } else {
+                    sql = String.format("SELECT * FROM lang WHERE dsLang = %s;", languagem.getDsLang());
+                }
+                stm = Conexao.repared(sql);
+            }
+            if (lang instanceof String nome) {
+                sql = String.format("SELECT * FROM lang WHERE dsLang = %s;", nome);
+                stm = Conexao.repared(sql);
+            }
+            if (stm == null) {
                 return null;
             }
-
-            // SE O CÓDIGO DA LINGUAGEM FOR MAIOR QUE ZERO PESQUISA
-            if (lang.getCdLang() > 0) {
-                sql = String.format("SELECT * FROM lang WHERE cdLang = %d", lang.getCdLang());
-            } else {
-                sql = String.format("SELECT * FROM lang WHERE dsLang = \"%s\"", lang.getDsLang());
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                Lang languagem = new Lang();
+                languagem.setCdLang(rs.getInt(1));
+                languagem.setDsLang(rs.getString(2));
+                return languagem;
             }
-            smt = Conexao.prepared(sql);
-            rs = smt.executeQuery();
-            while (rs.next()) {
-                this.lang = new Lang();
-                this.lang.setCdLang(rs.getInt("cdLang"));
-                this.lang.setDsLang(rs.getString("dsLang"));
-                return lang;
-            }
-            smt.close();
-            rs.close();
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao buscar o lang!!!", "select(Object lang)", getClass(), e);
+            Msg.ServidorErro("Erro ao buscar linguagem!!!", "select(@NotNull Object lang)", LangDao.class, e);
         } finally {
             Conexao.desconect();
+            close();
         }
         return null;
     }
 
-    public long update(Lang lang) {
+    public static void SELECT_ALL() {
         try {
-            sql = "UPDATE TABLE lang SET dsLong = ? WHERE cdLong = ?;";
-            smt = Conexao.prepared(sql);
-            smt.setString(1, lang.getDsLang());
-            smt.setInt(2, lang.getCdLang());
-            return smt.executeUpdate();
+            PreparedStatement stm = Conexao.repared("SELECT * FROM lang");
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Lang lang = new Lang();
+                lang.setCdLang(rs.getInt(1));
+                lang.setDsLang(rs.getString(2));
+                if (!VGlobal.LANG_LIST.contains(lang)) {
+                    VGlobal.LANG_LIST.add(lang);
+                    VGlobal.LANG_NAME_LIST.add(lang.getDsLang());
+                    VGlobal.LANG_MAP.put(lang.getDsLang(), lang);
+                }
+            }
+            Config.ADD_LANG();// ADICIONANDO O LANG NO ARQUIVO CONFIG
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao atualizar o lang!!!", "update(Lang lang)", getClass(), e);
+            Msg.ServidorErro("Erro ao buscar todos os Langs!!!", "SELECT_ALL()", LangDao.class, e);
         } finally {
             Conexao.desconect();
         }
-        return 0;
     }
 
-    public long delete(Lang lang) {
+    private static void close() {
         try {
-            sql = "DELETE FROM lang WHERE cdLang = ?;";
-            smt = Conexao.prepared(sql);
-            smt.setInt(1, lang.getCdLang());
-            return smt.executeUpdate();
+            if (stm != null) {
+                stm.close();
+            }
+            if (rs != null) {
+                rs.close();
+            }
         } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao apagar o lang!!!", "delete(Lang lang)", getClass(), e);
-        } finally {
-            Conexao.desconect();
+            Msg.ServidorErro("Erro ao fechar o banco!!!", "", LangDao.class, e);
         }
-        return 0;
     }
+
 }

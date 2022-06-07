@@ -26,26 +26,26 @@ public class ClickHopper implements Listener {
     private ItemStack itemStack;
     private Block block;
     private SmartHopper smartHopper;
-    private InventoryCustom inventory;
-    private Grupo grupo;
-    private String nameGrupo;
-    private ItemStack itemSalve;
-    private ItemMeta meta;
-    private List<String> lore;
-    private InventoryCustom inventoryCustom;
+
+    private Item item;
 
     @EventHandler
     public void clickHopper(PlayerInteractEvent event) {
 
         player = event.getPlayer();
         itemStack = player.getInventory().getItemInMainHand();
+<<<<<<< HEAD
         Hopper hopper = null;
+=======
+        item = new Item(itemStack);
+>>>>>>> v4.0.0
 
         if(itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK){
             if(event.getClickedBlock().getState().getType()==Material.HOPPER) {
                 hopper = (Hopper) event.getClickedBlock().getState();
                 SmartHopper smartHopper = new SmartHopper(hopper);
 
+<<<<<<< HEAD
                 if(smartHopper.getType()!=null) {
                     Dados nameHopper = (Dados) smartHopper.getType();
                     Msg.ServidorGreen("clicado com o graveto no bloco "+ nameHopper.getName(), getClass());
@@ -53,6 +53,15 @@ public class ClickHopper implements Listener {
                     Msg.ServidorGreen("não encontrado ", getClass());
                 }
             }
+=======
+        block = event.getClickedBlock();
+        smartHopper = new SmartHopper(block);
+
+        // SE FOR CLICADO NO HOPPER COM GRAVETO NA MÃO
+        if (itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            // SE EXISTIR MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL
+            smartHopper.msgPlayerSmartHopper(player);
+>>>>>>> v4.0.0
         }
     }
 }

@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.utils;
 
+import mc.elderbr.smarthopper.interfaces.Jogador;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
@@ -106,6 +107,32 @@ public class Msg {
                         + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCodigo()
         );
     }
+    public static void PlayerTodos(String msg){
+        Bukkit.getServer().broadcastMessage(msg);
+    }
+
+    //========================== JOGADOR =================================================//
+    public static void Jogador(@NotNull Jogador jogador, @NotNull Class classe) {
+        Bukkit.getServer().getConsoleSender().sendMessage(
+                "Codigo: " + jogador.getCdJogador()
+                        + "\nNome: " + jogador.getDsJogador()
+                        + "\nUUID: " + jogador.getUUID()
+                        + "\nTipo: " + jogador.toType()
+                        + "\nClasse: " + classe.getSimpleName()
+
+        );
+    }
+
+    //========================== ITEM =================================================//
+    public static void Item(Player player, Item item) {
+        item.setDsLang(player);
+        player.sendMessage(Color("$2Item: $6" + item.toTraducao() + "$e ID: " + item.getCdItem()));
+    }
+
+    public static void ItemNegar(Player player, Item item) {
+        item.setDsLang(player);
+        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao() + "$e ID: " + item.getCdItem()));
+    }
 
     public static void ItemNaoExiste(@NotNull Player player, String name) {
         player.sendMessage(Color("$aO item $6" + name + " $4$lNÃO $r$aexiste!"));
@@ -127,9 +154,32 @@ public class Msg {
     }
 
     public static void GrupoPlayer(@NotNull Player player, Grupo grupo) {
-        player.sendMessage(Color("$3$lGrupo: $r"+ grupo +" - $3$lID: $r"+grupo.getCdGrupo()));
+        player.sendMessage(Color("$3$lGrupo: $r" + grupo + " - $3$lID: $r" + grupo.getCdGrupo()));
+    }
+    public static void Grupo(Player player, Grupo grupo) {
+        player.sendMessage(Color("$d$lGrupo: $e" + grupo.toTraducao() + " $6ID: " + grupo.getCdGrupo()));
     }
 
+    public static void Grupo(Grupo grupo, @NotNull Class classe) {
+        Bukkit.getServer().getConsoleSender().sendMessage(
+                "Grupo ID: " + grupo.getCdGrupo()
+                        + "\nnome: " + grupo.getDsGrupo()
+                        + "\nTraducao: " + grupo.getTraducaoMap().values()
+        );
+    }
+
+    public static void GrupoNaoExiste(Player player, String name) {
+        player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
+    }
+
+    public static void GrupoNegar(Player player, Grupo grupo) {
+        grupo.setDsLang(player);
+        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.toTraducao() + "$e ID: " + grupo.getCdGrupo()));
+    }
+
+    public static void PulaPlayer(Player player) {
+        player.sendMessage("=====================================================");
+    }
 
     //======================= ERRROS ====================================================//
 

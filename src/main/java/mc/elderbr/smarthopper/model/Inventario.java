@@ -26,7 +26,7 @@ public class Inventario implements Inventory{
         this.inventory = inventory;
     }
 
-    public String getName(){
+    public String getDsGrupo(){
         if(inventory instanceof Hopper){
             hopper = (Hopper) inventory;
             return (hopper.getCustomName() != null ? hopper.getCustomName() : "HOPPER");
