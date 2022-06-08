@@ -7,8 +7,8 @@ plugins {
 group = 'mc.elderbr'
 version = '4.0.0'
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = "16"
+targetCompatibility = "16"
 
 repositories {
     mavenCentral()

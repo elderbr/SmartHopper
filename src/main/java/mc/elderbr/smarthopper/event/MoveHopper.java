@@ -26,11 +26,7 @@ public class MoveHopper implements Listener {
 
     private Item item;
 
-<<<<<<< HEAD
-    private Inventory initiator;
-=======
     private Inventory inventoryInicial;
->>>>>>> v4.0.0
     private Inventory inventory;
     private Inventory destination;
 
@@ -50,19 +46,9 @@ public class MoveHopper implements Listener {
 
     @EventHandler
     public void moveItemHopper(InventoryMoveItemEvent event) {
+        try {
+            event.setCancelled(true);// Cancela o movimento do item
 
-<<<<<<< HEAD
-        destination = event.getDestination();
-        inventory = event.getSource();
-        itemStack = event.getItem();
-        item = new Item(itemStack);
-
-        if (inventory.getType() == InventoryType.HOPPER) {
-            blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
-            if (blockDown.getType() == Material.HOPPER) {
-                event.setCancelled(true);
-                isBlockDownHopper();
-=======
             // Item que está sendo transferido
             itemStack = event.getItem();
             item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
@@ -86,13 +72,9 @@ public class MoveHopper implements Listener {
 
             if (blockDown.getState().getType() == Material.HOPPER) {// Verifica se o bloco de baixo é um hopper
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
->>>>>>> v4.0.0
                 for (Hopper hoppers : hopperList) {
+
                     smartHopper = new SmartHopper(hoppers);
-<<<<<<< HEAD
-                    if(smartHopper.equals(item.getName())){
-                        event.setCancelled(false);
-=======
 
                     // VERIFICA SE EXISTE MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL E SE FOI SETADO PARA BLOQUEIA
                     if (smartHopper.getNameHopper().contains(";") && smartHopper.getNameHopper().contains("#")) {
@@ -167,17 +149,10 @@ public class MoveHopper implements Listener {
                                 }
                             }
                         }
->>>>>>> v4.0.0
                     }
                 }
             }
-            smartHopper = new SmartHopper(destination);
-            if(smartHopper.getName().equals("chest") || smartHopper.getName().equals("hopper")){
-                event.setCancelled(false);
-            }
 
-<<<<<<< HEAD
-=======
 
             if (smartHopperDestino.getType() instanceof Item itemHopper) {
                 if (itemHopper.getCdItem() == item.getCdItem()) {
@@ -258,7 +233,6 @@ public class MoveHopper implements Listener {
         } catch (
                 Exception e) {
             event.setCancelled(false);
->>>>>>> v4.0.0
         }
 
     }

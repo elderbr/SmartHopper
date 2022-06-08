@@ -60,53 +60,18 @@ public class Msg {
     //========================== PLAYERS =================================================//
 
     //Mensagem do player
-    public static void PlayerGreen(@NotNull Player player, String msg) {
+    public static void PlayerGreen(Player player, String msg) {
         player.sendMessage(ChatColor.GREEN + msg);
     }
 
-    public static void PlayerGold(@NotNull Player player, String msg) {
+    public static void PlayerGold(Player player, String msg) {
         player.sendMessage(ChatColor.GOLD + msg);
     }
 
-    public static void PlayerRed(@NotNull Player player, String msg) {
+    public static void PlayerRed(Player player, String msg) {
         player.sendMessage(ChatColor.RED + msg);
     }
 
-    public static void PlayerBlue(@NotNull Player player, String msg) {
-        player.sendMessage(ChatColor.BLUE + msg);
-    }
-
-    public static void PlayerGreenLine(@NotNull Player player) {
-        player.sendMessage(ChatColor.GREEN + "-----------------------------------------------------");
-    }
-
-    public static void PlayerGoldLine(@NotNull Player player) {
-        player.sendMessage(ChatColor.GOLD + "-----------------------------------------------------");
-    }
-
-    public static void PlayerRedLine(@NotNull Player player) {
-        player.sendMessage(ChatColor.RED + "-----------------------------------------------------");
-    }
-
-    public static void PlayerBlueLine(@NotNull Player player) {
-        player.sendMessage(ChatColor.BLUE + "-----------------------------------------------------");
-    }
-
-    //========================== ITEM =================================================//
-
-    public static void Item(@NotNull Item item, @NotNull Class classe) {
-        Bukkit.getServer().getConsoleSender().sendMessage(
-                ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.toString()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCodigo() + "\n§r - classe: " + classe.getSimpleName()
-        );
-    }
-
-    public static void ItemPlayer(@NotNull Player player, Item item) {
-        player.sendMessage(
-                ChatColor.GREEN + "Item " + ChatColor.YELLOW + item.toString()
-                        + ChatColor.GREEN + " - ID: " + ChatColor.GOLD + item.getCodigo()
-        );
-    }
     public static void PlayerTodos(String msg){
         Bukkit.getServer().broadcastMessage(msg);
     }
@@ -134,28 +99,11 @@ public class Msg {
         player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao() + "$e ID: " + item.getCdItem()));
     }
 
-    public static void ItemNaoExiste(@NotNull Player player, String name) {
+    public static void ItemNaoExiste(Player player, String name) {
         player.sendMessage(Color("$aO item $6" + name + " $4$lNÃO $r$aexiste!"));
     }
 
     //========================== GRUPO =================================================//
-    public static void Grupo(@NotNull Grupo grupo, @NotNull Class classe) {
-        Bukkit.getServer().getConsoleSender().sendMessage(
-                "ID: " + grupo.getCdGrupo()
-                        + " - Nome: " + grupo.getDsGrupo()
-                        +" - Linguagem: "+ grupo.getDsLang()
-                        + " - Tradução: " + grupo.getDsTraducao()
-                        + " - §rclasse: " + classe.getSimpleName()
-        );
-    }
-
-    public static void GrupoNaoExiste(@NotNull Player player, String name) {
-        player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
-    }
-
-    public static void GrupoPlayer(@NotNull Player player, Grupo grupo) {
-        player.sendMessage(Color("$3$lGrupo: $r" + grupo + " - $3$lID: $r" + grupo.getCdGrupo()));
-    }
     public static void Grupo(Player player, Grupo grupo) {
         player.sendMessage(Color("$d$lGrupo: $e" + grupo.toTraducao() + " $6ID: " + grupo.getCdGrupo()));
     }
@@ -208,4 +156,6 @@ public class Msg {
     public static String Color(String text) {
         return ChatColor.translateAlternateColorCodes('$', text);
     }
+
+
 }

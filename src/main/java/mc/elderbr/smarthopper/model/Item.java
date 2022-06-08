@@ -22,6 +22,8 @@ public class Item implements Linguagem {
     private int cdItem = 0;
     private String dsItem;
     private ItemStack itemStack;
+
+    public static int SIZE_DEFAULT_ITEM = 0;
     // LANG
     private int cdLang;
     private String dsLang;
@@ -88,24 +90,20 @@ public class Item implements Linguagem {
         return dsLang;
     }
 
-    @Override
     public Item setCdTraducao(int codigo) {
         cdTraducao = codigo;
         return this;
     }
 
-    @Override
     public int getCdTraducao() {
         return cdTraducao;
     }
 
-    @Override
     public Item setDsTraducao(String traducao) {
         dsTraducao = traducao;
         return this;
     }
 
-    @Override
     public String getDsTraducao() {
         return dsTraducao;
     }
@@ -162,6 +160,7 @@ public class Item implements Linguagem {
             }
         }
         Collections.sort(VGlobal.ITEM_NAME_LIST);
+        Item.SIZE_DEFAULT_ITEM = VGlobal.ITEM_NAME_LIST.size();
     }
 
     public Item parseItem(@NotNull ItemStack itemStack) {

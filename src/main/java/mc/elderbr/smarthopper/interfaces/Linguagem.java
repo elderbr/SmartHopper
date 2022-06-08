@@ -1,11 +1,20 @@
 package mc.elderbr.smarthopper.interfaces;
 
-
-import mc.elderbr.smarthopper.model.Item;
+import org.bukkit.entity.Player;
 
 public interface Linguagem {
+
+    // LANG
+    Object setCdLang(int codigo);
     int getCdLang();
-    Item setCdLang(int lang);
+    Object setDsLang(String lang);
+    Object setDsLang(Player player);
     String getDsLang();
-    Item setDsLang(String lang);
+
+    // TRADUCAO
+    Object setCdTraducao(int codigo);
+    int getCdTraducao();
+    Object setDsTraducao(String traducao);
+    String getDsTraducao();
+
 }

@@ -132,7 +132,6 @@ public class ItemDao {
                 // ADICIONANDO NO OBJETO GLOBAL
                 VGlobal.ITEM_MAP_ID.put(item.getCdItem(), item);
                 VGlobal.ITEM_MAP_NAME.put(item.getDsItem(), item);
-
             }
         } catch (SQLException e) {
             Msg.ServidorErro("Erro ao carregar todos os itens do banco!!!", "", ItemDao.class, e);
@@ -158,21 +157,28 @@ public class ItemDao {
 
 
     public static void CreateDefault() {
-        Debug.Write("Criando a tabela de item");
-        for (String item : VGlobal.ITEM_NAME_LIST) {
-            try {
-                Debug.WriteMsg("Criando o item " + item);
-                PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
-                stm.setString(1, item);
-                stm.execute();
-            } catch (SQLException e) {
-                if (e.getErrorCode() != 19)
-                    Msg.ServidorErro("Erro ao criar item padrão!!!", "", ItemDao.class, e);
-            } finally {
-                Conexao.desconect();
+
+        selectAll();
+
+        // VERIFICA SE EXISTE MAIS ITENS DO JOGO DO QUE NO BANCO
+        if(Item.SIZE_DEFAULT_ITEM > VGlobal.ITEM_MAP_ID.size()) {
+
+            Debug.Write("Criando a tabela de item");
+            for (String item : VGlobal.ITEM_NAME_LIST) {
+                try {
+                    Debug.WriteMsg("Criando o item " + item);
+                    PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
+                    stm.setString(1, item);
+                    stm.execute();
+                } catch (SQLException e) {
+                    if (e.getErrorCode() != 19)
+                        Msg.ServidorErro("Erro ao criar item padrão!!!", "", ItemDao.class, e);
+                } finally {
+                    Conexao.desconect();
+                }
             }
+            Debug.Write("Tabela de item criadas");
         }
-        Debug.Write("Tabela de item criadas");
     }
 
     private void close() {

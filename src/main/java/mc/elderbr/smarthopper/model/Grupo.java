@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class Grupo extends Item implements Linguagem {
+public class Grupo implements Linguagem {
 
     private int cdGrupo;
     private String dsGrupo;
