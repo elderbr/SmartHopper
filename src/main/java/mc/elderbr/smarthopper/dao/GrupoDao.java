@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
@@ -19,26 +20,29 @@ public class GrupoDao {
     }
 
     public static void CREATE_GRUPO() {
-        Debug.WriteMsg("Adicionado o grupo no banco");
-        for (Grupo grupo : VGlobal.GRUPO_LIST) {
-            try {
-                PreparedStatement stm = Conexao.repared("INSERT INTO grupo (dsGrupo) VALUES (?)");
-                stm.setString(1, grupo.getDsGrupo());
-                stm.execute();
-                Debug.WriteMsg("Adicionado o grupo " + grupo.getDsGrupo());
-                ResultSet rs = stm.getGeneratedKeys();
-                if (rs.next()) {
-                    grupo.setCdGrupo(rs.getInt(1));
-                    INSERT_GRUPO_ITEM(grupo);
+        if(!Config.IsGrupoUpdate()) {
+            Debug.WriteMsg("Adicionado o grupo no banco");
+            for (Grupo grupo : VGlobal.GRUPO_LIST) {
+                try {
+                    PreparedStatement stm = Conexao.repared("INSERT INTO grupo (dsGrupo) VALUES (?)");
+                    stm.setString(1, grupo.getDsGrupo());
+                    stm.execute();
+                    Debug.WriteMsg("Adicionado o grupo " + grupo.getDsGrupo());
+                    ResultSet rs = stm.getGeneratedKeys();
+                    if (rs.next()) {
+                        grupo.setCdGrupo(rs.getInt(1));
+                        INSERT_GRUPO_ITEM(grupo);
+                    }
+                } catch (SQLException e) {
+                    if (e.getErrorCode() != 19)
+                        Msg.ServidorErro("Erro ao adicionar grupo!!!", "CREATE_GRUPO", GrupoDao.class, e);
+                } finally {
+                    Conexao.desconect();
                 }
-            } catch (SQLException e) {
-                if (e.getErrorCode() != 19)
-                    Msg.ServidorErro("Erro ao adicionar grupo!!!", "CREATE_GRUPO", GrupoDao.class, e);
-            } finally {
-                Conexao.desconect();
             }
+            Config.SetUpdateGrupo(true);
+            Debug.WriteMsg("Fim de adicionado o grupo no banco");
         }
-        Debug.WriteMsg("Fim de adicionado o grupo no banco");
     }
 
     public static boolean INSERT(Grupo grupo) {

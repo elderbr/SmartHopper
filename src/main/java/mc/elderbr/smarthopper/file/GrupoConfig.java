@@ -111,26 +111,28 @@ public class GrupoConfig {
     }
 
     public void updateYML() {
-        try {
-            fileConfig.delete();
-            fileConfig.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        if(!Config.IsGrupoUpdate()) {
+            try {
+                fileConfig.delete();
+                fileConfig.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        if (config == null) {
-            config = YamlConfiguration.loadConfiguration(fileConfig);
-        }
+            if (config == null) {
+                config = YamlConfiguration.loadConfiguration(fileConfig);
+            }
 
-        Msg.ServidorGold("Atualizando o arquivo grupo.yml");
+            Msg.ServidorGold("Atualizando o arquivo grupo.yml");
 
-        Collections.sort(VGlobal.GRUPO_NAME_LIST);
-        for (String name : VGlobal.GRUPO_NAME_LIST) {
-            grupo = VGlobal.GRUPO_MAP_NAME.get(name);
-            if (grupo == null) continue;
-            add(grupo);
+            Collections.sort(VGlobal.GRUPO_NAME_LIST);
+            for (String name : VGlobal.GRUPO_NAME_LIST) {
+                grupo = VGlobal.GRUPO_MAP_NAME.get(name);
+                if (grupo == null) continue;
+                add(grupo);
+            }
+            Msg.ServidorGold("Finalizado atualização do arquivo grupo.yml!!!");
         }
-        Msg.ServidorGold("Finalizado atualização do arquivo grupo.yml!!!");
     }
 
     private void save() {

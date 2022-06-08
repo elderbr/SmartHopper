@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Linguagem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import org.bukkit.entity.Player;
@@ -130,128 +131,136 @@ public class Grupo implements Linguagem {
 
 
     public static List<String> CreateGrupos() {
+
         grupoList = new ArrayList<>();
 
-        for (String item : VGlobal.ITEM_NAME_LIST) {
-            if (item.split("\\s").length > 0) {
-                String[] name = item.split("\\s");
-                for (int i = 0; i < name.length; i++) {
-                    String grupo = name[i];
-                    if (!grupoList.contains(grupo)) {
-                        grupoList.add(grupo);
-                    }
-                    if ((i + 1) < name.length) {
-                        grupo = name[i] + " " + name[i + 1];
+        if(Config.IsGrupoUpdate() == false) {
+
+            for (String item : VGlobal.ITEM_NAME_LIST) {
+                if (item.split("\\s").length > 0) {
+                    String[] name = item.split("\\s");
+                    for (int i = 0; i < name.length; i++) {
+                        String grupo = name[i];
                         if (!grupoList.contains(grupo)) {
                             grupoList.add(grupo);
                         }
-                    }
-                    if ((i + 2) < name.length) {
-                        grupo = name[i] + " " + name[i + 1] + " " + name[i + 2];
-                        if (!grupoList.contains(grupo)) {
-                            grupoList.add(grupo);
+                        if ((i + 1) < name.length) {
+                            grupo = name[i] + " " + name[i + 1];
+                            if (!grupoList.contains(grupo)) {
+                                grupoList.add(grupo);
+                            }
+                        }
+                        if ((i + 2) < name.length) {
+                            grupo = name[i] + " " + name[i + 1] + " " + name[i + 2];
+                            if (!grupoList.contains(grupo)) {
+                                grupoList.add(grupo);
+                            }
+                        }
+                        if ((i + 3) < name.length) {
+                            grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3];
+                            if (!grupoList.contains(grupo)) {
+                                grupoList.add(grupo);
+                            }
+                        }
+                        if ((i + 4) < name.length) {
+                            grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4];
+                            if (!grupoList.contains(grupo)) {
+                                grupoList.add(grupo);
+                            }
+                        }
+                        if ((i + 5) < name.length) {
+                            grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4] + " " + name[i + 5];
+                            if (!grupoList.contains(grupo)) {
+                                grupoList.add(grupo);
+                            }
                         }
                     }
-                    if ((i + 3) < name.length) {
-                        grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3];
-                        if (!grupoList.contains(grupo)) {
-                            grupoList.add(grupo);
-                        }
+                } else {
+                    if (!grupoList.contains(item)) {
+                        grupoList.add(item);
                     }
-                    if ((i + 4) < name.length) {
-                        grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4];
-                        if (!grupoList.contains(grupo)) {
-                            grupoList.add(grupo);
-                        }
-                    }
-                    if ((i + 5) < name.length) {
-                        grupo = name[i] + " " + name[i + 1] + " " + name[i + 2] + " " + name[i + 3] + " " + name[i + 4] + " " + name[i + 5];
-                        if (!grupoList.contains(grupo)) {
-                            grupoList.add(grupo);
-                        }
-                    }
-                }
-            } else {
-                if (!grupoList.contains(item)) {
-                    grupoList.add(item);
                 }
             }
+
+            // Grupos extras
+            grupoList.add("redstones");
+            grupoList.add("flowers");
+            grupoList.add("stone tools");
+            grupoList.add("iron tools");
+            grupoList.add("golden tools");
+            grupoList.add("diamond tools");
+            grupoList.add("netherite tools");
+            grupoList.add("carne crua");
+
+            // LIVROS ENCANTADOS
+            grupoList.add("enchanted book aqua affinity");
+            grupoList.add("enchanted book bane of arthropods");
+            grupoList.add("enchanted book binding curse");
+            grupoList.add("enchanted book blast protection");
+            grupoList.add("enchanted book channeling");
+            grupoList.add("enchanted book depth strider");
+            grupoList.add("enchanted book efficiency");
+            grupoList.add("enchanted book feather falling");
+            grupoList.add("enchanted book fire aspect");
+            grupoList.add("enchanted book fire protection");
+            grupoList.add("enchanted book flame");
+            grupoList.add("enchanted book fortune");
+            grupoList.add("enchanted book frost walker");
+            grupoList.add("enchanted book impaling");
+            grupoList.add("enchanted book infinity");
+            grupoList.add("enchanted book knockback");
+            grupoList.add("enchanted book looting");
+            grupoList.add("enchanted book loyalty");
+            grupoList.add("enchanted book luck of the sea");
+            grupoList.add("enchanted book lure");
+            grupoList.add("enchanted book mending");
+            grupoList.add("enchanted book multishot");
+            grupoList.add("enchanted book piercing");
+            grupoList.add("enchanted book power");
+            grupoList.add("enchanted book projectile protection");
+            grupoList.add("enchanted book protection");
+            grupoList.add("enchanted book punch");
+            grupoList.add("enchanted book quick charge");
+            grupoList.add("enchanted book respiration");
+            grupoList.add("enchanted book riptide");
+            grupoList.add("enchanted book sharpness");
+            grupoList.add("enchanted book silk touch");
+            grupoList.add("enchanted book smite");
+            grupoList.add("enchanted book oul speed");
+            grupoList.add("enchanted book sweeping");
+            grupoList.add("enchanted book horns");
+            grupoList.add("enchanted book unbreaking");
+            grupoList.add("enchanted book vanishing curse");
+
+
+            // POÇÕES
+            grupoList.add("potion awkward");
+            grupoList.add("potion fire resistance");
+            grupoList.add("potion instant damage");
+            grupoList.add("potion instant heal");
+            grupoList.add("potion jump");
+            grupoList.add("potion luck");
+            grupoList.add("potion mundane");
+            grupoList.add("potion night vision");
+            grupoList.add("potion poison");
+            grupoList.add("potion regen");
+            grupoList.add("potion slow falling");
+            grupoList.add("potion slowness");
+            grupoList.add("potion speed");
+            grupoList.add("potion strength");
+            grupoList.add("potion thick");
+            grupoList.add("potion turtle master");
+            grupoList.add("potion uncraftable");
+            grupoList.add("potion water");
+            grupoList.add("potion water breathing");
+            grupoList.add("potion weakness");
+
+            createGrupoItem();
+
+            // ALTERA PARA VERDADEIRO A ATUALIZAÇÃO DO GRUPO
+            Config.SetUpdateGrupo(true);
+
         }
-
-        // Grupos extras
-        grupoList.add("redstones");
-        grupoList.add("flowers");
-        grupoList.add("stone tools");
-        grupoList.add("iron tools");
-        grupoList.add("golden tools");
-        grupoList.add("diamond tools");
-        grupoList.add("netherite tools");
-        grupoList.add("carne crua");
-
-        // LIVROS ENCANTADOS
-        grupoList.add("enchanted book aqua affinity");
-        grupoList.add("enchanted book bane of arthropods");
-        grupoList.add("enchanted book binding curse");
-        grupoList.add("enchanted book blast protection");
-        grupoList.add("enchanted book channeling");
-        grupoList.add("enchanted book depth strider");
-        grupoList.add("enchanted book efficiency");
-        grupoList.add("enchanted book feather falling");
-        grupoList.add("enchanted book fire aspect");
-        grupoList.add("enchanted book fire protection");
-        grupoList.add("enchanted book flame");
-        grupoList.add("enchanted book fortune");
-        grupoList.add("enchanted book frost walker");
-        grupoList.add("enchanted book impaling");
-        grupoList.add("enchanted book infinity");
-        grupoList.add("enchanted book knockback");
-        grupoList.add("enchanted book looting");
-        grupoList.add("enchanted book loyalty");
-        grupoList.add("enchanted book luck of the sea");
-        grupoList.add("enchanted book lure");
-        grupoList.add("enchanted book mending");
-        grupoList.add("enchanted book multishot");
-        grupoList.add("enchanted book piercing");
-        grupoList.add("enchanted book power");
-        grupoList.add("enchanted book projectile protection");
-        grupoList.add("enchanted book protection");
-        grupoList.add("enchanted book punch");
-        grupoList.add("enchanted book quick charge");
-        grupoList.add("enchanted book respiration");
-        grupoList.add("enchanted book riptide");
-        grupoList.add("enchanted book sharpness");
-        grupoList.add("enchanted book silk touch");
-        grupoList.add("enchanted book smite");
-        grupoList.add("enchanted book oul speed");
-        grupoList.add("enchanted book sweeping");
-        grupoList.add("enchanted book horns");
-        grupoList.add("enchanted book unbreaking");
-        grupoList.add("enchanted book vanishing curse");
-
-
-        // POÇÕES
-        grupoList.add("potion awkward");
-        grupoList.add("potion fire resistance");
-        grupoList.add("potion instant damage");
-        grupoList.add("potion instant heal");
-        grupoList.add("potion jump");
-        grupoList.add("potion luck");
-        grupoList.add("potion mundane");
-        grupoList.add("potion night vision");
-        grupoList.add("potion poison");
-        grupoList.add("potion regen");
-        grupoList.add("potion slow falling");
-        grupoList.add("potion slowness");
-        grupoList.add("potion speed");
-        grupoList.add("potion strength");
-        grupoList.add("potion thick");
-        grupoList.add("potion turtle master");
-        grupoList.add("potion uncraftable");
-        grupoList.add("potion water");
-        grupoList.add("potion water breathing");
-        grupoList.add("potion weakness");
-
-        createGrupoItem();
         return grupoList;
     }
 

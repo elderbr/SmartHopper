@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
@@ -177,8 +178,11 @@ public class ItemDao {
                     Conexao.desconect();
                 }
             }
+            Config.SetUpdateItem(true);// ALTERA A ATUALIZAÇÃO DO ITEM PARA VERDADEIRO
+            Config.SetUpdateGrupo(false);
             Debug.Write("Tabela de item criadas");
         }
+        Config.SetUpdateItem(true);// ALTERA A ATUALIZAÇÃO DO ITEM PARA VERDADEIRO
     }
 
     private void close() {

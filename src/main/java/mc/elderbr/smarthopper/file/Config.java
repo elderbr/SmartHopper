@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.file;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -137,9 +138,10 @@ public class Config {
         YML.set(key, list);
     }
 
-    public static void setItemUpdate() {
+    public static void SetUpdateItem(@NotNull  boolean status) {
         try {
-            YML.set("item atualizado", true);
+            YML.setComments("item atualizado", Arrays.asList("Se a lista de item está atualizado"));
+            YML.set("item atualizado", status);
             YML.save(FILE_CONFIG);
         } catch (IOException e) {
             Msg.ServidorErro("Erro ao atualizar o estado do item!!!", "setItemUpdate()", Config.class, e);
@@ -150,16 +152,17 @@ public class Config {
         return YML.getBoolean("item atualizado");
     }
 
-    public static void setGrupoUpdate() {
+    public static void SetUpdateGrupo(@NotNull boolean status) {
         try {
-            YML.set("grupo atualizado", true);
+            YML.setComments("grupo atualizado", Arrays.asList("Se a lista do grupo está atualizada"));
+            YML.set("grupo atualizado", status);
             YML.save(FILE_CONFIG);
         } catch (IOException e) {
             Msg.ServidorErro("Erro ao atualizar o estado do grupo!!!", "setGrupoUpdate()", Config.class, e);
         }
     }
 
-    public static boolean isGrupoUpdate() {
+    public static boolean IsGrupoUpdate() {
         return YML.getBoolean("grupo atualizado");
     }
 
