@@ -23,7 +23,6 @@ public class Item implements Linguagem {
     private String dsItem;
     private ItemStack itemStack;
 
-    public static int SIZE_DEFAULT_ITEM = 0;
     // LANG
     private int cdLang;
     private String dsLang;
@@ -160,7 +159,6 @@ public class Item implements Linguagem {
             }
         }
         Collections.sort(VGlobal.ITEM_NAME_LIST);
-        Item.SIZE_DEFAULT_ITEM = VGlobal.ITEM_NAME_LIST.size();
     }
 
     public Item parseItem(@NotNull ItemStack itemStack) {

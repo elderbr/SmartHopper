@@ -141,48 +141,24 @@ public class ItemDao {
         }
     }
 
-    public static int size() {
-        try {
-            PreparedStatement preparedStatement = Conexao.repared("SELECT count(cdItem) FROM item");
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            Msg.ServidorErro("Erro ao verificar o tanho da lista de item!!!", "", ItemDao.class, e);
-        } finally {
-            Conexao.desconect();
-        }
-        return 0;
-    }
-
-
     public static void CreateDefault() {
-
-        selectAll();
-
         // VERIFICA SE EXISTE MAIS ITENS DO JOGO DO QUE NO BANCO
-        if(Item.SIZE_DEFAULT_ITEM > VGlobal.ITEM_MAP_ID.size()) {
-
-            Debug.Write("Criando a tabela de item");
-            for (String item : VGlobal.ITEM_NAME_LIST) {
-                try {
-                    Debug.WriteMsg("Criando o item " + item);
-                    PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
-                    stm.setString(1, item);
-                    stm.execute();
-                } catch (SQLException e) {
-                    if (e.getErrorCode() != 19)
-                        Msg.ServidorErro("Erro ao criar item padrão!!!", "", ItemDao.class, e);
-                } finally {
-                    Conexao.desconect();
-                }
+        Debug.Write("Criando a tabela de item");
+        for (String item : VGlobal.ITEM_NAME_LIST) {
+            try {
+                Debug.WriteMsg("Criando o item " + item);
+                PreparedStatement stm = Conexao.repared("INSERT INTO item (dsItem) VALUES (?)");
+                stm.setString(1, item);
+                stm.execute();
+            } catch (SQLException e) {
+                if (e.getErrorCode() != 19)
+                    Msg.ServidorErro("Erro ao criar item padrão!!!", "", ItemDao.class, e);
+            } finally {
+                Conexao.desconect();
             }
-            Config.SetUpdateItem(true);// ALTERA A ATUALIZAÇÃO DO ITEM PARA VERDADEIRO
-            Config.SetUpdateGrupo(false);
-            Debug.Write("Tabela de item criadas");
         }
         Config.SetUpdateItem(true);// ALTERA A ATUALIZAÇÃO DO ITEM PARA VERDADEIRO
+        Debug.Write("Tabela de item criadas");
     }
 
     private void close() {
