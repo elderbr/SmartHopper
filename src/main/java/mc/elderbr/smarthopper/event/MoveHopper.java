@@ -36,6 +36,7 @@ public class MoveHopper implements Listener {
     private List<Hopper> hopperList;
 
     private SmartHopper smartHopperDestino;
+    private boolean isBloqueia;
 
     public MoveHopper() {
 
@@ -81,19 +82,24 @@ public class MoveHopper implements Listener {
                             SmartHopper smart = new SmartHopper(hoppers.getBlock(), values);
 
                             if (smart.getNameHopper().contains("#")) {
+                                isBloqueia = true;
                                 if (smart.getType() instanceof Item items) {
-                                    if (items.getCdItem() != item.getCdItem()) {
-                                        event.setCancelled(false);
+                                    if (items.getCdItem() == item.getCdItem()) {
+                                        isBloqueia = false;
                                         return;
                                     }
                                 }
                                 if (smart.getType() instanceof Grupo grupo) {
-                                    if (!grupo.contentsItem(item)) {
-                                        event.setCancelled(false);
+                                    if (grupo.contentsItem(item)) {
+                                        isBloqueia = false;
                                         return;
                                     }
                                 }
+                                if(isBloqueia){
+                                    event.setCancelled(false);
+                                }
                             }
+
 
                             if (smart.getType() instanceof Item items) {
                                 if (items.getCdItem() == item.getCdItem()) {
@@ -146,24 +152,27 @@ public class MoveHopper implements Listener {
 
                 if(smartHopperDestino.getNameHopper().contains(";")){
                     String[] smartHopperList = smartHopperDestino.getNameHopper().split(";");
+                    isBloqueia = true;
                     for(String hoppers : smartHopperList){
                         smartHopper = new SmartHopper(destination.getLocation().getBlock(), hoppers);
                         if (smartHopper.getNameHopper().contains("#")) {
                             if (smartHopper.getType() instanceof Item itemHopper) {
-                                if (itemHopper.getCdItem() != item.getCdItem()) {
-                                    event.setCancelled(false);
-                                } else {
-                                    event.setCancelled(true);
+                                if (itemHopper.getCdItem() == item.getCdItem()) {
+                                    isBloqueia = false;
+                                    return;
                                 }
                             }
                             if (smartHopper.getType() instanceof Grupo grupoHopper) {
-                                if (!grupoHopper.contentsItem(item)) {
-                                    event.setCancelled(false);
-                                } else {
-                                    event.setCancelled(true);
+                                if (grupoHopper.contentsItem(item)) {
+                                    isBloqueia = false;
+                                    return;
                                 }
                             }
                         }
+                    }
+                    if(isBloqueia){
+                        event.setCancelled(false);
+                        return;
                     }
                 }
 
@@ -195,56 +204,6 @@ public class MoveHopper implements Listener {
                     if (grupoHopper.contentsItem(item)) {
                         event.setCancelled(false);
                         return;
-                    }
-                }
-
-                for (int i = 0; i < inventory.getSize(); i++) {
-                    if (inventory.getItem(i) != null) {
-                        Item itemInventory = VGlobal.ITEM_MAP_NAME.get(new Item(inventory.getItem(i)).getDsItem());
-
-                        // VERIFICA SE CONTEM MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O HOPPER
-                        if (smartHopperDestino.getNameHopper().contains(";")) {
-                            // PEGANDO A LISTA DE NOMES CONFIGURADOS PARA O HOPPER
-                            String[] lista = smartHopperDestino.getNameHopper().split(";");
-                            // PERCORRENDO A LISTA DE NOMES DO HOPPER
-                            for (String hopperNameList : lista) {
-                                SmartHopper smartHopper = new SmartHopper(destination.getLocation().getBlock(), hopperNameList);
-
-                                // SE O HOPPER DE DESTINO FOI CONFIGURADO PARA ITEM
-                                if (smartHopper.getType() instanceof Item itemHopperDestino) {
-                                    if (itemHopperDestino.getCdItem() == itemInventory.getCdItem()) {
-                                        destination.addItem(inventory.getItem(i));
-                                        inventory.removeItem(inventory.getItem(i));
-                                        return;
-                                    }
-                                }
-                                // SE O HOPPER DE DESTINO ESTIVER CONFIGURADO PARA GRUPO
-                                if (smartHopper.getType() instanceof Grupo grupoHopperDestino) {
-                                    if (grupoHopperDestino.contentsItem(itemInventory)) {
-                                        destination.addItem(inventory.getItem(i));
-                                        inventory.removeItem(inventory.getItem(i));
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-
-                        // SE O HOPPER DE DESTINO FOI CONFIGURADO PARA ITEM
-                        if (smartHopperDestino.getType() instanceof Item itemHopperDestino) {
-                            if (itemHopperDestino.getCdItem() == itemInventory.getCdItem()) {
-                                destination.addItem(inventory.getItem(i));
-                                inventory.removeItem(inventory.getItem(i));
-                                return;
-                            }
-                        }
-                        // SE O HOPPER DE DESTINO ESTIVER CONFIGURADO PARA GRUPO
-                        if (smartHopperDestino.getType() instanceof Grupo grupoHopperDestino) {
-                            if (grupoHopperDestino.contentsItem(itemInventory)) {
-                                destination.addItem(inventory.getItem(i));
-                                inventory.removeItem(inventory.getItem(i));
-                                return;
-                            }
-                        }
                     }
                 }
             }
