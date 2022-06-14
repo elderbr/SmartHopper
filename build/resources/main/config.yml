@@ -1,0 +1,20 @@
+#Configuração Separador inteligente SmartHopper
+author: ElderBR
+discord: ElderBR#5398
+#Versão do plugin
+version: 3.5.1
+# Verifica se os itens estão atualizados
+item atualizado: true
+#Verifica se os grupos estão atualizados
+grupo atualizado: true
+#Adminsitradores é responsável por adicionar ou remover operadores
+#Fica responsável por adicionar, alterar ou remover grupos
+adm:
+  - ElderBR
+#Operadores é responsável por adicionar, alterar ou deletar os grupos
+operador:
+  - ElderBR
+#Linguagens disponível
+lang:
+  - pt_br
+  - pt_pt
