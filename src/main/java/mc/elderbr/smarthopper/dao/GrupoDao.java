@@ -20,7 +20,8 @@ public class GrupoDao {
     }
 
     public static void CREATE_GRUPO() {
-        if(!Config.IsGrupoUpdate()) {
+        // VERIFICA SE O TAMANHO DA LISTA DE GRUPO É MAIOR QUE A LISTA DO BANCO DE DADOS
+        if(VGlobal.GRUPO_LIST.size() > VGlobal.GRUPO_MAP_NAME.size()) {
             Debug.WriteMsg("Adicionado o grupo no banco");
             for (Grupo grupo : VGlobal.GRUPO_LIST) {
                 try {
