@@ -9,6 +9,7 @@ import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class SmartHopper {
 
@@ -147,6 +148,21 @@ public class SmartHopper {
                 if(items.getCdItem() == item.getCdItem()){
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    public boolean isTransferer(Item item){
+        for(ItemStack itemStack : hopper.getInventory().getContents()){
+            if(itemStack==null){
+                return true;
+            }
+            Item newItem = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
+            newItem.setSize(itemStack.getAmount());
+            newItem.setMax(itemStack.getMaxStackSize());
+            if(item.getCdItem()==newItem.getCdItem() && newItem.isMax()){
+                return true;
             }
         }
         return false;
