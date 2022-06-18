@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.Linguagem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -22,6 +23,8 @@ public class Item implements Linguagem {
     private int cdItem = 0;
     private String dsItem;
     private ItemStack itemStack;
+    private int size = 0;
+    private int max = 1;
 
     // LANG
     private int cdLang;
@@ -41,6 +44,8 @@ public class Item implements Linguagem {
     }
 
     public Item(ItemStack itemStack) {
+        size = itemStack.getAmount();
+        max = itemStack.getMaxStackSize();
         parseItem(itemStack);
     }
 
@@ -92,6 +97,41 @@ public class Item implements Linguagem {
     public Item setCdTraducao(int codigo) {
         cdTraducao = codigo;
         return this;
+    }
+
+    public Item setSize(int size){
+        this.size = size;
+        return this;
+    }
+
+    public Item setSize(ItemStack itemStack){
+        this.size = itemStack.getAmount();
+        return this;
+    }
+
+    public int getSize(){
+        return size;
+    }
+
+    public Item setMax(int max){
+        this.max = max;
+        return this;
+    }
+
+    public Item setMax(ItemStack itemStack){
+        this.max = itemStack.getMaxStackSize();
+        return this;
+    }
+
+    public int getMax(){
+        return max;
+    }
+
+    public boolean isMax(){
+        if(size < max){
+            return true;
+        }
+        return false;
     }
 
     public int getCdTraducao() {
