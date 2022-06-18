@@ -95,7 +95,7 @@ public class MoveHopper implements Listener {
                                         return;
                                     }
                                 }
-                                if(isBloqueia){
+                                if (isBloqueia) {
                                     event.setCancelled(false);
                                 }
                             }
@@ -149,61 +149,68 @@ public class MoveHopper implements Listener {
 
 
             if (destination.getType() == InventoryType.HOPPER) {
+                for (int i = 0; i < inventory.getSize(); i++) {
+                    itemStack = inventory.getItem(i);
+                    if (itemStack != null) {
+                        item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
+                        item.setSize(itemStack);// Pegando a quantidade do mesmo item
+                        item.setMax(itemStack);// Setando a quantidade de impilhamento do item
 
-                if(smartHopperDestino.getNameHopper().contains(";")){
-                    String[] smartHopperList = smartHopperDestino.getNameHopper().split(";");
-                    isBloqueia = true;
-                    for(String hoppers : smartHopperList){
-                        smartHopper = new SmartHopper(destination.getLocation().getBlock(), hoppers);
-                        if (smartHopper.getNameHopper().contains("#")) {
-                            if (smartHopper.getType() instanceof Item itemHopper) {
-                                if (itemHopper.getCdItem() == item.getCdItem()) {
-                                    isBloqueia = false;
-                                    return;
+                        // Se o funil estiver configurado para mais de um item ou grupo
+                        if(smartHopperDestino.getNameHopper().contains(";")){
+                            String[] names = smartHopperDestino.getNameHopper().split(";");
+                            for(String name : names){
+                                smartHopper = new SmartHopper(destination.getLocation().getBlock(), name);
+
+                                // Se o hopper estiver configurado para o item
+                                if(smartHopper.getType() instanceof Item itemSmart){
+                                    if(itemSmart.getCdItem() == item.getCdItem() && smartHopper.isTransferer(item)){
+                                        destination.addItem(itemStack);
+                                        inventory.removeItem(itemStack);
+                                    }
+                                }
+
+                                // Se o funil for configurado para o grupo
+                                if(smartHopper.getType() instanceof Grupo grupoSmart){
+                                    if(grupoSmart.contentsItem(item) && smartHopper.isTransferer(item)){
+                                        destination.addItem(itemStack);
+                                        inventory.removeItem(itemStack);
+                                    }
                                 }
                             }
-                            if (smartHopper.getType() instanceof Grupo grupoHopper) {
-                                if (grupoHopper.contentsItem(item)) {
-                                    isBloqueia = false;
-                                    return;
+                        }
+
+                        // Se o funil for configurado para item
+                        if (smartHopperDestino.getType() instanceof Item itemSmart) {
+                            // Item bloqueado
+                            if (smartHopperDestino.getNameHopper().contains("#")) {
+                                if (itemSmart.getCdItem() != item.getCdItem()) {
+                                    destination.addItem(itemStack);
+                                    inventory.removeItem(itemStack);
                                 }
+                                continue;
+                            }
+                            // Se o item for igual a configuração do funil
+                            if (item.getCdItem() == itemSmart.getCdItem() && smartHopperDestino.isTransferer(item)) {
+                                destination.addItem(itemStack);
+                                inventory.removeItem(itemStack);
                             }
                         }
-                    }
-                    if(isBloqueia){
-                        event.setCancelled(false);
-                        return;
-                    }
-                }
-
-                if (smartHopperDestino.getNameHopper().contains("#")) {
-                    if (smartHopperDestino.getType() instanceof Item itemHopper) {
-                        if (itemHopper.getCdItem() != item.getCdItem()) {
-                            event.setCancelled(false);
-                        } else {
-                            event.setCancelled(true);
+                        // Se o funil estiver configurado para o grupo
+                        if(smartHopperDestino.getType() instanceof Grupo grupoSmart){
+                            if(smartHopperDestino.getNameHopper().contains("#")){
+                                if(!grupoSmart.contentsItem(item)){
+                                    destination.addItem(itemStack);
+                                    inventory.removeItem(itemStack);
+                                }
+                                continue;
+                            }
+                            // Se o grupo conter o item
+                            if(grupoSmart.contentsItem(item)){
+                                destination.addItem(itemStack);
+                                inventory.removeItem(itemStack);
+                            }
                         }
-                        return;
-                    }
-                    if (smartHopperDestino.getType() instanceof Grupo grupoHopper) {
-                        if (!grupoHopper.contentsItem(item)) {
-                            event.setCancelled(false);
-                        } else {
-                            event.setCancelled(true);
-                        }
-                        return;
-                    }
-                }
-                if (smartHopperDestino.getType() instanceof Item itemHopper) {
-                    if (itemHopper.getCdItem() == item.getCdItem()) {
-                        event.setCancelled(false);
-                        return;
-                    }
-                }
-                if (smartHopperDestino.getType() instanceof Grupo grupoHopper) {
-                    if (grupoHopper.contentsItem(item)) {
-                        event.setCancelled(false);
-                        return;
                     }
                 }
             }
