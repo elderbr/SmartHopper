@@ -1,7 +1,8 @@
 package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -56,7 +57,7 @@ public class TraducaoConfig {
             escrever.newLine();
             escrever.flush();
             while ((txtReader = reader.readLine()) != null) {
-                escrever.write(StringEscapeUtils.unescapeJava(txtReader));
+                escrever.write(StringUtils.capitalize(txtReader));
                 escrever.newLine();
                 escrever.flush();
             }

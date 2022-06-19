@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'mc.elderbr'
-version = '4.0.1'
+version = '4.0.2'
 
 sourceCompatibility = "16"
 targetCompatibility = "16"
@@ -17,8 +17,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:20.1.0'
-    implementation 'org.xerial:sqlite-jdbc:3.36.0.2'
-    implementation 'mysql:mysql-connector-java:8.0.25'
-    compileOnly('org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT')
+    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
+    implementation 'mysql:mysql-connector-java:8.0.29'
+    implementation 'org.apache.commons:commons-text:1.9'
+    compileOnly('org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT')
 }
