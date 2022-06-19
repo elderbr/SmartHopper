@@ -1,6 +1,8 @@
 package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Lang;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Map;
 
 public class TraducaoConfig {
     private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
