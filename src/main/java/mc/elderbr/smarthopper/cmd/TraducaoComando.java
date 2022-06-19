@@ -78,7 +78,7 @@ public class TraducaoComando implements CommandExecutor {
                 item = VGlobal.ITEM_MAP_NAME.get(new Item(player.getInventory().getItemInMainHand()).getDsItem());
                 item.setCdLang(jogador.getLang().getCdLang());
 
-                // VERIFICA SE O JOGADOR ESTÁ NA LISTA DE ADMINISTRADORES
+                // VERIFICA SE O JOGADOR ESTA NA LISTA DE ADMINISTRADORES
                 isOP = false;
                 for (Jogador jg : VGlobal.JOGADOR_LIST) {
                     if (jg.getUUID().equals(jogador.getUUID())) {
