@@ -22,12 +22,15 @@ public class TraducaoConfig {
     private File filePT = new File(directoryFile, "pt_pt.yml");
 
     public TraducaoConfig() {
+        // Criando o pasta lang
         if(!directoryFile.exists()){
             directoryFile.mkdir();
         }
+        // Se o arquivo pt_br não existir cria
         if(!fileBR.exists()) {
             createBR();
         }
+        // Se o arquivo pt_pt não existir cria
         if(!filePT.exists()) {
             createTP();
         }
