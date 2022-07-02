@@ -20,5 +20,5 @@ dependencies {
     implementation 'org.jetbrains:annotations:20.1.0'
     implementation 'org.xerial:sqlite-jdbc:3.36.0.2'
     implementation 'mysql:mysql-connector-java:8.0.25'
-    compileOnly('org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT')
+    compileOnly('org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT')
 }
