@@ -24,8 +24,9 @@ public class LangDao {
         stm = null;
         try {
             if (lang instanceof String name) {
-                sql = String.format("INSERT INTO lang (dsLang) VALUES (%s);", name);
+                sql = "INSERT INTO lang (dsLang) VALUES (?);";
                 stm = Conexao.repared(sql);
+                stm.setString(1, name);
             }
             if (lang instanceof Lang linguagem) {
                 sql = String.format("INSERT INTO lang (dsLang) VALUES (%s);", linguagem.getDsLang());

@@ -1,12 +1,19 @@
 package mc.elderbr.smarthopper.file;
 
+import mc.elderbr.smarthopper.dao.LangDao;
+import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Lang;
+import mc.elderbr.smarthopper.model.Traducao;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Map;
 
 public class TraducaoConfig {
     private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
@@ -23,25 +30,25 @@ public class TraducaoConfig {
 
     public TraducaoConfig() {
         // Criando o pasta lang
-        if(!directoryFile.exists()){
+        if (!directoryFile.exists()) {
             directoryFile.mkdir();
         }
         // Se o arquivo pt_br não existir cria
-        if(!fileBR.exists()) {
+        if (!fileBR.exists()) {
             createBR();
         }
         // Se o arquivo pt_pt não existir cria
-        if(!filePT.exists()) {
+        if (!filePT.exists()) {
             createTP();
         }
     }
 
-    public YamlConfiguration configBR(){
+    public YamlConfiguration configBR() {
         yml = YamlConfiguration.loadConfiguration(fileBR);
         return yml;
     }
 
-    public YamlConfiguration configPT(){
+    public YamlConfiguration configPT() {
         yml = YamlConfiguration.loadConfiguration(filePT);
         return yml;
     }
@@ -104,6 +111,32 @@ public class TraducaoConfig {
             } catch (IOException er) {
                 er.printStackTrace();
             }
+        }
+    }
+
+    public void reload() {
+        String lang = null;
+        int cd = 0;
+        for (File files : directoryFile.listFiles()) {
+            // Lendo o arquivo de tradução
+            yml = YamlConfiguration.loadConfiguration(files);
+            // Nome do linguagem
+            lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
+            // Adicionando a linguagem na variavel global se não existir
+            if (!VGlobal.LANG_NAME_LIST.contains(lang)) {
+                VGlobal.LANG_NAME_LIST.add(lang);
+                cd = LangDao.insert(lang);
+                if(cd == 0) break;
+                for (Map.Entry<String, Object> map : yml.getValues(false).entrySet()) {
+                    Item item = VGlobal.ITEM_MAP_NAME.get(map.getKey());
+                    if(item == null) continue;
+                    item.setCdLang(cd);
+                    item.setDsLang(lang);
+                    item.setDsTraducao(map.getValue().toString());
+                    TraducaoDao.INSERT(item);
+                }
+            }
+            files.delete();
         }
     }
 
