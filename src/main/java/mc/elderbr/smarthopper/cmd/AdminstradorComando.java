@@ -49,9 +49,8 @@ public class AdminstradorComando  implements CommandExecutor {
                 // Estato do retorno do banco ao tentar adicionar
                 switch (AdmDao.STATUS){
                     case 1:
-                        Msg.PlayerTodos(jogador.getDsJogador()+" foi adicionado como Administrador do Smart Hopper com sucesso!!!");
+                        Msg.PlayerTodos("§e§l"+jogador.getDsJogador()+" §r§9foi adicionado como Administrador do Smart Hopper com sucesso!!!");
                         VGlobal.JOGADOR_LIST.add(jogador);// Adicionando jogador na lista de administrador
-                        Config.ADD_ADM();// Adicionando o jogador na lista no arquivo config
                         break;
                     case 2:
                         Msg.PlayerGold(playerCommand, jogador.getDsJogador() + " já foi adicionado!!!");
