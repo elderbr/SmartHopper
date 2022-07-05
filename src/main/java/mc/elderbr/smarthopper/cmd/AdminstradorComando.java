@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.dao.AdmDao;
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Jogador;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Adm;
@@ -48,8 +49,9 @@ public class AdminstradorComando  implements CommandExecutor {
                 // Estato do retorno do banco ao tentar adicionar
                 switch (AdmDao.STATUS){
                     case 1:
-                        Msg.PlayerGold(playerCommand, jogador.getDsJogador()+" foi adicionado como Administrado com sucesso!!!");
+                        Msg.PlayerTodos(jogador.getDsJogador()+" foi adicionado como Administrador do Smart Hopper com sucesso!!!");
                         VGlobal.JOGADOR_LIST.add(jogador);// Adicionando jogador na lista de administrador
+                        Config.ADD_ADM();// Adicionando o jogador na lista no arquivo config
                         break;
                     case 2:
                         Msg.PlayerGold(playerCommand, jogador.getDsJogador() + " já foi adicionado!!!");
