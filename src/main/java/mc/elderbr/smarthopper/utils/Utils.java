@@ -1,15 +1,11 @@
 package mc.elderbr.smarthopper.utils;
 
-import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.bukkit.ChatColor;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -37,14 +33,14 @@ public class Utils {
     }
 
     public static String ToUTF(String obj) {
-        return StringEscapeUtils.unescapeJava(obj);
+        return StringUtils.capitalize(obj);
     }
 
     public static Map<String, String> ToUTF(Map<String, String> obj) {
         if (obj == null) return null;
         Map<String, String> map = new HashMap<>();
         for (Map.Entry<String, String> values : obj.entrySet()) {
-            map.put(values.getKey(), StringEscapeUtils.unescapeJava(values.getValue()));
+            map.put(values.getKey(), StringUtils.capitalize(values.getValue()));
         }
         return map;
     }
@@ -56,7 +52,6 @@ public class Utils {
     public static String toUP(String name) {
         return name.substring(0, 1).toUpperCase().concat(name.substring(1));
     }
-
 
 
     public static String toEnchantment(Enchantment enchantment) {
@@ -109,6 +104,6 @@ public class Utils {
     }
 
     public static String toItem(ItemStack item) {
-        return item.getType().name().toLowerCase().replaceAll("_"," ");
+        return item.getType().name().toLowerCase().replaceAll("_", " ");
     }
 }

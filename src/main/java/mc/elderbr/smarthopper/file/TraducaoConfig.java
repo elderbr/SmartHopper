@@ -4,10 +4,8 @@ import mc.elderbr.smarthopper.dao.LangDao;
 import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Lang;
-import mc.elderbr.smarthopper.model.Traducao;
-import mc.elderbr.smarthopper.utils.Msg;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -66,7 +64,7 @@ public class TraducaoConfig {
             escrever.newLine();
             escrever.flush();
             while ((txtReader = reader.readLine()) != null) {
-                escrever.write(StringEscapeUtils.unescapeJava(txtReader));
+                escrever.write(StringUtils.capitalize(txtReader));
                 escrever.newLine();
                 escrever.flush();
             }

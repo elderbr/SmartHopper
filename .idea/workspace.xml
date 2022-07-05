@@ -9,6 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="12109b36-73cd-4704-a5ea-8e7e064a0b38" name="Default Changelist" comment="Alterando a versão do plugin para 3.4">
       <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" afterDir="false" />
@@ -16,6 +17,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
+=======
+    <list default="true" id="12109b36-73cd-4704-a5ea-8e7e064a0b38" name="Default Changelist" comment="Alterando a versão do plugin para 3.4" />
+>>>>>>> v4.0.2
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -100,8 +104,13 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File" value="JAVA" />
+<<<<<<< HEAD
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../purpur/purpur-1.19-1689.jar" />
     <property name="project.structure.last.edited" value="Artifacts" />
+=======
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Server/Mundo01/plugins/SmartHopper/grupo.yml" />
+    <property name="project.structure.last.edited" value="Project" />
+>>>>>>> v4.0.2
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39771548" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
@@ -209,7 +218,11 @@
       <method v="2" />
     </configuration>
     <configuration name="SmartHopper" type="JarApplication">
+<<<<<<< HEAD
       <option name="JAR_PATH" value="$PROJECT_DIR$/../../../purpur/purpur-1.19-1689.jar" />
+=======
+      <option name="JAR_PATH" value="$PROJECT_DIR$/../../../Spigot/spigot-1.19.jar" />
+>>>>>>> v4.0.2
       <option name="VM_PARAMETERS" value="-Xmx2G" />
       <option name="PROGRAM_PARAMETERS" value="nogui" />
       <option name="WORKING_DIRECTORY" value="C:\Users\User\Documents\Minecraft\Servidor\SmartHopper" />
@@ -227,8 +240,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Smart Hopper" />
-        <item itemvalue="Gradle.Smart Hopper 3.2 [wrapper]" />
         <item itemvalue="Gradle.Smart Hopper 3.2 [clean]" />
+        <item itemvalue="Gradle.Smart Hopper 3.2 [wrapper]" />
         <item itemvalue="Gradle.Smart Hopper 3.2 [buildDependents]" />
       </list>
     </recent_temporary>
