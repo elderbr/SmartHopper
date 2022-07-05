@@ -17,7 +17,7 @@ import java.util.List;
 public class Config {
 
     private final File directoryFile = new File(VGlobal.ARQUIVO.getAbsolutePath());
-    private static final File FILE_CONFIG = new File(VGlobal.ARQUIVO, "config.YML");
+    private static final File FILE_CONFIG = new File(VGlobal.ARQUIVO, "config.yml");
     private BufferedWriter escrever;
     private Charset utf8 = StandardCharsets.UTF_8;
     private static YamlConfiguration YML;
