@@ -4,8 +4,6 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.SmartHopper;
-import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -157,22 +155,22 @@ public class MoveHopper implements Listener {
                         item.setMax(itemStack);// Setando a quantidade de impilhamento do item
 
                         // Se o funil estiver configurado para mais de um item ou grupo
-                        if(smartHopperDestino.getNameHopper().contains(";")){
+                        if (smartHopperDestino.getNameHopper().contains(";")) {
                             String[] names = smartHopperDestino.getNameHopper().split(";");
-                            for(String name : names){
+                            for (String name : names) {
                                 smartHopper = new SmartHopper(destination.getLocation().getBlock(), name);
 
                                 // Se o hopper estiver configurado para o item
-                                if(smartHopper.getType() instanceof Item itemSmart){
-                                    if(itemSmart.getCdItem() == item.getCdItem() && smartHopper.isTransferer(item)){
+                                if (smartHopper.getType() instanceof Item itemSmart) {
+                                    if (itemSmart.getCdItem() == item.getCdItem() && smartHopper.isTransferer(item)) {
                                         destination.addItem(itemStack);
                                         inventory.removeItem(itemStack);
                                     }
                                 }
 
                                 // Se o funil for configurado para o grupo
-                                if(smartHopper.getType() instanceof Grupo grupoSmart){
-                                    if(grupoSmart.contentsItem(item) && smartHopper.isTransferer(item)){
+                                if (smartHopper.getType() instanceof Grupo grupoSmart) {
+                                    if (grupoSmart.contentsItem(item) && smartHopper.isTransferer(item)) {
                                         destination.addItem(itemStack);
                                         inventory.removeItem(itemStack);
                                     }
@@ -197,16 +195,16 @@ public class MoveHopper implements Listener {
                             }
                         }
                         // Se o funil estiver configurado para o grupo
-                        if(smartHopperDestino.getType() instanceof Grupo grupoSmart){
-                            if(smartHopperDestino.getNameHopper().contains("#")){
-                                if(!grupoSmart.contentsItem(item)){
+                        if (smartHopperDestino.getType() instanceof Grupo grupoSmart) {
+                            if (smartHopperDestino.getNameHopper().contains("#")) {
+                                if (!grupoSmart.contentsItem(item)) {
                                     destination.addItem(itemStack);
                                     inventory.removeItem(itemStack);
                                 }
                                 continue;
                             }
                             // Se o grupo conter o item
-                            if(grupoSmart.contentsItem(item)){
+                            if (grupoSmart.contentsItem(item)) {
                                 destination.addItem(itemStack);
                                 inventory.removeItem(itemStack);
                             }
@@ -223,10 +221,8 @@ public class MoveHopper implements Listener {
                 event.setCancelled(false);// Ativa o movimento do item
             }
 
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             event.setCancelled(false);
-            Msg.ServidorErro("Erro ao movimentar o item!!!", "", getClass(), e);
         }
 
     }
