@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper;
 
+import mc.elderbr.smarthopper.cmd.ItemComando;
+import mc.elderbr.smarthopper.cmd.ItemTabCompleter;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
@@ -47,12 +49,20 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Salvando os item no arquivo item.yml
         itemConfig = new ItemConfig();
 
+        // Comandos
+        commands();
 
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    private void commands(){
+
+        getCommand("item").setExecutor(new ItemComando());
+        getCommand("item").setTabCompleter(new ItemTabCompleter());
     }
 
 

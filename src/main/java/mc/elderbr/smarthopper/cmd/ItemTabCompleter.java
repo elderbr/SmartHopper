@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,9 +36,9 @@ public class ItemTabCompleter implements TabCompleter {
                 cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
                 if(cmd.length()>0){
                     itemList = new ArrayList<>();
-                    for (Map.Entry<String, Item> items : VGlobal.TRADUCAO_ITEM_LIST.entrySet()){
-                        if(items.getKey().contains(cmd)){
-                            Item item = items.getValue();
+                    for (String items : VGlobal.TRADUCAO_ITEM_NAME_LIST){
+                        if(items.contains(cmd)){
+                            item = VGlobal.TRADUCAO_ITEM_LIST.get(items);
                             item.setDsLang(player.getLocale());
                             itemList.add(item.toTraducao());
                         }
@@ -46,7 +47,6 @@ public class ItemTabCompleter implements TabCompleter {
                 }
             }
         }
-
-        return null;
+        return Arrays.asList();
     }
 }

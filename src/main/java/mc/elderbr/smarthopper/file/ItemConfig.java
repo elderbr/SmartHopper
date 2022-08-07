@@ -71,9 +71,16 @@ public class ItemConfig {
                 MemorySection memorySection = ((MemorySection) config.get(names.concat(".item_lang")));
                 for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
                     item.addTraducao(langs.getKey(), langs.getValue().toString());
+                    VGlobal.TRADUCAO_ITEM_LIST.put(langs.getValue().toString().toLowerCase(), item);// Adicionando a tradução para o item
+                    VGlobal.TRADUCAO_ITEM_NAME_LIST.add(langs.getValue().toString().toLowerCase());
                 }
             }
+            // Adicionando item na variavel global
             VGlobal.ITEM_LIST.add(item);
+            VGlobal.ITEM_MAP_ID.put(item.getCdItem(), item);
+            VGlobal.ITEM_MAP_NAME.put(item.getDsItem(), item);
+            VGlobal.TRADUCAO_ITEM_LIST.put(names.toLowerCase(), item);// Adicionando a tradução para o item
+            VGlobal.TRADUCAO_ITEM_NAME_LIST.add(names.toLowerCase());
         }
     }
 
