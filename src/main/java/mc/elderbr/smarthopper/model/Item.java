@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class Item implements Linguagem {
 
+    private static Item item;
     private int cdItem = 0;
     private String dsItem;
     private ItemStack itemStack;
@@ -199,6 +200,15 @@ public class Item implements Linguagem {
             }
         }
         Collections.sort(VGlobal.ITEM_NAME_LIST);
+
+        // Criando itens com código e nome e adicionando na lista global
+        int cod = 1;
+        for(String name : VGlobal.ITEM_NAME_LIST){
+            item = new Item();
+            item.setCdItem(cod);
+            item.setDsItem(name);
+            VGlobal.ITEM_LIST.add(item);
+        }
     }
 
     public Item parseItem(@NotNull ItemStack itemStack) {
