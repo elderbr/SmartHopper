@@ -18,11 +18,8 @@ public class TraducaoComando implements CommandExecutor {
     private Adm jogador;
     private boolean isOP = false;
 
-    private Lang lang;
-
     private String[] traducaoArgs;
     private StringBuilder traducaoList = new StringBuilder();
-    private Traducao traducao;
 
     private Grupo grupo;
     private int cdGrupo;
@@ -39,8 +36,6 @@ public class TraducaoComando implements CommandExecutor {
 
             if (command.getName().equalsIgnoreCase("addTraducao")) {
 
-                lang = VGlobal.LANG_MAP.get(player.getLocale());
-
                 if (args.length > 0 && args[0].equalsIgnoreCase("grupo")) {
 
                     if (args.length > 2) {
@@ -52,14 +47,9 @@ public class TraducaoComando implements CommandExecutor {
                             return false;
                         }
                         grupo = VGlobal.GRUPO_MAP_ID.get(cdGrupo);
-                        grupo.setCdLang(lang.getCdLang());
                         if (grupo != null) {
                             grupo.setDsTraducao(toGrupoTraducao());
-
-                                VGlobal.GRUPO_MAP_ID.get(grupo.getCdGrupo()).addTraducao(lang.getDsLang(), grupo.getDsTraducao());
-                                VGlobal.GRUPO_MAP_NAME.get(grupo.getDsGrupo()).addTraducao(lang.getDsLang(), grupo.getDsTraducao());
                                 Msg.PlayerGreen(player, "Tradução do grupo " + grupo.getDsGrupo() + " adicionado com sucesso!!!");
-
                         } else {
                             Msg.PlayerGreen(player, "Grupo do código " + args[1] + " não foi encontrado!!!");
                         }
@@ -75,7 +65,6 @@ public class TraducaoComando implements CommandExecutor {
                 }
 
                 item = VGlobal.ITEM_MAP_NAME.get(new Item(player.getInventory().getItemInMainHand()).getDsItem());
-                item.setCdLang(jogador.getLang().getCdLang());
 
                 // VERIFICA SE O JOGADOR ESTA NA LISTA DE ADMINISTRADORES
                 isOP = false;
@@ -97,11 +86,6 @@ public class TraducaoComando implements CommandExecutor {
                 }
 
                 item.setDsTraducao(toTraducao());
-
-                traducao = VGlobal.TRADUCAO_MAP_ITEM_NAME.get(item.getCdItem());
-
-
-
             }
         }
 

@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -28,15 +29,17 @@ public class TraducaoConfig {
         // Criando o pasta lang
         if (!directoryFile.exists()) {
             directoryFile.mkdir();
+
+            // Se o arquivo pt_br não existir cria
+            if (!fileBR.exists()) {
+                createBR();
+            }
+            // Se o arquivo pt_pt não existir cria
+            if (!filePT.exists()) {
+                createTP();
+            }
         }
-        // Se o arquivo pt_br não existir cria
-        if (!fileBR.exists()) {
-            createBR();
-        }
-        // Se o arquivo pt_pt não existir cria
-        if (!filePT.exists()) {
-            createTP();
-        }
+        reload();// Lendo todas as traduções
     }
 
     public YamlConfiguration configBR() {
@@ -62,7 +65,7 @@ public class TraducaoConfig {
             escrever.newLine();
             escrever.flush();
             while ((txtReader = reader.readLine()) != null) {
-                escrever.write(StringUtils.capitalize(txtReader));
+                escrever.write(txtReader);
                 escrever.newLine();
                 escrever.flush();
             }
@@ -112,23 +115,18 @@ public class TraducaoConfig {
 
     public void reload() {
         String lang = null;
-        int cd = 0;
         for (File files : directoryFile.listFiles()) {
             // Lendo o arquivo de tradução
             yml = YamlConfiguration.loadConfiguration(files);
             // Nome do linguagem
             lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
-            // Adicionando a linguagem na variavel global se não existir
-            if (!VGlobal.LANG_NAME_LIST.contains(lang)) {
-                VGlobal.LANG_NAME_LIST.add(lang);
 
-                if(cd == 0) break;
-                for (Map.Entry<String, Object> map : yml.getValues(false).entrySet()) {
-                    Item item = VGlobal.ITEM_MAP_NAME.get(map.getKey());
-                    if(item == null) continue;
-                    item.setCdLang(cd);
-                    item.setDsLang(lang);
-                    item.setDsTraducao(map.getValue().toString());
+            int cod = 0;
+            for(Item item : VGlobal.ITEM_LIST) {
+                String name = item.getDsItem();
+                if(yml.get(name)!=null) {
+                    cod = (item.getCdItem()-1);
+                    VGlobal.ITEM_LIST.get(cod).addTraducao(lang, yml.get(name).toString());
                 }
             }
             files.delete();

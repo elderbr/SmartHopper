@@ -20,18 +20,14 @@ import java.util.Map;
 
 public class Item implements Linguagem {
 
-    private static Item item;
     private int cdItem = 0;
     private String dsItem;
     private ItemStack itemStack;
     private int size = 0;
     private int max = 1;
 
-    // LANG
-    private int cdLang;
-    private String dsLang;
     // TRADUCAO
-    private int cdTraducao;
+    private String dsLang;
     private String dsTraducao;
 
     // LISTA DE TRADUÇÃO
@@ -68,17 +64,6 @@ public class Item implements Linguagem {
     }
 
     @Override
-    public Item setCdLang(int codigo) {
-        cdLang = codigo;
-        return this;
-    }
-
-    @Override
-    public int getCdLang() {
-        return cdLang;
-    }
-
-    @Override
     public Item setDsLang(String lang) {
         dsLang = lang;
         return this;
@@ -93,11 +78,6 @@ public class Item implements Linguagem {
     @Override
     public String getDsLang() {
         return dsLang;
-    }
-
-    public Item setCdTraducao(int codigo) {
-        cdTraducao = codigo;
-        return this;
     }
 
     public Item setSize(int size){
@@ -135,10 +115,6 @@ public class Item implements Linguagem {
         return false;
     }
 
-    public int getCdTraducao() {
-        return cdTraducao;
-    }
-
     public Item setDsTraducao(String traducao) {
         dsTraducao = traducao;
         return this;
@@ -153,7 +129,6 @@ public class Item implements Linguagem {
     }
 
     public void addTraducao(String lang, String traducao) {
-        if(this.traducao == null) this.traducao = new HashMap<>();
         this.traducao.put(lang, traducao);
     }
 
@@ -204,10 +179,11 @@ public class Item implements Linguagem {
         // Criando itens com código e nome e adicionando na lista global
         int cod = 1;
         for(String name : VGlobal.ITEM_NAME_LIST){
-            item = new Item();
+            Item item = new Item();
             item.setCdItem(cod);
             item.setDsItem(name);
             VGlobal.ITEM_LIST.add(item);
+            cod++;
         }
     }
 

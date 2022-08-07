@@ -183,7 +183,6 @@ public class GrupoComando implements CommandExecutor {
 
                                 // TRADUÇÃO
                                 VGlobal.TRADUCAO_GRUPO_LIST.remove(GRUPO.getDsGrupo());
-                                VGlobal.TRADUCAO_MAP_GRUPO_NAME.remove(GRUPO.getCdGrupo());
 
                                 Msg.PlayerTodos(Msg.Color("$6O jogador " + player.getName() + " deletou o grupo $a$l" + GRUPO.getDsGrupo() + "!"));
 

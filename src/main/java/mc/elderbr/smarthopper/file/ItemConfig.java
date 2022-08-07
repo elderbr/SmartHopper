@@ -21,8 +21,6 @@ public class ItemConfig {
 
     private int idItem = 1;
     private Item item;
-    private String key;
-    private String value;
 
     private List<String> list = new ArrayList<>();
 
@@ -40,77 +38,51 @@ public class ItemConfig {
                 e.printStackTrace();
             }
         }
-
-        Debug.Write("Carregando o arquivo item.yml");
-        config = YamlConfiguration.loadConfiguration(ITEM_FILE);
+        load();// Lendo os itens do arquivo item.yml
     }
 
     public void createYML(){
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-        int codigo = 1;
-        for(String name : VGlobal.ITEM_NAME_LIST){
-            Item item = new Item();
-            item.setCdItem(codigo);
-            item.setDsItem(name);
+        for(Item item : VGlobal.ITEM_LIST){
             add(item);// Salvando o arquivo item.yml
-            codigo++;
         }
     }
 
-    public void updateYML() {
+    /********************************
+     *
+     * Lendo o arquivo item.yml
+     *
+     ********************************/
+    public void load(){
 
-        try {
-            ITEM_FILE.delete();
-            ITEM_FILE.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       VGlobal.ITEM_LIST.clear();// Limpando a lista de item
 
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
+        for(String names : VGlobal.ITEM_NAME_LIST){
 
-        Msg.ServidorGreen("Verificando se precisa atualizar os items...");
-        Collections.sort(VGlobal.ITEM_NAME_LIST);
-        for(String itemName : VGlobal.ITEM_NAME_LIST){
-            item = VGlobal.ITEM_MAP_NAME.get(itemName);
-            if(item == null) continue;
+            if(config.get(names)==null) continue;
 
-            config.set(itemName.concat(".id"), item.getCdItem());
-            config.set(itemName.concat(".name"), item.getDsItem());
-            config.set(itemName.concat(".lang"), item.getTraducao());
-            save();
+            item = new Item();
+            item.setCdItem(config.getInt(names.concat(".item_id")));
+            item.setDsItem(config.getString(names.concat(".item_name")));
 
-        }
-
-        Debug.WriteMsg("Novos itens adicionados com sucesso!!!");
-    }
-
-    public void loadYmlAddBanco() {
-        config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-        // SALVA O ITEM DO ARQUIVO ITEM.YML NO BANCO
-        if (Config.VERSION() < VGlobal.VERSION_INT) {
-            Debug.WriteMsg("Lendo o arquivo item.yml e salvando no bancao");
-            for (Map.Entry<String, Object> values : config.getValues(false).entrySet()) {
-                Item item = new Item();
-                item.setCdItem(config.getInt(values.getKey().concat(".id")));
-                item.setDsItem(config.getString(values.getKey().concat(".name")));
-
-                if(item.getItemStack() == null ) continue;
-
-                Msg.ServidorGreen("ITEM DO ARQUIVO >> " + item.getDsItem(), getClass());
-
-                if ((config.get(values.getKey().concat(".lang"))) instanceof MemorySection) {
-                    MemorySection memorySection = ((MemorySection) config.get(values.getKey().concat(".lang")));
-                    for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
-                        item.addTraducao(langs.getKey(), langs.getValue().toString());
-                    }
+            // Tradução dos itens
+            if(config.get(names.concat(".item_lang"))!=null) {
+                MemorySection memorySection = ((MemorySection) config.get(names.concat(".item_lang")));
+                for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
+                    item.addTraducao(langs.getKey(), langs.getValue().toString());
                 }
             }
+            VGlobal.ITEM_LIST.add(item);
         }
     }
 
     private void add(Item item){
-        config.set(item.getDsItem().concat(".id"), item.getCdItem());
-        config.set(item.getDsItem().concat(".name"), item.getDsItem());
+        config.set(item.getDsItem().concat(".item_id"), item.getCdItem());
+        config.set(item.getDsItem().concat(".item_name"), item.getDsItem());
+        if(!item.getTraducao().isEmpty()) {
+            config.set(item.getDsItem().concat(".item_lang"), item.getTraducao());
+        }
         save();
     }
 

@@ -10,7 +10,6 @@ public class Adm implements Jogador {
     private int codigo;
     private String nome;
     private String uuid;
-    private Lang lang;
     private AdmType type = AdmType.ADMINISTRADOR;
 
     public Adm() {
@@ -19,7 +18,6 @@ public class Adm implements Jogador {
     public Adm(Player player) {
         nome = player.getName();
         uuid = player.getUniqueId().toString();
-        lang = VGlobal.LANG_MAP.get(player.getLocale());
     }
 
     @Override
@@ -69,13 +67,7 @@ public class Adm implements Jogador {
 
     @Override
     public Jogador setLang(Player player) {
-        lang = VGlobal.LANG_MAP.get(player.getLocale());
         return this;
-    }
-
-    @Override
-    public Lang getLang() {
-        return lang;
     }
 
     @Override

@@ -47,17 +47,6 @@ public class Grupo implements Linguagem {
     }
 
     @Override
-    public Grupo setCdLang(int codigo) {
-        cdLang = codigo;
-        return this;
-    }
-
-    @Override
-    public int getCdLang() {
-        return cdLang;
-    }
-
-    @Override
     public Grupo setDsLang(String lang) {
         dsLang = lang;
         return this;
@@ -75,17 +64,6 @@ public class Grupo implements Linguagem {
     }
 
     @Override
-    public Grupo setCdTraducao(int codigo) {
-        cdTraducao = codigo;
-        return this;
-    }
-
-    @Override
-    public int getCdTraducao() {
-        return cdTraducao;
-    }
-
-    @Override
     public Grupo setDsTraducao(String traducao) {
         dsTraducao = traducao;
         return this;
@@ -94,11 +72,6 @@ public class Grupo implements Linguagem {
     @Override
     public String getDsTraducao() {
         return dsTraducao;
-    }
-
-    public Grupo addTraducao(Traducao traducao) {
-        traducaoMap.put(traducao.getDsLang(), traducao.getDsTraducao());
-        return this;
     }
 
     public Grupo addTraducao(String lang, String traducao) {

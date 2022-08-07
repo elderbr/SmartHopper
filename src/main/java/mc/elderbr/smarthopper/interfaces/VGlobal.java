@@ -2,8 +2,6 @@ package mc.elderbr.smarthopper.interfaces;
 
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Lang;
-import mc.elderbr.smarthopper.model.Traducao;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
@@ -41,15 +39,11 @@ public interface VGlobal {
     List<String> ITEM_NAME_LIST = new ArrayList<>();
 
     // LISTA DO LANGS DISPONIVEL
-    List<Lang> LANG_LIST = new ArrayList<>();
     List<String> LANG_NAME_LIST = new ArrayList<>();
-    Map<String, Lang> LANG_MAP = new HashMap<>();
 
     // LISTA DE TRADUCAO
-    Map<Integer, Traducao> TRADUCAO_MAP_ITEM_NAME = new HashMap<>();
     Map<String, Item> TRADUCAO_ITEM_LIST = new HashMap<>();
     Map<String, List<String>> TRADUCAO_ITEM_MAP = new HashMap<>();
-    Map<Integer, Traducao> TRADUCAO_MAP_GRUPO_NAME = new HashMap<>();
     Map<String, Grupo> TRADUCAO_GRUPO_LIST = new HashMap<>();
 
     // LIVROS ENCANTADOS
@@ -62,5 +56,6 @@ public interface VGlobal {
 
     File ARQUIVO = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper").getDataFolder().getAbsoluteFile();
     File FILE_LANG = new File(ARQUIVO+File.separator+"lang");
+
 
 }

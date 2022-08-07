@@ -77,7 +77,6 @@ public class GrupoConfig {
                     MemorySection memorySection = (MemorySection) config.get(key.concat("lang.lang"));
                     for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
                         grupo.addTraducao(langs.getKey(), langs.getValue().toString());
-                        grupo.setCdLang(VGlobal.LANG_MAP.get(langs.getKey()).getCdLang());
                         grupo.setDsTraducao(langs.getValue().toString());
                     }
                 }
