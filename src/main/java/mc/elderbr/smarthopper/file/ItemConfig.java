@@ -74,8 +74,8 @@ public class ItemConfig {
             item = VGlobal.ITEM_MAP_NAME.get(itemName);
             if(item == null) continue;
 
-            config.set(itemName.concat(".item_id"), item.getCdItem());
-            config.set(itemName.concat(".item_name"), item.getDsItem());
+            config.set(itemName.concat(".id"), item.getCdItem());
+            config.set(itemName.concat(".name"), item.getDsItem());
             config.set(itemName.concat(".lang"), item.getTraducao());
             save();
 
@@ -91,8 +91,8 @@ public class ItemConfig {
             Debug.WriteMsg("Lendo o arquivo item.yml e salvando no bancao");
             for (Map.Entry<String, Object> values : config.getValues(false).entrySet()) {
                 Item item = new Item();
-                item.setCdItem(config.getInt(values.getKey().concat(".item_id")));
-                item.setDsItem(config.getString(values.getKey().concat(".item_name")));
+                item.setCdItem(config.getInt(values.getKey().concat(".id")));
+                item.setDsItem(config.getString(values.getKey().concat(".name")));
 
                 if(item.getItemStack() == null ) continue;
 
@@ -109,8 +109,8 @@ public class ItemConfig {
     }
 
     private void add(Item item){
-        config.set(item.getDsItem().concat(".item_id"), item.getCdItem());
-        config.set(item.getDsItem().concat(".item_name"), item.getDsItem());
+        config.set(item.getDsItem().concat(".id"), item.getCdItem());
+        config.set(item.getDsItem().concat(".name"), item.getDsItem());
         save();
     }
 

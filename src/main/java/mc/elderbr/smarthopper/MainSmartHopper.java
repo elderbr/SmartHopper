@@ -38,8 +38,13 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         saveDefaultConfig();
         config = new Config();
 
-        // Criando os itens
+        // Lendo e criando os itens
         Item.CreateItem();// Criando todos os itens
+
+        // Tradução
+        traducaoConfig = new TraducaoConfig();
+
+        // Salvando os item no arquivo item.yml
         itemConfig = new ItemConfig();
 
 
