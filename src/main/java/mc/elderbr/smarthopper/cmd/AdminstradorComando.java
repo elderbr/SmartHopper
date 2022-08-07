@@ -1,9 +1,6 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.dao.AdmDao;
-import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Jogador;
-import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Adm;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
@@ -45,20 +42,7 @@ public class AdminstradorComando  implements CommandExecutor {
                     return false;
                 }
                 jogador = new Adm(player);
-                AdmDao.INSERT(jogador);
-                // Estato do retorno do banco ao tentar adicionar
-                switch (AdmDao.STATUS){
-                    case 1:
-                        Msg.PlayerTodos("§e§l"+jogador.getDsJogador()+" §r§9foi adicionado como Administrador do Smart Hopper com sucesso!!!");
-                        VGlobal.JOGADOR_LIST.add(jogador);// Adicionando jogador na lista de administrador
-                        break;
-                    case 2:
-                        Msg.PlayerGold(playerCommand, jogador.getDsJogador() + " já foi adicionado!!!");
-                        break;
-                    default:
-                        Msg.PlayerGold(playerCommand, "Ocorreu um erro ao adicionar Adm!!!");
-                        break;
-                }
+
             }
 
             // REMOVER ADMINISTRADOR
@@ -70,24 +54,7 @@ public class AdminstradorComando  implements CommandExecutor {
                 }
 
                 // BUSCANDO JOGADOR NA LISTA
-                jogador = AdmDao.SELECT(args[0]);
 
-                if(jogador == null){
-                    Msg.PlayerGold(playerCommand, "Jogador não está na lista de Administrador!!!");
-                    return false;
-                }
-
-                AdmDao.DELETE(jogador);
-                // Estato do retorno do banco ao tentar adicionar
-                switch (AdmDao.STATUS){
-                    case 1:
-                        VGlobal.JOGADOR_LIST.remove(jogador);// Removendo jogador na lista de administrador
-                        Msg.PlayerGold(playerCommand, jogador.getDsJogador()+" não mais um Administrador!!!");
-                        break;
-                    default:
-                        Msg.PlayerGold(playerCommand, "Ocorreu um erro ao remover Adm!!!");
-                        break;
-                }
             }
 
         }

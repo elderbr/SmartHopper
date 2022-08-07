@@ -1,15 +1,11 @@
 package mc.elderbr.smarthopper.file;
 
-import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +33,9 @@ public class ItemConfig {
             try {
                 Debug.Write("Criando o arquivo item.yml");
                 ITEM_FILE.createNewFile();
+
+                createYML();// Cria os itens se não existir
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -44,6 +43,18 @@ public class ItemConfig {
 
         Debug.Write("Carregando o arquivo item.yml");
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
+    }
+
+    public void createYML(){
+        config = YamlConfiguration.loadConfiguration(ITEM_FILE);
+        int codigo = 1;
+        for(String name : VGlobal.ITEM_NAME_LIST){
+            Item item = new Item();
+            item.setCdItem(codigo);
+            item.setDsItem(name);
+            add(item);// Salvando o arquivo item.yml
+            codigo++;
+        }
     }
 
     public void updateYML() {
@@ -93,9 +104,14 @@ public class ItemConfig {
                         item.addTraducao(langs.getKey(), langs.getValue().toString());
                     }
                 }
-                ItemDao.INSERT(item);
             }
         }
+    }
+
+    private void add(Item item){
+        config.set(item.getDsItem().concat(".item_id"), item.getCdItem());
+        config.set(item.getDsItem().concat(".item_name"), item.getDsItem());
+        save();
     }
 
     private void save() {

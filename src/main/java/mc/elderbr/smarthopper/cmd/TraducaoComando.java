@@ -1,6 +1,5 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.Jogador;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.*;
@@ -56,11 +55,11 @@ public class TraducaoComando implements CommandExecutor {
                         grupo.setCdLang(lang.getCdLang());
                         if (grupo != null) {
                             grupo.setDsTraducao(toGrupoTraducao());
-                            if (TraducaoDao.INSERT(grupo) > 0) {
+
                                 VGlobal.GRUPO_MAP_ID.get(grupo.getCdGrupo()).addTraducao(lang.getDsLang(), grupo.getDsTraducao());
                                 VGlobal.GRUPO_MAP_NAME.get(grupo.getDsGrupo()).addTraducao(lang.getDsLang(), grupo.getDsTraducao());
                                 Msg.PlayerGreen(player, "Tradução do grupo " + grupo.getDsGrupo() + " adicionado com sucesso!!!");
-                            }
+
                         } else {
                             Msg.PlayerGreen(player, "Grupo do código " + args[1] + " não foi encontrado!!!");
                         }
@@ -101,18 +100,7 @@ public class TraducaoComando implements CommandExecutor {
 
                 traducao = VGlobal.TRADUCAO_MAP_ITEM_NAME.get(item.getCdItem());
 
-                if (TraducaoDao.INSERT(item) > 0) {
-                    VGlobal.ITEM_MAP_NAME.get(item.getDsItem()).addTraducao(jogador.getLang().getDsLang(), item.getDsTraducao());
-                    Msg.PlayerGreen(player, "Tradução para o item " + item.getDsItem() + " adicionado com sucesso!!!");
-                } else {
-                    item.setCdTraducao(traducao.getCdTraducao());
-                    if (TraducaoDao.UPDATE(item)) {
-                        traducao.setDsTraducao(item.getDsTraducao());
-                        VGlobal.TRADUCAO_MAP_ITEM_NAME.put(item.getCdItem(), traducao);
-                        VGlobal.ITEM_MAP_NAME.get(item.getDsItem()).addTraducao(item.getDsLang(), item.getDsTraducao());
-                        Msg.PlayerGreen(player, "Tradução do " + item.getDsItem() + " atualizado com sucesso!!!");
-                    }
-                }
+
 
             }
         }

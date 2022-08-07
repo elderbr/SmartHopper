@@ -1,8 +1,6 @@
 package mc.elderbr.smarthopper.file;
 
 
-import mc.elderbr.smarthopper.dao.GrupoDao;
-import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
@@ -81,7 +79,6 @@ public class GrupoConfig {
                         grupo.addTraducao(langs.getKey(), langs.getValue().toString());
                         grupo.setCdLang(VGlobal.LANG_MAP.get(langs.getKey()).getCdLang());
                         grupo.setDsTraducao(langs.getValue().toString());
-                        TraducaoDao.INSERT(grupo);
                     }
                 }
                 // Percorrendo a lista de item do grupo
@@ -90,8 +87,6 @@ public class GrupoConfig {
                     if (item == null) continue;
                     grupo.addList(item);
                 }
-
-                GrupoDao.INSERT_ID(grupo);
                 Msg.Grupo(grupo, getClass());
                 Msg.PularLinha(getClass());
             }

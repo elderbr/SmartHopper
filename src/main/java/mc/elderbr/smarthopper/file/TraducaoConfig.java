@@ -1,7 +1,5 @@
 package mc.elderbr.smarthopper.file;
 
-import mc.elderbr.smarthopper.dao.LangDao;
-import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -123,7 +121,7 @@ public class TraducaoConfig {
             // Adicionando a linguagem na variavel global se não existir
             if (!VGlobal.LANG_NAME_LIST.contains(lang)) {
                 VGlobal.LANG_NAME_LIST.add(lang);
-                cd = LangDao.insert(lang);
+
                 if(cd == 0) break;
                 for (Map.Entry<String, Object> map : yml.getValues(false).entrySet()) {
                     Item item = VGlobal.ITEM_MAP_NAME.get(map.getKey());
@@ -131,7 +129,6 @@ public class TraducaoConfig {
                     item.setCdLang(cd);
                     item.setDsLang(lang);
                     item.setDsTraducao(map.getValue().toString());
-                    TraducaoDao.INSERT(item);
                 }
             }
             files.delete();

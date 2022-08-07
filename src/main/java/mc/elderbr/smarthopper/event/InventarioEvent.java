@@ -1,7 +1,6 @@
 package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.cmd.GrupoComando;
-import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
@@ -84,11 +83,7 @@ public class InventarioEvent implements Listener {
                     }
                 }
                 player.closeInventory();
-                if (GrupoDao.INSERT(grupoNovo)) {
-                    Msg.PlayerTodos(Msg.Color("$6O jogador "+ player.getName() +" criou o grupo $a$l" + grupoNovo.getDsGrupo() + "!"));
-                }else{
-                    Msg.PlayerTodos(Msg.Color("$4Ocorreu um erro ao criar o grupo $e&l "+ grupoNovo.getDsGrupo()+"$r!!!"));
-                }
+
             }
 
             // ALTERANDO GRUPO
@@ -98,7 +93,7 @@ public class InventarioEvent implements Listener {
 
                 grupo = GrupoComando.GRUPO;// BUSCA NO BANCO O GRUPO
 
-                GrupoDao.DELETE_GRUPO_ITEM(grupo);// APAGANGO A LISTA DE ITEM DO GRUPO NO BANCO DE DADOS
+
                 grupo.getListItem().clear();// APAGANDO A LISTA DO GRUPO DOS ITENS
 
                 player.closeInventory();
@@ -111,7 +106,7 @@ public class InventarioEvent implements Listener {
                         grupo.addList(VGlobal.ITEM_MAP_NAME.get(item.getDsItem()));
                     }
                 }
-                GrupoDao.INSERT_GRUPO_ITEM(grupo);// ADICIONANDO OS ITEM DO GRUPO
+
 
                 grupo.setDsLang(player);
                 Bukkit.getServer().broadcastMessage(Msg.Color("$6O jogador "+ player.getName() +" atualizou o grupo $a$l" + grupo.getDsGrupo() + "!"));

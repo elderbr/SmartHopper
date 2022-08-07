@@ -1,13 +1,11 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -90,8 +88,6 @@ public class GrupoComando implements CommandExecutor {
 
                     Item item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
                     item.setDsLang(player);
-
-                    listGrupo = GrupoDao.SELECT_GRUPO_ITEM(item);
 
                     if (listGrupo.isEmpty()) {
                         player.sendMessage(Msg.Color("$2Não existe grupo para o item $e" + item.toTraducao() + "!"));
@@ -177,7 +173,7 @@ public class GrupoComando implements CommandExecutor {
                             GRUPO = VGlobal.GRUPO_MAP_NAME.get(cmd);
                         }
                         if (GRUPO != null) {
-                            if (GrupoDao.DELETE(GRUPO)) {
+
 
                                 // REMOVENDO O GRUPO DAS VARIAVEIS GLOBAL
                                 VGlobal.GRUPO_MAP_NAME.get(GRUPO.getDsGrupo());
@@ -190,9 +186,7 @@ public class GrupoComando implements CommandExecutor {
                                 VGlobal.TRADUCAO_MAP_GRUPO_NAME.remove(GRUPO.getCdGrupo());
 
                                 Msg.PlayerTodos(Msg.Color("$6O jogador " + player.getName() + " deletou o grupo $a$l" + GRUPO.getDsGrupo() + "!"));
-                            }else{
-                                Msg.PlayerRed(player, "Ocorreu um erro ao deletar o grupo "+ GRUPO.getDsGrupo()+"!!!");
-                            }
+
                         }else{
                             Msg.PlayerRed(player, "O grupo "+ cmd +" não existe!!!");
                         }
