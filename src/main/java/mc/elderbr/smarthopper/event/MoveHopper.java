@@ -88,7 +88,7 @@ public class MoveHopper implements Listener {
                                     }
                                 }
                                 if (smart.getType() instanceof Grupo grupo) {
-                                    if (grupo.contentsItem(item)) {
+                                    if (grupo.isContains(item)) {
                                         isBloqueia = false;
                                         return;
                                     }
@@ -106,7 +106,7 @@ public class MoveHopper implements Listener {
                                 }
                             }
                             if (smart.getType() instanceof Grupo grupo) {
-                                if (grupo.contentsItem(item)) {
+                                if (grupo.isContains(item)) {
                                     event.setCancelled(false);
                                     return;
                                 }
@@ -129,14 +129,14 @@ public class MoveHopper implements Listener {
 
                     if (smartHopper.getType() instanceof Grupo grupoSmart) {
                         if (smartHopper.getNameHopper().contains("#")) {
-                            if (!grupoSmart.contentsItem(item)) {
+                            if (!grupoSmart.isContains(item)) {
                                 event.setCancelled(true);
                             } else {
                                 event.setCancelled(false);
                             }
                             return;
                         }
-                        if (grupoSmart.contentsItem(item)) {
+                        if (grupoSmart.isContains(item)) {
                             event.setCancelled(false);
                             return;
                         }
@@ -170,7 +170,7 @@ public class MoveHopper implements Listener {
 
                                 // Se o funil for configurado para o grupo
                                 if (smartHopper.getType() instanceof Grupo grupoSmart) {
-                                    if (grupoSmart.contentsItem(item) && smartHopper.isTransferer(item)) {
+                                    if (grupoSmart.isContains(item) && smartHopper.isTransferer(item)) {
                                         destination.addItem(itemStack);
                                         inventory.removeItem(itemStack);
                                     }
@@ -197,14 +197,14 @@ public class MoveHopper implements Listener {
                         // Se o funil estiver configurado para o grupo
                         if (smartHopperDestino.getType() instanceof Grupo grupoSmart) {
                             if (smartHopperDestino.getNameHopper().contains("#")) {
-                                if (!grupoSmart.contentsItem(item)) {
+                                if (!grupoSmart.isContains(item)) {
                                     destination.addItem(itemStack);
                                     inventory.removeItem(itemStack);
                                 }
                                 continue;
                             }
                             // Se o grupo conter o item
-                            if (grupoSmart.contentsItem(item)) {
+                            if (grupoSmart.isContains(item)) {
                                 destination.addItem(itemStack);
                                 inventory.removeItem(itemStack);
                             }

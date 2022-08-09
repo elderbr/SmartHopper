@@ -79,7 +79,7 @@ public class InventarioEvent implements Listener {
                 List<String> grupoNovoList = new ArrayList<>();
                 for (ItemStack itemStack : inventory.getContents()) {
                     if (itemStack != null && !itemStack.equals(itemBtnSalve)) {
-                        grupoNovo.addList(VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem()));
+                        //grupoNovo.addList(VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem()));
                     }
                 }
                 player.closeInventory();
@@ -103,7 +103,7 @@ public class InventarioEvent implements Listener {
                 for (ItemStack items : inventory.getContents()) {
                     if (items != null && !items.getType().isAir() && !items.equals(itemBtnSalve)) {
                         Item item = new Item(items);
-                        grupo.addList(VGlobal.ITEM_MAP_NAME.get(item.getDsItem()));
+                        //grupo.addList(VGlobal.ITEM_MAP_NAME.get(item.getDsItem()));
                     }
                 }
 

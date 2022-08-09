@@ -43,89 +43,21 @@ public class GrupoConfig {
     private List<String> listPotion;
 
     public GrupoConfig() {
-
-        Debug.Write("Verificando se existe o arquivo grupo.yml");
         if (!fileConfig.exists()) {
             try {
-                Debug.Write("Criando o arquivo grupo.yml");
                 fileConfig.createNewFile();
+                create();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        Debug.Write("Carregando o arquivo grupo.yml");
+        reload();
+    }
+
+    public void create() {
         config = YamlConfiguration.loadConfiguration(fileConfig);
-    }
-
-    /***
-     * Verificar se a versão do plugin atual é maior que a versão anterior, se sim vai ler o arquivo grupo.yml
-     * e salvar no banco de dados
-     */
-    public void loadYmlAddBanco() {
-        if (VGlobal.VERSION_INT > Config.VERSION()) {
-            Debug.WriteMsg("Criando grupos...");
-            if (config == null) {
-                config = YamlConfiguration.loadConfiguration(fileConfig);
-            }
-            for (Map.Entry<String, Object> grups : config.getValues(false).entrySet()) {
-                String key = grups.getKey().concat(".");
-                grupo = new Grupo();
-                grupo.setCdGrupo(config.getInt(key.concat("grupo_id")));
-                grupo.setDsGrupo(config.getString(key.concat("grupo_name")));
-
-                if ((config.get(key.concat("lang.lang")) instanceof MemorySection && config.get(key.concat("lang.lang")) != null)) {
-                    MemorySection memorySection = (MemorySection) config.get(key.concat("lang.lang"));
-                    for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
-                        grupo.addTraducao(langs.getKey(), langs.getValue().toString());
-                        grupo.setDsTraducao(langs.getValue().toString());
-                    }
-                }
-                // Percorrendo a lista de item do grupo
-                for (String itens : (List<String>) config.getList(key.concat(".grupo_item"))) {
-                    item = VGlobal.ITEM_MAP_NAME.get(itens);
-                    if (item == null) continue;
-                    grupo.addList(item);
-                }
-                Msg.Grupo(grupo, getClass());
-                Msg.PularLinha(getClass());
-            }
-            Debug.WriteMsg("Grupos criados com sucesso!");
-        }
-    }
-
-    public void loadYML() {
-        if (config == null) {
-            config = YamlConfiguration.loadConfiguration(fileConfig);
-        }
-        for (String name : VGlobal.GRUPO_NAME_LIST) {
-            grupo = new Grupo();
-            grupo.setCdGrupo(config.getInt(name.concat(".grupo_id")));
-            grupo.setDsGrupo(config.getString(name.concat(".grupo_name")));
-        }
-    }
-
-    public void updateYML() {
-        if(!Config.IsGrupoUpdate()) {
-            try {
-                fileConfig.delete();
-                fileConfig.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            if (config == null) {
-                config = YamlConfiguration.loadConfiguration(fileConfig);
-            }
-
-            Msg.ServidorGold("Atualizando o arquivo grupo.yml");
-
-            Collections.sort(VGlobal.GRUPO_NAME_LIST);
-            for (String name : VGlobal.GRUPO_NAME_LIST) {
-                grupo = VGlobal.GRUPO_MAP_NAME.get(name);
-                if (grupo == null) continue;
-                add(grupo);
-            }
-            Msg.ServidorGold("Finalizado atualização do arquivo grupo.yml!!!");
+        for (Grupo grupos : VGlobal.GRUPO_LIST) {
+            add(grupos);
         }
     }
 
@@ -138,21 +70,49 @@ public class GrupoConfig {
     }
 
     private void add(@NotNull Grupo grupo) {
-        String key = grupo.getDsGrupo();
-        List<String> listItem = new ArrayList<>();
 
-        config.set(key.concat(".grupo_id"), grupo.getCdGrupo());
-        config.set(key.concat(".grupo_name"), grupo.getDsGrupo());
-        if (!grupo.getTraducaoMap().isEmpty()) {
-            config.set(key.concat(".lang"), grupo.getTraducaoMap());
+        String name = grupo.getDsGrupo();
+
+        config.set(name.concat(".grupo_id"), grupo.getCdGrupo());
+        config.set(name.concat(".grupo_name"), name);
+        //Tradução
+        if (VGlobal.TRADUCAO_GRUPO_NAME_MAP.get(name) != null) {
+            grupo.addTraducao("pt_br", VGlobal.TRADUCAO_GRUPO_NAME_MAP.get(name));
+            config.set(name.concat(".grupo_lang"), grupo.getTraducaoMap());
         }
-        for (Item item : grupo.getListItem()) {
-            listItem.add(item.getDsItem());
-        }
-        Collections.sort(listItem);
-        config.set(key.concat(".grupo_item"), listItem);
-        Msg.ServidorGold("Criando o grupo " + grupo.getDsGrupo() + " no arquivo grupo.yml");
+        config.set(name.concat(".grupo_item"), grupo.getListItem());
         save();
+    }
+
+    public void reload() {
+        config = YamlConfiguration.loadConfiguration(fileConfig);
+        String name = null;
+        for (Map.Entry<String, Object> obj : config.getValues(false).entrySet()) {
+
+            name = obj.getKey().toString();
+
+            grupo = new Grupo();
+            grupo.setCdGrupo(config.getInt(name.concat(".grupo_id")));
+            grupo.setDsGrupo(config.getString(name.concat(".grupo_name")));
+
+            // TRADUÇÃO
+            if(config.get(name.concat(".grupo_lang"))!=null) {
+                MemorySection tradMemory = (MemorySection) config.get(name.concat(".grupo_lang"));
+                for (Map.Entry<String, Object> trad : tradMemory.getValues(false).entrySet()) {
+                    grupo.addTraducao(trad.getKey(), trad.getValue().toString());
+                }
+            }
+
+            // ITEM DO GRUPO
+            for(Object items : config.getList(name.concat(".grupo_item"))){
+                grupo.addList(items.toString());
+            }
+
+            // ADICIONANDO NA VARIAVEL GLOBAL
+            VGlobal.GRUPO_LIST.add(grupo);
+            VGlobal.GRUPO_MAP_ID.put(grupo.getCdGrupo(), grupo);
+            VGlobal.GRUPO_MAP_NAME.put(grupo.getDsGrupo(), grupo);
+        }
     }
 
     private void add(@NotNull String key, @NotNull String value, List<String> comentario) {

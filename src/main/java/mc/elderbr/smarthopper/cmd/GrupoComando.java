@@ -58,8 +58,9 @@ public class GrupoComando implements CommandExecutor {
                         if (!GRUPO.getListItem().isEmpty()) {
                             inventoryCustom = new InventoryCustom();
                             inventoryCustom.create(GRUPO.toTraducao().concat(Msg.Color(" $lID:$r" + GRUPO.getCdGrupo())));
-                            for (Item items : GRUPO.getListItem()) {
-                                inventoryCustom.addItem(items.getItemStack());
+                            for (String itemName : GRUPO.getListItem()) {
+                                Item item = new Item(itemName);
+                                inventoryCustom.addItem(item.getItemStack());
                             }
                             // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
                             if (VGlobal.ADM_LIST.contains(player.getName())) {
@@ -99,7 +100,8 @@ public class GrupoComando implements CommandExecutor {
                         GRUPO.setDsLang(player);
                         inventoryCustom = new InventoryCustom();
                         inventoryCustom.create(GRUPO.toTraducao().concat(Msg.Color(" $lID:$r" + GRUPO.getCdGrupo())));
-                        for (Item items : GRUPO.getListItem()) {
+                        for (String itemName : GRUPO.getListItem()) {
+                            Item items = new Item(itemName);
                             inventoryCustom.addItem(items.getItemStack());
                         }
 

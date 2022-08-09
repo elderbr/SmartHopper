@@ -92,7 +92,8 @@ public class SmartHopper {
                 // CRIANDO O INVENTARIO DO GRUPO
                 InventoryCustom inventory = new InventoryCustom();
                 inventory.create(grupo.toTraducao().concat(" §e§lID:" + grupo.getCdGrupo()));// NO DO INVENTARIO
-                for (Item items : grupo.getListItem()) {// ADICIONANDO OS ITENS NO INVENTARIO
+                for (String itemName : grupo.getListItem()) {// ADICIONANDO OS ITENS NO INVENTARIO
+                    Item items = new Item(itemName);
                     inventory.addItem(items.getItemStack());
                 }
                 player.openInventory(inventory.getInventory());
@@ -144,7 +145,8 @@ public class SmartHopper {
             }
         }
         if(getType() instanceof Grupo grupo){
-            for(Item items : grupo.getListItem()){
+            for(String itemName : grupo.getListItem()){
+                Item items = new Item(itemName);
                 if(items.getCdItem() == item.getCdItem()){
                     return true;
                 }

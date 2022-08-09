@@ -4,13 +4,11 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Map;
 
 public class TraducaoConfig {
     private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
@@ -38,7 +36,9 @@ public class TraducaoConfig {
             if (!filePT.exists()) {
                 createTP();
             }
+            createGrupoBR();
         }
+
         reload();// Lendo todas as traduções
     }
 
@@ -113,6 +113,29 @@ public class TraducaoConfig {
         }
     }
 
+    private void createGrupoBR() {
+        try {
+
+            input = getClass().getResourceAsStream("/grupo.yml");
+            reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
+
+            while ((txtReader = reader.readLine()) != null) {
+                String grupoName = txtReader.split(":")[0].trim();
+                String traducao = txtReader.split(":")[1].trim();
+                VGlobal.TRADUCAO_GRUPO_NAME_MAP.put(grupoName, traducao);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (IOException er) {
+                er.printStackTrace();
+            }
+        }
+    }
+
     public void reload() {
         String lang = null;
         for (File files : directoryFile.listFiles()) {
@@ -122,10 +145,10 @@ public class TraducaoConfig {
             lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
 
             int cod = 0;
-            for(Item item : VGlobal.ITEM_LIST) {
+            for (Item item : VGlobal.ITEM_LIST) {
                 String name = item.getDsItem();
-                if(yml.get(name)!=null) {
-                    cod = (item.getCdItem()-1);
+                if (yml.get(name) != null) {
+                    cod = (item.getCdItem() - 1);
                     VGlobal.ITEM_LIST.get(cod).addTraducao(lang, yml.get(name).toString());
                 }
             }
