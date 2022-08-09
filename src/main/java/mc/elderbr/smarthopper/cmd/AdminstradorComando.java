@@ -1,54 +1,57 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.interfaces.Jogador;
-import mc.elderbr.smarthopper.model.Adm;
+import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class AdminstradorComando  implements CommandExecutor {
+public class AdminstradorComando implements CommandExecutor {
 
-
-    private Jogador adm;
-    private Jogador jogador;
-    private Player player;
+    private String player;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if(sender instanceof Player playerCommand){
+        if (sender instanceof Player playerCommand) {
+
+            player = args[0].trim();
 
             // VERIFICA SE EXISTE O NOME DO JOGADOR DIGITADO
-            if(args.length == 0 || args[0].length() < 4){
+            if (args.length == 0 || player.length() < 4) {
                 Msg.PlayerGold(playerCommand, "Verifique se digitou o nome do jogador correto!!!");
                 return false;
             }
 
             // ADICIONANDO UM NOVO ADM
-            if(command.getName().equalsIgnoreCase("addAdm")){
+            if (command.getName().equalsIgnoreCase("addAdm")) {
 
-                if(!playerCommand.isOp()){
+                if (!playerCommand.isOp()) {
                     Msg.PlayerGold(playerCommand, "Você não tem permissão para usar esse comando!!!");
                     return false;
                 }
 
-                player = Bukkit.getPlayer(args[0]);
-                if(player == null){
-                    Msg.PlayerGold(playerCommand, "O jogador precisa está online para ser adicionando!!!");
+                if (VGlobal.ADM_LIST.contains(player)) {
+                    Msg.PlayerGold(playerCommand, String.format("O jogador %s já é adm do Smart Hopper!!!", player));
                     return false;
                 }
-                jogador = new Adm(player);
+
+                if (Config.ADD_ADM(player)) {
+                    Msg.PlayerTodos(String.format("O jogador %s é o novo administrador do Smart Hopper!!!", player));
+                    return false;
+                }else{
+                    Msg.PlayerRed(playerCommand, "Ocorreu um erro ao adicionar novo adm do Smart Hopper!!!");
+                }
 
             }
 
             // REMOVER ADMINISTRADOR
-            if(command.getName().equalsIgnoreCase("removerAdm")){
+            if (command.getName().equalsIgnoreCase("removerAdm")) {
 
-                if(!playerCommand.isOp()){
+                if (!playerCommand.isOp()) {
                     Msg.PlayerGold(playerCommand, "Você não tem permissão para usar esse comando!!!");
                     return false;
                 }

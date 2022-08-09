@@ -52,17 +52,19 @@ public class Config {
     }
 
     //=================== ADMINISTRADORES DO SMART HOPPER ===============================/
-    public static void ADD_ADM() {
+    public static boolean ADD_ADM(String player) {
         try {
             YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+            VGlobal.ADM_LIST.add(player);
             Collections.sort(VGlobal.ADM_LIST);
             YML.setComments("adm", Arrays.asList("Administradores do SmartHopper"));
             YML.set("adm", VGlobal.ADM_LIST);
             SAVE();
-            Msg.ServidorGreen("Adicionando novo adm", Config.class);
+            return true;
         } catch (IOException e) {
             Msg.ServidorErro("Erro ao salvar a lista de administrador no arquivo config", "ADD_ADM", Config.class, e);
         }
+        return false;
     }
 
     public static void REMOVER_ADM() {
@@ -122,10 +124,6 @@ public class Config {
                         "Fica responsável por adicionar, alterar ou remover grupos"));
 
         add("langs", Arrays.asList("pt_br", "pt_pt"), Arrays.asList("Linguagens disponível"));
-    }
-
-    public static YamlConfiguration GET_CONFIG() {
-        return YML;
     }
 
     private void add(String key, String value, List<String> comment) {

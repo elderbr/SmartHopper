@@ -1,7 +1,7 @@
 package mc.elderbr.smarthopper;
 
-import mc.elderbr.smarthopper.cmd.ItemComando;
-import mc.elderbr.smarthopper.cmd.ItemTabCompleter;
+
+import mc.elderbr.smarthopper.cmd.*;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
@@ -9,7 +9,6 @@ import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
@@ -67,10 +66,16 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Plugin shutdown logic
     }
 
-    private void commands(){
+    private void commands() {
 
         getCommand("item").setExecutor(new ItemComando());
         getCommand("item").setTabCompleter(new ItemTabCompleter());
+
+        getCommand("grupo").setExecutor(new GrupoComando());
+        getCommand("grupo").setTabCompleter(new GrupoTabCompleter());
+
+        // CONFIGURAÇÃO
+        getCommand("addadm").setExecutor(new AdminstradorComando());
     }
 
 
