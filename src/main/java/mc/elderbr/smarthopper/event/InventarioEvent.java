@@ -72,7 +72,7 @@ public class InventarioEvent implements Listener {
 
             // SALVAR NOVO GRUPO
             if (event.isLeftClick() && itemClick.getItemMeta().getLore() != null && itemClick.getItemMeta().getLore().contains(Msg.Color("$3Salva novo grupo"))) {
-                grupoNovo = GrupoComando.GRUPO;
+
                 grupoNovo.addTraducao(player.getLocale(), Utils.toUP(grupoNovo.getDsGrupo()));
 
                 // ADICIONANDO OS ITEM AO GRUPO
@@ -91,7 +91,7 @@ public class InventarioEvent implements Listener {
 
                 nameGrupo = titulo.substring(Msg.Color("$8$lGrupo: $r").length(), titulo.indexOf(Msg.Color(" $lID"))).trim().toLowerCase();
 
-                grupo = GrupoComando.GRUPO;// BUSCA NO BANCO O GRUPO
+
 
 
                 grupo.getListItem().clear();// APAGANDO A LISTA DO GRUPO DOS ITENS

@@ -236,7 +236,6 @@ public class Grupo implements Linguagem {
      */
     private static void createGrupoItem() {
         Collections.sort(grupoList);
-        int cod = 1;
         for (String nameGrupo : grupoList) {
 
             // NÃO É NOME VALIDO DE GRUPOS
@@ -335,11 +334,9 @@ public class Grupo implements Linguagem {
             }
 
             // LISTA DE NOMES DE GRUPO GLOBAL
-            if (grupo.getListItem().size() > 1 ) {
-                grupo.setCdGrupo(cod);
+            if (grupo.getListItem().size() > 1 && !VGlobal.GRUPO_NAME_LIST.contains(grupo.getDsGrupo())) {
                 VGlobal.GRUPO_NAME_LIST.add(grupo.dsGrupo);
                 VGlobal.GRUPO_LIST.add(grupo);
-                cod++;
             }
         }
     }
@@ -443,4 +440,8 @@ public class Grupo implements Linguagem {
         }
     }
 
+    @Override
+    public String toString() {
+        return dsGrupo;
+    }
 }

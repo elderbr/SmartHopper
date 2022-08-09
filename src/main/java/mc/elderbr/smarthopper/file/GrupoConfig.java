@@ -56,9 +56,14 @@ public class GrupoConfig {
 
     public void create() {
         config = YamlConfiguration.loadConfiguration(fileConfig);
+        int cod = 1;
         for (Grupo grupos : VGlobal.GRUPO_LIST) {
+            grupos.setCdGrupo(cod);
             add(grupos);
+            Msg.ServidorGold("Criando o grupo >> "+ grupos.getDsGrupo()+" | codigo >> "+ cod);
+            cod++;
         }
+        VGlobal.GRUPO_LIST.clear();
     }
 
     private void save() {
@@ -85,6 +90,7 @@ public class GrupoConfig {
     }
 
     public void reload() {
+        VGlobal.GRUPO_LIST.clear();
         config = YamlConfiguration.loadConfiguration(fileConfig);
         String name = null;
         for (Map.Entry<String, Object> obj : config.getValues(false).entrySet()) {
