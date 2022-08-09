@@ -10,6 +10,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class Msg {
 
+    public static void Todos(@NotNull String msg){
+        Bukkit.getServer().broadcastMessage(ChatColor.GREEN + " SmartHopper >> " +msg);
+    }
     public static void ServidorGreen(String msg) {
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + msg);
     }
