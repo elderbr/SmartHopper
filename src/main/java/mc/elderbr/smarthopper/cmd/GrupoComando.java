@@ -108,6 +108,12 @@ public class GrupoComando implements CommandExecutor {
                     Msg.PlayerRed(player, "O nome do grupo precisar conter mais do que 3 letras!!!");
                     return false;
                 }
+
+                if(VGlobal.GRUPO_MAP_NAME.get(cmd)!=null){
+                    Msg.PlayerRed(player, String.format("Esse grupo já existe §4§l%s§r§c!!!", cmd));
+                    return false;
+                }
+
                 inventoryCustom = new InventoryCustom();
                 GRUPO = new Grupo();
                 GRUPO.setDsGrupo(cmd);
