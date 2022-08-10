@@ -33,7 +33,7 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        reload();
     }
 
     //=================== VERSAO DO PLUGIN ===============================/
@@ -65,6 +65,14 @@ public class Config {
             Msg.ServidorErro("Erro ao salvar a lista de administrador no arquivo config", "ADD_ADM", Config.class, e);
         }
         return false;
+    }
+
+    public void reload(){
+        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        for(Object adm : YML.getList("adm")){
+            VGlobal.ADM_LIST.add(adm.toString());
+        }
+        Collections.sort(VGlobal.ADM_LIST);
     }
 
     public static void REMOVER_ADM() {
