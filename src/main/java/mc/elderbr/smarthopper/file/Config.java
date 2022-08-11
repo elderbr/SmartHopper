@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.file;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
@@ -63,6 +64,16 @@ public class Config {
             return true;
         } catch (IOException e) {
             Msg.ServidorErro("Erro ao salvar a lista de administrador no arquivo config", "ADD_ADM", Config.class, e);
+        }
+        return false;
+    }
+    public static boolean CONTAINS_ADD(Object player){
+        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        if(player instanceof Player player1) {
+            return YML.getList("adm").contains(player1.getName());
+        }
+        if(player instanceof String){
+            return YML.getList("adm").contains(player);
         }
         return false;
     }
