@@ -13,7 +13,6 @@ public class Grupo implements Linguagem {
     private String dsGrupo;
 
     // LANG
-    private int cdLang;
     private String dsLang;
 
     // TRADUCAO
