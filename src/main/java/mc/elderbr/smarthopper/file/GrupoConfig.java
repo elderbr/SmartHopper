@@ -51,6 +51,7 @@ public class GrupoConfig {
                 e.printStackTrace();
             }
         }
+        VGlobal.CD_MAX.add(1);// O ÚLTIMO CODIGO DO GRUPO
         reload();
     }
 
@@ -100,6 +101,11 @@ public class GrupoConfig {
             grupo = new Grupo();
             grupo.setCdGrupo(config.getInt(name.concat(".grupo_id")));
             grupo.setDsGrupo(config.getString(name.concat(".grupo_name")));
+
+            // PEGANDO O MAIOR CÓDIGO DO GRUPO
+            if(grupo.getCdGrupo()>VGlobal.CD_MAX.get(0)){
+                VGlobal.CD_MAX.set(0, grupo.getCdGrupo());
+            }
 
             // TRADUÇÃO
             if(config.get(name.concat(".grupo_lang"))!=null) {

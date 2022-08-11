@@ -28,6 +28,7 @@ public interface VGlobal {
     List<String> GRUPO_NAME_LIST = new ArrayList<>();
     // LISTA DE GRUPO
     List<Grupo> GRUPO_LIST = new ArrayList<>();
+    List<Integer> CD_MAX = new ArrayList<>();
 
     // Items
     List<Item> ITEM_LIST = new ArrayList<>();
