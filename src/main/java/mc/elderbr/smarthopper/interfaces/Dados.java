@@ -15,6 +15,10 @@ public interface Dados {
 
     String getName();
 
+    default String toName(){
+        return Utils.ToUTF(getName());
+    }
+
     Map<String, String> getTraducao();
 
     default Map<String, String> addTraducao(String lang, String traducao){

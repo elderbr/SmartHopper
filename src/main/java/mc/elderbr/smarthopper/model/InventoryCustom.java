@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.enums.InventarioType;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.InterfaceInventario;
 import mc.elderbr.smarthopper.utils.Msg;
+import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -104,7 +105,7 @@ public class InventoryCustom implements InterfaceInventario {
 
     public void create(@NotNull Object name) {
         if (name instanceof String titule) {
-            this.name = titule;
+            this.name = titule.toLowerCase();
             type = InventarioType.NOVO;
         }
         if (name instanceof Grupo grup) {

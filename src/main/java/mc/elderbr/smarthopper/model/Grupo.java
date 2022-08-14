@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.Dados;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Utils;
 
 import java.util.*;
 
