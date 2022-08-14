@@ -94,6 +94,11 @@ public class GrupoComando implements CommandExecutor {
 
             // ADICIONAR NOVO GRUPO
             if (command.getName().equalsIgnoreCase("addgrupo")) {
+                if(!Config.CONTAINS_ADD(player)){
+                    Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
+                    return false;
+                }
+
                 INVENTORY = new InventoryCustom(player);
                 INVENTORY.create(cmd);
                 player.openInventory(INVENTORY.getInventory());
@@ -101,6 +106,12 @@ public class GrupoComando implements CommandExecutor {
 
             // REMOVER GRUPO
             if (command.getName().equalsIgnoreCase("removegrupo")) {
+
+                if(!Config.CONTAINS_ADD(player)){
+                    Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
+                    return false;
+                }
+
                 grupo = null;
                 if (cmd.length() > 0) {
                     try {
