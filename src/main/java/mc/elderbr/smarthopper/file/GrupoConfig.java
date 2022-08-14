@@ -91,6 +91,28 @@ public class GrupoConfig {
         return false;
     }
 
+    public static boolean UPDATE(Grupo grupo) {
+        String name = grupo.getName();
+        if (VGlobal.GRUPO_MAP_NAME.get(name) != null) {
+            try {
+                YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
+
+                config.set(name.concat(".grupo_id"), grupo.getCodigo());
+                config.set(name.concat(".grupo_name"), name);
+                config.set(name.concat(".grupo_lang"), grupo.getTraducao());
+                config.set(name.concat(".grupo_item"), grupo.getListItem());
+                config.save(fileConfig);
+
+                VGlobal.GRUPO_LIST.add(grupo);
+                VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
+                VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+
+                return true;
+            } catch (IOException e) {}
+        }
+        return false;
+    }
+
     public static boolean DELETE(Grupo grupo) {
         try {
             // REMOVENDO O GRUPO DO ARQUIVO grupo.yml

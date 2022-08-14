@@ -68,32 +68,45 @@ public class InventarioEvent implements Listener {
                     if (itemBtnSalve != null
                             && itemBtnSalve.equals(itemClick)
                             && itemBtnSalve.getItemMeta().getDisplayName().equals("§2§lSalva")
-                            ) {
-
-                        if(inventoryCustom.getType()== InventarioType.NOVO){
+                    ) {
+                        if (inventoryCustom.getType() == InventarioType.NOVO) {
                             grupo = new Grupo();
-                            grupo.setCodigo(VGlobal.CD_MAX.get(0)+1);
                             grupo.setName(inventoryCustom.getName());
-                            grupo.addTraducao(player.getLocale(), Utils.ToUTF(grupo.getName()));
-
+                            grupo.setCodigo(VGlobal.CD_MAX.get(0) + 1);// Adicionando novo código do grupo
+                            grupo.addTraducao(player.getLocale(), Utils.ToUTF(grupo.getName()));// Adicionando tradução do grupo
                             inventory.removeItem(itemBtnSalve);// Remove o botão salvar antes de passar pelo os item
                             // Percorrendo todos os itens do inventario
-                            for(ItemStack itemStack : inventory.getContents()){
-                                if(itemStack!=null) {
+                            for (ItemStack itemStack : inventory.getContents()) {
+                                if (itemStack != null) {
                                     grupo.addList(new Item(itemStack).getName());
                                 }
                             }
                             player.closeInventory();
                             if(GrupoConfig.ADD(grupo)){
-                                Msg.PlayerTodos("§l§6Novo grupo adicionado §e"+ grupo.getName()+"§6 pelo o jogador §a"+ player.getName()+"!!!");
+                                Msg.PlayerTodos("§e§lNovo grupo §6§l"+ grupo.getName()+"§e§l criado por §d§l"+ player.getName()+"§s§l!!!");
                             }else{
-                                Msg.PlayerRed(player,"Erro ao adicionar novo grupo!!!");
+                                Msg.PlayerRed(player,"Erro ao adicionar o grupo");
                             }
-
+                        } else {
+                            grupo = VGlobal.GRUPO_MAP_NAME.get(inventoryCustom.getName());
+                            grupo.getListItem().clear();
+                            inventory.removeItem(itemBtnSalve);// Remove o botão salvar antes de passar pelo os item
+                            // Percorrendo todos os itens do inventario
+                            for (ItemStack itemStack : inventory.getContents()) {
+                                if (itemStack != null) {
+                                    grupo.addList(new Item(itemStack).getName());
+                                }
+                            }
+                            player.closeInventory();
+                            if(GrupoConfig.UPDATE(grupo)){
+                                Msg.PlayerTodos("§eAlterado grupo §6"+ grupo.getName()+"§e pelo §d"+ player.getName()+"§s!!!");
+                            }else{
+                                Msg.PlayerRed(player,"Erro ao alterar o grupo");
+                            }
                         }
                         return;
                     }
-                    if(!inventory.contains(itemClick)) {
+                    if (!inventory.contains(itemClick)) {
                         inventory.addItem(itemClick);
                     }
                 }
