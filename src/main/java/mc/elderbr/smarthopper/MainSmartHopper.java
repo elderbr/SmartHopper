@@ -81,6 +81,10 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getCommand("addgrupo").setExecutor(new GrupoComando());
         getCommand("removegrupo").setExecutor(new GrupoComando());
 
+        // TRADUÇÃO
+        getCommand("traducaoitem").setExecutor(new TraducaoComando());
+        getCommand("traducaogrupo").setExecutor(new TraducaoComando());
+
         // CONFIGURAÇÃO
         getCommand("addadm").setExecutor(new AdminstradorComando());
     }

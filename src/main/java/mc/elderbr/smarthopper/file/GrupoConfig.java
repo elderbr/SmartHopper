@@ -113,6 +113,22 @@ public class GrupoConfig {
         return false;
     }
 
+    public static boolean ADD_TRADUCAO(Grupo grupo){
+        try {
+
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
+            config.set(grupo.getName().concat(".grupo_lang"), grupo.getTraducao());
+            config.save(fileConfig);
+
+            VGlobal.GRUPO_LIST.add(grupo);
+            VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
+            VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+
+            return true;
+        } catch (IOException e) {}
+        return false;
+    }
+
     public static boolean DELETE(Grupo grupo) {
         try {
             // REMOVENDO O GRUPO DO ARQUIVO grupo.yml

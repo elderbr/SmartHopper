@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ItemConfig {
 
-    private final File ITEM_FILE = new File(VGlobal.ARQUIVO, "item.yml");
+    private static File ITEM_FILE = new File(VGlobal.ARQUIVO, "item.yml");
     private YamlConfiguration config;
 
     private int idItem = 1;
@@ -88,6 +88,18 @@ public class ItemConfig {
             config.set(item.getName().concat(".item_lang"), item.getTraducao());
         }
         save();
+    }
+
+    public static boolean ADD_TRADUCAO(Item item) {
+        try {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
+            config.set(item.getName().concat(".item_lang"), item.getTraducao());
+            config.save(ITEM_FILE);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void save() {

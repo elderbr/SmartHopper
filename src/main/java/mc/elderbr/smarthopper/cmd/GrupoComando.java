@@ -136,7 +136,7 @@ public class GrupoComando implements CommandExecutor {
                     Msg.PlayerRed(player, "Erro ao deletar o grupo!!!");
                 }
                 return false;
-            }
+            }// FIM DE DELETAR GRUPO
         }
         return false;
     }
