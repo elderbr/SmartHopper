@@ -75,12 +75,16 @@ public class GrupoConfig {
             try {
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
 
-                config.set(name.concat(".grupo_id"), 1);
+                config.set(name.concat(".grupo_id"), grupo.getCodigo());
                 config.set(name.concat(".grupo_name"), name);
                 config.set(name.concat(".grupo_lang"), grupo.getTraducao());
                 config.set(name.concat(".grupo_item"), grupo.getListItem());
-
                 config.save(fileConfig);
+
+                VGlobal.GRUPO_LIST.add(grupo);
+                VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
+                VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+
                 return true;
             } catch (IOException e) {}
         }
@@ -92,6 +96,7 @@ public class GrupoConfig {
             // REMOVENDO O GRUPO DO ARQUIVO grupo.yml
             YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
             config.set(grupo.getName(), null);
+            config.save(fileConfig);
             // REMOVENDO O GRUPO DA VARIAVEL GLOBAL
             VGlobal.GRUPO_LIST.remove(grupo);
             VGlobal.GRUPO_MAP_ID.remove(grupo.getCodigo());

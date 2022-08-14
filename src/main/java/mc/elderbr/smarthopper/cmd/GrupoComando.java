@@ -116,7 +116,7 @@ public class GrupoComando implements CommandExecutor {
                 }
                 // DELETANDO O GRUPO
                 if (GrupoConfig.DELETE(grupo)) {
-                    Msg.PlayerTodos("O grupo " + grupo.getName() + " foi removido pelo o ADM " + player.getName() + "!!!");
+                    Msg.PlayerTodos("§l§6O grupo §c" + grupo.getName() + "§6 foi removido pelo o ADM §e" + player.getName() + "§6!!!");
                 }
                 return false;
             }

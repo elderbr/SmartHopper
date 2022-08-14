@@ -1,9 +1,14 @@
 package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.cmd.GrupoComando;
+import mc.elderbr.smarthopper.enums.InventarioType;
+import mc.elderbr.smarthopper.file.GrupoConfig;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
+import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -64,7 +69,28 @@ public class InventarioEvent implements Listener {
                             && itemBtnSalve.equals(itemClick)
                             && itemBtnSalve.getItemMeta().getDisplayName().equals("§2§lSalva")
                             ) {
-                        Msg.ServidorBlue("btn salvar " + itemBtnSalve.getItemMeta().getDisplayName(), getClass());
+
+                        if(inventoryCustom.getType()== InventarioType.NOVO){
+                            grupo = new Grupo();
+                            grupo.setCodigo(VGlobal.CD_MAX.get(0)+1);
+                            grupo.setName(inventoryCustom.getName());
+                            grupo.addTraducao(player.getLocale(), Utils.ToUTF(grupo.getName()));
+
+                            inventory.removeItem(itemBtnSalve);// Remove o botão salvar antes de passar pelo os item
+                            // Percorrendo todos os itens do inventario
+                            for(ItemStack itemStack : inventory.getContents()){
+                                if(itemStack!=null) {
+                                    grupo.addList(new Item(itemStack).getName());
+                                }
+                            }
+                            player.closeInventory();
+                            if(GrupoConfig.ADD(grupo)){
+                                Msg.PlayerTodos("§l§6Novo grupo adicionado §e"+ grupo.getName()+"§6 pelo o jogador §a"+ player.getName()+"!!!");
+                            }else{
+                                Msg.PlayerRed(player,"Erro ao adicionar novo grupo!!!");
+                            }
+
+                        }
                         return;
                     }
                     if(!inventory.contains(itemClick)) {
