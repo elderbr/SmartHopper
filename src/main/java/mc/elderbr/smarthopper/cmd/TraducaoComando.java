@@ -27,28 +27,31 @@ public class TraducaoComando implements CommandExecutor {
 
         if (sender instanceof Player) {
 
-
-            codigo = (args[0] != null ? args[0] : null);
             player = (Player) sender;
 
             if (command.getName().equalsIgnoreCase("traducaoitem")) {
+
+                if (args.length == 0) {
+                    Msg.PlayerRed(player, "Digite o código do item!!!");
+                    Msg.PlayerGreen(player, "/traducaoitem <código> <traducao>");
+                    return false;
+                }
+
+                codigo = args[0];
+
                 if (!Config.CONTAINS_ADD(player)) {
                     Msg.PlayerGold(player, "OPS, você não é adm do Smart Hopper!!!");
                     return false;
                 }
-                if (codigo.length() > 0) {
-                    try {
-                        item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(codigo));
-                    } catch (NumberFormatException e) {
-                        Msg.PlayerRed(player, "Digite o código do item!!!");
-                        Msg.PlayerGreen(player, "/traducaoitem <código> <traducao>");
-                        return false;
-                    }
-                } else {
+
+                try {
+                    item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(codigo));
+                } catch (NumberFormatException e) {
                     Msg.PlayerRed(player, "Digite o código do item!!!");
-                    Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
+                    Msg.PlayerGreen(player, "/traducaoitem <código> <traducao>");
                     return false;
                 }
+
                 if (item == null) {
                     Msg.ItemNaoExiste(player, codigo);
                     return false;
@@ -62,22 +65,26 @@ public class TraducaoComando implements CommandExecutor {
                 return false;
             }
 
+
+            // TRADUÇÃO PARA O GRUPO
             if (command.getName().equalsIgnoreCase("traducaogrupo")) {
+
+                if (args.length == 0) {
+                    Msg.PlayerRed(player, "Digite o código do grupo!!!");
+                    Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
+                    return false;
+                }
+
+                codigo = args[0];
 
                 if (!Config.CONTAINS_ADD(player)) {
                     Msg.PlayerGold(player, "OPS, você não é adm do Smart Hopper!!!");
                     return false;
                 }
 
-                if (codigo.length() > 0) {
-                    try {
-                        grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(codigo));
-                    } catch (NumberFormatException e) {
-                        Msg.PlayerRed(player, "Digite o código do grupo!!!");
-                        Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
-                        return false;
-                    }
-                } else {
+                try {
+                    grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(codigo));
+                } catch (NumberFormatException e) {
                     Msg.PlayerRed(player, "Digite o código do grupo!!!");
                     Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
                     return false;
