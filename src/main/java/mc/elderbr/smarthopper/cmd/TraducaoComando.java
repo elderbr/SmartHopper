@@ -48,8 +48,8 @@ public class TraducaoComando implements CommandExecutor {
                         }
                         grupo = VGlobal.GRUPO_MAP_ID.get(cdGrupo);
                         if (grupo != null) {
-                            grupo.setDsTraducao(toGrupoTraducao());
-                                Msg.PlayerGreen(player, "Tradução do grupo " + grupo.getDsGrupo() + " adicionado com sucesso!!!");
+                            grupo.addTraducao(player.getLocale(), toGrupoTraducao());
+                                Msg.PlayerGreen(player, "Tradução do grupo " + grupo.getName() + " adicionado com sucesso!!!");
                         } else {
                             Msg.PlayerGreen(player, "Grupo do código " + args[1] + " não foi encontrado!!!");
                         }
@@ -64,7 +64,7 @@ public class TraducaoComando implements CommandExecutor {
                     return false;
                 }
 
-                item = VGlobal.ITEM_MAP_NAME.get(new Item(player.getInventory().getItemInMainHand()).getDsItem());
+                item = VGlobal.ITEM_MAP_NAME.get(new Item(player.getInventory().getItemInMainHand()).getName());
 
                 // VERIFICA SE O JOGADOR ESTA NA LISTA DE ADMINISTRADORES
                 isOP = false;
@@ -85,7 +85,7 @@ public class TraducaoComando implements CommandExecutor {
                     return false;
                 }
 
-                item.setDsTraducao(toTraducao());
+                item.addTraducao(player.getLocale(), toTraducao());
             }
         }
 

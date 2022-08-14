@@ -47,7 +47,7 @@ public class MoveHopper implements Listener {
 
             // Item que está sendo transferido
             itemStack = event.getItem();
-            item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
+            item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getName());
 
             // Pegando o inventorio onde está o item
             inventory = event.getSource();
@@ -82,7 +82,7 @@ public class MoveHopper implements Listener {
                             if (smart.getNameHopper().contains("#")) {
                                 isBloqueia = true;
                                 if (smart.getType() instanceof Item items) {
-                                    if (items.getCdItem() == item.getCdItem()) {
+                                    if (items.getCodigo() == item.getCodigo()) {
                                         isBloqueia = false;
                                         return;
                                     }
@@ -100,7 +100,7 @@ public class MoveHopper implements Listener {
 
 
                             if (smart.getType() instanceof Item items) {
-                                if (items.getCdItem() == item.getCdItem()) {
+                                if (items.getCodigo() == item.getCodigo()) {
                                     event.setCancelled(false);
                                     return;
                                 }
@@ -116,12 +116,12 @@ public class MoveHopper implements Listener {
 
                     if (smartHopper.getType() instanceof Item itemSmart) {
                         if (smartHopper.getNameHopper().contains("#")) {
-                            if (item.getCdItem() != itemSmart.getCdItem()) {
+                            if (item.getCodigo() != itemSmart.getCodigo()) {
                                 event.setCancelled(false);
                                 return;
                             }
                         }
-                        if (item.getCdItem() == itemSmart.getCdItem()) {
+                        if (item.getCodigo() == itemSmart.getCodigo()) {
                             event.setCancelled(false);
                             return;
                         }
@@ -150,7 +150,7 @@ public class MoveHopper implements Listener {
                 for (int i = 0; i < inventory.getSize(); i++) {
                     itemStack = inventory.getItem(i);
                     if (itemStack != null) {
-                        item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
+                        item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getName());
                         item.setSize(itemStack);// Pegando a quantidade do mesmo item
                         item.setMax(itemStack);// Setando a quantidade de impilhamento do item
 
@@ -162,7 +162,7 @@ public class MoveHopper implements Listener {
 
                                 // Se o hopper estiver configurado para o item
                                 if (smartHopper.getType() instanceof Item itemSmart) {
-                                    if (itemSmart.getCdItem() == item.getCdItem() && smartHopper.isTransferer(item)) {
+                                    if (itemSmart.getCodigo() == item.getCodigo() && smartHopper.isTransferer(item)) {
                                         destination.addItem(itemStack);
                                         inventory.removeItem(itemStack);
                                     }
@@ -182,14 +182,14 @@ public class MoveHopper implements Listener {
                         if (smartHopperDestino.getType() instanceof Item itemSmart) {
                             // Item bloqueado
                             if (smartHopperDestino.getNameHopper().contains("#")) {
-                                if (itemSmart.getCdItem() != item.getCdItem()) {
+                                if (itemSmart.getCodigo() != item.getCodigo()) {
                                     destination.addItem(itemStack);
                                     inventory.removeItem(itemStack);
                                 }
                                 continue;
                             }
                             // Se o item for igual a configuração do funil
-                            if (item.getCdItem() == itemSmart.getCdItem() && smartHopperDestino.isTransferer(item)) {
+                            if (item.getCodigo() == itemSmart.getCodigo() && smartHopperDestino.isTransferer(item)) {
                                 destination.addItem(itemStack);
                                 inventory.removeItem(itemStack);
                             }

@@ -47,7 +47,7 @@ public class ItemComando implements CommandExecutor {
                     }
                 }
                 if (item != null) {
-                    item = VGlobal.ITEM_MAP_NAME.get(item.getDsItem());
+                    item = VGlobal.ITEM_MAP_NAME.get(item.getName());
                     // MOSTRA MENSAGEM PARA O JOGADOR COM TODAS AS INFORMAÇÕES DO ITEM
                     Msg.Item(player, item);// Mostra o nome do item e seu ID
                 } else {

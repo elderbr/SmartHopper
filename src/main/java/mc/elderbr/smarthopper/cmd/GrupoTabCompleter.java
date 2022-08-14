@@ -41,8 +41,7 @@ public class GrupoTabCompleter implements TabCompleter {
                         for (Map.Entry<String, Grupo> grups : VGlobal.TRADUCAO_GRUPO_LIST.entrySet()) {
                             if(grups.getKey().contains(cmd)) {
                                 Grupo grupo = grups.getValue();
-                                grupo.setDsLang(player.getLocale());
-                                grupoList.add(grupo.toTraducao());
+                                grupoList.add(grupo.toTraducao(player));
                             }
                         }
                         return grupoList;

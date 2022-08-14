@@ -39,8 +39,7 @@ public class ItemTabCompleter implements TabCompleter {
                     for (String items : VGlobal.TRADUCAO_ITEM_NAME_LIST){
                         if(items.contains(cmd)){
                             item = VGlobal.TRADUCAO_ITEM_LIST.get(items);
-                            item.setDsLang(player.getLocale());
-                            itemList.add(item.toTraducao());
+                            itemList.add(item.toTraducao(player));
                         }
                     }
                     return itemList;

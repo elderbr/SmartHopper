@@ -146,9 +146,9 @@ public class TraducaoConfig {
 
             int cod = 0;
             for (Item item : VGlobal.ITEM_LIST) {
-                String name = item.getDsItem();
+                String name = item.getName();
                 if (yml.get(name) != null) {
-                    cod = (item.getCdItem() - 1);
+                    cod = (item.getCodigo() - 1);
                     VGlobal.ITEM_LIST.get(cod).addTraducao(lang, yml.get(name).toString());
                 }
             }

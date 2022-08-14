@@ -1,6 +1,5 @@
 package mc.elderbr.smarthopper.utils;
 
-import mc.elderbr.smarthopper.interfaces.Jogador;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
@@ -10,9 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class Msg {
 
-    public static void Todos(@NotNull String msg){
-        Bukkit.getServer().broadcastMessage(ChatColor.GREEN + " SmartHopper >> " +msg);
-    }
     public static void ServidorGreen(String msg) {
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + msg);
     }
@@ -79,27 +75,13 @@ public class Msg {
         Bukkit.getServer().broadcastMessage(msg);
     }
 
-    //========================== JOGADOR =================================================//
-    public static void Jogador(@NotNull Jogador jogador, @NotNull Class classe) {
-        Bukkit.getServer().getConsoleSender().sendMessage(
-                "Codigo: " + jogador.getCdJogador()
-                        + "\nNome: " + jogador.getDsJogador()
-                        + "\nUUID: " + jogador.getUUID()
-                        + "\nTipo: " + jogador.toType()
-                        + "\nClasse: " + classe.getSimpleName()
-
-        );
-    }
-
     //========================== ITEM =================================================//
     public static void Item(Player player, Item item) {
-        item.setDsLang(player);
-        player.sendMessage(Color("$2Item: $6" + item.toTraducao() + "$e ID: " + item.getCdItem()));
+        player.sendMessage(Color("$2Item: $6" + item.toTraducao(player) + "$e ID: " + item.getCodigo()));
     }
 
     public static void ItemNegar(Player player, Item item) {
-        item.setDsLang(player);
-        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao() + "$e ID: " + item.getCdItem()));
+        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao(player) + "$e ID: " + item.getCodigo()));
     }
 
     public static void ItemNaoExiste(Player player, String name) {
@@ -108,14 +90,14 @@ public class Msg {
 
     //========================== GRUPO =================================================//
     public static void Grupo(Player player, Grupo grupo) {
-        player.sendMessage(Color("$d$lGrupo: $e" + grupo.toTraducao() + " $6ID: " + grupo.getCdGrupo()));
+        player.sendMessage(Color("$d$lGrupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getCodigo()));
     }
 
     public static void Grupo(Grupo grupo, @NotNull Class classe) {
         Bukkit.getServer().getConsoleSender().sendMessage(
-                "Grupo ID: " + grupo.getCdGrupo()
-                        + "\nnome: " + grupo.getDsGrupo()
-                        + "\nTraducao: " + grupo.getTraducaoMap().values()
+                "Grupo ID: " + grupo.getCodigo()
+                        + "\nnome: " + grupo.getName()
+                        + "\nTraducao: " + grupo.getTraducao().values()
         );
     }
 
@@ -124,8 +106,7 @@ public class Msg {
     }
 
     public static void GrupoNegar(Player player, Grupo grupo) {
-        grupo.setDsLang(player);
-        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.toTraducao() + "$e ID: " + grupo.getCdGrupo()));
+        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.toTraducao(player) + "$e ID: " + grupo.getCodigo()));
     }
 
     public static void PulaPlayer(Player player) {

@@ -90,11 +90,11 @@ public class SmartHopper {
             }
             if (getType() instanceof Grupo grupo) {
                 // CRIANDO O INVENTARIO DO GRUPO
-                InventoryCustom inventory = new InventoryCustom();
-                inventory.create(grupo.toTraducao().concat(" §e§lID:" + grupo.getCdGrupo()));// NO DO INVENTARIO
+                InventoryCustom inventory = new InventoryCustom(player);
+                inventory.create(grupo.toTraducao().concat(" §e§lID:" + grupo.getCodigo()));// NO DO INVENTARIO
                 for (String itemName : grupo.getListItem()) {// ADICIONANDO OS ITENS NO INVENTARIO
                     Item items = new Item(itemName);
-                    inventory.addItem(items.getItemStack());
+                    inventory.addLista(items.getItemStack());
                 }
                 player.openInventory(inventory.getInventory());
                 if(nameHopper.contains("#")){
@@ -140,14 +140,14 @@ public class SmartHopper {
 
     public boolean igualContem(Item item){
         if(getType() instanceof Item it){
-            if(it.getCdItem() == item.getCdItem()){
+            if(it.getCodigo() == item.getCodigo()){
                 return true;
             }
         }
         if(getType() instanceof Grupo grupo){
             for(String itemName : grupo.getListItem()){
                 Item items = new Item(itemName);
-                if(items.getCdItem() == item.getCdItem()){
+                if(items.getCodigo() == item.getCodigo()){
                     return true;
                 }
             }
@@ -160,10 +160,10 @@ public class SmartHopper {
             if(itemStack==null){
                 return true;
             }
-            Item newItem = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
+            Item newItem = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getName());
             newItem.setSize(itemStack.getAmount());
             newItem.setMax(itemStack.getMaxStackSize());
-            if(item.getCdItem()==newItem.getCdItem() && newItem.isMax()){
+            if(item.getCodigo()==newItem.getCodigo() && newItem.isMax()){
                 return true;
             }
         }

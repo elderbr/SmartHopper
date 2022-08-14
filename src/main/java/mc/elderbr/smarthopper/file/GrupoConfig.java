@@ -3,44 +3,23 @@ package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class GrupoConfig {
 
-    private File fileConfig = new File(VGlobal.ARQUIVO, "grupo.yml");
+    private static File fileConfig = new File(VGlobal.ARQUIVO, "grupo.yml");
     private YamlConfiguration config;
-    private YamlConfiguration configLang;
-
-    private InputStream inputStream;
-    private BufferedReader reader;
-    private String txtReader;
-    private String key;
-    private String value;
-    private Map<String, String> langMap = new HashMap<>();
 
     private Grupo grupo;
-    private int idGrupo = 1;
-
-    private Item item;
-    private List<String> itemStringList;
-    private String nameMaterial;
-
-    private ItemStack itemPotion;
-    private PotionMeta potionMeta;
-    private List<String> listPotion;
 
     public GrupoConfig() {
         if (!fileConfig.exists()) {
@@ -59,9 +38,9 @@ public class GrupoConfig {
         config = YamlConfiguration.loadConfiguration(fileConfig);
         int cod = 1;
         for (Grupo grupos : VGlobal.GRUPO_LIST) {
-            grupos.setCdGrupo(cod);
+            grupos.setCodigo(cod);
             add(grupos);
-            Msg.ServidorGold("Criando o grupo >> "+ grupos.getDsGrupo()+" | codigo >> "+ cod);
+            Msg.ServidorGold("Criando o grupo >> " + grupos.getName() + " | codigo >> " + cod);
             cod++;
         }
         VGlobal.GRUPO_LIST.clear();
@@ -77,17 +56,50 @@ public class GrupoConfig {
 
     private void add(@NotNull Grupo grupo) {
 
-        String name = grupo.getDsGrupo();
+        String name = grupo.getName();
 
-        config.set(name.concat(".grupo_id"), grupo.getCdGrupo());
+        config.set(name.concat(".grupo_id"), grupo.getCodigo());
         config.set(name.concat(".grupo_name"), name);
         //Tradução
         if (VGlobal.TRADUCAO_GRUPO_NAME_MAP.get(name) != null) {
             grupo.addTraducao("pt_br", VGlobal.TRADUCAO_GRUPO_NAME_MAP.get(name));
-            config.set(name.concat(".grupo_lang"), grupo.getTraducaoMap());
+            config.set(name.concat(".grupo_lang"), grupo.getTraducao());
         }
         config.set(name.concat(".grupo_item"), grupo.getListItem());
         save();
+    }
+
+    public static boolean ADD(Grupo grupo) {
+        String name = grupo.getName();
+        if (VGlobal.GRUPO_MAP_NAME.get(name) == null) {
+            try {
+                YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
+
+                config.set(name.concat(".grupo_id"), 1);
+                config.set(name.concat(".grupo_name"), name);
+                config.set(name.concat(".grupo_lang"), grupo.getTraducao());
+                config.set(name.concat(".grupo_item"), grupo.getListItem());
+
+                config.save(fileConfig);
+                return true;
+            } catch (IOException e) {}
+        }
+        return false;
+    }
+
+    public static boolean DELETE(Grupo grupo) {
+        try {
+            // REMOVENDO O GRUPO DO ARQUIVO grupo.yml
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
+            config.set(grupo.getName(), null);
+            // REMOVENDO O GRUPO DA VARIAVEL GLOBAL
+            VGlobal.GRUPO_LIST.remove(grupo);
+            VGlobal.GRUPO_MAP_ID.remove(grupo.getCodigo());
+            VGlobal.GRUPO_MAP_NAME.remove(grupo.getName());
+            return true;
+        } catch (Exception e) {
+        }
+        return false;
     }
 
     public void reload() {
@@ -99,16 +111,16 @@ public class GrupoConfig {
             name = obj.getKey().toString();
 
             grupo = new Grupo();
-            grupo.setCdGrupo(config.getInt(name.concat(".grupo_id")));
-            grupo.setDsGrupo(config.getString(name.concat(".grupo_name")));
+            grupo.setCodigo(config.getInt(name.concat(".grupo_id")));
+            grupo.setName(config.getString(name.concat(".grupo_name")));
 
             // PEGANDO O MAIOR CÓDIGO DO GRUPO
-            if(grupo.getCdGrupo()>VGlobal.CD_MAX.get(0)){
-                VGlobal.CD_MAX.set(0, grupo.getCdGrupo());
+            if (grupo.getCodigo() > VGlobal.CD_MAX.get(0)) {
+                VGlobal.CD_MAX.set(0, grupo.getCodigo());
             }
 
             // TRADUÇÃO
-            if(config.get(name.concat(".grupo_lang"))!=null) {
+            if (config.get(name.concat(".grupo_lang")) != null) {
                 MemorySection tradMemory = (MemorySection) config.get(name.concat(".grupo_lang"));
                 for (Map.Entry<String, Object> trad : tradMemory.getValues(false).entrySet()) {
                     grupo.addTraducao(trad.getKey(), trad.getValue().toString());
@@ -116,14 +128,14 @@ public class GrupoConfig {
             }
 
             // ITEM DO GRUPO
-            for(Object items : config.getList(name.concat(".grupo_item"))){
+            for (Object items : config.getList(name.concat(".grupo_item"))) {
                 grupo.addList(items.toString());
             }
 
             // ADICIONANDO NA VARIAVEL GLOBAL
             VGlobal.GRUPO_LIST.add(grupo);
-            VGlobal.GRUPO_MAP_ID.put(grupo.getCdGrupo(), grupo);
-            VGlobal.GRUPO_MAP_NAME.put(grupo.getDsGrupo(), grupo);
+            VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
+            VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
         }
     }
 

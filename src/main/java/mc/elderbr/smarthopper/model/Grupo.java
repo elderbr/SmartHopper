@@ -1,91 +1,46 @@
 package mc.elderbr.smarthopper.model;
 
-import mc.elderbr.smarthopper.interfaces.Linguagem;
+import mc.elderbr.smarthopper.interfaces.Dados;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
-public class Grupo implements Linguagem {
+public class Grupo implements Dados {
 
-    private int cdGrupo;
-    private String dsGrupo;
-
-    // LANG
-    private String dsLang;
-
-    // TRADUCAO
-    private String dsTraducao;
-    private Map<String, String> traducaoMap = new HashMap<>();
-
-    // Item do grupo
+    private int codigo;
+    private String name;
+    private Map<String, String> traducao = new HashMap<>();
     private List<String> listItem = new ArrayList<>();
 
-    // AULIXIAR
-    private static List<String> grupoList = new ArrayList<>();
+    // Auxiliar
+    private static List<String> grupoList;
 
     public Grupo() {
     }
 
-    public int getCdGrupo() {
-        return cdGrupo;
-    }
-
-    public void setCdGrupo(int cdGrupo) {
-        this.cdGrupo = cdGrupo;
-    }
-
-    public String getDsGrupo() {
-        return dsGrupo;
-    }
-
-    public void setDsGrupo(String dsGrupo) {
-        this.dsGrupo = dsGrupo;
+    @Override
+    public int setCodigo(int codigo) {
+        return this.codigo = codigo;
     }
 
     @Override
-    public Grupo setDsLang(String lang) {
-        dsLang = lang;
-        return this;
+    public int getCodigo() {
+        return codigo;
     }
 
     @Override
-    public Grupo setDsLang(Player player) {
-        dsLang = player.getLocale();
-        return this;
+    public String setName(String name) {
+        return this.name = name;
     }
 
     @Override
-    public String getDsLang() {
-        return dsLang;
+    public String getName() {
+        return name;
     }
 
     @Override
-    public Grupo setDsTraducao(String traducao) {
-        dsTraducao = traducao;
-        return this;
-    }
-
-    @Override
-    public String getDsTraducao() {
-        return dsTraducao;
-    }
-
-    public Grupo addTraducao(String lang, String traducao) {
-        traducaoMap.put(lang, traducao);
-        return this;
-    }
-
-    public Map<String, String> getTraducaoMap() {
-        return traducaoMap;
-    }
-
-    public String toTraducao() {
-        if (!traducaoMap.isEmpty()) {
-            dsTraducao = traducaoMap.get(dsLang);
-        }
-        return (dsTraducao == null ? dsGrupo : dsTraducao);
+    public Map<String, String> getTraducao() {
+        return traducao;
     }
 
     public List<String> getListItem() {
@@ -93,10 +48,9 @@ public class Grupo implements Linguagem {
     }
 
     public Grupo addList(String item) {
-        if (listItem == null) {
-            listItem = new ArrayList<>();
+        if (!listItem.contains(item)) {
+            listItem.add(item);
         }
-        listItem.add(item);
         return this;
     }
 
@@ -241,7 +195,7 @@ public class Grupo implements Linguagem {
             if (NotGrupo().contains(nameGrupo)) continue;
 
             Grupo grupo = new Grupo();
-            grupo.setDsGrupo(nameGrupo);
+            grupo.setName(nameGrupo);
 
             for (String itemName : VGlobal.ITEM_NAME_LIST) {
                 if (pertence(nameGrupo, itemName) && grupo.isContains(itemName)) {
@@ -250,7 +204,7 @@ public class Grupo implements Linguagem {
             }
 
             // Ferramentas de Pedras
-            if (grupo.getDsGrupo().equals("stone tools")) {
+            if (grupo.getName().equals("stone tools")) {
                 grupo.addList("stone sword");
                 grupo.addList("stone shovel");
                 grupo.addList("stone pickaxe");
@@ -259,7 +213,7 @@ public class Grupo implements Linguagem {
             }
 
             // Ferramentas de Ferro
-            if (grupo.getDsGrupo().equals("iron tools")) {
+            if (grupo.getName().equals("iron tools")) {
                 grupo.addList("iron sword");
                 grupo.addList("iron shovel");
                 grupo.addList("iron pickaxe");
@@ -268,7 +222,7 @@ public class Grupo implements Linguagem {
             }
 
             // Ferramentas de Ouro
-            if (grupo.getDsGrupo().equals("golden tools")) {
+            if (grupo.getName().equals("golden tools")) {
                 grupo.addList("golden sword");
                 grupo.addList("golden shovel");
                 grupo.addList("golden pickaxe");
@@ -277,7 +231,7 @@ public class Grupo implements Linguagem {
             }
 
             // Ferramentas de Diamante
-            if (grupo.getDsGrupo().equals("diamond tools")) {
+            if (grupo.getName().equals("diamond tools")) {
                 grupo.addList("diamond sword");
                 grupo.addList("diamond shovel");
                 grupo.addList("diamond pickaxe");
@@ -286,7 +240,7 @@ public class Grupo implements Linguagem {
             }
 
             // Ferramentas de netherite
-            if (grupo.getDsGrupo().equals("netherite tools")) {
+            if (grupo.getName().equals("netherite tools")) {
                 grupo.addList("netherite sword");
                 grupo.addList("netherite shovel");
                 grupo.addList("netherite pickaxe");
@@ -295,7 +249,7 @@ public class Grupo implements Linguagem {
             }
 
             // ITENS PARA SEREM ASSADOS
-            if (grupo.getDsGrupo().equals("carne crua")) {
+            if (grupo.getName().equals("carne crua")) {
                 grupo.addList("potato");
                 grupo.addList("beef");
                 grupo.addList("porkchop");
@@ -308,7 +262,7 @@ public class Grupo implements Linguagem {
             }
 
             // GRUPO DE FLORES
-            if (grupo.getDsGrupo().equals("flowers")) {
+            if (grupo.getName().equals("flowers")) {
                 grupo.addList("grass");
                 grupo.addList("fern");
                 grupo.addList("dead bush");
@@ -333,15 +287,15 @@ public class Grupo implements Linguagem {
             }
 
             // LISTA DE NOMES DE GRUPO GLOBAL
-            if (grupo.getListItem().size() > 1 && !VGlobal.GRUPO_NAME_LIST.contains(grupo.getDsGrupo())) {
-                VGlobal.GRUPO_NAME_LIST.add(grupo.dsGrupo);
+            if (grupo.getListItem().size() > 1 && !VGlobal.GRUPO_NAME_LIST.contains(grupo.getName())) {
+                VGlobal.GRUPO_NAME_LIST.add(grupo.name);
                 VGlobal.GRUPO_LIST.add(grupo);
             }
         }
     }
 
-    public boolean isContains(Item item){
-        return this.getListItem().contains(item.getDsItem());
+    public boolean isContains(Item item) {
+        return this.getListItem().contains(item.getName());
     }
 
     public boolean isContains(String item) {
@@ -350,40 +304,40 @@ public class Grupo implements Linguagem {
         String[] split = item.split("\\s");
         int size = item.split("\\s").length;
 
-        if(this.getDsGrupo().equals(item)) return true;
+        if (this.getName().equals(item)) return true;
 
         for (int i = 0; i < size; i++) {
 
             name = split[i];
-            if(this.getDsGrupo().equals(name)) return true;
+            if (this.getName().equals(name)) return true;
 
             if ((i + 1) < size) {
                 name = split[i] + " " + split[i + 1];
-                if (this.getDsGrupo().equals(name)) {
+                if (this.getName().equals(name)) {
                     return true;
                 }
             }
             if ((i + 2) < size) {
                 name = split[i] + " " + split[i + 1] + " " + split[i + 2];
-                if (this.getDsGrupo().equals(name)) {
+                if (this.getName().equals(name)) {
                     return true;
                 }
             }
             if ((i + 3) < size) {
                 name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3];
-                if (this.getDsGrupo().equals(name)) {
+                if (this.getName().equals(name)) {
                     return true;
                 }
             }
             if ((i + 4) < size) {
                 name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3] + " " + split[i + 4];
-                if (this.getDsGrupo().equals(name)) {
+                if (this.getName().equals(name)) {
                     return true;
                 }
             }
             if ((i + 5) < size) {
                 name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3] + " " + split[i + 4] + " " + split[i + 4];
-                if (this.getDsGrupo().equals(name)) {
+                if (this.getName().equals(name)) {
                     return true;
                 }
             }
@@ -441,6 +395,6 @@ public class Grupo implements Linguagem {
 
     @Override
     public String toString() {
-        return dsGrupo;
+        return name;
     }
 }
