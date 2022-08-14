@@ -12,16 +12,14 @@
     <list default="true" id="12109b36-73cd-4704-a5ea-8e7e064a0b38" name="Default Changelist" comment="Alterando a versão do plugin para 3.4">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/MainSmartHopper.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/MainSmartHopper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/GrupoComando.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/GrupoComando.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/ItemComando.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/ItemComando.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/TraducaoComando.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/cmd/TraducaoComando.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/GrupoConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/GrupoConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/MainSmartHopper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/MainSmartHopper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/cmd/GrupoComando.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/cmd/GrupoComando.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/ItemConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/file/ItemConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Item.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/mc/elderbr/smarthopper/model/Item.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/cmd/ItemComando.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/cmd/ItemComando.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/cmd/TraducaoComando.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/cmd/TraducaoComando.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/GrupoConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/GrupoConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/ItemConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/file/ItemConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/mc/elderbr/smarthopper/model/Item.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

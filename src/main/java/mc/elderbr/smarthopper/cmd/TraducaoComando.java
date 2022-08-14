@@ -3,12 +3,10 @@ package mc.elderbr.smarthopper.cmd;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
-import mc.elderbr.smarthopper.interfaces.Jogador;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.model.*;
+import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,11 +28,11 @@ public class TraducaoComando implements CommandExecutor {
         if (sender instanceof Player) {
 
 
-            codigo = args[0];
+            codigo = (args[0] != null ? args[0] : null);
             player = (Player) sender;
 
-            if(command.getName().equalsIgnoreCase("traducaoitem")){
-                if (!Config.CONTAINS_ADD(player)){
+            if (command.getName().equalsIgnoreCase("traducaoitem")) {
+                if (!Config.CONTAINS_ADD(player)) {
                     Msg.PlayerGold(player, "OPS, você não é adm do Smart Hopper!!!");
                     return false;
                 }
@@ -43,29 +41,30 @@ public class TraducaoComando implements CommandExecutor {
                         item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(codigo));
                     } catch (NumberFormatException e) {
                         Msg.PlayerRed(player, "Digite o código do item!!!");
-                        Msg.PlayerGreen(player,"/traducaoitem <código> <traducao>");
+                        Msg.PlayerGreen(player, "/traducaoitem <código> <traducao>");
                         return false;
                     }
-                }else{
+                } else {
                     Msg.PlayerRed(player, "Digite o código do item!!!");
-                    Msg.PlayerGreen(player,"/traducaogrupo <código> <traducao>");
+                    Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
                     return false;
                 }
-                if(item==null){
+                if (item == null) {
                     Msg.ItemNaoExiste(player, codigo);
                     return false;
                 }
-                if(ItemConfig.ADD_TRADUCAO(item)){
-                    Msg.Item(player, item);
-                }else{
+                item.addTraducao(player.getLocale(), traducao(args));
+                if (ItemConfig.ADD_TRADUCAO(item)) {
+                    Msg.PlayerTodos("§6A tradução para o item " + item.getName() + " foi alterada pelo §e" + player.getName());
+                } else {
                     Msg.ItemNaoExiste(player, codigo);
                 }
                 return false;
             }
 
-            if(command.getName().equalsIgnoreCase("traducaogrupo")){
+            if (command.getName().equalsIgnoreCase("traducaogrupo")) {
 
-                if (!Config.CONTAINS_ADD(player)){
+                if (!Config.CONTAINS_ADD(player)) {
                     Msg.PlayerGold(player, "OPS, você não é adm do Smart Hopper!!!");
                     return false;
                 }
@@ -75,16 +74,16 @@ public class TraducaoComando implements CommandExecutor {
                         grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(codigo));
                     } catch (NumberFormatException e) {
                         Msg.PlayerRed(player, "Digite o código do grupo!!!");
-                        Msg.PlayerGreen(player,"/traducaogrupo <código> <traducao>");
+                        Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
                         return false;
                     }
-                }else{
+                } else {
                     Msg.PlayerRed(player, "Digite o código do grupo!!!");
-                    Msg.PlayerGreen(player,"/traducaogrupo <código> <traducao>");
+                    Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
                     return false;
                 }
 
-                if(grupo == null){
+                if (grupo == null) {
                     Msg.GrupoNaoExiste(player, codigo);
                     return false;
                 }
@@ -96,10 +95,10 @@ public class TraducaoComando implements CommandExecutor {
         return false;
     }
 
-    private String traducao(String[] cmd){
+    private String traducao(String[] cmd) {
         StringBuilder tradStr = new StringBuilder();
-        for(int i = 1; i < cmd.length;i++){
-            tradStr.append(cmd[i]+" ");
+        for (int i = 1; i < cmd.length; i++) {
+            tradStr.append(cmd[i] + " ");
         }
         return tradStr.toString().trim();
     }

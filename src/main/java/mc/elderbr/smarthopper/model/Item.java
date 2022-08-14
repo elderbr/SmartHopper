@@ -44,7 +44,7 @@ public class Item implements Dados {
 
     @Override
     public int setCodigo(int codigo) {
-        return codigo = codigo;
+        return this.codigo = codigo;
     }
 
     @Override
