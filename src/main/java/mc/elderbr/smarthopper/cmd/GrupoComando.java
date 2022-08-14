@@ -115,12 +115,8 @@ public class GrupoComando implements CommandExecutor {
                     return false;
                 }
                 // DELETANDO O GRUPO
-                if(VGlobal.GRUPO_LIST.contains(grupo)) {
-                    if (GrupoConfig.DELETE(grupo)) {
-                        Msg.PlayerTodos("O grupo " + grupo.getName() + " foi removido pelo o ADM " + player.getName() + "!!!");
-                    }
-                }else{
-                    Msg.GrupoNaoExiste(player, cmd);
+                if (GrupoConfig.DELETE(grupo)) {
+                    Msg.PlayerTodos("O grupo " + grupo.getName() + " foi removido pelo o ADM " + player.getName() + "!!!");
                 }
                 return false;
             }
