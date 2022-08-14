@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class AdminstradorComando implements CommandExecutor {
+public class AdministradorComando implements CommandExecutor {
 
     private String player;
 
