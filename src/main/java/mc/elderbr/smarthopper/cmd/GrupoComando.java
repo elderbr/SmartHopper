@@ -53,7 +53,7 @@ public class GrupoComando implements CommandExecutor {
                     try {
                         grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
                     } catch (NumberFormatException e) {
-                        grupo = VGlobal.GRUPO_MAP_NAME.get(cmd);
+                        grupo = VGlobal.GRUPO_MAP_NAME.get(cmd.toLowerCase());
                     }
                 } else {
                     if (itemStack != null && itemStack.getType() == Material.AIR) {
@@ -117,9 +117,13 @@ public class GrupoComando implements CommandExecutor {
                     try {
                         grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
                     } catch (NumberFormatException e) {
-                        grupo = VGlobal.GRUPO_MAP_NAME.get(cmd);
+                        grupo = VGlobal.GRUPO_MAP_NAME.get(cmd.toLowerCase());
                     }
+                }else{
+                    Msg.PlayerRed(player, "Digite o nome ou código do grupo!!!");
+                    return false;
                 }
+
                 // SE O GRUPO NÃO EXISTIR
                 if (grupo == null) {
                     Msg.GrupoNaoExiste(player, cmd);
@@ -134,31 +138,4 @@ public class GrupoComando implements CommandExecutor {
         }
         return false;
     }
-
-    private void btnNewGrup() {
-        // CRIANDO O BOTÃO PARA SALVAR
-        itemSalve = new ItemStack(Material.LIME_WOOL);
-        meta = itemSalve.getItemMeta();
-        meta.setDisplayName(Msg.Color("$aSalva"));
-        lore = new ArrayList<>();
-        lore.add(Msg.Color("$3Salva novo grupo"));
-        meta.setLore(lore);
-        itemSalve.setItemMeta(meta);
-        INVENTORY.getInventory().setItem(53, itemSalve);
-        player.openInventory(INVENTORY.getInventory());
-    }
-
-    private void btnUpdateGrup() {
-        if (Config.CONTAINS_ADD(player.getName())) {
-            itemSalve = new ItemStack(Material.LIME_WOOL);
-            meta = itemSalve.getItemMeta();
-            meta.setDisplayName(Msg.Color("$aAtualizar"));
-            lore = new ArrayList<>();
-            lore.add(Msg.Color("$3Salvar"));
-            meta.setLore(lore);
-            itemSalve.setItemMeta(meta);
-            INVENTORY.getInventory().setItem(53, itemSalve);
-        }
-    }
-
 }
