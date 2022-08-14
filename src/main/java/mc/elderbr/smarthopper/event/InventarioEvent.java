@@ -83,7 +83,7 @@ public class InventarioEvent implements Listener {
                             }
                             player.closeInventory();
                             if(GrupoConfig.ADD(grupo)){
-                                Msg.PlayerTodos("§e§lNovo grupo §6§l"+ grupo.getName()+"§e§l criado por §d§l"+ player.getName()+"§s§l!!!");
+                                Msg.PlayerTodos("§e§lNovo grupo §6§l"+ grupo.getName()+"§e§l criado por §d§l"+ player.getName()+"§e§l!!!");
                             }else{
                                 Msg.PlayerRed(player,"Erro ao adicionar o grupo");
                             }
@@ -99,7 +99,7 @@ public class InventarioEvent implements Listener {
                             }
                             player.closeInventory();
                             if(GrupoConfig.UPDATE(grupo)){
-                                Msg.PlayerTodos("§eAlterado grupo §6"+ grupo.getName()+"§e pelo §d"+ player.getName()+"§s!!!");
+                                Msg.PlayerTodos("§eAlterado grupo §6"+ grupo.getName()+"§e pelo §d"+ player.getName()+"§e!!!");
                             }else{
                                 Msg.PlayerRed(player,"Erro ao alterar o grupo");
                             }
