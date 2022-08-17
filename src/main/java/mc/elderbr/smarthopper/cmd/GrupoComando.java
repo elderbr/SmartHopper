@@ -2,8 +2,6 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
-import mc.elderbr.smarthopper.interfaces.Dados;
-import mc.elderbr.smarthopper.interfaces.InterfaceInventario;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -79,7 +77,11 @@ public class GrupoComando implements CommandExecutor {
                         Msg.PlayerGold(player, "#====================================#");
                         return false;
                     }
-                    grupo = listGrupo.get(0);// PEGA O PRIMEIRO GRUPO ENCONTRADO
+                    if(listGrupo.size()>0) {
+                        grupo = listGrupo.get(0);// PEGA O PRIMEIRO GRUPO ENCONTRADO
+                    }else{
+                        Msg.PlayerRed(player, "Não existe grupo para esse item!!!");
+                    }
                 }
 
                 if (grupo != null) {

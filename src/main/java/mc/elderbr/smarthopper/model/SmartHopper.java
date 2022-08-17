@@ -1,173 +1,163 @@
 package mc.elderbr.smarthopper.model;
 
 
+import mc.elderbr.smarthopper.interfaces.Dados;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-public class SmartHopper {
+import java.util.HashMap;
+import java.util.Map;
+
+public class SmartHopper implements Dados {
+
+    private int codigo;
+    private String name;
+    private Map<String, String> traducao = new HashMap<>();
 
     private Hopper hopper = null;
-    private int code;
-    private String name;
-    private String nameHopper;
     private String silaba;
+    private boolean bloqueio = false;
 
-    public SmartHopper(Hopper hopper) {
-        this.hopper = hopper;
-    }
+    // ITEM
+    private Item item;
+    private Item itemSH;
+    private Grupo grupo;
 
-    public SmartHopper(Inventory inventory) {
-        if (inventory.getType() == InventoryType.HOPPER) {
-            this.hopper = (Hopper) inventory.getLocation().getBlock().getState();
+    public SmartHopper(@NotNull Object hopper) {
+        if (hopper instanceof Hopper funil) {
+            this.hopper = funil;
         }
-    }
-
-    public SmartHopper(Block block) {
-        if (block.getType() == Material.HOPPER) {
-            this.hopper = (Hopper) block.getState();
-        }
-    }
-
-    public SmartHopper(Block block, String name) {
-        hopper = (Hopper) block.getState();
-        hopper.setCustomName(name);
-    }
-
-    public String getNameHopper() {
-        nameHopper = (hopper.getCustomName() != null ? hopper.getCustomName().toLowerCase().replaceAll("_", " ").trim() : "HOPPER");
-        return nameHopper;
-    }
-
-    public String toSmartHopper() {
-        if (getType() instanceof Item item) {
-            return item.toTraducao();
-        }
-        if (getType() instanceof Grupo grupo) {
-            return grupo.toTraducao();
-        }
-        return "Hopper";
-    }
-
-    public void msgPlayerSmartHopper(Player player) {
-        getNameHopper();
-        if (nameHopper.contains(";")) {
-            String[] lista = nameHopper.split(";");
-            Msg.PulaPlayer(player);
-            for (String values : lista) {
-                SmartHopper smart = new SmartHopper(hopper.getBlock(), values);
-                if (smart.getType() instanceof Item items) {
-                    if (values.contains("#")) {
-                        Msg.ItemNegar(player, items);
-                    } else {
-                        Msg.Item(player, items);
-                    }
-                }
-                if (smart.getType() instanceof Grupo grupo) {
-                    if (values.contains("#")) {
-                        Msg.GrupoNegar(player, grupo);
-                    } else {
-                        Msg.Grupo(player, grupo);
-                    }
-                }
+        if (hopper instanceof Inventory inventory) {
+            if (inventory.getType() == InventoryType.HOPPER) {
+                this.hopper = (Hopper) inventory.getLocation().getBlock().getState();
             }
-            Msg.PulaPlayer(player);
-            return;
-        } else {
-            if (getType() instanceof Item item) {
-                if (nameHopper.contains("#")) {
-                    Msg.ItemNegar(player, item);
-                } else {
-                    Msg.Item(player, item);
-                }
-                return;
-            }
-            if (getType() instanceof Grupo grupo) {
-                // CRIANDO O INVENTARIO DO GRUPO
-                InventoryCustom inventory = new InventoryCustom(player);
-                inventory.create(grupo.toTraducao().concat(" §e§lID:" + grupo.getCodigo()));// NO DO INVENTARIO
-                for (String itemName : grupo.getListItem()) {// ADICIONANDO OS ITENS NO INVENTARIO
-                    Item items = new Item(itemName);
-                    inventory.addLista(items.getItemStack());
-                }
-                player.openInventory(inventory.getInventory());
-                if(nameHopper.contains("#")){
-                    Msg.GrupoNegar(player, grupo);
-                }else {
-                    Msg.Grupo(player, grupo);
-                }
-                return;
-            }
-            Msg.PlayerGold(player, Msg.Color("Funil $cNÃO $rfoi configurado!!!"));
         }
-    }
+        if (hopper instanceof Block block) {
+            if (block.getType() == Material.HOPPER) {
+                this.hopper = (Hopper) block.getState();
+            }
+        }
+        if (this.hopper != null) {
 
-    public Object getType() {
-        getNameHopper();
-
-        silaba = nameHopper.replaceAll("[#\\*]", "").substring(0, 1);
-        name = nameHopper.replaceAll("[#\\*]", "");
-
-        // VERIFICA SE É ITEM OU GRUPO
-        if (silaba.equalsIgnoreCase("i") || silaba.equalsIgnoreCase("g")) {
-            name = name.substring(1, name.length());
+            name = (this.hopper.getCustomName() == null ? "hopper" : this.hopper.getCustomName().toLowerCase());
+            silaba = name.substring(0, 1);
+            // Verifica se o item está bloqueado
+            if (silaba.equals("#")) {
+                silaba = name.substring(1, 2);
+                bloqueio = true;
+            }
             try {
-                code = Integer.parseInt(name);
+                if (bloqueio)
+                    codigo = Integer.parseInt(name.substring(2, name.length()));
+                else
+                    codigo = Integer.parseInt(name.substring(1, name.length()));
             } catch (NumberFormatException e) {
+                codigo = 0;
             }
+        } else {
+            name = "hopper";
         }
-
-        // RETORNA O GRUPO
-        if (nameHopper.contains("*") || silaba.equalsIgnoreCase("g")) {
-            if (code > 0) {
-                return VGlobal.GRUPO_MAP_ID.get(code);
-            }
-            return VGlobal.GRUPO_MAP_NAME.get(name);
-        }
-
-        // RETORNA O ITEM
-        if (code > 0) {
-            return VGlobal.ITEM_MAP_ID.get(code);
-        }
-        return VGlobal.ITEM_MAP_NAME.get(name);
     }
 
-    public boolean igualContem(Item item){
-        if(getType() instanceof Item it){
-            if(it.getCodigo() == item.getCodigo()){
-                return true;
+    @Override
+    public int setCodigo(int codigo) {
+        return this.codigo = codigo;
+    }
+
+    @Override
+    public int getCodigo() {
+        return codigo;
+    }
+
+    @Override
+    public String setName(String name) {
+        this.name = name;
+        hopper.setCustomName(name);
+        return this.name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Map<String, String> getTraducao() {
+        return traducao;
+    }
+
+    public boolean isMove(Item item) {
+        try {
+            if (name.contains(";")) {
+                for (String names : name.split(";")) {
+                    silaba = names.substring(0, 1).toLowerCase();
+                    codigo = Integer.parseInt(names.substring(1, names.length()));
+
+                    if (silaba.equalsIgnoreCase("i")) {
+                        Msg.ServidorGreen("Item >> " + names, getClass());
+                        itemSH = VGlobal.ITEM_MAP_ID.get(codigo);
+                        if (itemSH != null && item.getCodigo() == itemSH.getCodigo()) {
+                            return true;
+                        }
+                    }
+                    if (silaba.equalsIgnoreCase("g")) {
+                        grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                        if (grupo != null && grupo.isContains(item)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             }
-        }
-        if(getType() instanceof Grupo grupo){
-            for(String itemName : grupo.getListItem()){
-                Item items = new Item(itemName);
-                if(items.getCodigo() == item.getCodigo()){
+
+            if(bloqueio){
+                if(silaba.equalsIgnoreCase("i")){
+                    if(codigo == item.getCodigo()){
+                        return false;
+                    }
+                }
+                if(silaba.equalsIgnoreCase("g")){
+                    grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                    if(grupo.isContains(item)){
+                        return false;
+                    }
+                }
+            }
+
+            if (silaba.equalsIgnoreCase("i")) {
+                if (item.getCodigo() == codigo) {
                     return true;
                 }
             }
+            if (silaba.equalsIgnoreCase("g")) {
+                grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                if (grupo != null && grupo.isContains(item)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
         }
         return false;
     }
 
-    public boolean isTransferer(Item item){
-        for(ItemStack itemStack : hopper.getInventory().getContents()){
-            if(itemStack==null){
-                return true;
-            }
-            Item newItem = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getName());
-            newItem.setSize(itemStack.getAmount());
-            newItem.setMax(itemStack.getMaxStackSize());
-            if(item.getCodigo()==newItem.getCodigo() && newItem.isMax()){
-                return true;
-            }
+    public Object getType() {
+        if (silaba.equalsIgnoreCase("i")) {
+            return VGlobal.ITEM_MAP_ID.get(codigo).getClass();
         }
-        return false;
+        if (silaba.equalsIgnoreCase("g")) {
+            return VGlobal.GRUPO_MAP_ID.get(codigo).getClass();
+        }
+        return null;
     }
 
+    public boolean isBloqueio(){
+        return bloqueio;
+    }
 }

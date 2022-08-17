@@ -27,7 +27,9 @@ public class InventarioEvent implements Listener {
     private ItemStack itemClick;
 
     // GRUPO
-    private String nameGrupo;
+    private int codigo;
+    private String name;
+    private String type;
     private Grupo grupo;
     private Inventory inventory;
 
@@ -50,9 +52,10 @@ public class InventarioEvent implements Listener {
             return;
         }
 
-
         titulo = event.getView().getTitle();// NOME DO INVENTARIO
-        inventoryCustom = GrupoComando.INVENTORY;// INVENTARIO VINDO DO GRUPO COMANDO
+        if (!titulo.contains(":") && !titulo.contains("Grupo")) return;
+
+        inventoryCustom = GrupoComando.INVENTORY;
 
         itemClick = event.getCurrentItem();// ITEM CLICADO
         itemClick.setAmount(1);
@@ -60,7 +63,7 @@ public class InventarioEvent implements Listener {
         itemBtnSalve = player.getOpenInventory().getItem(53);// BOTÃO DE SALVAR OU ATUALIZAR VAI SER A LÃ DA COR LIMÃO COM LORE
 
         // SE O INVENTARIO ABERTO É UM GRUPO
-        if (inventoryCustom.getType() != null) {
+        if (inventoryCustom != null && inventoryCustom.getType() != null) {
             event.setCancelled(true);
 
             if (inventoryCustom.isAdm()) {
@@ -82,10 +85,10 @@ public class InventarioEvent implements Listener {
                                 }
                             }
                             player.closeInventory();
-                            if(GrupoConfig.ADD(grupo)){
-                                Msg.PlayerTodos("§e§lNovo grupo §6§l"+ grupo.getName()+"§e§l criado por §d§l"+ player.getName()+"§e§l!!!");
-                            }else{
-                                Msg.PlayerRed(player,"Erro ao adicionar o grupo");
+                            if (GrupoConfig.ADD(grupo)) {
+                                Msg.PlayerTodos("§e§lNovo grupo §6§l" + grupo.getName() + "§e§l criado por §d§l" + player.getName() + "§e§l!!!");
+                            } else {
+                                Msg.PlayerRed(player, "Erro ao adicionar o grupo");
                             }
                         } else {
                             grupo = VGlobal.GRUPO_MAP_NAME.get(inventoryCustom.getName());
@@ -98,10 +101,10 @@ public class InventarioEvent implements Listener {
                                 }
                             }
                             player.closeInventory();
-                            if(GrupoConfig.UPDATE(grupo)){
-                                Msg.PlayerTodos("§eAlterado grupo §6"+ grupo.getName()+"§e pelo §d"+ player.getName()+"§e!!!");
-                            }else{
-                                Msg.PlayerRed(player,"Erro ao alterar o grupo");
+                            if (GrupoConfig.UPDATE(grupo)) {
+                                Msg.PlayerTodos("§eAlterado grupo §6" + grupo.getName() + "§e pelo §d" + player.getName() + "§e!!!");
+                            } else {
+                                Msg.PlayerRed(player, "Erro ao alterar o grupo");
                             }
                         }
                         return;
@@ -117,7 +120,8 @@ public class InventarioEvent implements Listener {
                     }
                 }
             }
-
+        } else {
+            event.setCancelled(false);
         }
 
     }

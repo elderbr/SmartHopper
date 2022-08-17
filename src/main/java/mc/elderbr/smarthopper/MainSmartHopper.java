@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper;
 
 import mc.elderbr.smarthopper.cmd.*;
 import mc.elderbr.smarthopper.event.InventarioEvent;
+import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
@@ -91,6 +92,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
     private void events(){
         getServer().getPluginManager().registerEvents(new InventarioEvent(), this);
+        getServer().getPluginManager().registerEvents(new MoveHopper(), this);
     }
 
 

@@ -38,7 +38,7 @@ public class ClickHopper implements Listener {
         // SE FOR CLICADO NO HOPPER COM GRAVETO NA MÃO
         if (itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK) {
             // SE EXISTIR MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL
-            smartHopper.msgPlayerSmartHopper(player);
+            //smartHopper.msgPlayerSmartHopper(player);
         }
     }
 }
