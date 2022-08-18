@@ -48,10 +48,18 @@ public class ClickHopper implements Listener {
                 Msg.PlayerGold(player, "§f====================== LISTA ======================");
                 for (Object obj : list) {
                     if (obj instanceof Item item) {
-                        Msg.Item(player, item);
+                        if(item.isBloqueado()){
+                            Msg.ItemNegar(player, item);
+                        }else {
+                            Msg.Item(player, item);
+                        }
                     }
                     if (obj instanceof Grupo grupo) {
-                        Msg.Grupo(player, grupo);
+                        if(grupo.isBloqueado()) {
+                            Msg.GrupoNegar(player, grupo);
+                        }else{
+                            Msg.Grupo(player, grupo);
+                        }
                     }
                 }
                 Msg.PlayerGold(player, "§f=====================================================");
@@ -59,11 +67,19 @@ public class ClickHopper implements Listener {
             }
             if (smartHopper.getType() instanceof Item item) {
                 Msg.PulaPlayer(player);
-                Msg.Item(player, item);
+                if(smartHopper.isBloqueado()){
+                    Msg.ItemNegar(player, item);
+                }else {
+                    Msg.Item(player, item);
+                }
             }
             if (smartHopper.getType() instanceof Grupo grupo) {
                 Msg.PulaPlayer(player);
-                Msg.Grupo(player, grupo);
+                if(smartHopper.isBloqueado()) {
+                    Msg.GrupoNegar(player, grupo);
+                }else{
+                    Msg.Grupo(player, grupo);
+                }
             }
 
             if (smartHopper.getType() == null) {
