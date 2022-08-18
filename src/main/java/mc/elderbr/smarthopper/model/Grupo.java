@@ -10,6 +10,7 @@ public class Grupo implements Dados {
 
     private int codigo;
     private String name;
+    private boolean bloqueado = false;
     private Map<String, String> traducao = new HashMap<>();
     private List<String> listItem = new ArrayList<>();
 
@@ -37,6 +38,16 @@ public class Grupo implements Dados {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean setBloqueado(boolean value) {
+        return this.bloqueado = value;
+    }
+
+    @Override
+    public boolean isBloqueado() {
+        return bloqueado;
     }
 
     @Override

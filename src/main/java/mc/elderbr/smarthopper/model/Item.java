@@ -21,6 +21,7 @@ public class Item implements Dados {
 
     private int codigo = 0;
     private String name;
+    private boolean bloqueado = false;
     private Map<String, String> traducao = new HashMap<>();
 
     private ItemStack itemStack;
@@ -70,6 +71,16 @@ public class Item implements Dados {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean setBloqueado(boolean value) {
+        return this.bloqueado = value;
+    }
+
+    @Override
+    public boolean isBloqueado() {
+        return bloqueado;
     }
 
     public int getSize() {

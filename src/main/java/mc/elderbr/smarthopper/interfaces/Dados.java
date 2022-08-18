@@ -15,6 +15,9 @@ public interface Dados {
 
     String getName();
 
+    boolean setBloqueado(boolean value);
+    boolean isBloqueado();
+
     default String toName(){
         return Utils.ToUTF(getName());
     }

@@ -20,6 +20,7 @@ public class InventoryCustom implements InterfaceInventario {
     private Player player;
     private int codigo;
     private String name;
+    private boolean bloqueado = false;
     private List<String> listItem = new ArrayList<>();
     private Map<String, String> traducao = new HashMap<>();
     private Inventory inventory;
@@ -91,6 +92,16 @@ public class InventoryCustom implements InterfaceInventario {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean setBloqueado(boolean value) {
+        return bloqueado = value;
+    }
+
+    @Override
+    public boolean isBloqueado() {
+        return bloqueado;
     }
 
     @Override
