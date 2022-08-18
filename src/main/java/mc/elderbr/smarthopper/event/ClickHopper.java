@@ -43,12 +43,9 @@ public class ClickHopper implements Listener {
         // SE FOR CLICADO NO HOPPER COM GRAVETO NA MÃO
         if (itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK) {
 
-            Msg.ServidorGreen("nome do hopper >> " + smartHopper.getName() + " - codigo: " + smartHopper.getCodigo() + " - silaba: " + smartHopper.getSilaba(), getClass());
-            Msg.ServidorGold("tipo: " + smartHopper.getType(), getClass());
-            Msg.PularLinha(getClass());
-
             // SE EXISTIR MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL
             if (smartHopper.getType() instanceof ArrayList list) {
+                Msg.PlayerGold(player, "§f====================== LISTA ======================");
                 for (Object obj : list) {
                     if (obj instanceof Item item) {
                         Msg.Item(player, item);
@@ -57,13 +54,15 @@ public class ClickHopper implements Listener {
                         Msg.Grupo(player, grupo);
                     }
                 }
+                Msg.PlayerGold(player, "§f=====================================================");
                 return;
             }
             if (smartHopper.getType() instanceof Item item) {
-                Msg.ServidorGold("item nome : " + item.getName() + " - codigo: " + item.getCodigo(), getClass());
+                Msg.PulaPlayer(player);
                 Msg.Item(player, item);
             }
             if (smartHopper.getType() instanceof Grupo grupo) {
+                Msg.PulaPlayer(player);
                 Msg.Grupo(player, grupo);
             }
 
