@@ -9,21 +9,23 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SmartHopper implements Dados {
 
     private int codigo;
     private String name;
+    private boolean bloqueio = false;
     private Map<String, String> traducao = new HashMap<>();
 
     private Hopper hopper = null;
     private String silaba;
-    private boolean bloqueio = false;
+
 
     // ITEM
     private Item item;
@@ -89,75 +91,130 @@ public class SmartHopper implements Dados {
     }
 
     @Override
+    public boolean setBloqueado(boolean value) {
+        return bloqueio = value;
+    }
+
+    @Override
+    public boolean isBloqueado() {
+        return bloqueio;
+    }
+
+    @Override
     public Map<String, String> getTraducao() {
         return traducao;
     }
 
-    public boolean isMove(Item item) {
-        try {
-            if (name.contains(";")) {
-                for (String names : name.split(";")) {
-                    silaba = names.substring(0, 1).toLowerCase();
-                    codigo = Integer.parseInt(names.substring(1, names.length()));
+    public String getSilaba() {
+        return silaba;
+    }
 
-                    if (silaba.equalsIgnoreCase("i")) {
-                        Msg.ServidorGreen("Item >> " + names, getClass());
-                        itemSH = VGlobal.ITEM_MAP_ID.get(codigo);
-                        if (itemSH != null && item.getCodigo() == itemSH.getCodigo()) {
+    public boolean isCancelled(Item item) {
+        Msg.ServidorGreen("nome smart >> "+ name, getClass());
+        if(getType() instanceof ArrayList list){
+            for(Object obj : list){
+                // Se for item
+                if(obj instanceof Item i){
+                    if(i.isBloqueado()){
+                        if(i.getCodigo() == item.getCodigo()) {
                             return true;
                         }
                     }
-                    if (silaba.equalsIgnoreCase("g")) {
-                        grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
-                        if (grupo != null && grupo.isContains(item)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
-            if(bloqueio){
-                if(silaba.equalsIgnoreCase("i")){
-                    if(codigo == item.getCodigo()){
+                    if(i.getCodigo() == item.getCodigo()){
                         return false;
                     }
                 }
-                if(silaba.equalsIgnoreCase("g")){
-                    grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                // Se for grupo
+                if(obj instanceof Grupo grupo){
+                    if(grupo.isBloqueado()){
+                        if(grupo.isContains(item)){
+                            return true;
+                        }
+                    }
                     if(grupo.isContains(item)){
                         return false;
                     }
                 }
             }
-
-            if (silaba.equalsIgnoreCase("i")) {
-                if (item.getCodigo() == codigo) {
+            return true;
+        }
+        if(getType() instanceof Item i){
+            if(i.isBloqueado()){
+                if(i.getCodigo()==item.getCodigo()) {
                     return true;
                 }
+                return false;
             }
-            if (silaba.equalsIgnoreCase("g")) {
-                grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
-                if (grupo != null && grupo.isContains(item)) {
-                    return true;
-                }
+            if(i.getCodigo() == item.getCodigo()) {
+                return false;
             }
-        } catch (Exception e) {
+            return true;
+        }
+        if(getType() instanceof Grupo grupo){
+            if(grupo.isBloqueado() && grupo.isContains(item)){
+                return true;
+            }
+            if(grupo.isContains(item)){
+                return false;
+            }
+            return true;
         }
         return false;
     }
 
     public Object getType() {
-        if (silaba.equalsIgnoreCase("i")) {
-            return VGlobal.ITEM_MAP_ID.get(codigo).getClass();
-        }
-        if (silaba.equalsIgnoreCase("g")) {
-            return VGlobal.GRUPO_MAP_ID.get(codigo).getClass();
+        List<Object> list = new ArrayList<>();
+        try {
+            if (name.contains(";")) {
+                for (String names : name.split(";")) {
+
+                    if(names.contains("#")) {
+                        silaba = names.substring(1, 2).toLowerCase();
+                        codigo = Integer.parseInt(names.substring(2, names.length()));
+                        bloqueio = true;
+                    }else{
+                        silaba = names.substring(0, 1).toLowerCase();
+                        codigo = Integer.parseInt(names.substring(1, names.length()));
+                        bloqueio = false;
+                    }
+
+                    if (silaba.equalsIgnoreCase("i")) {
+                        item = VGlobal.ITEM_MAP_ID.get(codigo);
+                        item.setBloqueado(bloqueio);
+                        list.add(item);
+                    }
+                    if (silaba.equalsIgnoreCase("g")) {
+                        grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                        grupo.setBloqueado(bloqueio);
+                        list.add(grupo);
+                    }
+                }
+                return list;
+            }
+
+            if(name.contains("#")){
+                bloqueio = true;
+                silaba = name.substring(1, 2).toLowerCase();
+                codigo = Integer.parseInt(name.substring(2, name.length()));
+            }else{
+                bloqueio = false;
+                silaba = name.substring(0, 1).toLowerCase();
+                codigo = Integer.parseInt(name.substring(1, name.length()));
+            }
+
+            if (silaba.equalsIgnoreCase("i")) {
+                item = VGlobal.ITEM_MAP_ID.get(codigo);
+                item.setBloqueado(bloqueio);
+                return item;
+            }
+
+            if (silaba.equalsIgnoreCase("g")) {
+                grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                grupo.setBloqueado(bloqueio);
+                return grupo;
+            }
+        } catch (Exception e) {
         }
         return null;
-    }
-
-    public boolean isBloqueio(){
-        return bloqueio;
     }
 }

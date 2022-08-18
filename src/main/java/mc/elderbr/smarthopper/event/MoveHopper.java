@@ -73,19 +73,24 @@ public class MoveHopper implements Listener {
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
                 for (Hopper hoppers : hopperList) {
                     smartHopper = new SmartHopper(hoppers);
-                    if(smartHopper.isMove(item)) {
+
+                    if (smartHopper.isBloqueado()) {
+                        event.setCancelled(smartHopper.isCancelled(item));
+                        break;
+                    }
+                    if(!smartHopper.isCancelled(item)) {
                         event.setCancelled(false);
                         break;
                     }
                 }
             }
 
-            if(smartHopperDestino.getName().equals("hopper")){
+            if (smartHopperDestino.getName().equals("hopper")) {
                 event.setCancelled(false);
             }
 
             if (destination.getType() != InventoryType.HOPPER) {
-                if(smartHopperDestino.getName().equals("hopper")){
+                if (smartHopperDestino.getName().equals("hopper")) {
                     event.setCancelled(false);
                 }
                 event.setCancelled(false);// Ativa o movimento do item
