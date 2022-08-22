@@ -237,4 +237,8 @@ public class Item implements Dados {
     public boolean isMax() {
         return false;
     }
+
+    public static Item PARSE(ItemStack itemStack){
+        return VGlobal.ITEM_MAP_NAME.get(itemStack.getType().getKey().getKey().replaceAll("_"," "));
+    }
 }
