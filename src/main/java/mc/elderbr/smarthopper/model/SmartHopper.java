@@ -9,22 +9,24 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SmartHopper implements Dados {
 
-    private int codigo;
-    private String name;
+    private int codigo = 0;
+    private String name = "hopper";
     private boolean bloqueio = false;
     private Map<String, String> traducao = new HashMap<>();
+    private Object type = null;
+    private List<Object> list = null;
 
     private Hopper hopper = null;
     private String silaba;
+    private int size = 0;
+    private int max = 0;
 
 
     // ITEM
@@ -49,22 +51,67 @@ public class SmartHopper implements Dados {
         if (this.hopper != null) {
 
             name = (this.hopper.getCustomName() == null ? "hopper" : this.hopper.getCustomName().toLowerCase());
-            silaba = name.substring(0, 1);
-            // Verifica se o item está bloqueado
-            if (silaba.equals("#")) {
-                silaba = name.substring(1, 2);
-                bloqueio = true;
-            }
+
+            if (name.equals("hopper")) return;
+
             try {
-                if (bloqueio)
+                if (name.contains(";")) {
+                    list = new ArrayList<>();
+                    for (String names : name.split(";")) {
+
+                        if (names.contains("#")) {
+                            silaba = names.substring(1, 2).toLowerCase();
+                            codigo = Integer.parseInt(names.substring(2, names.length()));
+                            bloqueio = true;
+                        } else {
+                            silaba = names.substring(0, 1).toLowerCase();
+                            codigo = Integer.parseInt(names.substring(1, names.length()));
+                            bloqueio = false;
+                        }
+
+                        if (silaba.equalsIgnoreCase("i")) {
+                            item = VGlobal.ITEM_MAP_ID.get(codigo);
+                            item.setBloqueado(bloqueio);
+                            list.add(item);
+                        }
+                        if (silaba.equalsIgnoreCase("g")) {
+                            grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                            grupo.setBloqueado(bloqueio);
+                            list.add(grupo);
+                        }
+                    }
+                    type = list;
+                    return;
+                }
+
+                if (name.contains("#")) {
+                    bloqueio = true;
+                    silaba = name.substring(1, 2).toLowerCase();
                     codigo = Integer.parseInt(name.substring(2, name.length()));
-                else
+                } else {
+                    bloqueio = false;
+                    silaba = name.substring(0, 1).toLowerCase();
                     codigo = Integer.parseInt(name.substring(1, name.length()));
-            } catch (NumberFormatException e) {
-                codigo = 0;
+                }
+
+                if (silaba.equalsIgnoreCase("i")) {
+                    item = VGlobal.ITEM_MAP_ID.get(codigo);
+                    traducao = item.getTraducao();
+                    item.setBloqueado(bloqueio);
+                    type = item;
+                    return;
+                }
+
+                if (silaba.equalsIgnoreCase("g")) {
+                    grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                    traducao = grupo.getTraducao();
+                    grupo.setBloqueado(bloqueio);
+                    type = grupo;
+                }
+            } catch (NumberFormatException ex) {
+            } catch (Exception e) {
+                Msg.ServidorErro("Erro ao pegar o tipo de smarthopper", "getType()", getClass(), e);
             }
-        } else {
-            name = "hopper";
         }
     }
 
@@ -90,6 +137,22 @@ public class SmartHopper implements Dados {
         return name;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
     @Override
     public boolean setBloqueado(boolean value) {
         return bloqueio = value;
@@ -109,52 +172,142 @@ public class SmartHopper implements Dados {
         return silaba;
     }
 
+    public Object getType() {
+        return type;
+    }
+
+    public boolean isTransf(Inventory inventory) {
+
+        List<ItemStack> listItem = new ArrayList<>();
+
+        if (type instanceof ArrayList lista) {
+
+            for (ItemStack itemStack : inventory.getStorageContents()) {
+                if (itemStack == null) continue;
+                Item itemInventory = Item.PARSE(itemStack);
+                boolean transf = false;
+                for (Object obj : lista) {
+                    if (obj instanceof Item itemHopper) {
+                        if (bloqueio) {
+                            transf = true;
+                            if (itemHopper.getCodigo() == itemInventory.getCodigo()) {
+                                transf = false;
+                                break;
+                            }
+                        }else{
+                            if (itemHopper.getCodigo() == itemInventory.getCodigo()) {
+                                transf = true;
+                            }
+                        }
+                    }
+                    if(obj instanceof Grupo grupo){
+                        if(bloqueio){
+                            transf = true;
+                            if(grupo.isContains(itemInventory)){
+                                transf = false;
+                                break;
+                            }
+                        }else{
+                            if(grupo.isContains(itemInventory)){
+                                transf = true;
+                            }
+                        }
+                    }
+                }
+                if(transf){
+                    hopper.getInventory().addItem(itemStack);
+                    inventory.removeItem(itemStack);
+                }
+            }
+        }
+
+        if (type instanceof Item itemSmartHopper) {
+
+            for (ItemStack itemStackInventory : inventory.getStorageContents()) {
+
+                if (itemStackInventory == null) continue;
+                Item itemInventory = Item.PARSE(itemStackInventory);
+
+                if (bloqueio) {
+                    if (itemSmartHopper.getCodigo() != itemInventory.getCodigo()) {
+                        hopper.getInventory().addItem(itemStackInventory);
+                        inventory.removeItem(itemStackInventory);
+                    }
+                } else {
+                    if (itemSmartHopper.getCodigo() == itemInventory.getCodigo()) {
+                        hopper.getInventory().addItem(itemStackInventory);
+                        inventory.removeItem(itemStackInventory);
+                    }
+                }
+            }
+        }
+        if (type instanceof Grupo grupo) {
+            for (ItemStack itemStackInventory : inventory.getStorageContents()) {
+                if (itemStackInventory == null) continue;
+                Item itemInventory = Item.PARSE(itemStackInventory);
+
+                if (bloqueio) {
+                    if (!grupo.isContains(itemInventory)) {
+                        hopper.getInventory().addItem(itemStackInventory);
+                        inventory.removeItem(itemStackInventory);
+                    }
+                } else {
+                    if (grupo.isContains(itemInventory)) {
+                        hopper.getInventory().addItem(itemStackInventory);
+                        inventory.removeItem(itemStackInventory);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean isCancelled(Item item) {
-        Msg.ServidorGreen("nome smart >> "+ name, getClass());
-        if(getType() instanceof ArrayList list){
-            for(Object obj : list){
+
+        if (type instanceof ArrayList list) {
+            for (Object obj : list) {
                 // Se for item
-                if(obj instanceof Item i){
-                    if(i.isBloqueado()){
-                        if(i.getCodigo() == item.getCodigo()) {
+                if (obj instanceof Item i) {
+                    if (i.isBloqueado()) {
+                        if (i.getCodigo() == item.getCodigo()) {
                             return true;
                         }
                     }
-                    if(i.getCodigo() == item.getCodigo()){
+                    if (i.getCodigo() == item.getCodigo()) {
                         return false;
                     }
                 }
                 // Se for grupo
-                if(obj instanceof Grupo grupo){
-                    if(grupo.isBloqueado()){
-                        if(grupo.isContains(item)){
+                if (obj instanceof Grupo grupo) {
+                    if (grupo.isBloqueado()) {
+                        if (grupo.isContains(item)) {
                             return true;
                         }
                     }
-                    if(grupo.isContains(item)){
+                    if (grupo.isContains(item)) {
                         return false;
                     }
                 }
             }
             return true;
         }
-        if(getType() instanceof Item i){
-            if(i.isBloqueado()){
-                if(i.getCodigo()==item.getCodigo()) {
+        if (type instanceof Item i) {
+            if (i.isBloqueado()) {
+                if (i.getCodigo() == item.getCodigo()) {
                     return true;
                 }
                 return false;
             }
-            if(i.getCodigo() == item.getCodigo()) {
+            if (i.getCodigo() == item.getCodigo()) {
                 return false;
             }
             return true;
         }
-        if(getType() instanceof Grupo grupo){
-            if(grupo.isBloqueado() && grupo.isContains(item)){
+        if (type instanceof Grupo grupo) {
+            if (grupo.isBloqueado() && grupo.isContains(item)) {
                 return true;
             }
-            if(grupo.isContains(item)){
+            if (grupo.isContains(item)) {
                 return false;
             }
             return true;
@@ -162,59 +315,5 @@ public class SmartHopper implements Dados {
         return false;
     }
 
-    public Object getType() {
-        List<Object> list = new ArrayList<>();
-        try {
-            if (name.contains(";")) {
-                for (String names : name.split(";")) {
 
-                    if(names.contains("#")) {
-                        silaba = names.substring(1, 2).toLowerCase();
-                        codigo = Integer.parseInt(names.substring(2, names.length()));
-                        bloqueio = true;
-                    }else{
-                        silaba = names.substring(0, 1).toLowerCase();
-                        codigo = Integer.parseInt(names.substring(1, names.length()));
-                        bloqueio = false;
-                    }
-
-                    if (silaba.equalsIgnoreCase("i")) {
-                        item = VGlobal.ITEM_MAP_ID.get(codigo);
-                        item.setBloqueado(bloqueio);
-                        list.add(item);
-                    }
-                    if (silaba.equalsIgnoreCase("g")) {
-                        grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
-                        grupo.setBloqueado(bloqueio);
-                        list.add(grupo);
-                    }
-                }
-                return list;
-            }
-
-            if(name.contains("#")){
-                bloqueio = true;
-                silaba = name.substring(1, 2).toLowerCase();
-                codigo = Integer.parseInt(name.substring(2, name.length()));
-            }else{
-                bloqueio = false;
-                silaba = name.substring(0, 1).toLowerCase();
-                codigo = Integer.parseInt(name.substring(1, name.length()));
-            }
-
-            if (silaba.equalsIgnoreCase("i")) {
-                item = VGlobal.ITEM_MAP_ID.get(codigo);
-                item.setBloqueado(bloqueio);
-                return item;
-            }
-
-            if (silaba.equalsIgnoreCase("g")) {
-                grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
-                grupo.setBloqueado(bloqueio);
-                return grupo;
-            }
-        } catch (Exception e) {
-        }
-        return null;
-    }
 }

@@ -239,6 +239,35 @@ public class Item implements Dados {
     }
 
     public static Item PARSE(ItemStack itemStack){
-        return VGlobal.ITEM_MAP_NAME.get(itemStack.getType().getKey().getKey().replaceAll("_"," "));
+        String name = itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
+        // ITEM DE POÇAO
+        if (itemStack.getType() == Material.POTION || itemStack.getType() == Material.SPLASH_POTION || itemStack.getType() == Material.LINGERING_POTION) {
+            PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
+            String potion = potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
+            switch (itemStack.getType()) {
+                case LINGERING_POTION:
+                    name = "lingering potion " + potion;
+                    break;
+                case SPLASH_POTION:
+                    name = "splash potion " + potion;
+                    break;
+                case POTION:
+                    name = "potion " + potion;
+                    break;
+            }
+        }
+        // LIVROS ENCANTADOS PEGA A PRIMEIRO ENCANTAMENTO DA LISTA DE ENCANTAMENTOS
+        if (itemStack.getType() == Material.ENCHANTED_BOOK) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            if (meta.getStoredEnchants().size() > 0) {
+                for (Map.Entry<Enchantment, Integer> keys : meta.getStoredEnchants().entrySet()) {
+                    name = "enchanted book " + keys.getKey().getKey().getKey().toLowerCase().replaceAll("_", " ");
+                    VGlobal.BOOK_ENCHANTMENTE_LIST.add(name);// ADICIONANDO LIVRO DE ENCANTAMENTO NA VARIAVEL GLOBAL
+                    VGlobal.BOOK_ENCHANTEMENT_MAP.put(name, keys.getKey());
+                    break;
+                }
+            }
+        }
+        return VGlobal.ITEM_MAP_NAME.get(name);
     }
 }

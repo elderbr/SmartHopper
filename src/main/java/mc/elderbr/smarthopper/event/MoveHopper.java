@@ -1,7 +1,6 @@
 package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.SmartHopper;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -24,6 +23,7 @@ public class MoveHopper implements Listener {
     private ItemStack itemStack;
 
     private Item item;
+    private Item itemDestino;
 
     private Inventory inventoryInicial;
     private Inventory inventory;
@@ -60,28 +60,15 @@ public class MoveHopper implements Listener {
             smartHopperDestino = new SmartHopper(destination);
 
             // Pega o bloco de baixo de onde o item está
-            if (inventory.getType() == InventoryType.CHEST) {
-                blockDown = inventoryInicial.getLocation().getBlock().getRelative(BlockFace.DOWN);
-            } else {
-                blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
-            }
+            blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
             if (blockDown.getState().getType() == Material.HOPPER) {// Verifica se o bloco de baixo é um hopper
 
                 event.setCancelled(true);// Cancela o movimento do item
-
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
                 for (Hopper hoppers : hopperList) {
                     smartHopper = new SmartHopper(hoppers);
-
-                    if (smartHopper.isBloqueado()) {
-                        event.setCancelled(smartHopper.isCancelled(item));
-                        break;
-                    }
-                    if(!smartHopper.isCancelled(item)) {
-                        event.setCancelled(false);
-                        break;
-                    }
+                    smartHopper.isTransf(inventory);
                 }
             }
 
@@ -90,9 +77,6 @@ public class MoveHopper implements Listener {
             }
 
             if (destination.getType() != InventoryType.HOPPER) {
-                if (smartHopperDestino.getName().equals("hopper")) {
-                    event.setCancelled(false);
-                }
                 event.setCancelled(false);// Ativa o movimento do item
             }
 
