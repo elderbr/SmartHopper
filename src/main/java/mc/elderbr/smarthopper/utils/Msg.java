@@ -106,7 +106,7 @@ public class Msg {
     }
 
     public static void GrupoNegar(Player player, Grupo grupo) {
-        player.sendMessage(Color("$cBloqueado$6 o grupo: " + grupo.toTraducao(player) + "$e ID: " + grupo.getCodigo()));
+        player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTraducao(player) + "$e ID: " + grupo.getCodigo()));
     }
 
     public static void PulaPlayer(Player player) {
