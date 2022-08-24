@@ -71,12 +71,10 @@ public class SmartHopper implements Dados {
 
                         if (silaba.equalsIgnoreCase("i")) {
                             item = VGlobal.ITEM_MAP_ID.get(codigo);
-                            item.setBloqueado(bloqueio);
                             list.add(item);
                         }
                         if (silaba.equalsIgnoreCase("g")) {
                             grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
-                            grupo.setBloqueado(bloqueio);
                             list.add(grupo);
                         }
                     }
@@ -97,7 +95,6 @@ public class SmartHopper implements Dados {
                 if (silaba.equalsIgnoreCase("i")) {
                     item = VGlobal.ITEM_MAP_ID.get(codigo);
                     traducao = item.getTraducao();
-                    item.setBloqueado(bloqueio);
                     type = item;
                     return;
                 }
@@ -105,7 +102,6 @@ public class SmartHopper implements Dados {
                 if (silaba.equalsIgnoreCase("g")) {
                     grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
                     traducao = grupo.getTraducao();
-                    grupo.setBloqueado(bloqueio);
                     type = grupo;
                 }
             } catch (NumberFormatException ex) {
@@ -153,13 +149,7 @@ public class SmartHopper implements Dados {
         this.max = max;
     }
 
-    @Override
-    public boolean setBloqueado(boolean value) {
-        return bloqueio = value;
-    }
-
-    @Override
-    public boolean isBloqueado() {
+    public boolean isBloqueio(){
         return bloqueio;
     }
 
@@ -258,59 +248,6 @@ public class SmartHopper implements Dados {
                     }
                 }
             }
-        }
-        return false;
-    }
-
-    public boolean isCancelled(Item item) {
-
-        if (type instanceof ArrayList list) {
-            for (Object obj : list) {
-                // Se for item
-                if (obj instanceof Item i) {
-                    if (i.isBloqueado()) {
-                        if (i.getCodigo() == item.getCodigo()) {
-                            return true;
-                        }
-                    }
-                    if (i.getCodigo() == item.getCodigo()) {
-                        return false;
-                    }
-                }
-                // Se for grupo
-                if (obj instanceof Grupo grupo) {
-                    if (grupo.isBloqueado()) {
-                        if (grupo.isContains(item)) {
-                            return true;
-                        }
-                    }
-                    if (grupo.isContains(item)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        if (type instanceof Item i) {
-            if (i.isBloqueado()) {
-                if (i.getCodigo() == item.getCodigo()) {
-                    return true;
-                }
-                return false;
-            }
-            if (i.getCodigo() == item.getCodigo()) {
-                return false;
-            }
-            return true;
-        }
-        if (type instanceof Grupo grupo) {
-            if (grupo.isBloqueado() && grupo.isContains(item)) {
-                return true;
-            }
-            if (grupo.isContains(item)) {
-                return false;
-            }
-            return true;
         }
         return false;
     }
