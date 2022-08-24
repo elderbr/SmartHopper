@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.enums.InventarioType;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.InterfaceInventario;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
@@ -145,7 +146,7 @@ public class InventoryCustom implements InterfaceInventario {
             }
         } else {
             for (String name : listItem) {
-                inventory.addItem(new Item(name).getItemStack());
+                inventory.addItem(VGlobal.ITEM_MAP_NAME.get(name).getItemStack());
             }
             if(isAdm()) {// SE O JOGADOR FOR ADM DO SMART HOPPER MOSTRA O BOTÃO DE SALVAR
                 inventory.setItem(53, save);
