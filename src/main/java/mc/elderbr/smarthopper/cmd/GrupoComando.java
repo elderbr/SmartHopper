@@ -69,12 +69,11 @@ public class GrupoComando implements CommandExecutor {
                     }
 
                     if (listGrupo.size() > 1) {
-                        Msg.PlayerGold(player, "#====================================#");
-                        Msg.PlayerGold(player, "        LISTA DE GRUPOS");
+                        Msg.PlayerGold(player, "§f#================ LISTA DE GRUPOS ====================#");
                         for (Grupo grups : listGrupo) {
                             Msg.Grupo(player, grups);
                         }
-                        Msg.PlayerGold(player, "#====================================#");
+                        Msg.PlayerGold(player, "§f#====================================#");
                         return false;
                     }
                     if(listGrupo.size()>0) {

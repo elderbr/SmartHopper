@@ -1,12 +1,12 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.Dados;
+import mc.elderbr.smarthopper.interfaces.LivroEncantado;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Item implements Dados {
+public class Item implements Dados, LivroEncantado {
 
     private int codigo = 0;
     private String name;
@@ -79,6 +79,7 @@ public class Item implements Dados {
     public void setSize(int size) {
         this.size = size;
     }
+
     public void setSize(ItemStack itemStack) {
         this.size = itemStack.getAmount();
     }
@@ -176,58 +177,60 @@ public class Item implements Dados {
         return this;
     }
 
-    public ItemStack parseItemStack(@NotNull Item item) {
+    public ItemStack parseItemStack() {
         try {
 
-            if (item.name.contains("splash")) {
-                String name = item.getName().replaceAll("splash potion ", "").replaceAll(" ", "_").toUpperCase();
+            if (name.contains("splash")) {
+                String potion = name.replaceAll("splash potion ", "").replaceAll(" ", "_").toUpperCase();
                 itemStack = new ItemStack(Material.SPLASH_POTION);
                 PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
-                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(potion)));
                 itemStack.setItemMeta(meta);
                 return itemStack;
             }
 
-            if (item.name.contains("lingering")) {
-                String name = item.getName().replaceAll("lingering potion ", "").replaceAll(" ", "_").toUpperCase();
+            if (name.contains("lingering")) {
+                String potion = name.replaceAll("lingering potion ", "").replaceAll(" ", "_").toUpperCase();
                 itemStack = new ItemStack(Material.LINGERING_POTION);
                 PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
-                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(potion)));
                 itemStack.setItemMeta(meta);
                 return itemStack;
             }
 
-            if (item.name.contains("potion")) {
-                String name = item.getName().replaceAll("potion ", "").replaceAll(" ", "_").toUpperCase();
+            if (name.contains("potion")) {
+                String potion = name.replaceAll("potion ", "").replaceAll(" ", "_").toUpperCase();
                 itemStack = new ItemStack(Material.POTION);
                 PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
-                meta.setBasePotionData(new PotionData(PotionType.valueOf(name)));
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(potion)));
                 itemStack.setItemMeta(meta);
                 return itemStack;
             }
 
-            if (item.getName().contains("enchanted book")) {
+            if (name.contains("enchanted book")) {
                 itemStack = new ItemStack(Material.ENCHANTED_BOOK);
-                BookMeta meta = (BookMeta) itemStack.getItemMeta();
-                meta.addEnchant(VGlobal.BOOK_ENCHANTEMENT_MAP.get(item.getName()), 0, true);
-                itemStack.setItemMeta(meta);
+                if (getEncantamento() != null) {
+                    EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+                    meta.addStoredEnchant(getEncantamento(), 1, true);
+                    itemStack.setItemMeta(meta);
+                }
                 return itemStack;
             }
-            return new ItemStack(Material.getMaterial(item.getName().replaceAll("\\s", "_").toUpperCase()));
+            return new ItemStack(Material.getMaterial(name.replaceAll("\\s", "_").toUpperCase()));
         } catch (Exception e) {
             return null;
         }
     }
 
     public ItemStack getItemStack() {
-        return parseItemStack(this);
+        return itemStack;
     }
 
     public boolean isMax() {
         return false;
     }
 
-    public static Item PARSE(ItemStack itemStack){
+    public static Item PARSE(ItemStack itemStack) {
         String name = itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
         // ITEM DE POÇAO
         if (itemStack.getType() == Material.POTION || itemStack.getType() == Material.SPLASH_POTION || itemStack.getType() == Material.LINGERING_POTION) {

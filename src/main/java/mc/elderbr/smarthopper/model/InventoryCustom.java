@@ -127,17 +127,20 @@ public class InventoryCustom implements InterfaceInventario {
             int position = 0;
             for (String name : listItem) {
                 if (position < 53) {
-                    inventory.addItem(new Item(name).getItemStack());
-                }else{
+                    inventory.addItem(VGlobal.ITEM_MAP_NAME.get(name).getItemStack());
+                } else {
                     inventory.setItem(53, pro);
                 }
                 position++;
             }
         } else {
             for (String name : listItem) {
-                inventory.addItem(VGlobal.ITEM_MAP_NAME.get(name).getItemStack());
+                Item item = VGlobal.ITEM_MAP_NAME.get(name);
+                if (item.parseItemStack() != null) {
+                    inventory.addItem(item.parseItemStack());
+                }
             }
-            if(isAdm()) {// SE O JOGADOR FOR ADM DO SMART HOPPER MOSTRA O BOTÃO DE SALVAR
+            if (isAdm()) {// SE O JOGADOR FOR ADM DO SMART HOPPER MOSTRA O BOTÃO DE SALVAR
                 inventory.setItem(53, save);
             }
         }
