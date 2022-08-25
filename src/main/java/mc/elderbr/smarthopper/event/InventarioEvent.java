@@ -23,8 +23,13 @@ public class InventarioEvent implements Listener {
     private String titulo;
     private Player player;
     private ItemStack itemStack;
+
+    // Navegador
     private ItemStack itemBtnSalve;
+    private ItemStack itemBtnAnt;
+    private ItemStack itemBtnProx;
     private ItemStack itemClick;
+    private int pag = 1;
 
     // GRUPO
     private int codigo;
@@ -60,7 +65,11 @@ public class InventarioEvent implements Listener {
         itemClick = event.getCurrentItem();// ITEM CLICADO
         itemClick.setAmount(1);
         itemStack = new ItemStack(itemClick.getType());// PEGANDO O TIPO DE ITEM QUE FOI CLICADO
+
+        // Navegador
         itemBtnSalve = player.getOpenInventory().getItem(53);// BOTÃO DE SALVAR OU ATUALIZAR VAI SER A LÃ DA COR LIMÃO COM LORE
+        itemBtnAnt = player.getOpenInventory().getItem(52);
+        itemBtnProx = player.getOpenInventory().getItem(53);
 
         // SE O INVENTARIO ABERTO É UM GRUPO
         if (inventoryCustom != null && inventoryCustom.getType() != null) {
@@ -120,6 +129,27 @@ public class InventarioEvent implements Listener {
                     }
                 }
             }
+            if (event.isLeftClick()) {
+                if (itemBtnAnt != null && itemBtnAnt.getItemMeta().getDisplayName().equalsIgnoreCase("§9§lRetorna")) {
+                    pag--;
+                    inventory.clear();
+                    for (ItemStack itemStack : inventoryCustom.getInventory(pag)) {
+                        if (itemStack != null) {
+                            inventory.addItem(itemStack);
+                        }
+                    }
+                }
+                if (itemBtnProx != null && itemBtnProx.getItemMeta().getDisplayName().equalsIgnoreCase("§9§lPróximo")) {
+                    pag++;
+                    inventory.clear();
+                    for (ItemStack itemStack : inventoryCustom.getInventory(pag)) {
+                        if (itemStack != null) {
+                            inventory.addItem(itemStack);
+                        }
+                    }
+                }
+            }
+
         } else {
             event.setCancelled(false);
         }

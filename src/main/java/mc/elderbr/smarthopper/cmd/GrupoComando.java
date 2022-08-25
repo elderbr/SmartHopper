@@ -86,7 +86,7 @@ public class GrupoComando implements CommandExecutor {
                 if (grupo != null) {
                     INVENTORY = new InventoryCustom(player);
                     INVENTORY.create(grupo);
-                    player.openInventory(INVENTORY.getInventory());
+                    player.openInventory(INVENTORY.getInventory(1));
                 } else {
                     Msg.GrupoNaoExiste(player, cmd);
                 }
@@ -102,7 +102,7 @@ public class GrupoComando implements CommandExecutor {
 
                 INVENTORY = new InventoryCustom(player);
                 INVENTORY.create(cmd);
-                player.openInventory(INVENTORY.getInventory());
+                player.openInventory(INVENTORY.getInventory(1));
             }
 
             // REMOVER GRUPO

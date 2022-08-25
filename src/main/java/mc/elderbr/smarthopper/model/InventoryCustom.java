@@ -32,6 +32,10 @@ public class InventoryCustom implements InterfaceInventario {
     private ItemStack pro;
     private ItemMeta meta;
 
+    // PAGINAÇÃO
+    private int pag = 1;
+    private Map<Integer, List<ItemStack>> pagMap = new HashMap<>();
+
     public InventoryCustom(@NotNull Player player) {
 
         save = new ItemStack(Material.BARRIER, 1);
@@ -119,31 +123,73 @@ public class InventoryCustom implements InterfaceInventario {
             }
         }
         inventory = Bukkit.createInventory(null, 54, toTitulo(player));
+
+        // CRIANDO PAGINAÇÃO DOS ITENS
+        pag = 1;
+        List<ItemStack> lista = new ArrayList<>();
+        int position = 1;
+        for (String names : listItem) {
+            lista.add(VGlobal.ITEM_MAP_NAME.get(names).parseItemStack());
+            if (listItem.size() < 53) {
+                if (position == listItem.size()) {
+                    pagMap.put(pag, lista);
+                }
+            }
+            if (listItem.size() > 52 && listItem.size() < 104) {
+                if (position == 52) {
+                    pagMap.put(1, lista);
+                    lista = new ArrayList<>();
+                }
+
+                if (position == listItem.size()) {
+                    pagMap.put(2, lista);
+                    pag = 2;
+                }
+            }
+            if (listItem.size() > 103 && listItem.size() < 155) {
+                if (position == 52) {
+                    pagMap.put(1, lista);
+                    lista = new ArrayList<>();
+                }
+                if (position == 103) {
+                    pagMap.put(2, lista);
+                    lista = new ArrayList<>();
+                }
+                if (position == listItem.size()) {
+                    pagMap.put(3, lista);
+                    pag = 3;
+                }
+            }
+            position++;
+        }
+
     }
 
-    public Inventory getInventory() {
+    public Inventory getInventory(@NotNull int pag) {
 
-        if (listItem.size() > 52) {
-            int position = 0;
-            for (String name : listItem) {
-                if (position < 53) {
-                    inventory.addItem(VGlobal.ITEM_MAP_NAME.get(name).parseItemStack());
-                } else {
-                    inventory.setItem(53, pro);
+        for (ItemStack itemStack : pagMap.get(pag)) {
+            itemStack.setAmount(1);
+            inventory.addItem(itemStack);
+        }
+
+        if (pag == 1) {
+            if (this.pag == 1) {
+                if (isAdm()) {
+                    inventory.setItem(53, save);
                 }
-                position++;
-            }
-        } else {
-            for (String name : listItem) {
-                Item item = VGlobal.ITEM_MAP_NAME.get(name);
-                if (item.parseItemStack() != null) {
-                    inventory.addItem(item.parseItemStack());
-                }
-            }
-            if (isAdm()) {// SE O JOGADOR FOR ADM DO SMART HOPPER MOSTRA O BOTÃO DE SALVAR
-                inventory.setItem(53, save);
+            } else {
+                inventory.setItem(53, pro);
             }
         }
+        if (pag > 1) {
+            inventory.setItem(52, ant);
+            if (isAdm() && this.pag == 2) {
+                inventory.setItem(53, save);
+            } else {
+                inventory.setItem(53, pro);
+            }
+        }
+
         return inventory;
     }
 
