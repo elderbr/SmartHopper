@@ -96,7 +96,11 @@ public class TraducaoComando implements CommandExecutor {
                 }
 
                 grupo.addTraducao(player.getLocale(), traducao(args));
-                GrupoConfig.ADD_TRADUCAO(grupo);
+                if(GrupoConfig.ADD_TRADUCAO(grupo)){
+                    Msg.PlayerTodos("§9O jogador §e"+ player.getName()+"§9 adicionou tradução para o grupo §e"+ grupo.getName()+"§9.");
+                }else{
+                    Msg.PlayerGold(player, "Não foi possivél adicionar a tradução!!!");
+                }
             }
         }
         return false;

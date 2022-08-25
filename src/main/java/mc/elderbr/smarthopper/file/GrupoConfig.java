@@ -123,6 +123,7 @@ public class GrupoConfig {
             VGlobal.GRUPO_LIST.add(grupo);
             VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
             VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+            VGlobal.TRADUCAO_GRUPO_LIST.put(grupo.getName(), grupo);
 
             return true;
         } catch (IOException e) {}
