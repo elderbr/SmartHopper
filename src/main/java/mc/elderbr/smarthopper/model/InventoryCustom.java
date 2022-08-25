@@ -127,7 +127,7 @@ public class InventoryCustom implements InterfaceInventario {
             int position = 0;
             for (String name : listItem) {
                 if (position < 53) {
-                    inventory.addItem(VGlobal.ITEM_MAP_NAME.get(name).getItemStack());
+                    inventory.addItem(VGlobal.ITEM_MAP_NAME.get(name).parseItemStack());
                 } else {
                     inventory.setItem(53, pro);
                 }
