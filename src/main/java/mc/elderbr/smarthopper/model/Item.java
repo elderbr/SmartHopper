@@ -260,6 +260,9 @@ public class Item implements Dados, LivroEncantado {
                 }
             }
         }
-        return VGlobal.ITEM_MAP_NAME.get(name);
+        Item item = VGlobal.ITEM_MAP_NAME.get(name);
+        item.setSize(itemStack.getAmount());
+        item.setMax(itemStack.getMaxStackSize());
+        return item;
     }
 }
