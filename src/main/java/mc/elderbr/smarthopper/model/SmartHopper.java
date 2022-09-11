@@ -31,7 +31,8 @@ public class SmartHopper implements Dados {
 
     // ITEM
     private Item item;
-    private Item itemSH;
+    private Item itemInventory, itemDestino;
+
     private Grupo grupo;
 
     public SmartHopper(@NotNull Object hopper) {
@@ -149,7 +150,7 @@ public class SmartHopper implements Dados {
         this.max = max;
     }
 
-    public boolean isBloqueio(){
+    public boolean isBloqueio() {
         return bloqueio;
     }
 
@@ -166,90 +167,216 @@ public class SmartHopper implements Dados {
         return type;
     }
 
-    public boolean isTransf(Inventory inventory) {
+    public boolean cancelled(Inventory inventory, Inventory destino) {
 
-        List<ItemStack> listItem = new ArrayList<>();
+        if (hopper == null || name.equals("hopper")) return false;
 
-        if (type instanceof ArrayList lista) {
-
-            for (ItemStack itemStack : inventory.getStorageContents()) {
-                if (itemStack == null) continue;
-                Item itemInventory = Item.PARSE(itemStack);
-                boolean transf = false;
-                for (Object obj : lista) {
-                    if (obj instanceof Item itemHopper) {
+        if (type instanceof ArrayList listObj) {
+            for (Object type : listObj) {
+                if (type instanceof Item itemSmart) {
+                    for (ItemStack itemStackInventory : inventory.getStorageContents()) {
+                        if (itemStackInventory == null) continue;
+                        itemInventory = Item.PARSE(itemStackInventory);
                         if (bloqueio) {
-                            transf = true;
-                            if (itemHopper.getCodigo() == itemInventory.getCodigo()) {
-                                transf = false;
-                                break;
+                            if (itemSmart.getCodigo() != itemInventory.getCodigo()) {
+                                for (ItemStack itemStackDestino : destino.getStorageContents()) {
+                                    if (itemStackDestino == null) {
+                                        destino.addItem(itemStackInventory);
+                                        inventory.removeItem(itemStackInventory);
+                                        return true;
+                                    }
+                                    itemDestino = Item.PARSE(itemStackDestino);
+                                    if (itemDestino.getSize() < itemDestino.getMax()) {
+                                        destino.addItem(itemStackInventory);
+                                        inventory.removeItem(itemStackInventory);
+                                        return true;
+                                    }
+                                }
                             }
-                        }else{
-                            if (itemHopper.getCodigo() == itemInventory.getCodigo()) {
-                                transf = true;
+                        } else if (itemSmart.getCodigo() == itemInventory.getCodigo()) {
+                            for (ItemStack itemStackDestino : destino.getStorageContents()) {
+                                if (itemStackDestino == null) {
+                                    destino.addItem(itemStackInventory);
+                                    inventory.removeItem(itemStackInventory);
+                                    return true;
+                                }
+                                itemDestino = Item.PARSE(itemStackDestino);
+                                if (itemDestino.getSize() < itemDestino.getMax()) {
+                                    destino.addItem(itemStackInventory);
+                                    inventory.removeItem(itemStackInventory);
+                                    return true;
+                                }
                             }
                         }
                     }
-                    if(obj instanceof Grupo grupo){
-                        if(bloqueio){
-                            transf = true;
-                            if(grupo.isContains(itemInventory)){
-                                transf = false;
-                                break;
+                }// FIM DO ITEM
+                if (type instanceof Grupo grupo) {
+                    for (ItemStack itemStackInventory : inventory.getStorageContents()) {
+                        if (itemStackInventory == null) continue;
+                        itemInventory = Item.PARSE(itemStackInventory);
+                        if (bloqueio) {
+                            if (!grupo.isContains(itemInventory)) {
+                                for (ItemStack itemStackDestino : destino.getStorageContents()) {
+                                    if (itemStackDestino == null) {
+                                        destino.addItem(itemStackInventory);
+                                        inventory.removeItem(itemStackInventory);
+                                        return true;
+                                    }
+                                    if (itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
+                                        destino.addItem(itemStackInventory);
+                                        inventory.removeItem(itemStackInventory);
+                                        return true;
+                                    }
+                                }
                             }
-                        }else{
-                            if(grupo.isContains(itemInventory)){
-                                transf = true;
+                        } else if (grupo.isContains(itemInventory)) {
+                            for (ItemStack itemStackDestino : destino.getStorageContents()) {
+                                if (itemStackDestino == null) {
+                                    destino.addItem(itemStackInventory);
+                                    inventory.removeItem(itemStackInventory);
+                                    return true;
+                                }
+                                if (itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
+                                    destino.addItem(itemStackInventory);
+                                    inventory.removeItem(itemStackInventory);
+                                    return true;
+                                }
                             }
                         }
                     }
-                }
-                if(transf){
-                    hopper.getInventory().addItem(itemStack);
-                    inventory.removeItem(itemStack);
                 }
             }
         }
 
-        if (type instanceof Item itemSmartHopper) {
-
+        if (type instanceof Item itemSmart) {
             for (ItemStack itemStackInventory : inventory.getStorageContents()) {
-
                 if (itemStackInventory == null) continue;
-                Item itemInventory = Item.PARSE(itemStackInventory);
-
+                itemInventory = Item.PARSE(itemStackInventory);
                 if (bloqueio) {
-                    if (itemSmartHopper.getCodigo() != itemInventory.getCodigo()) {
-                        hopper.getInventory().addItem(itemStackInventory);
-                        inventory.removeItem(itemStackInventory);
+                    if (itemSmart.getCodigo() != itemInventory.getCodigo()) {
+                        for (ItemStack itemStackDestino : destino.getStorageContents()) {
+                            if (itemStackDestino == null) {
+                                destino.addItem(itemStackInventory);
+                                inventory.removeItem(itemStackInventory);
+                                return true;
+                            }
+                            itemDestino = Item.PARSE(itemStackDestino);
+                            if (itemSmart.getCodigo() == itemDestino.getCodigo() && itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
+                                destino.addItem(itemStackInventory);
+                                inventory.removeItem(itemStackInventory);
+                                return true;
+                            }
+                        }
                     }
-                } else {
-                    if (itemSmartHopper.getCodigo() == itemInventory.getCodigo()) {
-                        hopper.getInventory().addItem(itemStackInventory);
-                        inventory.removeItem(itemStackInventory);
+                } else if (itemSmart.getCodigo() == itemInventory.getCodigo()) {
+                    for (ItemStack itemStackDestino : destino.getStorageContents()) {
+                        ItemStack itemMove = itemStackInventory.clone();
+                        itemMove.setAmount(1);
+                        if (itemStackDestino == null) {
+                            destino.addItem(itemMove);
+                            return true;
+                        }
+                        itemDestino = Item.PARSE(itemStackDestino);
+                        if (itemSmart.getCodigo() == itemDestino.getCodigo() && itemDestino.getSize() < itemDestino.getMax()) {
+                            destino.addItem(itemMove);
+                            inventory.removeItem(itemMove);
+                            return true;
+                        }
                     }
                 }
             }
-        }
+        }// FIM DO ITEM
+
         if (type instanceof Grupo grupo) {
             for (ItemStack itemStackInventory : inventory.getStorageContents()) {
                 if (itemStackInventory == null) continue;
-                Item itemInventory = Item.PARSE(itemStackInventory);
-
+                itemInventory = Item.PARSE(itemStackInventory);
                 if (bloqueio) {
                     if (!grupo.isContains(itemInventory)) {
-                        hopper.getInventory().addItem(itemStackInventory);
-                        inventory.removeItem(itemStackInventory);
+                        for (ItemStack itemStackDestino : destino.getStorageContents()) {
+                            if (itemStackDestino == null) {
+                                destino.addItem(itemStackInventory);
+                                inventory.removeItem(itemStackInventory);
+                                return true;
+                            }
+                            if (itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
+                                destino.addItem(itemStackInventory);
+                                inventory.removeItem(itemStackInventory);
+                                return true;
+                            }
+                        }
                     }
-                } else {
-                    if (grupo.isContains(itemInventory)) {
-                        hopper.getInventory().addItem(itemStackInventory);
-                        inventory.removeItem(itemStackInventory);
+                } else if (grupo.isContains(itemInventory)) {
+                    for (ItemStack itemStackDestino : destino.getStorageContents()) {
+                        if (itemStackDestino == null) {
+                            destino.addItem(itemStackInventory);
+                            inventory.removeItem(itemStackInventory);
+                            return true;
+                        }
+                        itemDestino = Item.PARSE(itemStackDestino);
+                        if (itemInventory.getCodigo() == itemDestino.getCodigo() && itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
+                            destino.addItem(itemStackInventory.clone());
+                            inventory.removeItem(itemStackInventory.clone());
+                            return true;
+                        }
                     }
                 }
             }
         }
         return false;
+    }
+
+    public boolean isCancelled(Item item) {
+        if (type instanceof ArrayList listObj) {
+            for (Object type : listObj) {
+                if (type instanceof Item itemSmart) {
+                    if (bloqueio) {
+                        if(itemSmart.getCodigo() == item.getCodigo()) {
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    } else if (itemSmart.getCodigo() == item.getCodigo()) {
+                        return false;
+                    }
+                }
+                if (type instanceof Grupo grupo) {
+                    if (bloqueio) {
+                        if(grupo.isContains(item)) {
+                            return true;
+                        }else{
+                            return false;
+                        }
+                    } else if (grupo.isContains(item)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (type instanceof Item itemSmart) {
+            if (bloqueio) {
+                if(itemSmart.getCodigo() == item.getCodigo()) {
+                    return true;
+                }else{
+                    return false;
+                }
+            } else if (itemSmart.getCodigo() == item.getCodigo()) {
+                return false;
+            }
+        }
+        if (type instanceof Grupo grupo) {
+            if (bloqueio) {
+                if(grupo.isContains(item)) {
+                    return true;
+                }else{
+                    return false;
+                }
+            } else if (grupo.isContains(item)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
