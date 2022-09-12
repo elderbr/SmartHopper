@@ -77,7 +77,10 @@ public class MoveHopper implements Listener {
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
                 for (Hopper hoppers : hopperList) {
                     smartHopper = new SmartHopper(hoppers);
-                    event.setCancelled(smartHopper.isCancelled(item));
+                    if(!smartHopper.isCancelled(item)) {
+                        event.setCancelled(false);
+                        break;
+                    }
                 }
             }
 

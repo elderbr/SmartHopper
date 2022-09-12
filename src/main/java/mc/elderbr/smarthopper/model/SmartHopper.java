@@ -19,6 +19,7 @@ public class SmartHopper implements Dados {
     private int codigo = 0;
     private String name = "hopper";
     private boolean bloqueio = false;
+    private boolean trava = true;
     private Map<String, String> traducao = new HashMap<>();
     private Object type = null;
     private List<Object> list = null;
@@ -328,48 +329,54 @@ public class SmartHopper implements Dados {
 
     public boolean isCancelled(Item item) {
         if (type instanceof ArrayList listObj) {
+            trava = true;
             for (Object type : listObj) {
                 if (type instanceof Item itemSmart) {
                     if (bloqueio) {
-                        if(itemSmart.getCodigo() == item.getCodigo()) {
-                            return true;
+                        if (itemSmart.getCodigo() == item.getCodigo()) {
+                            trava = true;
+                            break;
                         }else{
-                            return false;
+                            trava = false;
                         }
                     } else if (itemSmart.getCodigo() == item.getCodigo()) {
-                        return false;
+                        trava = false;
                     }
                 }
                 if (type instanceof Grupo grupo) {
                     if (bloqueio) {
-                        if(grupo.isContains(item)) {
-                            return true;
+                        if (grupo.isContains(item)) {
+                            trava = true;
+                            break;
                         }else{
-                            return false;
+                            trava = false;
                         }
                     } else if (grupo.isContains(item)) {
-                        return false;
+                        trava = false;
                     }
                 }
             }
+            return trava;
+
         }
 
         if (type instanceof Item itemSmart) {
             if (bloqueio) {
-                if(itemSmart.getCodigo() == item.getCodigo()) {
+                if (itemSmart.getCodigo() == item.getCodigo()) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
-            } else if (itemSmart.getCodigo() == item.getCodigo()) {
+            }
+            if (itemSmart.getCodigo() == item.getCodigo()) {
                 return false;
             }
         }
         if (type instanceof Grupo grupo) {
             if (bloqueio) {
-                if(grupo.isContains(item)) {
+                if (grupo.isContains(item)) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             } else if (grupo.isContains(item)) {
