@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -57,7 +58,11 @@ public class LivroComando implements CommandExecutor {
                     if(linha == 0){
                         txt = new StringBuilder();
                     }
-                    txt.append("."+grupos+"\n");
+                    if(linha % 2 == 0) {
+                        txt.append(ChatColor.BLACK+""+ChatColor.BOLD+"- " + grupos + "\n");
+                    }else{
+                        txt.append(ChatColor.DARK_GRAY+""+ChatColor.BOLD+"- " + grupos + "\n");
+                    }
                     linha++;
                     if(linha==15){
                         grupoList.add(txt.toString());
