@@ -151,22 +151,18 @@ public class TraducaoConfig {
             yml = YamlConfiguration.loadConfiguration(files);
             // Nome do linguagem
             lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
-            Msg.ServidorGold("Nome do arquivo: " + lang, getClass());
-
             if (lang.equals("grupo")) {
                 for (Grupo grupo : VGlobal.GRUPO_LIST) {
                     for (Map.Entry<String, Object> obj : yml.getValues(false).entrySet()) {
                         name = obj.getKey();
                         traducao = String.valueOf(obj.getValue());
                         if (name.equals(grupo.getName())) {
-                            Msg.ServidorGold("Grupo nome: "+ grupo.getName()+" - codigo: "+ grupo.getCodigo(), getClass());
                             VGlobal.GRUPO_LIST.get(grupo.getCodigo()-1).addTraducao("pt_br", traducao);
                             break;
                         }
                     }
                 }
             } else {
-
                 for (Item item : VGlobal.ITEM_LIST) {
                     for (Map.Entry<String, Object> obj : yml.getValues(false).entrySet()) {
                         name = obj.getKey();
@@ -178,7 +174,7 @@ public class TraducaoConfig {
                     }
                 }
             }
-            //files.delete();
+            files.delete();
         }
     }
 
