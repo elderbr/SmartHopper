@@ -45,7 +45,7 @@ public class ClickHopper implements Listener {
 
             // SE EXISTIR MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL
             if (smartHopper.getType() instanceof ArrayList list) {
-                Msg.PlayerGold(player, "§f====================== LISTA ======================");
+                Msg.PlayerGold(player, "$f====================== LISTA ======================");
                 for (Object obj : list) {
                     if (obj instanceof Item item) {
                         if(smartHopper.isBloqueio()){
@@ -62,7 +62,7 @@ public class ClickHopper implements Listener {
                         }
                     }
                 }
-                Msg.PlayerGold(player, "§f=====================================================");
+                Msg.PlayerGold(player, "$f=====================================================");
                 return;
             }
             if (smartHopper.getType() instanceof Item item) {
@@ -83,7 +83,7 @@ public class ClickHopper implements Listener {
             }
 
             if (smartHopper.getType() == null) {
-                Msg.PlayerRed(player, "§eFunil §4§lNÃO §econfigurado!!!");
+                Msg.PlayerRed(player, "$eFunil $4$lNÃO $econfigurado!!!");
             }
 
         }

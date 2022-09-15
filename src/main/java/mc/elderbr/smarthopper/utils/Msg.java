@@ -10,43 +10,43 @@ import org.jetbrains.annotations.NotNull;
 public class Msg {
 
     public static void ServidorGreen(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + msg);
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + Color(msg));
     }
 
     public static void ServidorGreen(String msg, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + msg + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + Color(msg) + " - Class: " + getClass.getSimpleName());
     }
 
     public static void ServidorGreen(String msg, String metodo, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + msg + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + Color(msg) + " - Class: " + getClass.getSimpleName());
     }
 
     public static void ServidorRed(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + " SmartHopper >> " + msg);
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + " SmartHopper >> " + Color(msg));
     }
 
     public static void ServidorGold(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + msg);
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + Color(msg));
     }
 
     public static void ServidorGold(String msg, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + msg + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + Color(msg) + " - Class: " + getClass.getSimpleName());
     }
 
     public static void ServidorWhite(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.WHITE + " SmartHopper >> " + msg);
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.WHITE + " SmartHopper >> " + Color(msg));
     }
 
     public static void ServidorColored(String msg, String msg1, String msg2) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + msg + " - " + ChatColor.YELLOW + msg1 + " - " + ChatColor.AQUA + msg2);
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + Color(msg) + " - " + ChatColor.YELLOW + msg1 + " - " + ChatColor.AQUA + msg2);
     }
 
     public static void ServidorBlue(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + " SmartHopper >> " + msg);
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + " SmartHopper >> " + Color(msg));
     }
 
     public static void ServidorBlue(String msg, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + " SmartHopper >> " + msg + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + " SmartHopper >> " + Color(msg) + " - Class: " + getClass.getSimpleName());
     }
 
     /**
@@ -60,19 +60,19 @@ public class Msg {
 
     //Mensagem do player
     public static void PlayerGreen(Player player, String msg) {
-        player.sendMessage(ChatColor.GREEN + msg);
+        player.sendMessage(ChatColor.GREEN + Color(msg));
     }
 
     public static void PlayerGold(Player player, String msg) {
-        player.sendMessage(ChatColor.GOLD + msg);
+        player.sendMessage(ChatColor.GOLD + Color(msg));
     }
 
     public static void PlayerRed(Player player, String msg) {
-        player.sendMessage(ChatColor.RED + msg);
+        player.sendMessage(ChatColor.RED + Color(msg));
     }
 
     public static void PlayerTodos(String msg){
-        Bukkit.getServer().broadcastMessage(Msg.Color(msg));
+        Bukkit.getServer().broadcastMessage(Color(msg));
     }
 
     //========================== ITEM =================================================//
