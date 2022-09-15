@@ -124,6 +124,11 @@ public class InventoryCustom implements InterfaceInventario {
         }
         inventory = Bukkit.createInventory(null, 54, toTitulo(player));
 
+        if(type == InventarioType.NOVO){
+            inventory.setItem(53, save);
+            return;
+        }
+
         // CRIANDO PAGINAÇÃO DOS ITENS
         pag = 1;
         List<ItemStack> lista = new ArrayList<>();
@@ -167,29 +172,30 @@ public class InventoryCustom implements InterfaceInventario {
 
     public Inventory getInventory(@NotNull int pag) {
 
-        for (ItemStack itemStack : pagMap.get(pag)) {
-            itemStack.setAmount(1);
-            inventory.addItem(itemStack);
-        }
+        if(type == InventarioType.NORMAL) {
+            for (ItemStack itemStack : pagMap.get(pag)) {
+                itemStack.setAmount(1);
+                inventory.addItem(itemStack);
+            }
 
-        if (pag == 1) {
-            if (this.pag == 1) {
-                if (isAdm()) {
-                    inventory.setItem(53, save);
+            if (pag == 1) {
+                if (this.pag == 1) {
+                    if (isAdm()) {
+                        inventory.setItem(53, save);
+                    }
+                } else {
+                    inventory.setItem(53, pro);
                 }
-            } else {
-                inventory.setItem(53, pro);
+            }
+            if (pag > 1) {
+                inventory.setItem(52, ant);
+                if (isAdm() && this.pag == 2) {
+                    inventory.setItem(53, save);
+                } else {
+                    inventory.setItem(53, pro);
+                }
             }
         }
-        if (pag > 1) {
-            inventory.setItem(52, ant);
-            if (isAdm() && this.pag == 2) {
-                inventory.setItem(53, save);
-            } else {
-                inventory.setItem(53, pro);
-            }
-        }
-
         return inventory;
     }
 

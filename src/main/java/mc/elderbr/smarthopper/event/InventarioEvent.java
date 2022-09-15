@@ -95,6 +95,12 @@ public class InventarioEvent implements Listener {
                             }
                             player.closeInventory();
                             if (GrupoConfig.ADD(grupo)) {
+                                // Adicionando na variavel global
+                                VGlobal.GRUPO_LIST.add(grupo);
+                                VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
+                                VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+                                VGlobal.TRADUCAO_GRUPO.put(grupo.getName(), grupo);
+
                                 Msg.PlayerTodos("§e§lNovo grupo §6§l" + grupo.getName() + "§e§l criado por §d§l" + player.getName() + "§e§l!!!");
                             } else {
                                 Msg.PlayerRed(player, "Erro ao adicionar o grupo");
