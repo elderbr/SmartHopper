@@ -43,7 +43,6 @@ public interface VGlobal {
     List<String> TRADUCAO_ITEM_NAME_LIST = new ArrayList<>();
     Map<String, Item> TRADUCAO_ITEM_LIST = new HashMap<>();
     Map<String, Grupo> TRADUCAO_GRUPO = new HashMap<>();
-    Map<String, String> TRADUCAO_GRUPO_YML = new HashMap<>();
 
     // LIVROS ENCANTADOS
     List<String> BOOK_ENCHANTMENTE_LIST = new ArrayList<>();

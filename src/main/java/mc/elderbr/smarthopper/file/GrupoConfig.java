@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -170,6 +171,7 @@ public class GrupoConfig {
                     lang = langs.getKey();
                     traducao = langs.getValue().toString();
                     grupo.addTraducao(lang, traducao);
+                    // Variavel Global
                     VGlobal.TRADUCAO_GRUPO.put(traducao, grupo);
                 }
             }
