@@ -51,7 +51,7 @@ public class GrupoComando implements CommandExecutor {
                     try {
                         grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
                     } catch (NumberFormatException e) {
-                        grupo = VGlobal.GRUPO_MAP_NAME.get(cmd.toLowerCase());
+                        grupo = VGlobal.TRADUCAO_GRUPO.get(cmd);
                     }
                 } else {
                     if (itemStack != null && itemStack.getType() == Material.AIR) {
