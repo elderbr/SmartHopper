@@ -83,6 +83,10 @@ public class Config {
         for(Object adm : YML.getList("adm")){
             VGlobal.ADM_LIST.add(adm.toString());
         }
+        // Adicionando a lista de linguagem
+        for(Object lang : YML.getList("lang")){
+            VGlobal.LANG_NAME_LIST.add(lang.toString());
+        }
         Collections.sort(VGlobal.ADM_LIST);
     }
 

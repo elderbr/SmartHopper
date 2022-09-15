@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.interfaces;
 
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Traducao;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
@@ -34,9 +35,6 @@ public interface VGlobal {
     List<Item> ITEM_LIST = new ArrayList<>();
     Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();
     Map<String, Item> ITEM_MAP_NAME = new HashMap<>();
-    // RETORNA A TRADUÇÃO DO ITEM PEGANDO O NOME DO ITEM E O LANG
-    Map<String, Map<String, String>> ITEM_LANG_MAP = new HashMap<>();
-    Map<String, String> ITEM_MAP = new HashMap<>();
     List<String> ITEM_NAME_LIST = new ArrayList<>();
 
     // LISTA DO LANGS DISPONIVEL
@@ -45,8 +43,8 @@ public interface VGlobal {
     // LISTA DE TRADUCAO
     List<String> TRADUCAO_ITEM_NAME_LIST = new ArrayList<>();
     Map<String, Item> TRADUCAO_ITEM_LIST = new HashMap<>();
-    Map<String, Grupo> TRADUCAO_GRUPO_LIST = new HashMap<>();
-    Map<String, String> TRADUCAO_GRUPO_NAME_MAP = new HashMap<>();
+    Map<String, Grupo> TRADUCAO_GRUPO = new HashMap<>();
+    Map<String, String> TRADUCAO_GRUPO_YML = new HashMap<>();
 
     // LIVROS ENCANTADOS
     List<String> BOOK_ENCHANTMENTE_LIST = new ArrayList<>();

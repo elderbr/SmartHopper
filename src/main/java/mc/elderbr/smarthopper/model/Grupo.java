@@ -190,6 +190,7 @@ public class Grupo implements Dados {
      */
     private static void createGrupoItem() {
         Collections.sort(grupoList);
+        int codigo = 1;
         for (String nameGrupo : grupoList) {
 
             // NÃO É NOME VALIDO DE GRUPOS
@@ -289,6 +290,8 @@ public class Grupo implements Dados {
 
             // LISTA DE NOMES DE GRUPO GLOBAL
             if (grupo.getListItem().size() > 1 && !VGlobal.GRUPO_NAME_LIST.contains(grupo.getName())) {
+                grupo.setCodigo(codigo);
+                codigo++;
                 VGlobal.GRUPO_NAME_LIST.add(grupo.name);
                 VGlobal.GRUPO_LIST.add(grupo);
             }

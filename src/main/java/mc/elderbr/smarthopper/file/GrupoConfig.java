@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +22,8 @@ public class GrupoConfig {
     private YamlConfiguration config;
 
     private Grupo grupo;
+    private String lang;
+    private String traducao;
 
     public GrupoConfig() {
         if (!fileConfig.exists()) {
@@ -36,12 +40,9 @@ public class GrupoConfig {
 
     public void create() {
         config = YamlConfiguration.loadConfiguration(fileConfig);
-        int cod = 1;
         for (Grupo grupos : VGlobal.GRUPO_LIST) {
-            grupos.setCodigo(cod);
             add(grupos);
-            Msg.ServidorGold("Criando o grupo >> " + grupos.getName() + " | codigo >> " + cod);
-            cod++;
+            Msg.ServidorGold("Criando o grupo >> " + grupos.getName() + " | codigo >> " + grupos.getCodigo());
         }
         VGlobal.GRUPO_LIST.clear();
     }
@@ -60,9 +61,7 @@ public class GrupoConfig {
 
         config.set(name.concat(".grupo_id"), grupo.getCodigo());
         config.set(name.concat(".grupo_name"), name);
-        //Tradução
-        if (VGlobal.TRADUCAO_GRUPO_NAME_MAP.get(name) != null) {
-            grupo.addTraducao("pt_br", VGlobal.TRADUCAO_GRUPO_NAME_MAP.get(name));
+        if(!grupo.getTraducao().isEmpty()) {
             config.set(name.concat(".grupo_lang"), grupo.getTraducao());
         }
         config.set(name.concat(".grupo_item"), grupo.getListItem());
@@ -86,7 +85,8 @@ public class GrupoConfig {
                 VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
 
                 return true;
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
         return false;
     }
@@ -108,12 +108,13 @@ public class GrupoConfig {
                 VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
 
                 return true;
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
         return false;
     }
 
-    public static boolean ADD_TRADUCAO(Grupo grupo){
+    public static boolean ADD_TRADUCAO(Grupo grupo) {
         try {
 
             YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
@@ -123,10 +124,11 @@ public class GrupoConfig {
             VGlobal.GRUPO_LIST.add(grupo);
             VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
             VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
-            VGlobal.TRADUCAO_GRUPO_LIST.put(grupo.getName(), grupo);
+            VGlobal.TRADUCAO_GRUPO.put(grupo.getName(), grupo);
 
             return true;
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
         return false;
     }
 
@@ -157,6 +159,7 @@ public class GrupoConfig {
             grupo = new Grupo();
             grupo.setCodigo(config.getInt(name.concat(".grupo_id")));
             grupo.setName(config.getString(name.concat(".grupo_name")));
+            VGlobal.TRADUCAO_GRUPO.put(grupo.getName(), grupo);
 
             // PEGANDO O MAIOR CÓDIGO DO GRUPO
             if (grupo.getCodigo() > VGlobal.CD_MAX.get(0)) {
@@ -166,8 +169,11 @@ public class GrupoConfig {
             // TRADUÇÃO
             if (config.get(name.concat(".grupo_lang")) != null) {
                 MemorySection tradMemory = (MemorySection) config.get(name.concat(".grupo_lang"));
-                for (Map.Entry<String, Object> trad : tradMemory.getValues(false).entrySet()) {
-                    grupo.addTraducao(trad.getKey(), trad.getValue().toString());
+                for (Map.Entry<String, Object> langs : tradMemory.getValues(false).entrySet()) {
+                    lang = langs.getKey();
+                    traducao = langs.getValue().toString();
+                    grupo.addTraducao(lang, traducao);
+                    VGlobal.TRADUCAO_GRUPO.put(traducao, grupo);
                 }
             }
 
@@ -180,6 +186,7 @@ public class GrupoConfig {
             VGlobal.GRUPO_LIST.add(grupo);
             VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
             VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+
         }
     }
 

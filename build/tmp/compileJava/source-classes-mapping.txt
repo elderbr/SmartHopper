@@ -65,6 +65,8 @@ mc/elderbr/smarthopper/cmd/InformacaoComando.java
  mc.elderbr.smarthopper.cmd.InformacaoComando
 mc/elderbr/smarthopper/recipes/HopperRecipe.java
  mc.elderbr.smarthopper.recipes.HopperRecipe
+mc/elderbr/smarthopper/model/Traducao.java
+ mc.elderbr.smarthopper.model.Traducao
 mc/elderbr/smarthopper/cmd/GrupoComando.java
  mc.elderbr.smarthopper.cmd.GrupoComando
 mc/elderbr/smarthopper/model/Item.java

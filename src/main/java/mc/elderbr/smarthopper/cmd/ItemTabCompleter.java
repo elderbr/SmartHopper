@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class ItemTabCompleter implements TabCompleter {
 
@@ -30,14 +29,19 @@ public class ItemTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
 
-        if(sender instanceof Player) {
+        if (!(sender instanceof Player)) {
+            Msg.ServidorGold("Comando apenas para jogadores!!!");
+            return null;
+        }
+
+        if (sender instanceof Player) {
             player = (Player) sender;
             if (command.getName().equalsIgnoreCase("item")) {
                 cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
-                if(cmd.length()>0){
+                if (cmd.length() > 0) {
                     itemList = new ArrayList<>();
-                    for (String items : VGlobal.TRADUCAO_ITEM_NAME_LIST){
-                        if(items.contains(cmd)){
+                    for (String items : VGlobal.TRADUCAO_ITEM_NAME_LIST) {
+                        if (items.contains(cmd)) {
                             item = VGlobal.TRADUCAO_ITEM_LIST.get(items);
                             itemList.add(item.toTraducao(player));
                         }
