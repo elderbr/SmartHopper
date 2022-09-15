@@ -72,7 +72,7 @@ public class Msg {
     }
 
     public static void PlayerTodos(String msg){
-        Bukkit.getServer().broadcastMessage(msg);
+        Bukkit.getServer().broadcastMessage(Msg.Color(msg));
     }
 
     //========================== ITEM =================================================//

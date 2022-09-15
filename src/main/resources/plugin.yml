@@ -18,8 +18,8 @@ commands:
     description: Remover grupo existente
   addAdm:
       description: Adiciona Administrador para o SmartHopper
-  removerAdm:
-    description: Adiciona Operador para o SmartHopper
+  removeradm:
+    description: Remove o jogador do Adm do SmartHopper
   livro:
     aliases: [ book, livro ]
     description: Recebe um livro com os nomes de todos os grupos
