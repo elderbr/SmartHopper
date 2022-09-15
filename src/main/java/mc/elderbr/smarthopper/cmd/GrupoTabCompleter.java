@@ -18,8 +18,6 @@ public class GrupoTabCompleter implements TabCompleter {
 
     private Player player;
     private String cmd;
-
-    private Grupo grupo;
     private List<String> grupoList;
 
     @Nullable
@@ -37,9 +35,9 @@ public class GrupoTabCompleter implements TabCompleter {
                     cmd = Utils.NAME_ARRAY(args);
                     if (args.length >= 1) {
                         grupoList = new ArrayList<>();
-                        for(Map.Entry<String, Grupo> traducao : VGlobal.TRADUCAO_GRUPO.entrySet()){
-                            if(traducao.getKey().contains(cmd)){
-                                grupoList.add(traducao.getKey());
+                        for(String traducao : VGlobal.TRADUCAO_GRUPO.keySet()){
+                            if(traducao.contains(cmd)){
+                                grupoList.add(traducao);
                             }
                         }
                         return grupoList;
