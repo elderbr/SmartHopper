@@ -2,7 +2,6 @@ package mc.elderbr.smarthopper.interfaces;
 
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Traducao;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;

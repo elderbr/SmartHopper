@@ -2,8 +2,6 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.model.Traducao;
-import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
