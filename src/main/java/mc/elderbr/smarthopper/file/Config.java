@@ -78,6 +78,21 @@ public class Config {
         return false;
     }
 
+    public static boolean REMOVE_ADM(String player) {
+        try {
+            YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+            VGlobal.ADM_LIST.remove(player);
+            Collections.sort(VGlobal.ADM_LIST);
+            YML.setComments("adm", Arrays.asList("Administradores do SmartHopper"));
+            YML.set("adm", VGlobal.ADM_LIST);
+            SAVE();
+            return true;
+        } catch (IOException e) {
+            Msg.ServidorErro("Erro ao remover da lista de administrador no arquivo config", "REMOVE_ADM", Config.class, e);
+        }
+        return false;
+    }
+
     public void reload(){
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
         for(Object adm : YML.getList("adm")){
