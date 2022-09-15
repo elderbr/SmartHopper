@@ -1,17 +1,17 @@
 name: SmartHopper
-version: 4.0.2
+version: 4.0.3
 main: mc.elderbr.smarthopper.MainSmartHopper
 api-version: 1.19
 authors: [ ElderBR ]
 commands:
   item:
     description: Mostra o número do ID do material
-  traducaoItem:
+  traducaoitem:
     description: Adicionar tradução ao item
   grupo:
     description: Mostra o número do Grupo do material
-  traducaoGrupo:
-    description: Adicionar tradução ao grupo
+  traducaogrupo:
+    description: Adicionar tradução para o grupo
   addgrupo:
     description: Adicionar novo grupo
   removegrupo:
@@ -20,8 +20,6 @@ commands:
       description: Adiciona Administrador para o SmartHopper
   removerAdm:
     description: Adiciona Operador para o SmartHopper
-  addTraducao:
-    description: Adiciona nova tradução para o item ou grupo
   livro:
     aliases: [ book, livro ]
     description: Recebe um livro com os nomes de todos os grupos

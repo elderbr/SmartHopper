@@ -1,7 +1,6 @@
 package mc.elderbr.smarthopper.interfaces;
 
 import mc.elderbr.smarthopper.enums.AdmType;
-import mc.elderbr.smarthopper.model.Lang;
 import org.bukkit.entity.Player;
 
 public interface Jogador {
@@ -18,7 +17,6 @@ public interface Jogador {
     String getUUID();
 
     Jogador setLang(Player player);
-    Lang getLang();
 
     AdmType getType();
     String toType();

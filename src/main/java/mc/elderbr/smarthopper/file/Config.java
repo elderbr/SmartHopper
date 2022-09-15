@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.file;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
@@ -33,7 +34,7 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        reload();
     }
 
     //=================== VERSAO DO PLUGIN ===============================/
@@ -52,17 +53,41 @@ public class Config {
     }
 
     //=================== ADMINISTRADORES DO SMART HOPPER ===============================/
-    public static void ADD_ADM() {
+    public static boolean ADD_ADM(String player) {
         try {
             YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+            VGlobal.ADM_LIST.add(player);
             Collections.sort(VGlobal.ADM_LIST);
             YML.setComments("adm", Arrays.asList("Administradores do SmartHopper"));
             YML.set("adm", VGlobal.ADM_LIST);
             SAVE();
-            Msg.ServidorGreen("Adicionando novo adm", Config.class);
+            return true;
         } catch (IOException e) {
             Msg.ServidorErro("Erro ao salvar a lista de administrador no arquivo config", "ADD_ADM", Config.class, e);
         }
+        return false;
+    }
+    public static boolean CONTAINS_ADD(Object player){
+        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        if(player instanceof Player player1) {
+            return YML.getList("adm").contains(player1.getName());
+        }
+        if(player instanceof String){
+            return YML.getList("adm").contains(player);
+        }
+        return false;
+    }
+
+    public void reload(){
+        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        for(Object adm : YML.getList("adm")){
+            VGlobal.ADM_LIST.add(adm.toString());
+        }
+        // Adicionando a lista de linguagem
+        for(Object lang : YML.getList("lang")){
+            VGlobal.LANG_NAME_LIST.add(lang.toString());
+        }
+        Collections.sort(VGlobal.ADM_LIST);
     }
 
     public static void REMOVER_ADM() {
@@ -122,10 +147,6 @@ public class Config {
                         "Fica responsável por adicionar, alterar ou remover grupos"));
 
         add("langs", Arrays.asList("pt_br", "pt_pt"), Arrays.asList("Linguagens disponível"));
-    }
-
-    public static YamlConfiguration GET_CONFIG() {
-        return YML;
     }
 
     private void add(String key, String value, List<String> comment) {

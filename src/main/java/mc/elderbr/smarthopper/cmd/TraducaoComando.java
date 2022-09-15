@@ -1,11 +1,12 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.dao.TraducaoDao;
-import mc.elderbr.smarthopper.interfaces.Jogador;
+import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.file.GrupoConfig;
+import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.model.*;
+import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,18 +16,11 @@ import org.jetbrains.annotations.NotNull;
 public class TraducaoComando implements CommandExecutor {
 
     private Player player;
-    private Item item;
-    private Adm jogador;
-    private boolean isOP = false;
-
-    private Lang lang;
-
-    private String[] traducaoArgs;
     private StringBuilder traducaoList = new StringBuilder();
-    private Traducao traducao;
 
+    private String codigo;
+    private Item item;
     private Grupo grupo;
-    private int cdGrupo;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -34,106 +28,89 @@ public class TraducaoComando implements CommandExecutor {
         if (sender instanceof Player) {
 
             player = (Player) sender;
-            jogador = new Adm(player);
 
-            traducaoArgs = args;
+            if (command.getName().equalsIgnoreCase("traducaoitem")) {
 
-            if (command.getName().equalsIgnoreCase("addTraducao")) {
-
-                lang = VGlobal.LANG_MAP.get(player.getLocale());
-
-                if (args.length > 0 && args[0].equalsIgnoreCase("grupo")) {
-
-                    if (args.length > 2) {
-
-                        try {
-                            cdGrupo = Integer.parseInt(args[1]);
-                        } catch (NumberFormatException e) {
-                            Msg.PlayerGold(player, "Código do grupo é invalido!!!");
-                            return false;
-                        }
-                        grupo = VGlobal.GRUPO_MAP_ID.get(cdGrupo);
-                        grupo.setCdLang(lang.getCdLang());
-                        if (grupo != null) {
-                            grupo.setDsTraducao(toGrupoTraducao());
-                            if (TraducaoDao.INSERT(grupo) > 0) {
-                                VGlobal.GRUPO_MAP_ID.get(grupo.getCdGrupo()).addTraducao(lang.getDsLang(), grupo.getDsTraducao());
-                                VGlobal.GRUPO_MAP_NAME.get(grupo.getDsGrupo()).addTraducao(lang.getDsLang(), grupo.getDsTraducao());
-                                Msg.PlayerGreen(player, "Tradução do grupo " + grupo.getDsGrupo() + " adicionado com sucesso!!!");
-                            }
-                        } else {
-                            Msg.PlayerGreen(player, "Grupo do código " + args[1] + " não foi encontrado!!!");
-                        }
-                    } else {
-                        Msg.PlayerGold(player, "Digite o código do grupo e a seu tradução!!!");
-                    }
+                if (args.length == 0) {
+                    Msg.PlayerRed(player, "Digite o código do item!!!");
+                    Msg.PlayerGreen(player, "/traducaoitem <código> <traducao>");
                     return false;
                 }
 
-                if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-                    Msg.PlayerGold(player, "Segure um item na mão para adicionar a tradução!!!");
+                codigo = args[0];
+
+                if (!Config.CONTAINS_ADD(player)) {
+                    Msg.PlayerGold(player, "OPS, você não é adm do Smart Hopper!!!");
                     return false;
                 }
 
-                item = VGlobal.ITEM_MAP_NAME.get(new Item(player.getInventory().getItemInMainHand()).getDsItem());
-                item.setCdLang(jogador.getLang().getCdLang());
-
-                // VERIFICA SE O JOGADOR ESTA NA LISTA DE ADMINISTRADORES
-                isOP = false;
-                for (Jogador jg : VGlobal.JOGADOR_LIST) {
-                    if (jg.getUUID().equals(jogador.getUUID())) {
-                        isOP = true;
-                        break;
-                    }
-                }
-
-                if (!isOP) {// VERIFICA SE O JOGADOR É ADM
-                    Msg.PlayerGold(player, "Você não tem permissão para usar esse comando!!!");
+                try {
+                    item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(codigo));
+                } catch (NumberFormatException e) {
+                    Msg.PlayerRed(player, "Digite o código do item!!!");
+                    Msg.PlayerGreen(player, "/traducaoitem <código> <traducao>");
                     return false;
                 }
 
-                if (args.length == 0) {// VERIFICA SE EXISTE TEXTO PARA A TRADUÇÃO
-                    Msg.PlayerGold(player, "Digite a tradução!!!");
+                if (item == null) {
+                    Msg.ItemNaoExiste(player, codigo);
                     return false;
                 }
-
-                item.setDsTraducao(toTraducao());
-
-                traducao = VGlobal.TRADUCAO_MAP_ITEM_NAME.get(item.getCdItem());
-
-                if (TraducaoDao.INSERT(item) > 0) {
-                    VGlobal.ITEM_MAP_NAME.get(item.getDsItem()).addTraducao(jogador.getLang().getDsLang(), item.getDsTraducao());
-                    Msg.PlayerGreen(player, "Tradução para o item " + item.getDsItem() + " adicionado com sucesso!!!");
+                item.addTraducao(player.getLocale(), traducao(args));
+                if (ItemConfig.ADD_TRADUCAO(item)) {
+                    Msg.PlayerTodos("§6A tradução para o item " + item.getName() + " foi alterada pelo §e" + player.getName());
                 } else {
-                    item.setCdTraducao(traducao.getCdTraducao());
-                    if (TraducaoDao.UPDATE(item)) {
-                        traducao.setDsTraducao(item.getDsTraducao());
-                        VGlobal.TRADUCAO_MAP_ITEM_NAME.put(item.getCdItem(), traducao);
-                        VGlobal.ITEM_MAP_NAME.get(item.getDsItem()).addTraducao(item.getDsLang(), item.getDsTraducao());
-                        Msg.PlayerGreen(player, "Tradução do " + item.getDsItem() + " atualizado com sucesso!!!");
-                    }
+                    Msg.ItemNaoExiste(player, codigo);
+                }
+                return false;
+            }
+
+
+            // TRADUÇÃO PARA O GRUPO
+            if (command.getName().equalsIgnoreCase("traducaogrupo")) {
+
+                if (args.length == 0) {
+                    Msg.PlayerRed(player, "Digite o código do grupo!!!");
+                    Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
+                    return false;
                 }
 
+                codigo = args[0];
+
+                if (!Config.CONTAINS_ADD(player)) {
+                    Msg.PlayerGold(player, "OPS, você não é adm do Smart Hopper!!!");
+                    return false;
+                }
+
+                try {
+                    grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(codigo));
+                } catch (NumberFormatException e) {
+                    Msg.PlayerRed(player, "Digite o código do grupo!!!");
+                    Msg.PlayerGreen(player, "/traducaogrupo <código> <traducao>");
+                    return false;
+                }
+
+                if (grupo == null) {
+                    Msg.GrupoNaoExiste(player, codigo);
+                    return false;
+                }
+
+                grupo.addTraducao(player.getLocale(), traducao(args));
+                if(GrupoConfig.ADD_TRADUCAO(grupo)){
+                    Msg.PlayerTodos("§9O jogador §e"+ player.getName()+"§9 adicionou tradução para o grupo §e"+ grupo.getName()+"§9.");
+                }else{
+                    Msg.PlayerGold(player, "Não foi possivél adicionar a tradução!!!");
+                }
             }
         }
-
         return false;
     }
 
-    private String toTraducao() {
-        traducaoList = new StringBuilder();
-        for (String value : traducaoArgs) {
-            traducaoList.append(value.concat(" "));
+    private String traducao(String[] cmd) {
+        StringBuilder tradStr = new StringBuilder();
+        for (int i = 1; i < cmd.length; i++) {
+            tradStr.append(cmd[i] + " ");
         }
-        return traducaoList.toString().trim();
-    }
-
-    private String toGrupoTraducao() {
-        traducaoList = new StringBuilder();
-        for (int i = 2; i < traducaoArgs.length; i++) {
-            String value = traducaoArgs[i];
-            traducaoList.append(value.concat(" "));
-        }
-        return traducaoList.toString().trim();
+        return tradStr.toString().trim();
     }
 }

@@ -1,13 +1,13 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.dao.GrupoDao;
+import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,16 +25,15 @@ public class GrupoComando implements CommandExecutor {
     private Player player;
     private String cmd;
 
-    public static Grupo GRUPO;
+    public Grupo grupo;
     private List<Grupo> listGrupo;
+
+    private Item item;
     private ItemStack itemStack;
-    private InventoryCustom inventory;
+    public static InventoryCustom INVENTORY;
     private ItemStack itemSalve;
     private ItemMeta meta;
     private List<String> lore;
-
-
-    private InventoryCustom inventoryCustom;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -45,165 +44,100 @@ public class GrupoComando implements CommandExecutor {
             itemStack = player.getInventory().getItemInMainHand();
             cmd = Utils.NAME_ARRAY(args);
 
+            // Buscar grupo
             if (command.getName().equalsIgnoreCase("grupo")) {
-
-                GRUPO = null;
+                grupo = null;
                 if (cmd.length() > 0) {
                     try {
-                        GRUPO = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
+                        grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
                     } catch (NumberFormatException e) {
-                        GRUPO = VGlobal.TRADUCAO_GRUPO_LIST.get(cmd);
-                    }
-                    if (GRUPO != null) {
-                        GRUPO.setDsLang(player);
-
-                        if (!GRUPO.getListItem().isEmpty()) {
-                            inventoryCustom = new InventoryCustom();
-                            inventoryCustom.create(GRUPO.toTraducao().concat(Msg.Color(" $lID:$r" + GRUPO.getCdGrupo())));
-                            for (Item items : GRUPO.getListItem()) {
-                                inventoryCustom.addItem(items.getItemStack());
-                            }
-                            // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
-                            if (VGlobal.ADM_LIST.contains(player.getName())) {
-                                // CRIANDO O BOTÃO PARA SALVAR
-                                itemSalve = new ItemStack(Material.LIME_WOOL);
-                                meta = itemSalve.getItemMeta();
-                                meta.setDisplayName(Msg.Color("$aAtualizar"));
-                                lore = new ArrayList<>();
-                                lore.add(Msg.Color("$3Salvar"));
-                                meta.setLore(lore);
-                                itemSalve.setItemMeta(meta);
-                                inventoryCustom.getInventory().setItem(53, itemSalve);
-                            }
-                            player.openInventory(inventoryCustom.getInventory());
-                        }
-                        player.sendMessage(Msg.Color("$2Grupo: $6" + GRUPO.toTraducao() + " $e$lID: " + GRUPO.getCdGrupo()));
-                    } else {
-                        player.sendMessage(Msg.Color("$2O grupo $e" + cmd + " $6não existe!"));
+                        grupo = VGlobal.TRADUCAO_GRUPO.get(cmd);
                     }
                 } else {
-
-                    if (itemStack.getType() == Material.AIR) {
-                        Msg.PlayerRed(player, "Segure um item na mão ou escreva o nome do grupo ou seu ID!!!");
+                    if (itemStack != null && itemStack.getType() == Material.AIR) {
+                        Msg.PlayerGold(player, "Segure um item na mão ou digite o código ou nome do grupo!!!");
                         return false;
                     }
 
-                    Item item = VGlobal.ITEM_MAP_NAME.get(new Item(itemStack).getDsItem());
-                    item.setDsLang(player);
-
-                    listGrupo = GrupoDao.SELECT_GRUPO_ITEM(item);
-
-                    if (listGrupo.isEmpty()) {
-                        player.sendMessage(Msg.Color("$2Não existe grupo para o item $e" + item.toTraducao() + "!"));
-                        return false;
-                    }
-
-                    if (listGrupo.size() == 1) {
-                        GRUPO = VGlobal.GRUPO_MAP_NAME.get(listGrupo.get(0).getDsGrupo());
-                        GRUPO.setDsLang(player);
-                        inventoryCustom = new InventoryCustom();
-                        inventoryCustom.create(GRUPO.toTraducao().concat(Msg.Color(" $lID:$r" + GRUPO.getCdGrupo())));
-                        for (Item items : GRUPO.getListItem()) {
-                            inventoryCustom.addItem(items.getItemStack());
+                    item = new Item(itemStack);
+                    // Verificando se o item esta presenta mais de um grupo
+                    listGrupo = new ArrayList<>();
+                    for (Grupo grups : VGlobal.GRUPO_LIST) {
+                        if (grups.getListItem().contains(item.getName())) {
+                            listGrupo.add(grups);
                         }
+                    }
 
-                        // SE FOR ADM OU OPERADOR ADICIONA O BOTÃO PARA SALVAR OU ALTERAR
-                        if (VGlobal.ADM_LIST.contains(player.getName())) {
-                            // CRIANDO O BOTÃO PARA SALVAR
-                            itemSalve = new ItemStack(Material.LIME_WOOL);
-                            meta = itemSalve.getItemMeta();
-                            meta.setDisplayName(Msg.Color("$aAtualizar"));
-                            lore = new ArrayList<>();
-                            lore.add(Msg.Color("$3Salvar"));
-                            meta.setLore(lore);
-                            itemSalve.setItemMeta(meta);
-                            inventoryCustom.getInventory().setItem(53, itemSalve);
+                    if (listGrupo.size() > 1) {
+                        Msg.PlayerGold(player, "§f#================ LISTA DE GRUPOS ====================#");
+                        for (Grupo grups : listGrupo) {
+                            Msg.Grupo(player, grups);
                         }
-                        player.openInventory(inventoryCustom.getInventory());
-                        player.sendMessage(Msg.Color("$2Grupo: $6" + GRUPO.toTraducao() + " $e$lID: " + GRUPO.getCdGrupo()));
+                        Msg.PlayerGold(player, "§f#====================================#");
                         return false;
                     }
-
-                    player.sendMessage("=====================================================");
-                    for (Grupo grupo : listGrupo) {
-                        grupo.setDsLang(player);
-                        player.sendMessage(Msg.Color("$2Grupo: $6" + grupo.toTraducao() + " $e$lID: " + grupo.getCdGrupo()));
+                    if(listGrupo.size()>0) {
+                        grupo = listGrupo.get(0);// PEGA O PRIMEIRO GRUPO ENCONTRADO
+                    }else{
+                        Msg.PlayerRed(player, "Não existe grupo para esse item!!!");
                     }
-                    player.sendMessage("=====================================================");
                 }
 
-            }
-
-            /************  ADICIONA NOVO GRUPO     ************/
-            if (command.getName().contentEquals("addgrupo")) {
-
-                if (VGlobal.ADM_LIST.contains(player.getName())) {
-                    if (cmd.length() > 4) {
-
-                        GRUPO = new Grupo();
-                        GRUPO.setDsGrupo(cmd);
-                        GRUPO.setDsTraducao(cmd);
-
-                        inventory = new InventoryCustom();
-                        inventory.createNewGrupo(cmd);
-
-                        // CRIANDO O BOTÃO PARA SALVAR
-                        itemSalve = new ItemStack(Material.LIME_WOOL);
-                        meta = itemSalve.getItemMeta();
-                        meta.setDisplayName(Msg.Color("$aSalva"));
-                        lore = new ArrayList<>();
-                        lore.add(Msg.Color("$3Salva novo grupo"));
-                        meta.setLore(lore);
-                        itemSalve.setItemMeta(meta);
-
-                        inventory.getInventory().setItem(53, itemSalve);
-
-                        player.openInventory(inventory.getInventory());
-                    } else {
-                        player.sendMessage(Msg.Color("$e$lO nome do grupo precisa ter 5 ou mais letras!!!"));
-                    }
+                if (grupo != null) {
+                    INVENTORY = new InventoryCustom(player);
+                    INVENTORY.create(grupo);
+                    player.openInventory(INVENTORY.getInventory(1));
                 } else {
-                    player.sendMessage(Msg.Color("$6Você não tem permissão!!!"));
+                    Msg.GrupoNaoExiste(player, cmd);
                 }
+                return false;
+            }// FIM DE PESQUISAR GRUPO
+
+            // ADICIONAR NOVO GRUPO
+            if (command.getName().equalsIgnoreCase("addgrupo")) {
+                if(!Config.CONTAINS_ADD(player)){
+                    Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
+                    return false;
+                }
+
+                INVENTORY = new InventoryCustom(player);
+                INVENTORY.create(cmd);
+                player.openInventory(INVENTORY.getInventory(1));
             }
 
-            /************  REMOVER GRUPO     ************/
-            if (command.getName().contentEquals("removegrupo")) {
-                if (VGlobal.ADM_LIST.contains(player.getName())) {
-                    if (cmd.length() > 0) {
-                        try {
-                            GRUPO = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
-                        } catch (NumberFormatException e) {
-                            GRUPO = VGlobal.GRUPO_MAP_NAME.get(cmd);
-                        }
-                        if (GRUPO != null) {
-                            if (GrupoDao.DELETE(GRUPO)) {
+            // REMOVER GRUPO
+            if (command.getName().equalsIgnoreCase("removegrupo")) {
 
-                                // REMOVENDO O GRUPO DAS VARIAVEIS GLOBAL
-                                VGlobal.GRUPO_MAP_NAME.get(GRUPO.getDsGrupo());
-                                VGlobal.GRUPO_MAP_ID.get(GRUPO.getCdGrupo());
-                                VGlobal.GRUPO_MAP.get(GRUPO.getDsGrupo());
-                                VGlobal.GRUPO_NAME_LIST.remove(GRUPO.getDsGrupo());
+                if(!Config.CONTAINS_ADD(player)){
+                    Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
+                    return false;
+                }
 
-                                // TRADUÇÃO
-                                VGlobal.TRADUCAO_GRUPO_LIST.remove(GRUPO.getDsGrupo());
-                                VGlobal.TRADUCAO_MAP_GRUPO_NAME.remove(GRUPO.getCdGrupo());
-
-                                Msg.PlayerTodos(Msg.Color("$6O jogador " + player.getName() + " deletou o grupo $a$l" + GRUPO.getDsGrupo() + "!"));
-                            }else{
-                                Msg.PlayerRed(player, "Ocorreu um erro ao deletar o grupo "+ GRUPO.getDsGrupo()+"!!!");
-                            }
-                        }else{
-                            Msg.PlayerRed(player, "O grupo "+ cmd +" não existe!!!");
-                        }
-                        return false;
-                    } else {
-                        player.sendMessage("Escreva o nome do grupo que deseja apagar!!!\n/removegrupo <grupo>");
-                        return false;
+                grupo = null;
+                if (cmd.length() > 0) {
+                    try {
+                        grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
+                    } catch (NumberFormatException e) {
+                        grupo = VGlobal.GRUPO_MAP_NAME.get(cmd.toLowerCase());
                     }
+                }else{
+                    Msg.PlayerRed(player, "Digite o nome ou código do grupo!!!");
+                    return false;
                 }
-            }
 
+                // SE O GRUPO NÃO EXISTIR
+                if (grupo == null) {
+                    Msg.GrupoNaoExiste(player, cmd);
+                    return false;
+                }
+                // DELETANDO O GRUPO
+                if (GrupoConfig.DELETE(grupo)) {
+                    Msg.PlayerTodos("§l§6O grupo §c" + grupo.getName() + "§6 foi removido pelo o ADM §e" + player.getName() + "§6!!!");
+                }else{
+                    Msg.PlayerRed(player, "Erro ao deletar o grupo!!!");
+                }
+                return false;
+            }// FIM DE DELETAR GRUPO
         }
         return false;
     }

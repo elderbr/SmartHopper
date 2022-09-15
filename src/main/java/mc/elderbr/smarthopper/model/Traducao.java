@@ -1,29 +1,55 @@
 package mc.elderbr.smarthopper.model;
 
-public class Traducao extends Lang {
+public class Traducao {
 
-    private int cdTraducao;
-    private String dsTraducao;
-
+    private String lang;
+    private String traducao;
+    private Item item;
+    private Grupo grupo;
 
     public Traducao() {
     }
 
-    public int getCdTraducao() {
-        return cdTraducao;
+    public Traducao(String lang, String traducao, Item item, Grupo grupo) {
+        this.lang = lang;
+        this.traducao = traducao;
+        this.item = item;
+        this.grupo = grupo;
     }
 
-    public Traducao setCdTraducao(int cdTraducao) {
-        this.cdTraducao = cdTraducao;
+    public String getLang() {
+        return lang;
+    }
+
+    public Traducao setLang(String lang) {
+        this.lang = lang;
         return this;
     }
 
-    public String getDsTraducao() {
-        return dsTraducao;
+    public String getTraducao() {
+        return traducao;
     }
 
-    public Traducao setDsTraducao(String dsTraducao) {
-        this.dsTraducao = dsTraducao;
+    public Traducao setTraducao(String traducao) {
+        this.traducao = traducao;
+        return this;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public Traducao setItem(Item item) {
+        this.item = item;
+        return this;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public Traducao setGrupo(Grupo grupo) {
+        this.grupo = grupo;
         return this;
     }
 }

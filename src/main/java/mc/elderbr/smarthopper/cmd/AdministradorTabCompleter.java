@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminstradorTabCompleter implements TabCompleter {
+public class AdministradorTabCompleter implements TabCompleter {
 
     private Player player;
     private String cmd;

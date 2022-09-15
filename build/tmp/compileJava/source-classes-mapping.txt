@@ -10,6 +10,8 @@ mc/elderbr/smarthopper/file/Debugs.java
  mc.elderbr.smarthopper.file.Debugs
 mc/elderbr/smarthopper/cmd/GrupoTabCompleter.java
  mc.elderbr.smarthopper.cmd.GrupoTabCompleter
+mc/elderbr/smarthopper/cmd/AdministradorTabCompleter.java
+ mc.elderbr.smarthopper.cmd.AdministradorTabCompleter
 mc/elderbr/smarthopper/cmd/ItemComando.java
  mc.elderbr.smarthopper.cmd.ItemComando
 mc/elderbr/smarthopper/model/Slot.java
@@ -18,10 +20,10 @@ mc/elderbr/smarthopper/interfaces/Slot.java
  mc.elderbr.smarthopper.interfaces.Slot
 mc/elderbr/smarthopper/cmd/ItemTabCompleter.java
  mc.elderbr.smarthopper.cmd.ItemTabCompleter
-mc/elderbr/smarthopper/cmd/AdminstradorTabCompleter.java
- mc.elderbr.smarthopper.cmd.AdminstradorTabCompleter
 mc/elderbr/smarthopper/file/ItemConfig.java
  mc.elderbr.smarthopper.file.ItemConfig
+mc/elderbr/smarthopper/event/TextureEvent.java
+ mc.elderbr.smarthopper.event.TextureEvent
 mc/elderbr/smarthopper/model/Velocity.java
  mc.elderbr.smarthopper.model.Velocity
 mc/elderbr/smarthopper/cmd/LivroComando.java
@@ -34,18 +36,22 @@ mc/elderbr/smarthopper/utils/Utils.java
  mc.elderbr.smarthopper.utils.Utils
 mc/elderbr/smarthopper/event/ClickHopper.java
  mc.elderbr.smarthopper.event.ClickHopper
+mc/elderbr/smarthopper/enums/InventarioType.java
+ mc.elderbr.smarthopper.enums.InventarioType
 mc/elderbr/smarthopper/cmd/TraducaoTabCompleter.java
  mc.elderbr.smarthopper.cmd.TraducaoTabCompleter
 mc/elderbr/smarthopper/interfaces/Jogador.java
  mc.elderbr.smarthopper.interfaces.Jogador
+mc/elderbr/smarthopper/interfaces/InterfaceInventario.java
+ mc.elderbr.smarthopper.interfaces.InterfaceInventario
 mc/elderbr/smarthopper/model/Grupo.java
  mc.elderbr.smarthopper.model.Grupo
+mc/elderbr/smarthopper/inventarios/Inventario.java
+ mc.elderbr.smarthopper.inventarios.Inventario
 mc/elderbr/smarthopper/interfaces/Linguagem.java
  mc.elderbr.smarthopper.interfaces.Linguagem
-mc/elderbr/smarthopper/dao/Conexao.java
- mc.elderbr.smarthopper.dao.Conexao
-mc/elderbr/smarthopper/cmd/AdminstradorComando.java
- mc.elderbr.smarthopper.cmd.AdminstradorComando
+mc/elderbr/smarthopper/cmd/AdministradorComando.java
+ mc.elderbr.smarthopper.cmd.AdministradorComando
 mc/elderbr/smarthopper/utils/Msg.java
  mc.elderbr.smarthopper.utils.Msg
 mc/elderbr/smarthopper/utils/Debug.java
@@ -59,8 +65,6 @@ mc/elderbr/smarthopper/cmd/InformacaoComando.java
  mc.elderbr.smarthopper.cmd.InformacaoComando
 mc/elderbr/smarthopper/recipes/HopperRecipe.java
  mc.elderbr.smarthopper.recipes.HopperRecipe
-mc/elderbr/smarthopper/dao/GrupoDao.java
- mc.elderbr.smarthopper.dao.GrupoDao
 mc/elderbr/smarthopper/model/Traducao.java
  mc.elderbr.smarthopper.model.Traducao
 mc/elderbr/smarthopper/cmd/GrupoComando.java
@@ -72,27 +76,19 @@ mc/elderbr/smarthopper/model/Adm.java
  mc.elderbr.smarthopper.model.Adm
 mc/elderbr/smarthopper/event/MoveHopper.java
  mc.elderbr.smarthopper.event.MoveHopper
+mc/elderbr/smarthopper/interfaces/LivroEncantado.java
+ mc.elderbr.smarthopper.interfaces.LivroEncantado
 mc/elderbr/smarthopper/model/InventoryCustom.java
  mc.elderbr.smarthopper.model.InventoryCustom
-mc/elderbr/smarthopper/dao/AdmDao.java
- mc.elderbr.smarthopper.dao.AdmDao
-mc/elderbr/smarthopper/interfaces/Dados.java
- mc.elderbr.smarthopper.interfaces.Dados
 mc/elderbr/smarthopper/file/Config.java
  mc.elderbr.smarthopper.file.Config
+mc/elderbr/smarthopper/interfaces/Dados.java
+ mc.elderbr.smarthopper.interfaces.Dados
 mc/elderbr/smarthopper/cmd/TraducaoComando.java
  mc.elderbr.smarthopper.cmd.TraducaoComando
 mc/elderbr/smarthopper/event/InventarioEvent.java
  mc.elderbr.smarthopper.event.InventarioEvent
-mc/elderbr/smarthopper/dao/ItemDao.java
- mc.elderbr.smarthopper.dao.ItemDao
-mc/elderbr/smarthopper/dao/TraducaoDao.java
- mc.elderbr.smarthopper.dao.TraducaoDao
-mc/elderbr/smarthopper/dao/LangDao.java
- mc.elderbr.smarthopper.dao.LangDao
 mc/elderbr/smarthopper/interfaces/VGlobal.java
  mc.elderbr.smarthopper.interfaces.VGlobal
 mc/elderbr/smarthopper/model/Cargo.java
  mc.elderbr.smarthopper.model.Cargo
-mc/elderbr/smarthopper/model/Lang.java
- mc.elderbr.smarthopper.model.Lang

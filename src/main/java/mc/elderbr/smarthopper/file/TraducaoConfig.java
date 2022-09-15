@@ -1,11 +1,10 @@
 package mc.elderbr.smarthopper.file;
 
-import mc.elderbr.smarthopper.dao.LangDao;
-import mc.elderbr.smarthopper.dao.TraducaoDao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
+import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -16,6 +15,9 @@ import java.util.Map;
 public class TraducaoConfig {
     private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
 
+    private String name;
+    private String traducao;
+
     private BufferedWriter escrever;
     private BufferedReader reader;
     private InputStream input;
@@ -24,21 +26,26 @@ public class TraducaoConfig {
     private static YamlConfiguration yml;
 
     private File fileBR = new File(directoryFile, "pt_br.yml");
+    private File fileGrupoBR = new File(directoryFile, "grupo.yml");
     private File filePT = new File(directoryFile, "pt_pt.yml");
 
     public TraducaoConfig() {
         // Criando o pasta lang
         if (!directoryFile.exists()) {
             directoryFile.mkdir();
+
+            // Se o arquivo pt_br não existir cria
+            if (!fileBR.exists()) {
+                createBR();
+            }
+            // Se o arquivo pt_pt não existir cria
+            if (!filePT.exists()) {
+                createTP();
+            }
+            createGrupoBR();
         }
-        // Se o arquivo pt_br não existir cria
-        if (!fileBR.exists()) {
-            createBR();
-        }
-        // Se o arquivo pt_pt não existir cria
-        if (!filePT.exists()) {
-            createTP();
-        }
+
+        reload();// Lendo todas as traduções
     }
 
     public YamlConfiguration configBR() {
@@ -64,7 +71,7 @@ public class TraducaoConfig {
             escrever.newLine();
             escrever.flush();
             while ((txtReader = reader.readLine()) != null) {
-                escrever.write(StringUtils.capitalize(txtReader));
+                escrever.write(txtReader);
                 escrever.newLine();
                 escrever.flush();
             }
@@ -94,7 +101,7 @@ public class TraducaoConfig {
             escrever.newLine();
             escrever.flush();
             while ((txtReader = reader.readLine()) != null) {
-                escrever.write(StringEscapeUtils.unescapeJava(txtReader));
+                escrever.write(txtReader);
                 escrever.newLine();
                 escrever.flush();
             }
@@ -112,26 +119,59 @@ public class TraducaoConfig {
         }
     }
 
+    private void createGrupoBR() {
+        try {
+
+            input = getClass().getResourceAsStream("/grupo.yml");
+            reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
+
+            escrever = Files.newBufferedWriter(fileGrupoBR.toPath(), StandardCharsets.UTF_8);
+
+            while ((txtReader = reader.readLine()) != null) {
+                escrever.write(txtReader);
+                escrever.newLine();
+                escrever.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (IOException er) {
+                er.printStackTrace();
+            }
+        }
+    }
+
     public void reload() {
         String lang = null;
-        int cd = 0;
         for (File files : directoryFile.listFiles()) {
             // Lendo o arquivo de tradução
             yml = YamlConfiguration.loadConfiguration(files);
             // Nome do linguagem
             lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
-            // Adicionando a linguagem na variavel global se não existir
-            if (!VGlobal.LANG_NAME_LIST.contains(lang)) {
-                VGlobal.LANG_NAME_LIST.add(lang);
-                cd = LangDao.insert(lang);
-                if(cd == 0) break;
-                for (Map.Entry<String, Object> map : yml.getValues(false).entrySet()) {
-                    Item item = VGlobal.ITEM_MAP_NAME.get(map.getKey());
-                    if(item == null) continue;
-                    item.setCdLang(cd);
-                    item.setDsLang(lang);
-                    item.setDsTraducao(map.getValue().toString());
-                    TraducaoDao.INSERT(item);
+            if (lang.equals("grupo")) {
+                for (Grupo grupo : VGlobal.GRUPO_LIST) {
+                    for (Map.Entry<String, Object> obj : yml.getValues(false).entrySet()) {
+                        name = obj.getKey();
+                        traducao = String.valueOf(obj.getValue());
+                        if (name.equals(grupo.getName())) {
+                            VGlobal.GRUPO_LIST.get(grupo.getCodigo()-1).addTraducao("pt_br", traducao);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                for (Item item : VGlobal.ITEM_LIST) {
+                    for (Map.Entry<String, Object> obj : yml.getValues(false).entrySet()) {
+                        name = obj.getKey();
+                        traducao = String.valueOf(obj.getValue());
+                        if (name.equals(item.getName())) {
+                            VGlobal.ITEM_LIST.get(item.getCodigo()-1).addTraducao(lang, traducao);
+                            break;
+                        }
+                    }
                 }
             }
             files.delete();
