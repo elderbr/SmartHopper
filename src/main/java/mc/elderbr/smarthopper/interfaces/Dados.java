@@ -11,7 +11,7 @@ public interface Dados {
 
     int getCodigo();
 
-    String setName(String name);
+    Dados setName(String name);
 
     String getName();
 

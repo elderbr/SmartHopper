@@ -1,10 +1,11 @@
 package mc.elderbr.smarthopper.interfaces;
 
+import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.enchantments.Enchantment;
 
 public interface LivroEncantado {
 
-    String setName(String name);
+    Item setName(String name);
     String getName();
 
     default Enchantment getEncantamento(){

@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.enums.InventarioType;
 import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.interfaces.InterfaceInventario;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -16,10 +17,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class InventoryCustom implements InterfaceInventario {
+public class InventoryCustom implements InterfaceInventario, Botao {
 
     private Player player;
-    private int codigo;
+    private int codigo = 0;
     private String name;
     private List<String> listItem = new ArrayList<>();
     private Map<String, String> traducao = new HashMap<>();
@@ -27,38 +28,15 @@ public class InventoryCustom implements InterfaceInventario {
     private InventarioType type;
 
     private ItemStack barreira = new ItemStack(Material.BARRIER);
-    private ItemStack save;
-    private ItemStack ant;
-    private ItemStack pro;
-    private ItemMeta meta;
+    private Grupo grupo;
 
     // PAGINAÇÃO
     private int pag = 1;
-    private Map<Integer, List<ItemStack>> pagMap = new HashMap<>();
+    private double pagQuant;
+    List<ItemStack> listItemStack;
+    private Map<Integer, List<String>> pagMap = new HashMap<>();
 
     public InventoryCustom(@NotNull Player player) {
-
-        save = new ItemStack(Material.BARRIER, 1);
-        meta = save.getItemMeta();
-        meta.setDisplayName("§2§lSalva");
-        meta.setLore(Arrays.asList("§fSalva a lista"));
-        meta.setCustomModelData(10);
-        save.setItemMeta(meta);
-
-        ant = new ItemStack(Material.BARRIER, 1);
-        meta = ant.getItemMeta();
-        meta.setDisplayName("§9§lRetorna");
-        meta.setLore(Arrays.asList("§fRetorna a lista anteior"));
-        meta.setCustomModelData(12);
-        ant.setItemMeta(meta);
-
-        pro = new ItemStack(Material.BARRIER, 1);
-        meta = pro.getItemMeta();
-        meta.setDisplayName("§9§lPróximo");
-        meta.setLore(Arrays.asList("§fVai para próxima lista"));
-        meta.setCustomModelData(11);
-        pro.setItemMeta(meta);
-
         this.player = player;
     }
 
@@ -89,13 +67,14 @@ public class InventoryCustom implements InterfaceInventario {
     }
 
     @Override
-    public String setName(String name) {
-        return this.name = name;
+    public InventoryCustom setName(String name) {
+        this.name = name;
+        return this;
     }
 
     @Override
     public String getName() {
-        return name;
+        return name.replaceAll(Msg.Color("$lGrupo: $r"), "");
     }
 
     @Override
@@ -110,97 +89,90 @@ public class InventoryCustom implements InterfaceInventario {
 
     public void create(@NotNull Object name) {
         if (name instanceof String titule) {
-            this.name = titule.toLowerCase();
-            type = InventarioType.NOVO;
+            this.name = titule.toLowerCase().replaceAll(Msg.Color("$lGrupo: $r"), "");
+            Msg.ServidorGold("titulo: "+ this.name, getClass());
+            this.codigo = Utils.ParseNumber(this.name);
+            if (codigo > 0) {
+                type = InventarioType.NORMAL;
+                grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+            } else {
+                type = InventarioType.NOVO;
+                grupo = new Grupo();
+                grupo.setName(this.name);
+                grupo.addTraducao(player.getLocale(), this.name);
+            }
         }
         if (name instanceof Grupo grup) {
+            grupo = grup;
             type = InventarioType.NORMAL;
             this.codigo = grup.getCodigo();
             this.name = grup.getName();
             traducao = grup.getTraducao();
-            for (String names : grup.getListItem()) {
-                listItem.add(names);
-            }
         }
+
         inventory = Bukkit.createInventory(null, 54, toTitulo(player));
 
-        if(type == InventarioType.NOVO){
-            inventory.setItem(53, save);
-            return;
+        // Paginação
+        pagQuant = (grupo.getListItem().size()/54.0);
+        pagMap = new HashMap<>();
+        listItem = new ArrayList<>();
+        for (int i = 0; i < grupo.getListItem().size(); i++) {
+            listItem.add(grupo.getListItem().get(i));
+            if(pagQuant < 0.99 && (grupo.getListItem().size()-1) == i){
+                pagMap.put(1, listItem);
+                listItem = new ArrayList<>();
+            }
+            if(pagQuant > 0.98 && pagQuant < 1.95){
+                if(i == 52){
+                    pagMap.put(1, listItem);
+                    listItem = new ArrayList<>();
+                }
+                if( (grupo.getListItem().size()-1) == i) {
+                    pagMap.put(2, listItem);
+                    listItem = new ArrayList<>();
+                }
+            }
         }
-
-        // CRIANDO PAGINAÇÃO DOS ITENS
-        pag = 1;
-        List<ItemStack> lista = new ArrayList<>();
-        int position = 1;
-        for (String names : listItem) {
-            lista.add(VGlobal.ITEM_MAP_NAME.get(names).parseItemStack());
-            if (listItem.size() < 53) {
-                if (position == listItem.size()) {
-                    pagMap.put(pag, lista);
-                }
-            }
-            if (listItem.size() > 52 && listItem.size() < 104) {
-                if (position == 52) {
-                    pagMap.put(1, lista);
-                    lista = new ArrayList<>();
-                }
-
-                if (position == listItem.size()) {
-                    pagMap.put(2, lista);
-                    pag = 2;
-                }
-            }
-            if (listItem.size() > 103 && listItem.size() < 155) {
-                if (position == 52) {
-                    pagMap.put(1, lista);
-                    lista = new ArrayList<>();
-                }
-                if (position == 103) {
-                    pagMap.put(2, lista);
-                    lista = new ArrayList<>();
-                }
-                if (position == listItem.size()) {
-                    pagMap.put(3, lista);
-                    pag = 3;
-                }
-            }
-            position++;
-        }
-
     }
 
     public Inventory getInventory(@NotNull int pag) {
 
-        if(type == InventarioType.NORMAL) {
-            for (ItemStack itemStack : pagMap.get(pag)) {
-                itemStack.setAmount(1);
-                inventory.addItem(itemStack);
-            }
+        if(type == InventarioType.NOVO){
+            inventory.setItem(53, BtnSalva());
+            return inventory;
+        }
 
-            if (pag == 1) {
-                if (this.pag == 1) {
-                    if (isAdm()) {
-                        inventory.setItem(53, save);
-                    }
-                } else {
-                    inventory.setItem(53, pro);
-                }
+        if(pagQuant > 0 && pagQuant < 0.99){
+            for(String values : pagMap.get(pag)){
+                inventory.addItem(new Item(values).parseItemStack());
             }
-            if (pag > 1) {
-                inventory.setItem(52, ant);
-                if (isAdm() && this.pag == 2) {
-                    inventory.setItem(53, save);
-                } else {
-                    inventory.setItem(53, pro);
-                }
+            if(Config.CONTAINS_ADD(player)) {
+                inventory.setItem(53, BtnSalva());
+            }
+        }
+        if(pagQuant > 0.98 && pagQuant < 1.95){
+            for(String values : pagMap.get(pag)){
+                inventory.addItem(new Item(values).parseItemStack());
+            }
+            if(pag == 1){
+                inventory.setItem(53, BtnProximo());
             }
         }
         return inventory;
     }
 
     @Override
+    public InterfaceInventario setType(InventarioType type) {
+        this.type = type;
+        return this;
+    }
+
+    @Override
     public InventarioType getType() {
         return type;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
     }
 }

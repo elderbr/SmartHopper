@@ -30,8 +30,9 @@ public class Grupo implements Dados {
     }
 
     @Override
-    public String setName(String name) {
-        return this.name = name;
+    public Grupo setName(String name) {
+        this.name = name;
+        return this;
     }
 
     @Override

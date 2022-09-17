@@ -19,9 +19,13 @@ public interface InterfaceInventario extends Dados {
 
     default String toTitulo(Player player) {
         if (getCodigo() > 0) {
-            return Msg.Color("§lGrupo: §r" + toTraducao(getPlayer().getLocale()) + " §lID: §r" + getCodigo());
+            setType(InventarioType.NORMAL);
+            setName(toTraducao(getPlayer().getLocale()));
+            return Msg.Color("$lGrupo: $r" + toTraducao(getPlayer().getLocale()) + " $lID: $r" + getCodigo());
         } else {
-            return Msg.Color("§lGrupo: §r" + toTraducao(getPlayer().getLocale()));
+            setType(InventarioType.NOVO);
+            setName(toTraducao(getPlayer().getLocale()));
+            return Msg.Color("$lGrupo: $r" + toTraducao(getPlayer().getLocale()));
         }
     }
 
@@ -66,5 +70,6 @@ public interface InterfaceInventario extends Dados {
     }
 
     InventarioType getType();
+    InterfaceInventario setType(InventarioType type);
 
 }

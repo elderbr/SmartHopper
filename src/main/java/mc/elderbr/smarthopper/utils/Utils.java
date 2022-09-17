@@ -105,4 +105,17 @@ public class Utils {
     public static String toItem(ItemStack item) {
         return item.getType().name().toLowerCase().replaceAll("_", " ");
     }
+
+    public static int ParseNumber(String value){
+        StringBuilder v = new StringBuilder();
+        for(char x : value.toCharArray()){
+            if(Character.getType(x) == 9){
+                v.append(x);
+            }
+        }
+        if(v.toString().length()<1){
+            v.append(0);
+        }
+        return Integer.parseInt(v.toString());
+    }
 }

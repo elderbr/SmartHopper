@@ -30,7 +30,7 @@ public class GrupoComando implements CommandExecutor {
 
     private Item item;
     private ItemStack itemStack;
-    public static InventoryCustom INVENTORY;
+    public InventoryCustom inventory;
     private ItemStack itemSalve;
     private ItemMeta meta;
     private List<String> lore;
@@ -84,9 +84,9 @@ public class GrupoComando implements CommandExecutor {
                 }
 
                 if (grupo != null) {
-                    INVENTORY = new InventoryCustom(player);
-                    INVENTORY.create(grupo);
-                    player.openInventory(INVENTORY.getInventory(1));
+                    inventory = new InventoryCustom(player);
+                    inventory.create(grupo);
+                    player.openInventory(inventory.getInventory(1));
                 } else {
                     Msg.GrupoNaoExiste(player, cmd);
                 }
@@ -100,9 +100,9 @@ public class GrupoComando implements CommandExecutor {
                     return false;
                 }
 
-                INVENTORY = new InventoryCustom(player);
-                INVENTORY.create(cmd);
-                player.openInventory(INVENTORY.getInventory(1));
+                inventory = new InventoryCustom(player);
+                inventory.create(cmd);
+                player.openInventory(inventory.getInventory(1));
             }
 
             // REMOVER GRUPO

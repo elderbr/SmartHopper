@@ -124,10 +124,10 @@ public class SmartHopper implements Dados {
     }
 
     @Override
-    public String setName(String name) {
+    public SmartHopper setName(String name) {
         this.name = name;
         hopper.setCustomName(name);
-        return this.name;
+        return this;
     }
 
     @Override

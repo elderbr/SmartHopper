@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Item implements Dados, LivroEncantado {
+public class Item implements LivroEncantado, Dados {
 
     private int codigo = 0;
     private String name;
@@ -53,8 +53,9 @@ public class Item implements Dados, LivroEncantado {
     }
 
     @Override
-    public String setName(String name) {
-        return this.name = name;
+    public Item setName(String name) {
+        this.name = name;
+        return this;
     }
 
     @Override
@@ -76,8 +77,9 @@ public class Item implements Dados, LivroEncantado {
         return size;
     }
 
-    public void setSize(int size) {
+    public Item setSize(int size) {
         this.size = size;
+        return this;
     }
 
     public void setSize(ItemStack itemStack) {
@@ -88,12 +90,14 @@ public class Item implements Dados, LivroEncantado {
         return max;
     }
 
-    public void setMax(int max) {
+    public Item setMax(int max) {
         this.max = max;
+        return this;
     }
 
-    public void setMax(ItemStack itemStack) {
+    public Item setMax(ItemStack itemStack) {
         this.max = itemStack.getMaxStackSize();
+        return this;
     }
 
     public static void CreateItem() {
