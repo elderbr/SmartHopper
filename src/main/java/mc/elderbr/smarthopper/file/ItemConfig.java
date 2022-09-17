@@ -76,7 +76,7 @@ public class ItemConfig {
             // Adicionando item na variavel global
             VGlobal.ITEM_LIST.add(item);
             VGlobal.ITEM_MAP_ID.put(item.getCodigo(), item);
-            VGlobal.ITEM_MAP_NAME.put(item.getName(), item);
+            VGlobal.ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
             VGlobal.TRADUCAO_ITEM_LIST.put(names.toLowerCase(), item);// Adicionando a tradução para o item
             VGlobal.TRADUCAO_ITEM_NAME_LIST.add(names.toLowerCase());
         }
