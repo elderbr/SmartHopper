@@ -78,6 +78,8 @@ mc/elderbr/smarthopper/event/MoveHopper.java
  mc.elderbr.smarthopper.event.MoveHopper
 mc/elderbr/smarthopper/interfaces/LivroEncantado.java
  mc.elderbr.smarthopper.interfaces.LivroEncantado
+mc/elderbr/smarthopper/interfaces/Botao.java
+ mc.elderbr.smarthopper.interfaces.Botao
 mc/elderbr/smarthopper/model/InventoryCustom.java
  mc.elderbr.smarthopper.model.InventoryCustom
 mc/elderbr/smarthopper/file/Config.java
