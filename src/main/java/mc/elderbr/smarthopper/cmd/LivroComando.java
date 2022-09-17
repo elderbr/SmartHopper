@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -76,6 +77,10 @@ public class LivroComando implements CommandExecutor {
                 player.sendMessage("Você recebeu o livro com a lista dos grupos");
                 player.playSound(player.getLocation(), Sound.ENTITY_WANDERING_TRADER_YES, 20, 120);
                 return true;
+            }
+            if(command.getName().equalsIgnoreCase("informacao")){
+                Msg.PlayerGold(player,"$lhttps://github.com/elderbr/SmartHopper");
+                Msg.PlayerGreen(player,"$lhttps://youtu.be/fBIeZ57ka1M");
             }
         }else{
             Msg.ServidorRed("Comando somente para jogadores!!!");
