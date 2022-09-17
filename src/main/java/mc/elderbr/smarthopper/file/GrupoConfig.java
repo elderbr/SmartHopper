@@ -157,7 +157,7 @@ public class GrupoConfig {
             grupo = new Grupo();
             grupo.setCodigo(config.getInt(name.concat(".grupo_id")));
             grupo.setName(config.getString(name.concat(".grupo_name")));
-            VGlobal.TRADUCAO_GRUPO.put(grupo.getName(), grupo);
+            VGlobal.TRADUCAO_GRUPO.put(grupo.getName().toLowerCase(), grupo);
 
             // PEGANDO O MAIOR CÓDIGO DO GRUPO
             if (grupo.getCodigo() > VGlobal.CD_MAX.get(0)) {
@@ -172,7 +172,7 @@ public class GrupoConfig {
                     traducao = langs.getValue().toString();
                     grupo.addTraducao(lang, traducao);
                     // Variavel Global
-                    VGlobal.TRADUCAO_GRUPO.put(traducao, grupo);
+                    VGlobal.TRADUCAO_GRUPO.put(traducao.toLowerCase(), grupo);
                 }
             }
 
@@ -184,7 +184,7 @@ public class GrupoConfig {
             // ADICIONANDO NA VARIAVEL GLOBAL
             VGlobal.GRUPO_LIST.add(grupo);
             VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
-            VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+            VGlobal.GRUPO_MAP_NAME.put(grupo.getName().toLowerCase(), grupo);
 
         }
     }
