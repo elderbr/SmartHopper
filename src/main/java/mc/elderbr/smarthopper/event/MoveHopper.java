@@ -94,7 +94,6 @@ public class MoveHopper implements Listener {
 
         } catch (Exception e) {
             event.setCancelled(false);
-            Msg.ServidorErro("Erro ao movimentar o item", "", getClass(), e);
         }
 
     }
