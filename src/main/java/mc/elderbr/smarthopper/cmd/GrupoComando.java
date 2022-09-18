@@ -135,6 +135,8 @@ public class GrupoComando implements CommandExecutor {
                     VGlobal.GRUPO_LIST.remove(grupo);
                     VGlobal.GRUPO_MAP_ID.remove(grupo.getCodigo());
                     VGlobal.GRUPO_MAP_NAME.remove(grupo.getName());
+                    VGlobal.TRADUCAO_GRUPO.remove(grupo.getName().toLowerCase());
+                    VGlobal.TRADUCAO_GRUPO.remove(grupo.toTraducao(player).toLowerCase());
                     Msg.PlayerTodos("$l$6O grupo $c" + grupo.getName() + "$6 foi removido pelo o ADM $e" + player.getName() + "$6!!!");
                 }else{
                     Msg.PlayerRed(player, "Erro ao deletar o grupo!!!");
