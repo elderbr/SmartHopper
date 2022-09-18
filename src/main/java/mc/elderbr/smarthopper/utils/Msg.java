@@ -102,7 +102,7 @@ public class Msg {
     }
 
     public static void GrupoNaoExiste(Player player, String name) {
-        player.sendMessage(Color("$2O grupo $e" + name + " $6NÃO existe!"));
+        player.sendMessage(Color("$2O grupo $e" + name + "$6 NÃO existe!"));
     }
 
     public static void GrupoNegar(Player player, Grupo grupo) {
