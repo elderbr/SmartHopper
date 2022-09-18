@@ -88,8 +88,8 @@ public class InventarioEvent implements Listener, Botao {
                             // Adicionando na variavel global
                             VGlobal.GRUPO_LIST.add(grupo);
                             VGlobal.GRUPO_MAP_ID.put(grupo.getCodigo(), grupo);
-                            VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
-                            VGlobal.TRADUCAO_GRUPO.put(grupo.getName(), grupo);
+                            VGlobal.GRUPO_MAP_NAME.put(grupo.getName().toLowerCase(), grupo);
+                            VGlobal.TRADUCAO_GRUPO.put(grupo.getName().toLowerCase(), grupo);
 
                             Msg.PlayerTodos("$e$lNovo grupo $6$l" + grupo.getName() + "$e$l criado por $2$l" + player.getName() + "$e$l!!!");
                         } else {
