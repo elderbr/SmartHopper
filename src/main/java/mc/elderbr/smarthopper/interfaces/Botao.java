@@ -22,8 +22,8 @@ public interface Botao {
     default ItemStack BtnProximo(){
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
-        meta.setDisplayName(Msg.Color("$9$lPróximo"));
-        meta.setLore(Arrays.asList(Msg.Color("$fVai para próxima lista")));
+        meta.setDisplayName(Msg.Color("$9$l Próximo"));
+        meta.setLore(Arrays.asList(Msg.Color("$f Vai para próxima lista")));
         meta.setCustomModelData(11);
         btn.setItemMeta(meta);
         return btn;
