@@ -69,13 +69,22 @@ public class InventarioEvent implements Listener, Botao {
         if (inventoryCustom.isAdm()) {
             if (event.isLeftClick()) {
                 if (itemClick != null && itemClick.equals(BtnSalva())) {
+
+                    inventory.removeItem(BtnSalva());// Remove o botão salvar antes de passar pelo os item
+
+                    if(inventory.isEmpty()){
+                        Msg.PlayerGold(player,"Adicione item para o grupo!!!");
+                        inventory.setItem(53, BtnSalva());
+                        return;
+                    }
+
                     if (inventoryCustom.getType() == InventarioType.NOVO) {
 
                         grupo = inventoryCustom.getGrupo();
                         grupo.setName(titulo.replaceAll(Msg.Color("$lGrupo: $r"), ""));
                         grupo.setCodigo(VGlobal.CD_MAX.get(0) + 1);// Adicionando novo código do grupo
                         grupo.addTraducao(player.getLocale(), Utils.ToUTF(grupo.getName()));// Adicionando tradução do grupo
-                        inventory.removeItem(BtnSalva());// Remove o botão salvar antes de passar pelo os item
+
                         // Percorrendo todos os itens do inventario
                         for (ItemStack itemStack : inventory.getContents()) {
                             if (itemStack != null) {
