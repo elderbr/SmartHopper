@@ -40,7 +40,7 @@ public class AdministradorComando implements CommandExecutor {
                 }
 
                 if (Config.ADD_ADM(player)) {
-                    Msg.PlayerTodos(String.format("$lO jogador $e%s$r$l é o novo administrador do $2Smart Hopper!!!", player));
+                    Msg.PlayerTodos(String.format("$lO jogador $e%s $r$lé o novo administrador do $2Smart Hopper!!!", player));
                     return false;
                 }else{
                     Msg.PlayerRed(playerCommand, "Ocorreu um erro ao adicionar novo adm do Smart Hopper!!!");
@@ -57,7 +57,7 @@ public class AdministradorComando implements CommandExecutor {
                 }
                 // BUSCANDO JOGADOR NA LISTA
                 if(Config.CONTAINS_ADD(player) && Config.REMOVE_ADM(player)){
-                    Msg.PlayerTodos("$lO jogador $e"+ player +"$r$l foi $cremovido$r$l do Adm do Smart Hopper!!!");
+                    Msg.PlayerTodos("$lO jogador $e"+ player +"$r$l foi $cremovido$r$l do Adm do $2Smart Hopper!!!");
                 }
 
             }

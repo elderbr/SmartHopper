@@ -33,7 +33,7 @@ public class ItemComando implements CommandExecutor {
                 if (cmd.length() == 0) {// VERIFICA SE NÃO FOI DIGITADO E SE O ITEM É DIFERENTE DE AR
 
                     if (itemStack.getType() == Material.AIR) {
-                        player.sendMessage("§cSegure um item na mão ou escreva o nome ou ID!!!");
+                        Msg.PlayerGreen(player, "$cSegure um item na mão ou escreva o nome ou ID!!!");
                         return true;
                     }
                     // CONVERTE ITEM STACK PARA ITEM

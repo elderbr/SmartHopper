@@ -69,11 +69,11 @@ public class GrupoComando implements CommandExecutor {
                     }
 
                     if (listGrupo.size() > 1) {
-                        Msg.PlayerGold(player, "§f#================ LISTA DE GRUPOS ====================#");
+                        Msg.PlayerGold(player, "$f#================ LISTA DE GRUPOS ====================#");
                         for (Grupo grups : listGrupo) {
                             Msg.Grupo(player, grups);
                         }
-                        Msg.PlayerGold(player, "§f#====================================#");
+                        Msg.PlayerGold(player, "$f#====================================#");
                         return false;
                     }
                     if(listGrupo.size()>0) {
@@ -132,7 +132,7 @@ public class GrupoComando implements CommandExecutor {
                 }
                 // DELETANDO O GRUPO
                 if (GrupoConfig.DELETE(grupo)) {
-                    Msg.PlayerTodos("§l§6O grupo §c" + grupo.getName() + "§6 foi removido pelo o ADM §e" + player.getName() + "§6!!!");
+                    Msg.PlayerTodos("$l$6O grupo $c" + grupo.getName() + "$6 foi removido pelo o ADM $e" + player.getName() + "$6!!!");
                 }else{
                     Msg.PlayerRed(player, "Erro ao deletar o grupo!!!");
                 }
