@@ -62,7 +62,7 @@ public class ClickHopper implements Listener {
                         }
                     }
                 }
-                Msg.PlayerGold(player, "$f=====================================================");
+                Msg.PulaPlayer(player);
                 return;
             }
             if (smartHopper.getType() instanceof Item item) {
@@ -83,7 +83,7 @@ public class ClickHopper implements Listener {
             }
 
             if (smartHopper.getType() == null) {
-                Msg.PlayerRed(player, "$eFunil $4$lNÃO $econfigurado!!!");
+                Msg.PlayerRed(player, "$eFunil$4$l NÃO $econfigurado!!!");
             }
 
         }
