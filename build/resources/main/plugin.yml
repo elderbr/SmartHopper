@@ -1,5 +1,5 @@
 name: SmartHopper
-version: 4.0.3
+version: 4.0.4
 main: mc.elderbr.smarthopper.MainSmartHopper
 api-version: 1.19
 authors: [ ElderBR ]
