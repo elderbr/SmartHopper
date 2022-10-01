@@ -58,9 +58,10 @@ public class InventarioEvent implements Listener, Botao {
         inventoryCustom = new InventoryCustom(player);
         inventoryCustom.create(titulo);
 
-        itemClick = event.getCurrentItem();// ITEM CLICADO
+        itemClick = event.getCurrentItem().clone();// ITEM CLICADO
         itemClick.setAmount(1);
         itemStack = new ItemStack(itemClick.getType());// PEGANDO O TIPO DE ITEM QUE FOI CLICADO
+        itemStack.setAmount(1);
 
         // SE O INVENTARIO ABERTO É UM GRUPO
 
