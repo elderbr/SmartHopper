@@ -90,7 +90,6 @@ public class InventoryCustom implements InterfaceInventario, Botao {
     public void create(@NotNull Object name) {
         if (name instanceof String titule) {
             this.name = titule.toLowerCase().replaceAll(Msg.Color("$lGrupo: $r"), "");
-            Msg.ServidorGold("titulo: "+ this.name, getClass());
             this.codigo = Utils.ParseNumber(this.name);
             if (codigo > 0) {
                 type = InventarioType.NORMAL;
