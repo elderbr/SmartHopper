@@ -103,3 +103,12 @@ do jogador. O jogador precisa está online para ser adicionado.
 
 ### AVISO
 Na coluna ***não pode ter um funil sem está configurado***, quando funil não está configura ***recebe*** todos os tipos de item, ele se torna um funil global onde aceita qualquer item.
+
+
+### Agora com icone para navegar entre os itens do grupo
+
+#### Botão Próximo
+![Ir para próxima página](https://github.com/elderbr/SmartHopper/raw/main/src/main/resources/img/btn_next.png)
+
+#### Botão Salvar
+![botão salvar](https://github.com/elderbr/SmartHopper/raw/main/src/main/resources/img/btn_save.png)
