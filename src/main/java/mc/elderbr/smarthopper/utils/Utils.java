@@ -11,18 +11,6 @@ import java.util.*;
 
 public class Utils {
 
-    public static String ToMaterial(Material material) {
-        return material.getKey().getKey().replaceAll("_", " ").toLowerCase();
-    }
-
-    public static String toItemStack(ItemStack itemStack) {
-        return itemStack.getType().getKey().getKey().replaceAll("_", " ").toLowerCase();
-    }
-
-    public static Material ParseItemStack(String keys) {
-        return Material.getMaterial(keys.toUpperCase().replaceAll("\\s", "_"));
-    }
-
     public static String NAME_ARRAY(String[] args) {
         StringBuilder txt = new StringBuilder();
         for (String name : args) {
