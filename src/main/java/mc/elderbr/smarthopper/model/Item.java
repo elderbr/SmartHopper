@@ -33,7 +33,9 @@ public class Item implements LivroEncantado, Dados {
 
     public Item(String name) {
         this.name = name;
-        itemStack = new ItemStack(Utils.ParseItemStack(name));
+        Item newItem = new Item();
+        newItem.setName(name);
+        itemStack = newItem.parseItemStack();
     }
 
     public Item(ItemStack itemStack) {
