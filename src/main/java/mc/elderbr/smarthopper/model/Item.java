@@ -45,7 +45,7 @@ public class Item implements LivroEncantado, Dados {
         itemStack = newItem.parseItemStack();
     }
 
-    public Item(ItemStack itemStack) {
+    public Item(@NotNull ItemStack itemStack) {
         size = itemStack.getAmount();
         max = itemStack.getMaxStackSize();
         parseItem(itemStack);
