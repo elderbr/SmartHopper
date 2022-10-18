@@ -31,10 +31,17 @@ public class Item implements LivroEncantado, Dados {
     public Item() {
     }
 
-    public Item(String name) {
+    public Item(@NotNull String name) {
+        if(name == null || name.isEmpty()){
+            throw new RuntimeException("O nome do item não poder está vazio!");
+        }
         this.name = name;
         Item newItem = new Item();
         newItem.setName(name);
+        if(newItem.parseItemStack() == null){
+            itemStack = new ItemStack(Material.AIR);
+            throw new RuntimeException("O item "+ name +" não existe!");
+        }
         itemStack = newItem.parseItemStack();
     }
 
