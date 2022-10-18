@@ -286,8 +286,8 @@ public class Grupo implements Dados {
                 grupo.addList("lily pad");
                 grupo.addList("wither rose");
                 grupo.addList("rose bush");
-                grupo.addList("weeping vine");
-                grupo.addList("wisting vine");
+                grupo.addList("weeping vines");
+                grupo.addList("twisting vines");
                 grupo.addList("vine");
                 grupo.addList("sunflower");
                 grupo.addList("lilac");
