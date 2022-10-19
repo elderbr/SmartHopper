@@ -1,15 +1,12 @@
 package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 
 import java.io.IOException;
 
 public class TextureController {
-
-    private Player myPlayer;
     private final String url = "http://elderbr.com/minecraft/textures/SmartHopper.zip";
 
     public TextureController() {
