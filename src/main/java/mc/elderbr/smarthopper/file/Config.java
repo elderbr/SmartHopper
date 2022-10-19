@@ -15,9 +15,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Config {
+public class Config implements VGlobal{
 
-    private final File directoryFile = new File(VGlobal.ARQUIVO.getAbsolutePath());
     private static final File FILE_CONFIG = new File(VGlobal.ARQUIVO, "config.yml");
     private BufferedWriter escrever;
     private Charset utf8 = StandardCharsets.UTF_8;
@@ -49,6 +48,16 @@ public class Config {
             SAVE();
         } catch (IOException e) {
             Msg.ServidorErro("Erro ao salvar a versão do plugin!!!", "", Config.class, e);
+        }
+    }
+
+    public static void SET_VERSION(){
+        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        YML.set("version", VERSION);
+        try {
+            SAVE();
+        }catch (IOException e){
+            throw new RuntimeException("Erro ao salvar a versão do plugin!");
         }
     }
 
@@ -156,6 +165,8 @@ public class Config {
         // VERSÃO DO PLUGIN
         add("version", VGlobal.VERSION, Arrays.asList("Versão atual do plugin"));
 
+        add("isUseTexture", true, Arrays.asList("Usa textura personalizada para os botões de navegação dos itens do grupo"));
+
         // Administrador do Smart Hopper
         add("adm", Arrays.asList("ElderBR"),
                 Arrays.asList("Adminsitradores é responsável por adicionar ou remover operadores",
@@ -164,7 +175,7 @@ public class Config {
         add("langs", Arrays.asList("pt_br", "pt_pt"), Arrays.asList("Linguagens disponível"));
     }
 
-    private void add(String key, String value, List<String> comment) {
+    private void add(String key, Object value, List<String> comment) {
         YML.setComments(key, comment);
         YML.set(key, value);
     }
@@ -200,6 +211,26 @@ public class Config {
 
     public static boolean IsGrupoUpdate() {
         return YML.getBoolean("grupo atualizado");
+    }
+
+    /***
+     *
+     *  USO DA TEXTURA NO SERVIDOR
+     *
+     */
+    public static boolean ExistUseTexture(){
+        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        return (YML.get("isUseTexture")!=null);
+    }
+    public static boolean IsUseTexture(){
+        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        return YML.getBoolean("isUseTexture");
+    }
+
+    public static void SetUseTexture(boolean use) throws IOException {
+        YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        YML.set("isUseTexture", use);
+        SAVE();
     }
 
 

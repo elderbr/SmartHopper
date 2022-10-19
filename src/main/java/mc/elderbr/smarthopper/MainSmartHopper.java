@@ -47,6 +47,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
         config = new Config();
+        Config.SET_VERSION();
 
         // Lendo e criando os itens
         Item.CreateItem();// Criando todos os itens
