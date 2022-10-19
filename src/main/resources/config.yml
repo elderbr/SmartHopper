@@ -8,6 +8,7 @@ item atualizado: true
 #Verifica se os grupos estão atualizados
 grupo atualizado: true
 # Usa textura personalizada para os botões de navegação dos itens do grupo
+# link texture pack http://elderbr.com/minecraft/textures/SmartHopper.zip
 isUseTexture: true;
 #Adminsitradores é responsável por adicionar ou remover operadores
 #Fica responsável por adicionar, alterar ou remover grupos

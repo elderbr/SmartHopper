@@ -229,6 +229,9 @@ public class Config implements VGlobal{
 
     public static void SetUseTexture(boolean use) throws IOException {
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
+        YML.setComments("isUseTexture",
+                Arrays.asList("Usa textura personalizada para os botões de navegação dos itens do grupo"
+                , "link texture pack http://elderbr.com/minecraft/textures/SmartHopper.zip"));
         YML.set("isUseTexture", use);
         SAVE();
     }
