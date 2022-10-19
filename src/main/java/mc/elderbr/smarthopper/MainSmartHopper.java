@@ -41,7 +41,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
                 "\n+---------------------------+\n" +
                 "| Smart Hopper              |\n" +
                 "| Version " + VGlobal.VERSION + "             |\n" +
-                "| Dircord: ElderBR#5398     |\n" +
+                "| Discord: ElderBR#5398     |\n" +
                 "+---------------------------+");
 
         // Iniciando o config padrão dos YML
