@@ -115,4 +115,4 @@ run/
 
 # Meus documentos
 .txt
-!version/
+!version/*.jar
