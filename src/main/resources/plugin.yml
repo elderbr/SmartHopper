@@ -26,5 +26,5 @@ commands:
     aliases: [ book, livro ]
     description: Recebe um livro com os nomes de todos os grupos
   informacao:
-    aliases: [infor, tutorial]
+    aliases: [infor, tutorial, config]
     description: Receberá um livro com os comandos basicos do Smart Hopper

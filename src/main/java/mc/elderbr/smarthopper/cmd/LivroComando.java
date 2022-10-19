@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.controllers.LivroController;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -32,6 +33,8 @@ public class LivroComando implements CommandExecutor {
     private List<String> list;
     private int linha = 0;
 
+    private LivroController livroController;
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
@@ -47,25 +50,25 @@ public class LivroComando implements CommandExecutor {
                 grupoList = new ArrayList<>();
                 list = new ArrayList<>();
                 String lang = null;
-                for(Grupo grupos : VGlobal.GRUPO_MAP_NAME.values()){
+                for (Grupo grupos : VGlobal.GRUPO_MAP_NAME.values()) {
                     lang = Utils.ToUTF(grupos.toTraducao(player));
-                    if(lang!=null && !list.contains(lang)) {
+                    if (lang != null && !list.contains(lang)) {
                         list.add(lang);
                     }
                 }
 
                 Collections.sort(list);
-                for(String grupos : list){
-                    if(linha == 0){
+                for (String grupos : list) {
+                    if (linha == 0) {
                         txt = new StringBuilder();
                     }
-                    if(linha % 2 == 0) {
-                        txt.append(ChatColor.BLACK+""+ChatColor.BOLD+"- " + grupos + "\n");
-                    }else{
-                        txt.append(ChatColor.DARK_GRAY+""+ChatColor.BOLD+"- " + grupos + "\n");
+                    if (linha % 2 == 0) {
+                        txt.append(ChatColor.BLACK + "" + ChatColor.BOLD + "- " + grupos + "\n");
+                    } else {
+                        txt.append(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "- " + grupos + "\n");
                     }
                     linha++;
-                    if(linha==15){
+                    if (linha == 15) {
                         grupoList.add(txt.toString());
                         linha = 0;
                     }
@@ -78,11 +81,11 @@ public class LivroComando implements CommandExecutor {
                 player.playSound(player.getLocation(), Sound.ENTITY_WANDERING_TRADER_YES, 20, 120);
                 return true;
             }
-            if(command.getName().equalsIgnoreCase("informacao")){
-                Msg.PlayerGold(player,"$lhttps://github.com/elderbr/SmartHopper");
-                Msg.PlayerGreen(player,"$lhttps://youtu.be/fBIeZ57ka1M");
+            if (command.getName().equalsIgnoreCase("informacao")) {
+                livroController = new LivroController();
+                livroController.informacao(player);
             }
-        }else{
+        } else {
             Msg.ServidorRed("Comando somente para jogadores!!!");
         }
         return false;
