@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Dados;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Utils;
@@ -304,6 +305,7 @@ public class Grupo implements Dados {
                 VGlobal.GRUPO_LIST.add(grupo);
             }
         }
+        Config.SET_VERSION();// Alterando para versão atual
     }
 
     public boolean isContains(Item item) {
