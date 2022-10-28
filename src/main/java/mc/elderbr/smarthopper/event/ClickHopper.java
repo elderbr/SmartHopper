@@ -33,59 +33,21 @@ public class ClickHopper implements Listener {
         item = new Item(itemStack);
 
         // RETORN SE O BLOCO CLICADO FOR DIFERENTE DO HOPPER OU SE
-        if (event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.HOPPER) {
+        if (event.getClickedBlock() == null
+                || itemStack.getType() != Material.STICK
+                || event.getAction() != Action.LEFT_CLICK_BLOCK
+                || event.getClickedBlock().getType() != Material.HOPPER) {
             return;
         }
 
         block = event.getClickedBlock();
-        smartHopper = new SmartHopper(block);
-
-        // SE FOR CLICADO NO HOPPER COM GRAVETO NA MÃO
-        if (itemStack.getType() == Material.STICK && event.getAction() == Action.LEFT_CLICK_BLOCK) {
-
-            // SE EXISTIR MAIS DE UM ITEM OU GRUPO CONFIGURADO PARA O MESMO FUNIL
-            if (smartHopper.getType() instanceof ArrayList list) {
-                Msg.PlayerGold(player, "$f====================== LISTA ======================");
-                for (Object obj : list) {
-                    if (obj instanceof Item item) {
-                        if(smartHopper.isBloqueio()){
-                            Msg.ItemNegar(player, item);
-                        }else {
-                            Msg.Item(player, item);
-                        }
-                    }
-                    if (obj instanceof Grupo grupo) {
-                        if(smartHopper.isBloqueio()) {
-                            Msg.GrupoNegar(player, grupo);
-                        }else{
-                            Msg.Grupo(player, grupo);
-                        }
-                    }
-                }
-                Msg.PulaPlayer(player);
-                return;
-            }
-            if (smartHopper.getType() instanceof Item item) {
-                Msg.PulaPlayer(player);
-                if(smartHopper.isBloqueio()){
-                    Msg.ItemNegar(player, item);
-                }else {
-                    Msg.Item(player, item);
-                }
-            }
-            if (smartHopper.getType() instanceof Grupo grupo) {
-                Msg.PulaPlayer(player);
-                if(smartHopper.isBloqueio()) {
-                    Msg.GrupoNegar(player, grupo);
-                }else{
-                    Msg.Grupo(player, grupo);
-                }
-            }
-
-            if (smartHopper.getType() == null) {
-                Msg.PlayerRed(player, "$eFunil$4$l NÃO $econfigurado!!!");
-            }
-
+        try {
+            smartHopper = new SmartHopper(block);
+            Msg.getType(player, smartHopper.getType());
+        } catch (Exception e) {
+            Msg.PlayerGold(player, e.getMessage());
+            Msg.ServidorRed(e.getMessage());
         }
+
     }
 }
