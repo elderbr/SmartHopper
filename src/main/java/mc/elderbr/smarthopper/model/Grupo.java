@@ -1,13 +1,12 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.interfaces.Dados;
+import mc.elderbr.smarthopper.interfaces.Funil;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Utils;
 
 import java.util.*;
 
-public class Grupo implements Dados {
+public class Grupo implements Funil {
 
     private int codigo;
     private String name;

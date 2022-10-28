@@ -3,9 +3,8 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.interfaces.Dados;
+import mc.elderbr.smarthopper.interfaces.Funil;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
@@ -19,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SmartHopper implements Dados {
+public class SmartHopper implements Funil {
 
     private int codigo = 0;
     private String name = "hopper";
@@ -154,8 +153,9 @@ public class SmartHopper implements Dados {
     }
 
     @Override
-    public int setCodigo(int codigo) {
-        return this.codigo = codigo;
+    public Funil setCodigo(int codigo) {
+        this.codigo = codigo;
+        return this;
     }
 
     @Override
