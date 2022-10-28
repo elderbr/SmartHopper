@@ -1,6 +1,8 @@
 package mc.elderbr.smarthopper.model;
 
 
+import mc.elderbr.smarthopper.exceptions.GrupoException;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.Dados;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -12,7 +14,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SmartHopper implements Dados {
 
@@ -22,9 +27,9 @@ public class SmartHopper implements Dados {
     private boolean trava = true;
     private Map<String, String> traducao = new HashMap<>();
     private Object type = null;
-    private List<Object> list = null;
+    private List<Object> listType = null;
 
-    private Hopper hopper = null;
+    private Hopper myHopper = null;
     private String silaba;
     private int size = 0;
     private int max = 0;
@@ -36,80 +41,115 @@ public class SmartHopper implements Dados {
 
     private Grupo grupo;
 
-    public SmartHopper(@NotNull Object hopper) {
+    private Block block;
+
+    public SmartHopper(@NotNull Object hopper) throws Exception {
         if (hopper instanceof Hopper funil) {
-            this.hopper = funil;
+            myHopper = funil;
         }
         if (hopper instanceof Inventory inventory) {
             if (inventory.getType() == InventoryType.HOPPER) {
-                this.hopper = (Hopper) inventory.getLocation().getBlock().getState();
+                myHopper = (Hopper) inventory.getLocation().getBlock().getState();
             }
         }
         if (hopper instanceof Block block) {
             if (block.getType() == Material.HOPPER) {
-                this.hopper = (Hopper) block.getState();
+                myHopper = (Hopper) block.getState();
             }
         }
-        if (this.hopper != null) {
+        if (myHopper == null) {// Se não existir o hopper
+            return;
+        }
 
-            name = (this.hopper.getCustomName() == null ? "hopper" : this.hopper.getCustomName().toLowerCase());
+        // Verifica se existe nome personalizado para o hopper
+        if (myHopper.getCustomName() == null) {
+            return;
+        }
 
-            if (name.equals("hopper")) return;
+        // Pegando o bloco hopper
+        block = myHopper.getBlock();
 
-            try {
-                if (name.contains(";")) {
-                    list = new ArrayList<>();
-                    for (String names : name.split(";")) {
+        // Pegando o nome do hopper
+        name = myHopper.getCustomName().toLowerCase();
 
-                        if (names.contains("#")) {
-                            silaba = names.substring(1, 2).toLowerCase();
-                            codigo = Integer.parseInt(names.substring(2, names.length()));
-                            bloqueio = true;
-                        } else {
-                            silaba = names.substring(0, 1).toLowerCase();
-                            codigo = Integer.parseInt(names.substring(1, names.length()));
-                            bloqueio = false;
-                        }
+        if (name.contains(";")) {
+            listType = new ArrayList<>();
+            for (String names : name.split(";")) {
 
-                        if (silaba.equalsIgnoreCase("i")) {
-                            item = VGlobal.ITEM_MAP_ID.get(codigo);
-                            list.add(item);
-                        }
-                        if (silaba.equalsIgnoreCase("g")) {
-                            grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
-                            list.add(grupo);
-                        }
+                if (names.substring(0, 2).contains("i")) {// Se o nome do hopper conter a letra i se trata de item
+                    // Pegando o código do item
+                    try {
+                        codigo = Integer.parseInt(names.replaceAll("[#i]", ""));
+                    } catch (NumberFormatException e) {
+                        throw new GrupoException("O funil configurado com o nome " + names + " não é valido!");
                     }
-                    type = list;
-                    return;
-                }
-
-                if (name.contains("#")) {
-                    bloqueio = true;
-                    silaba = name.substring(1, 2).toLowerCase();
-                    codigo = Integer.parseInt(name.substring(2, name.length()));
-                } else {
-                    bloqueio = false;
-                    silaba = name.substring(0, 1).toLowerCase();
-                    codigo = Integer.parseInt(name.substring(1, name.length()));
-                }
-
-                if (silaba.equalsIgnoreCase("i")) {
+                    // Pegando o item na memória
                     item = VGlobal.ITEM_MAP_ID.get(codigo);
+                    if (item == null) {
+                        throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
+                    }
                     traducao = item.getTraducao();
-                    type = item;
-                    return;
+                    listType.add(item);
                 }
 
-                if (silaba.equalsIgnoreCase("g")) {
+                // Se o nome do hopper conter a letra G se trata de grupo
+                if (names.substring(0, 2).contains("g")) {
+                    // Pegando o código do grupo
+                    try {
+                        codigo = Integer.parseInt(names.replaceAll("[#g]", ""));
+                    } catch (NumberFormatException e) {
+                        throw new GrupoException("O funil configurado com o nome " + names + " não é valido!", block);
+                    }
+                    // Buscando o grupo em memória
                     grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                    if (grupo == null) {
+                        throw new GrupoException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
+                    }
                     traducao = grupo.getTraducao();
-                    type = grupo;
+                    listType.add(grupo);
                 }
-            } catch (NumberFormatException ex) {
-            } catch (Exception e) {
-                Msg.ServidorErro("Erro ao pegar o tipo de smarthopper", "getType()", getClass(), e);
             }
+            type = listType;
+            return;
+        }
+
+        // Se o nome do hopper conter a letra i se trata de item
+        if (name.substring(0, 2).contains("i")) {
+            // Pegando o código do item
+            try {
+                codigo = Integer.parseInt(name.replaceAll("[#i]", ""));
+            } catch (NumberFormatException e) {
+                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
+            }
+            // Pegando o item na memória
+            item = VGlobal.ITEM_MAP_ID.get(codigo);
+            if (item == null) {
+                throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
+            }
+            traducao = item.getTraducao();
+            type = item;
+            return;
+        }
+
+        // Se o nome do hopper conter a letra G se trata de grupo
+        if (name.substring(0, 2).contains("g")) {
+            // Pegando o código do grupo
+            try {
+                codigo = Integer.parseInt(name.replaceAll("[#g]", ""));
+            } catch (NumberFormatException e) {
+                throw new GrupoException("O funil configurado com o nome " + name + " não é valido!", block);
+            }
+            // Buscando o grupo em memória
+            grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+            if (grupo == null) {
+                throw new GrupoException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
+            }
+            traducao = grupo.getTraducao();
+            type = grupo;
+        }
+        // Se conter # o item deve ser bloqueado
+        if (name.contains("#")) {
+            bloqueio = true;
         }
     }
 
@@ -126,7 +166,7 @@ public class SmartHopper implements Dados {
     @Override
     public SmartHopper setName(String name) {
         this.name = name;
-        hopper.setCustomName(name);
+        myHopper.setCustomName(name);
         return this;
     }
 
@@ -170,10 +210,10 @@ public class SmartHopper implements Dados {
 
     public boolean cancelled(Inventory inventory, Inventory destino) {
 
-        if (hopper == null || name.equals("hopper")) return false;
+        if (myHopper == null || name.equals("hopper")) return false;
 
-        if (type instanceof ArrayList listObj) {
-            for (Object type : listObj) {
+        if (type instanceof ArrayList listTypeObj) {
+            for (Object type : listTypeObj) {
                 if (type instanceof Item itemSmart) {
                     for (ItemStack itemStackInventory : inventory.getStorageContents()) {
                         if (itemStackInventory == null) continue;
@@ -328,15 +368,15 @@ public class SmartHopper implements Dados {
     }
 
     public boolean isCancelled(Item item) {
-        if (type instanceof ArrayList listObj) {
+        if (type instanceof ArrayList listTypeObj) {
             trava = true;
-            for (Object type : listObj) {
+            for (Object type : listTypeObj) {
                 if (type instanceof Item itemSmart) {
                     if (bloqueio) {
                         if (itemSmart.getCodigo() == item.getCodigo()) {
                             trava = true;
                             break;
-                        }else{
+                        } else {
                             trava = false;
                         }
                     } else if (itemSmart.getCodigo() == item.getCodigo()) {
@@ -348,7 +388,7 @@ public class SmartHopper implements Dados {
                         if (grupo.isContains(item)) {
                             trava = true;
                             break;
-                        }else{
+                        } else {
                             trava = false;
                         }
                     } else if (grupo.isContains(item)) {
