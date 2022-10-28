@@ -16,6 +16,7 @@ public class ItemException extends RuntimeException {
 
     public ItemException(@NotNull String message) {
         super(message);
+        msg = message;
     }
 
     public ItemException(@NotNull String message,@NotNull Block block) throws Exception {
@@ -28,5 +29,10 @@ public class ItemException extends RuntimeException {
 
         Bukkit.getServer().getConsoleSender().sendMessage(msg);
         throw new Exception(msg);
+    }
+
+    @Override
+    public String getMessage(){
+        return msg;
     }
 }
