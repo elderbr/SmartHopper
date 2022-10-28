@@ -7,6 +7,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class Msg {
 
     public static void ServidorGreen(String msg) {
@@ -118,7 +120,19 @@ public class Msg {
             player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getCodigo()));
             return;
         }
-        player.sendMessage(Color("$eFunil$c NÃO $econfigurado"));
+        if(value instanceof ArrayList listaType){
+            for(Object obj : listaType){
+                if(obj instanceof Item item){
+                    player.sendMessage(Color("$2Item: $6" + item.toTraducao(player) + "$e ID: " + item.getCodigo()));
+                    return;
+                }
+                if(obj instanceof Grupo grupo){
+                    player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getCodigo()));
+                    return;
+                }
+            }
+        }
+        player.sendMessage(Color("$eFunil$c NÃO $econfigurado!!!"));
     }
 
     public static void PulaPlayer(Player player) {
