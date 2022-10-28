@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.exceptions;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemException extends RuntimeException {
     private String world, msg;
@@ -13,11 +14,11 @@ public class ItemException extends RuntimeException {
     public ItemException() {
     }
 
-    public ItemException(String message) {
+    public ItemException(@NotNull String message) {
         super(message);
     }
 
-    public ItemException(String message, Block block) throws Exception {
+    public ItemException(@NotNull String message,@NotNull Block block) throws Exception {
         world = block.getWorld().getName();
         x = block.getLocation().getBlockX();
         y = block.getLocation().getBlockY();
