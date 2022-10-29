@@ -1,6 +1,8 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.Funil;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -16,8 +18,21 @@ public class Item implements Funil {
     public Item() {
     }
 
-    public Item(ItemStack itemStack){
+    public Item(ItemStack itemStack) {
+        name = toItemStack(itemStack);
+        this = ITEM_MAP_NAME.get(name);
+    }
 
+    public Item(String name) {
+        this = ITEM_MAP_NAME.get(name);
+    }
+
+    public static ItemStack ParseItemStack(){
+        return new ItemStack(Material.valueOf(name.toUpperCase().replaceAll("\\s","_")));
+    }
+
+    public static Item PARSE(ItemStack itemStack) {
+        return new Item(itemStack);
     }
 
     @Override
@@ -58,11 +73,13 @@ public class Item implements Funil {
         return traducao;
     }
 
-    public String toItemStack(ItemStack itemStack){
-        return itemStack.getType().getKey().getKey().toLowerCase().replaceAll("_"," ");
+    public String toItemStack(ItemStack itemStack) {
+        return itemStack.getType().getKey().getKey().toLowerCase().replaceAll("_", " ");
     }
 
-    public static Item PARSE(ItemStack itemStack){
-        return new Item(itemStack);
+    public ItemStack parseItemStack(String name){
+        return new ItemStack(Material.valueOf(name.toUpperCase().replaceAll("\\s","_")));
     }
+
+
 }

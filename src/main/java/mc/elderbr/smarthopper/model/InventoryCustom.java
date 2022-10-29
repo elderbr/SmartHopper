@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.enums.InventarioType;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Botao;
+import mc.elderbr.smarthopper.interfaces.Funil;
 import mc.elderbr.smarthopper.interfaces.InterfaceInventario;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -57,8 +58,9 @@ public class InventoryCustom implements InterfaceInventario, Botao {
     }
 
     @Override
-    public int setCodigo(int codigo) {
-        return this.codigo = codigo;
+    public Funil setCodigo(int codigo) {
+        this.codigo = codigo;
+        return this;
     }
 
     @Override

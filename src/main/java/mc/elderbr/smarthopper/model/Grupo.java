@@ -20,8 +20,9 @@ public class Grupo implements Funil {
     }
 
     @Override
-    public int setCodigo(int codigo) {
-        return this.codigo = codigo;
+    public Funil setCodigo(int codigo) {
+        this.codigo = codigo;
+        return this;
     }
 
     @Override
@@ -38,6 +39,16 @@ public class Grupo implements Funil {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean isBloqueado() {
+        return false;
+    }
+
+    @Override
+    public Funil setBloqueado(boolean bloqueado) {
+        return null;
     }
 
     @Override
