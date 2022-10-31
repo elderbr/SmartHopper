@@ -10,6 +10,8 @@ public class Grupo implements Funil {
 
     private int codigo;
     private String name;
+
+    private boolean bloqueado;
     private Map<String, String> traducao = new HashMap<>();
     private List<String> listItem = new ArrayList<>();
 
@@ -43,12 +45,13 @@ public class Grupo implements Funil {
 
     @Override
     public boolean isBloqueado() {
-        return false;
+        return bloqueado;
     }
 
     @Override
     public Funil setBloqueado(boolean bloqueado) {
-        return null;
+        this.bloqueado = bloqueado;
+        return this;
     }
 
     @Override
