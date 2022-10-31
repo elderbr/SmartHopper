@@ -80,6 +80,16 @@ public class InventoryCustom implements InterfaceInventario, Botao {
     }
 
     @Override
+    public boolean isBloqueado() {
+        return false;
+    }
+
+    @Override
+    public Funil setBloqueado(boolean bloqueado) {
+        return null;
+    }
+
+    @Override
     public Map<String, String> getTraducao() {
         return traducao;
     }
