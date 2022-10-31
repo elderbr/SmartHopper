@@ -129,16 +129,16 @@ public class Msg {
             return;
         }
         if(value instanceof ArrayList listaType){
+            PulaPlayer(player);
             for(Object obj : listaType){
                 if(obj instanceof Item item){
                     player.sendMessage(Color("$2Item: $6" + item.toTraducao(player) + "$e ID: " + item.getCodigo()));
-                    return;
                 }
                 if(obj instanceof Grupo grupo){
                     player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getCodigo()));
-                    return;
                 }
             }
+            return;
         }
         player.sendMessage(Color("$eFunil$c NÃO $econfigurado!!!"));
     }
