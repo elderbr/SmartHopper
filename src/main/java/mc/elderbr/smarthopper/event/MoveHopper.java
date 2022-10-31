@@ -70,26 +70,57 @@ public class MoveHopper implements Listener {
             smartHopperDestino = new SmartHopper(destination);
 
             // Pega o bloco de baixo de onde o item está
-            blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            blockDown = destination.getLocation().getBlock();
 
-            if (blockDown.getState().getType() == Material.HOPPER) {// Verifica se o bloco de baixo é um hopper
+            if (destination.getType() == InventoryType.HOPPER) {
+
                 event.setCancelled(true);// Cancela o movimento do item
                 isBlockDownHopper();// Verifica se existe mais funis em baixo
                 for (Hopper hoppers : hopperList) {
                     smartHopper = new SmartHopper(hoppers);
-                    if(!smartHopper.isCancelled(item)) {
+
+                    // Se o hopper for igual ao item
+                    if (smartHopper.getType() instanceof Item itemSmart) {
+                        if(itemSmart.isBloqueado()){
+                            if(item.getCodigo() != itemSmart.getCodigo()){
+                                event.setCancelled(false);
+                                break;
+                            }
+                        }
+                        if (item.getCodigo() == itemSmart.getCodigo()) {
+                            if (itemSmart.isBloqueado()) {
+                                event.setCancelled(true);
+                                break;
+                            }
+                            event.setCancelled(false);
+                        }
+                    }
+
+                    // Se o hopper for igual ao grupo
+                    if (smartHopper.getType() instanceof Grupo grupoSmart) {
+                        if(grupoSmart.isBloqueado()){
+                            if(!grupoSmart.isContains(item)){
+                                event.setCancelled(false);
+                            }else{
+                                event.setCancelled(true);
+                            }
+                            break;
+                        }
+                        if (grupoSmart.isContains(item)) {
+                            event.setCancelled(false);
+                            break;
+                        }
+                    }
+
+                    if (smartHopper.getType() == null) {
                         event.setCancelled(false);
-                        break;
                     }
                 }
-            }
 
-            if (smartHopperDestino.getName().equals("hopper")) {
-                event.setCancelled(false);
             }
 
             if (destination.getType() != InventoryType.HOPPER) {
-                event.setCancelled(false);// Ativa o movimento do item
+                event.setCancelled(false);
             }
 
         } catch (Exception e) {
