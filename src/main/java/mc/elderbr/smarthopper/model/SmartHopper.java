@@ -5,34 +5,27 @@ import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.Funil;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SmartHopper implements Funil {
+public class SmartHopper {
 
-    private int codigo = 0;
-    private String name = "hopper";
-    private boolean bloqueio = false;
-    private boolean trava = true;
-    private Map<String, String> traducao = new HashMap<>();
+
+    private int codigo;
+    private String name;
     private Object type = null;
     private List<Object> listType = null;
-
     private Hopper myHopper = null;
-    private String silaba;
-    private int size = 0;
-    private int max = 0;
-
+    private Block block;
 
     // ITEM
     private Item item;
@@ -40,9 +33,10 @@ public class SmartHopper implements Funil {
 
     private Grupo grupo;
 
-    private Block block;
+
 
     public SmartHopper(@NotNull Object hopper) throws Exception {
+        myHopper = null;
         if (hopper instanceof Hopper funil) {
             myHopper = funil;
         }
@@ -87,7 +81,10 @@ public class SmartHopper implements Funil {
                     if (item == null) {
                         throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
                     }
-                    traducao = item.getTraducao();
+                    // Se conter cerquilha o item é negado
+                    if(name.contains("#")){
+                        item.setBloqueado(true);
+                    }
                     listType.add(item);
                 }
 
@@ -104,7 +101,10 @@ public class SmartHopper implements Funil {
                     if (grupo == null) {
                         throw new GrupoException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
                     }
-                    traducao = grupo.getTraducao();
+                    // Se conter cerquilha o grupo é negado
+                    if(name.contains("#")){
+                        grupo.setBloqueado(true);
+                    }
                     listType.add(grupo);
                 }
             }
@@ -125,7 +125,8 @@ public class SmartHopper implements Funil {
             if (item == null) {
                 throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
             }
-            traducao = item.getTraducao();
+            // Se conter cerquilha o item é negado
+            item.setBloqueado(name.contains("#"));
             type = item;
             return;
         }
@@ -143,287 +144,39 @@ public class SmartHopper implements Funil {
             if (grupo == null) {
                 throw new GrupoException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
             }
-            traducao = grupo.getTraducao();
+            // Se conter cerquilha o grupo é negado
+            grupo.setBloqueado(name.contains("#"));
             type = grupo;
         }
-        // Se conter # o item deve ser bloqueado
-        if (name.contains("#")) {
-            bloqueio = true;
-        }
     }
 
-    @Override
-    public Funil setCodigo(int codigo) {
-        this.codigo = codigo;
-        return this;
-    }
-
-    @Override
-    public int getCodigo() {
-        return codigo;
-    }
-
-    @Override
-    public SmartHopper setName(String name) {
-        this.name = name;
-        myHopper.setCustomName(name);
-        return this;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
-    }
-
-    public boolean isBloqueio() {
-        return bloqueio;
-    }
-
-    @Override
-    public Map<String, String> getTraducao() {
-        return traducao;
-    }
-
-    public String getSilaba() {
-        return silaba;
-    }
 
     public Object getType() {
         return type;
     }
 
-    public boolean cancelled(Inventory inventory, Inventory destino) {
-
-        if (myHopper == null || name.equals("hopper")) return false;
-
-        if (type instanceof ArrayList listTypeObj) {
-            for (Object type : listTypeObj) {
-                if (type instanceof Item itemSmart) {
-                    for (ItemStack itemStackInventory : inventory.getStorageContents()) {
-                        if (itemStackInventory == null) continue;
-                        itemInventory = Item.PARSE(itemStackInventory);
-                        if (bloqueio) {
-                            if (itemSmart.getCodigo() != itemInventory.getCodigo()) {
-                                for (ItemStack itemStackDestino : destino.getStorageContents()) {
-                                    if (itemStackDestino == null) {
-                                        destino.addItem(itemStackInventory);
-                                        inventory.removeItem(itemStackInventory);
-                                        return true;
-                                    }
-                                    itemDestino = Item.PARSE(itemStackDestino);
-                                    if (itemDestino.getSize() < itemDestino.getMax()) {
-                                        destino.addItem(itemStackInventory);
-                                        inventory.removeItem(itemStackInventory);
-                                        return true;
-                                    }
-                                }
-                            }
-                        } else if (itemSmart.getCodigo() == itemInventory.getCodigo()) {
-                            for (ItemStack itemStackDestino : destino.getStorageContents()) {
-                                if (itemStackDestino == null) {
-                                    destino.addItem(itemStackInventory);
-                                    inventory.removeItem(itemStackInventory);
-                                    return true;
-                                }
-                                itemDestino = Item.PARSE(itemStackDestino);
-                                if (itemDestino.getSize() < itemDestino.getMax()) {
-                                    destino.addItem(itemStackInventory);
-                                    inventory.removeItem(itemStackInventory);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }// FIM DO ITEM
-                if (type instanceof Grupo grupo) {
-                    for (ItemStack itemStackInventory : inventory.getStorageContents()) {
-                        if (itemStackInventory == null) continue;
-                        itemInventory = Item.PARSE(itemStackInventory);
-                        if (bloqueio) {
-                            if (!grupo.isContains(itemInventory)) {
-                                for (ItemStack itemStackDestino : destino.getStorageContents()) {
-                                    if (itemStackDestino == null) {
-                                        destino.addItem(itemStackInventory);
-                                        inventory.removeItem(itemStackInventory);
-                                        return true;
-                                    }
-                                    if (itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
-                                        destino.addItem(itemStackInventory);
-                                        inventory.removeItem(itemStackInventory);
-                                        return true;
-                                    }
-                                }
-                            }
-                        } else if (grupo.isContains(itemInventory)) {
-                            for (ItemStack itemStackDestino : destino.getStorageContents()) {
-                                if (itemStackDestino == null) {
-                                    destino.addItem(itemStackInventory);
-                                    inventory.removeItem(itemStackInventory);
-                                    return true;
-                                }
-                                if (itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
-                                    destino.addItem(itemStackInventory);
-                                    inventory.removeItem(itemStackInventory);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
+    public boolean isCancelled(Item item) {
+        if(type instanceof Item itemSmart){
+            if(itemSmart.getCodigo() == item.getCodigo()){
+                if(itemSmart.isBloqueado()){
+                    return true;
+                }else{
+                    return false;
                 }
             }
+            return true;
         }
-
-        if (type instanceof Item itemSmart) {
-            for (ItemStack itemStackInventory : inventory.getStorageContents()) {
-                if (itemStackInventory == null) continue;
-                itemInventory = Item.PARSE(itemStackInventory);
-                if (bloqueio) {
-                    if (itemSmart.getCodigo() != itemInventory.getCodigo()) {
-                        for (ItemStack itemStackDestino : destino.getStorageContents()) {
-                            if (itemStackDestino == null) {
-                                destino.addItem(itemStackInventory);
-                                inventory.removeItem(itemStackInventory);
-                                return true;
-                            }
-                            itemDestino = Item.PARSE(itemStackDestino);
-                            if (itemSmart.getCodigo() == itemDestino.getCodigo() && itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
-                                destino.addItem(itemStackInventory);
-                                inventory.removeItem(itemStackInventory);
-                                return true;
-                            }
-                        }
-                    }
-                } else if (itemSmart.getCodigo() == itemInventory.getCodigo()) {
-                    for (ItemStack itemStackDestino : destino.getStorageContents()) {
-                        ItemStack itemMove = itemStackInventory.clone();
-                        itemMove.setAmount(1);
-                        if (itemStackDestino == null) {
-                            destino.addItem(itemMove);
-                            return true;
-                        }
-                        itemDestino = Item.PARSE(itemStackDestino);
-                        if (itemSmart.getCodigo() == itemDestino.getCodigo() && itemDestino.getSize() < itemDestino.getMax()) {
-                            destino.addItem(itemMove);
-                            inventory.removeItem(itemMove);
-                            return true;
-                        }
-                    }
+        if(type instanceof Grupo grupo){
+            if(grupo.isContains(item)){
+                if(grupo.isBloqueado()){
+                    return true;
+                }else{
+                    return false;
                 }
             }
-        }// FIM DO ITEM
-
-        if (type instanceof Grupo grupo) {
-            for (ItemStack itemStackInventory : inventory.getStorageContents()) {
-                if (itemStackInventory == null) continue;
-                itemInventory = Item.PARSE(itemStackInventory);
-                if (bloqueio) {
-                    if (!grupo.isContains(itemInventory)) {
-                        for (ItemStack itemStackDestino : destino.getStorageContents()) {
-                            if (itemStackDestino == null) {
-                                destino.addItem(itemStackInventory);
-                                inventory.removeItem(itemStackInventory);
-                                return true;
-                            }
-                            if (itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
-                                destino.addItem(itemStackInventory);
-                                inventory.removeItem(itemStackInventory);
-                                return true;
-                            }
-                        }
-                    }
-                } else if (grupo.isContains(itemInventory)) {
-                    for (ItemStack itemStackDestino : destino.getStorageContents()) {
-                        if (itemStackDestino == null) {
-                            destino.addItem(itemStackInventory);
-                            inventory.removeItem(itemStackInventory);
-                            return true;
-                        }
-                        itemDestino = Item.PARSE(itemStackDestino);
-                        if (itemInventory.getCodigo() == itemDestino.getCodigo() && itemStackDestino.getAmount() < itemStackDestino.getMaxStackSize()) {
-                            destino.addItem(itemStackInventory.clone());
-                            inventory.removeItem(itemStackInventory.clone());
-                            return true;
-                        }
-                    }
-                }
-            }
+            return true;
         }
         return false;
-    }
-
-    public boolean isCancelled(Item item) {
-        if (type instanceof ArrayList listTypeObj) {
-            trava = true;
-            for (Object type : listTypeObj) {
-                if (type instanceof Item itemSmart) {
-                    if (bloqueio) {
-                        if (itemSmart.getCodigo() == item.getCodigo()) {
-                            trava = true;
-                            break;
-                        } else {
-                            trava = false;
-                        }
-                    } else if (itemSmart.getCodigo() == item.getCodigo()) {
-                        trava = false;
-                    }
-                }
-                if (type instanceof Grupo grupo) {
-                    if (bloqueio) {
-                        if (grupo.isContains(item)) {
-                            trava = true;
-                            break;
-                        } else {
-                            trava = false;
-                        }
-                    } else if (grupo.isContains(item)) {
-                        trava = false;
-                    }
-                }
-            }
-            return trava;
-
-        }
-
-        if (type instanceof Item itemSmart) {
-            if (bloqueio) {
-                if (itemSmart.getCodigo() == item.getCodigo()) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            if (itemSmart.getCodigo() == item.getCodigo()) {
-                return false;
-            }
-        }
-        if (type instanceof Grupo grupo) {
-            if (bloqueio) {
-                if (grupo.isContains(item)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else if (grupo.isContains(item)) {
-                return false;
-            }
-        }
-        return true;
     }
 
 
