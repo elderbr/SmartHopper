@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static mc.elderbr.smarthopper.interfaces.VGlobal.ARQUIVO;
+
 public class ItemConfig {
 
-    private static File ITEM_FILE = new File(VGlobal.ARQUIVO, "item.yml");
+    private static File ITEM_FILE = new File(ARQUIVO, "item.yml");
     private YamlConfiguration config;
 
     private int idItem = 1;
