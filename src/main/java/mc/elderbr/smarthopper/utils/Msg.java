@@ -132,10 +132,18 @@ public class Msg {
             PulaPlayer(player);
             for(Object obj : listaType){
                 if(obj instanceof Item item){
-                    player.sendMessage(Color("$2Item: $6" + item.toTraducao(player) + "$e ID: " + item.getCodigo()));
+                    if(item.isBloqueado()){
+                        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao(player) + "$e ID: " + item.getCodigo()));
+                    }else {
+                        player.sendMessage(Color("$2Item: $6" + item.toTraducao(player) + "$e ID: " + item.getCodigo()));
+                    }
                 }
                 if(obj instanceof Grupo grupo){
-                    player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getCodigo()));
+                    if(grupo.isBloqueado()){
+                        player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTraducao(player) + "$e ID: " + grupo.getCodigo()));
+                    }else {
+                        player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getCodigo()));
+                    }
                 }
             }
             return;
