@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -139,5 +140,10 @@ public class Item implements Funil {
                 ", name:'" + name + '\'' +
                 ", bloqueado:" + bloqueado +
                 '}';
+    }
+
+    @Override
+    public boolean equals(@NotNull Object obj) {
+        return (codigo == ((Item) obj).getCodigo());
     }
 }
