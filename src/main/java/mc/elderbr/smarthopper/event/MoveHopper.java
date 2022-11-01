@@ -1,10 +1,8 @@
 package mc.elderbr.smarthopper.event;
 
-import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.SmartHopper;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -17,7 +15,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +25,6 @@ public class MoveHopper implements Listener {
     private ItemStack itemStack;
 
     private Item item;
-    private Item itemDestino;
     private Map<Integer, ItemStack> map;
 
     private Inventory inventoryInicial;
@@ -79,18 +75,33 @@ public class MoveHopper implements Listener {
                 for (Hopper hoppers : hopperList) {
                     smartHopper = new SmartHopper(hoppers);
 
+                    if (smartHopper.getType() instanceof List listaFunil) {
+                        for (Object objFunil : listaFunil) {
+                            // Se o hopper for igual ao item
+                            if (objFunil instanceof Item itemSmart) {
+                                if (itemSmart.getCodigo() == item.getCodigo()) {
+                                    event.setCancelled(false);
+                                }
+                            }
+                            // Se o hopper for igual ao grupo
+                            if (smartHopper.getType() instanceof Grupo grupoSmart) {
+                                if (grupoSmart.isContains(item)) {
+                                    event.setCancelled(false);
+                                }
+                            }
+                        }
+                    }
+
                     // Se o hopper for igual ao item
                     if (smartHopper.getType() instanceof Item itemSmart) {
-                        if(itemSmart.isBloqueado()){
-                            if(item.getCodigo() != itemSmart.getCodigo()){
+                        if (itemSmart.isBloqueado()) {
+                            if (item.getCodigo() != itemSmart.getCodigo()) {
                                 event.setCancelled(false);
-                                break;
                             }
                         }
                         if (item.getCodigo() == itemSmart.getCodigo()) {
                             if (itemSmart.isBloqueado()) {
                                 event.setCancelled(true);
-                                break;
                             }
                             event.setCancelled(false);
                         }
@@ -98,17 +109,15 @@ public class MoveHopper implements Listener {
 
                     // Se o hopper for igual ao grupo
                     if (smartHopper.getType() instanceof Grupo grupoSmart) {
-                        if(grupoSmart.isBloqueado()){
-                            if(!grupoSmart.isContains(item)){
+                        if (grupoSmart.isBloqueado()) {
+                            if (!grupoSmart.isContains(item)) {
                                 event.setCancelled(false);
-                            }else{
+                            } else {
                                 event.setCancelled(true);
                             }
-                            break;
                         }
                         if (grupoSmart.isContains(item)) {
                             event.setCancelled(false);
-                            break;
                         }
                     }
 
@@ -116,7 +125,6 @@ public class MoveHopper implements Listener {
                         event.setCancelled(false);
                     }
                 }
-
             }
 
             if (destination.getType() != InventoryType.HOPPER) {
