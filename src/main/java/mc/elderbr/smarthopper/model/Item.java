@@ -17,7 +17,7 @@ public class Item implements Funil {
 
     private int codigo = 0;
     private String name;
-    private boolean bloqueado;
+    private boolean bloqueado = false;
     private Map<String, String> traducao = new HashMap<>();
 
     public Item() {
@@ -130,5 +130,14 @@ public class Item implements Funil {
             VGlobal.ITEM_LIST.add(item);
             cod++;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "codigo=" + codigo +
+                ", name='" + name + '\'' +
+                ", bloqueado=" + bloqueado +
+                '}';
     }
 }
