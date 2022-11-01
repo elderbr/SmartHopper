@@ -134,10 +134,10 @@ public class Item implements Funil {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "codigo=" + codigo +
-                ", name='" + name + '\'' +
-                ", bloqueado=" + bloqueado +
+        return "Item:{" +
+                "codigo:" + codigo +
+                ", name:'" + name + '\'' +
+                ", bloqueado:" + bloqueado +
                 '}';
     }
 }
