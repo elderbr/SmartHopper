@@ -92,6 +92,10 @@ public class Item implements Funil {
         return ITEM_MAP_NAME.get(itemStackInventory.getType().getKey().getKey().toLowerCase().replaceAll("_", " "));
     }
 
+    public static String ToName(ItemStack itemStack){
+        return itemStack.getType().getKey().getKey().toLowerCase().replaceAll("_", " ");
+    }
+
     public static void CreateItem() {
         for (Material m : Material.values()) {
             ItemStack itemStack = new ItemStack(m);
