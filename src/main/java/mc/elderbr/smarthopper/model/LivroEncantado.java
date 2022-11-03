@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 
+import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_NAME;
 import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_NAME_LIST;
 
 public class LivroEncantado {
@@ -50,5 +51,9 @@ public class LivroEncantado {
                 .replaceAll("\\s", "_").toUpperCase();
         itemStack = new ItemStack(Material.getMaterial(book));
         return itemStack;
+    }
+
+    public Item getItem(){
+        return ITEM_MAP_NAME.get(name);
     }
 }
