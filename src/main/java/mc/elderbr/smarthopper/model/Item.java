@@ -84,6 +84,10 @@ public class Item implements Funil {
         return new ItemStack(Material.valueOf(name.toUpperCase().replaceAll("\\s", "_")));
     }
 
+    public static ItemStack ParseItemStack(String name) {
+        return new ItemStack(Material.valueOf(name.toUpperCase().replaceAll("\\s", "_")));
+    }
+
     public static Item PARSE(ItemStack itemStackInventory) {
         return ITEM_MAP_NAME.get(itemStackInventory.getType().getKey().getKey().toLowerCase().replaceAll("_", " "));
     }
@@ -98,19 +102,8 @@ public class Item implements Funil {
                 }
             }
         }
-        // POÇÕES E SEU EFEITOS
-        for (PotionType potion : PotionType.values()) {
-            String name = "potion " + potion.name().replaceAll("_", " ").toLowerCase();
-            if (!VGlobal.ITEM_NAME_LIST.contains(name)) {
-                VGlobal.ITEM_NAME_LIST.add(name);
-            }
-            if (!VGlobal.ITEM_NAME_LIST.contains("splash " + name)) {
-                VGlobal.ITEM_NAME_LIST.add("splash " + name);
-            }
-            if (!VGlobal.ITEM_NAME_LIST.contains("lingering " + name)) {
-                VGlobal.ITEM_NAME_LIST.add("lingering " + name);
-            }
-        }
+
+        Pocao.Create();// POÇÕES E SEU EFEITOS
 
 
         // LIVRO ENCANTADOS
