@@ -104,16 +104,9 @@ public class Item implements Funil {
         }
 
         Pocao.Create();// POÇÕES E SEU EFEITOS
+        LivroEncantado.Create();// LIVRO ENCANTADOS
 
-
-        // LIVRO ENCANTADOS
-        for (Enchantment enchantment : Enchantment.values()) {
-            String name = "enchanted book " + enchantment.getKey().getKey().replaceAll("_", " ");
-            if (!VGlobal.ITEM_NAME_LIST.contains(name)) {
-                VGlobal.ITEM_NAME_LIST.add(name);
-            }
-        }
-        Collections.sort(VGlobal.ITEM_NAME_LIST);
+        Collections.sort(VGlobal.ITEM_NAME_LIST);// Organizando em ordem alfabetica
 
         // Criando itens com código e nome e adicionando na lista global
         int cod = 1;
