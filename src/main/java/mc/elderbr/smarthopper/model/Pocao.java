@@ -1,19 +1,12 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_NAME;
 import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_NAME_LIST;
@@ -60,31 +53,32 @@ public class Pocao {
                 type = "potion ";
                 break;
             case SPLASH_POTION:
-                type = "splash potion";
+                type = "splash potion ";
                 break;
             case LINGERING_POTION:
-                type = "lingering potion";
+                type = "lingering potion ";
                 break;
             default:
                 return null;
         }
         PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
-        name = type + " " + potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
+        name = type + potionMeta.getBasePotionData().getType().name().replaceAll("_", " ").toLowerCase();
         return name;
     }
 
     public Item getItem() {
-        return ITEM_MAP_NAME.get(getPotion());
+        getPotion();
+        return ITEM_MAP_NAME.get(name);
     }
 
     public ItemStack parseItemStack() throws ItemException {
-        if(name.contains("lingering")){
+        if (name.contains("lingering")) {
             itemStack = new ItemStack(Material.LINGERING_POTION);
             type = "lingering potion";
-        }else if(name.contains("splash")){
+        } else if (name.contains("splash")) {
             itemStack = new ItemStack(Material.SPLASH_POTION);
             type = "splash potion";
-        }else {
+        } else {
             itemStack = new ItemStack(Material.POTION);
             type = "potion";
         }
