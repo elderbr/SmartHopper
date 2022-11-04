@@ -26,7 +26,7 @@ public class LivroEncantado {
         this.itemStack = itemStack;
     }
 
-    public static void Create(){
+    public static void Create() {
         for (Enchantment enchantment : Enchantment.values()) {
             String name = Livro + enchantment.getKey().getKey().replaceAll("_", " ");
             if (!ITEM_NAME_LIST.contains(name)) {
@@ -35,17 +35,17 @@ public class LivroEncantado {
         }
     }
 
-    public String getBook(){
+    public String getBook() {
         if (itemStack.getType() == Material.ENCHANTED_BOOK) {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
-            for(Enchantment key : meta.getStoredEnchants().keySet()){
-                return Livro+ key;
+            for (Enchantment key : meta.getStoredEnchants().keySet()) {
+                return Livro + key;
             }
         }
         return null;
     }
 
-    public ItemStack parseItemStack(){
+    public ItemStack parseItemStack() {
         String book = name
                 .replaceAll(Livro, "").trim()
                 .replaceAll("\\s", "_").toUpperCase();
@@ -53,7 +53,13 @@ public class LivroEncantado {
         return itemStack;
     }
 
-    public Item getItem(){
+    public Item getItem() {
+        if (itemStack.getType() == Material.ENCHANTED_BOOK) {
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            for (Enchantment key : meta.getStoredEnchants().keySet()) {
+                name = Livro + key.getKey().getKey().replaceAll("_", " ").toLowerCase();
+            }
+        }
         return ITEM_MAP_NAME.get(name);
     }
 }
