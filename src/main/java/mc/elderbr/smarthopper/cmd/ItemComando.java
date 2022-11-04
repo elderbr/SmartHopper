@@ -38,6 +38,7 @@ public class ItemComando implements CommandExecutor {
                         item = itemController.getItem(cmd);
                     }
                     Msg.Item(player, item);
+                    return true;
                 } catch (ItemException e) {
                     Msg.PlayerGold(player, e.getMessage());
                 }
