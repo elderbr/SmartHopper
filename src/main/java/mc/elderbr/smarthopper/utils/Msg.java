@@ -148,7 +148,7 @@ public class Msg {
             }
             return;
         }
-        player.sendMessage(Color("$eFunil$c NÃO $econfigurado!!!"));
+        player.sendMessage(Color("$6Funil $cNÃO $6configurado!!!"));
     }
 
     public static void PulaPlayer(Player player) {

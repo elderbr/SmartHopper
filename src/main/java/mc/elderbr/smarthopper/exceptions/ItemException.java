@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.exceptions;
 
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +34,6 @@ public class ItemException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return msg;
+        return Msg.Color(msg);
     }
 }
