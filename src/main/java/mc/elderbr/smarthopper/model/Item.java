@@ -131,9 +131,7 @@ public class Item implements Funil {
                 ", bloqueado:" + bloqueado +
                 '}';
     }
-
-    @Override
-    public boolean equals(@NotNull Object obj) {
-        return (codigo == ((Item) obj).getCodigo());
+    public boolean equals(@NotNull Item item) {
+        return (codigo == item.getCodigo());
     }
 }
