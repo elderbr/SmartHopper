@@ -13,10 +13,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InventoryCustom implements InterfaceInventario, Botao {
 
@@ -124,21 +126,21 @@ public class InventoryCustom implements InterfaceInventario, Botao {
         inventory = Bukkit.createInventory(null, 54, toTitulo(player));
 
         // Paginação
-        pagQuant = (grupo.getListItem().size()/54.0);
+        pagQuant = (grupo.getListItem().size() / 54.0);
         pagMap = new HashMap<>();
         listItem = new ArrayList<>();
         for (int i = 0; i < grupo.getListItem().size(); i++) {
             listItem.add(grupo.getListItem().get(i));
-            if(pagQuant < 0.99 && (grupo.getListItem().size()-1) == i){
+            if (pagQuant < 0.99 && (grupo.getListItem().size() - 1) == i) {
                 pagMap.put(1, listItem);
                 listItem = new ArrayList<>();
             }
-            if(pagQuant > 0.98 && pagQuant < 1.95){
-                if(i == 52){
+            if (pagQuant > 0.98 && pagQuant < 1.95) {
+                if (i == 52) {
                     pagMap.put(1, listItem);
                     listItem = new ArrayList<>();
                 }
-                if( (grupo.getListItem().size()-1) == i) {
+                if ((grupo.getListItem().size() - 1) == i) {
                     pagMap.put(2, listItem);
                     listItem = new ArrayList<>();
                 }
@@ -148,24 +150,24 @@ public class InventoryCustom implements InterfaceInventario, Botao {
 
     public Inventory getInventory(@NotNull int pag) {
 
-        if(type == InventarioType.NOVO){
+        if (type == InventarioType.NOVO) {
             inventory.setItem(53, BtnSalva());
             return inventory;
         }
 
-        if(pagQuant > 0 && pagQuant < 0.99){
-            for(String values : pagMap.get(pag)){
+        if (pagQuant > 0 && pagQuant < 0.99) {
+            for (String values : pagMap.get(pag)) {
                 inventory.addItem(new Item(values).parseItemStack());
             }
-            if(Config.CONTAINS_ADD(player)) {
+            if (Config.CONTAINS_ADD(player)) {
                 inventory.setItem(53, BtnSalva());
             }
         }
-        if(pagQuant > 0.98 && pagQuant < 1.95){
-            for(String values : pagMap.get(pag)){
+        if (pagQuant > 0.98 && pagQuant < 1.95) {
+            for (String values : pagMap.get(pag)) {
                 inventory.addItem(new Item(values).parseItemStack());
             }
-            if(pag == 1){
+            if (pag == 1) {
                 inventory.setItem(53, BtnProximo());
             }
         }
