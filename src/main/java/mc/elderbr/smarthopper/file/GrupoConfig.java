@@ -67,13 +67,13 @@ public class GrupoConfig {
     }
 
     public static boolean ADD(Grupo grupo) {
-        String name = grupo.getName();
+        String name = grupo.getName().toLowerCase();
         if (VGlobal.GRUPO_MAP_NAME.get(name) == null) {
             try {
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
 
                 config.set(name.concat(".grupo_id"), grupo.getCodigo());
-                config.set(name.concat(".grupo_name"), name);
+                config.set(name.concat(".grupo_name"), grupo.getName());
                 config.set(name.concat(".grupo_lang"), grupo.getTraducao());
                 config.set(name.concat(".grupo_item"), grupo.getListItem());
                 config.save(fileConfig);
