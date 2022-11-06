@@ -1,8 +1,7 @@
 package mc.elderbr.smarthopper.event;
 
-import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.SmartHopper;
+import mc.elderbr.smarthopper.controllers.SmartHopper;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,9 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClickHopper implements Listener {
 
@@ -32,7 +28,7 @@ public class ClickHopper implements Listener {
         itemStack = player.getInventory().getItemInMainHand();
         item = new Item(itemStack);
 
-        // RETORN SE O BLOCO CLICADO FOR DIFERENTE DO HOPPER OU SE
+        // VERIFICA SE O JOGADOR ESTÁ SEGURANDO GRAVETO E SE BATEU NO FUNIL
         if (event.getClickedBlock() == null
                 || itemStack.getType() != Material.STICK
                 || event.getAction() != Action.LEFT_CLICK_BLOCK

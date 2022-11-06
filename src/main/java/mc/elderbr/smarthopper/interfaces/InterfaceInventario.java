@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public interface InterfaceInventario extends Dados {
+public interface InterfaceInventario extends Funil {
 
     // JOGADOR
     String setPlayer(@NotNull Player player);

@@ -5,44 +5,48 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public interface Dados {
+public interface Funil {
 
-    int setCodigo(int codigo);
+    Funil setCodigo(int codigo);
 
     int getCodigo();
 
-    Dados setName(String name);
+    Funil setName(String name);
 
     String getName();
 
-    default String toName(){
+    default String toName() {
         return Utils.ToUTF(getName());
     }
 
+    boolean isBloqueado();
+
+    Funil setBloqueado(boolean bloqueado);
+
     Map<String, String> getTraducao();
 
-    default Map<String, String> addTraducao(String lang, String traducao){
+    default Map<String, String> addTraducao(String lang, String traducao) {
         getTraducao().put(lang, traducao);
         return getTraducao();
     }
 
     default String toTraducao(String lang) {
-        if(getTraducao().get(lang)!=null) {
+        if (getTraducao().get(lang) != null) {
             return Utils.ToUTF(getTraducao().get(lang));
-        }else{
+        } else {
             return Utils.ToUTF(getName());
         }
     }
 
     default String toTraducao(Player player) {
-        if(getTraducao().get(player.getLocale())!=null) {
+        if (getTraducao().get(player.getLocale()) != null) {
             return Utils.ToUTF(getTraducao().get(player.getLocale()));
-        }else{
+        } else {
             return Utils.ToUTF(getName());
         }
     }
 
-    default String toTraducao(){
+    default String toTraducao() {
         return Utils.ToUTF(getName());
     }
 }

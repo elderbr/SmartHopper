@@ -1,16 +1,17 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.interfaces.Dados;
+import mc.elderbr.smarthopper.interfaces.Funil;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Utils;
 
 import java.util.*;
 
-public class Grupo implements Dados {
+public class Grupo implements Funil {
 
     private int codigo;
     private String name;
+
+    private boolean bloqueado;
     private Map<String, String> traducao = new HashMap<>();
     private List<String> listItem = new ArrayList<>();
 
@@ -21,8 +22,9 @@ public class Grupo implements Dados {
     }
 
     @Override
-    public int setCodigo(int codigo) {
-        return this.codigo = codigo;
+    public Funil setCodigo(int codigo) {
+        this.codigo = codigo;
+        return this;
     }
 
     @Override
@@ -39,6 +41,17 @@ public class Grupo implements Dados {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean isBloqueado() {
+        return bloqueado;
+    }
+
+    @Override
+    public Funil setBloqueado(boolean bloqueado) {
+        this.bloqueado = bloqueado;
+        return this;
     }
 
     @Override
