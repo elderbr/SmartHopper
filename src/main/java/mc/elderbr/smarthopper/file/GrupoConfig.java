@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,11 +54,11 @@ public class GrupoConfig {
 
     private void add(@NotNull Grupo grupo) {
 
-        String name = grupo.getName();
+        String name = grupo.getName().toLowerCase();
 
         config.set(name.concat(".grupo_id"), grupo.getCodigo());
-        config.set(name.concat(".grupo_name"), name);
-        if(!grupo.getTraducao().isEmpty()) {
+        config.set(name.concat(".grupo_name"), grupo.getName());
+        if (!grupo.getTraducao().isEmpty()) {
             config.set(name.concat(".grupo_lang"), grupo.getTraducao());
         }
         config.set(name.concat(".grupo_item"), grupo.getListItem());
@@ -90,13 +89,13 @@ public class GrupoConfig {
     }
 
     public static boolean UPDATE(Grupo grupo) {
-        String name = grupo.getName();
+        String name = grupo.getName().toLowerCase();
         if (VGlobal.GRUPO_MAP_NAME.get(name) != null) {
             try {
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
 
                 config.set(name.concat(".grupo_id"), grupo.getCodigo());
-                config.set(name.concat(".grupo_name"), name);
+                config.set(name.concat(".grupo_name"), grupo.getName());
                 config.set(name.concat(".grupo_lang"), grupo.getTraducao());
                 config.set(name.concat(".grupo_item"), grupo.getListItem());
                 config.save(fileConfig);
@@ -116,7 +115,7 @@ public class GrupoConfig {
         try {
 
             YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
-            config.set(grupo.getName().concat(".grupo_lang"), grupo.getTraducao());
+            config.set(grupo.getName().toLowerCase().concat(".grupo_lang"), grupo.getTraducao());
             config.save(fileConfig);
 
             VGlobal.GRUPO_LIST.add(grupo);
