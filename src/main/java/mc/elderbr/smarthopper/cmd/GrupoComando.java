@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
@@ -35,10 +37,14 @@ public class GrupoComando implements CommandExecutor {
     private ItemMeta meta;
     private List<String> lore;
 
+    private GrupoController grupoController;
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (sender instanceof Player) {
+
+            grupoController = new GrupoController();
 
             player = (Player) sender;
             itemStack = player.getInventory().getItemInMainHand();
@@ -46,56 +52,36 @@ public class GrupoComando implements CommandExecutor {
 
             // Buscar grupo
             if (command.getName().equalsIgnoreCase("grupo")) {
-                grupo = null;
-                if (cmd.length() > 0) {
-                    try {
-                        grupo = VGlobal.GRUPO_MAP_ID.get(Integer.parseInt(cmd));
-                    } catch (NumberFormatException e) {
-                        grupo = VGlobal.TRADUCAO_GRUPO.get(cmd);
-                    }
-                } else {
-                    if (itemStack != null && itemStack.getType() == Material.AIR) {
-                        Msg.PlayerGold(player, "Segure um item na mão ou digite o código ou nome do grupo!!!");
-                        return false;
-                    }
-
-                    item = new Item(itemStack);
-                    // Verificando se o item esta presenta mais de um grupo
-                    listGrupo = new ArrayList<>();
-                    for (Grupo grups : VGlobal.GRUPO_LIST) {
-                        if (grups.getListItem().contains(item.getName())) {
-                            listGrupo.add(grups);
-                        }
-                    }
-
-                    if (listGrupo.size() > 1) {
-                        Msg.PlayerGold(player, "$f#================ LISTA DE GRUPOS ====================#");
-                        for (Grupo grups : listGrupo) {
-                            Msg.Grupo(player, grups);
-                        }
-                        Msg.PlayerGold(player, "$f#====================================#");
-                        return false;
-                    }
-                    if(listGrupo.size()>0) {
-                        grupo = listGrupo.get(0);// PEGA O PRIMEIRO GRUPO ENCONTRADO
+                try {
+                    if (args.length == 0) {
+                        grupoController.getGrupo(itemStack);// Se não houver argumentos busca o item que estiver na mão do jogador
                     }else{
-                        Msg.PlayerRed(player, "Não existe grupo para esse item!!!");
+                        grupoController.getGrupo(cmd);// Pega o nome ou ID digitado
                     }
-                }
 
-                if (grupo != null) {
-                    inventory = new InventoryCustom(player);
-                    inventory.create(grupo);
-                    player.openInventory(inventory.getInventory(1));
-                } else {
-                    Msg.GrupoNaoExiste(player, cmd);
+                    // Mostra todos os grupos que contem o item
+                    Msg.PlayerGold(player, "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+                    for(Grupo grupo : grupoController.getListGrupo()){
+                        Msg.Grupo(player, grupo);
+                    }
+
+                    // Se existir apenas um grupo para o item mostra o inventario
+                    if(grupoController.getListGrupo().size() == 1){
+                        grupo = grupoController.getListGrupo().get(0);
+                        inventory = new InventoryCustom(player);
+                        inventory.create(grupo);
+                        player.openInventory(inventory.getInventory(1));
+                    }
+                    return true;
+                } catch (GrupoException e) {
+                    Msg.PlayerGold(player, e.getMessage());
                 }
                 return false;
             }// FIM DE PESQUISAR GRUPO
 
             // ADICIONAR NOVO GRUPO
             if (command.getName().equalsIgnoreCase("addgrupo")) {
-                if(!Config.CONTAINS_ADD(player)){
+                if (!Config.CONTAINS_ADD(player)) {
                     Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
                     return false;
                 }
@@ -108,7 +94,7 @@ public class GrupoComando implements CommandExecutor {
             // REMOVER GRUPO
             if (command.getName().equalsIgnoreCase("removegrupo")) {
 
-                if(!Config.CONTAINS_ADD(player)){
+                if (!Config.CONTAINS_ADD(player)) {
                     Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
                     return false;
                 }
@@ -120,7 +106,7 @@ public class GrupoComando implements CommandExecutor {
                     } catch (NumberFormatException e) {
                         grupo = VGlobal.GRUPO_MAP_NAME.get(cmd.toLowerCase());
                     }
-                }else{
+                } else {
                     Msg.PlayerRed(player, "Digite o nome ou código do grupo!!!");
                     return false;
                 }
@@ -138,7 +124,7 @@ public class GrupoComando implements CommandExecutor {
                     VGlobal.TRADUCAO_GRUPO.remove(grupo.getName().toLowerCase());
                     VGlobal.TRADUCAO_GRUPO.remove(grupo.toTraducao(player).toLowerCase());
                     Msg.PlayerTodos("$l$6O grupo $c" + grupo.getName() + "$6 foi removido pelo o ADM $e" + player.getName() + "$6!!!");
-                }else{
+                } else {
                     Msg.PlayerRed(player, "Erro ao deletar o grupo!!!");
                 }
                 return false;
