@@ -92,7 +92,11 @@ public class Msg {
 
     //========================== GRUPO =================================================//
     public static void Grupo(Player player, Grupo grupo) {
-        player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getCodigo()));
+        if(grupo.isBloqueado()){
+            player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTraducao(player) + "$e ID: " + grupo.getCodigo()));
+        }else {
+            player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getCodigo()));
+        }
     }
 
     public static void Grupo(Grupo grupo, @NotNull Class classe) {
