@@ -7,7 +7,6 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.LivroEncantado;
 import mc.elderbr.smarthopper.model.Pocao;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -73,6 +72,7 @@ public class GrupoController {
                     listGrupo.add(grup);
                 }
             }
+            grupo = listGrupo.get(0);
             return listGrupo;
         }
 
@@ -83,7 +83,7 @@ public class GrupoController {
         }
 
         if (grupo == null) {
-            throw new GrupoException("$cO grupo$6 " + name + " $c não é valido!!!");
+            throw new GrupoException("$cO grupo$6 " + name + "$c não é valido!!!");
         }
         grupo.setBloqueado(name.contains("#"));
         listGrupo.add(grupo);
@@ -94,7 +94,7 @@ public class GrupoController {
         return listGrupo;
     }
 
-    public boolean delete(Player player, Grupo grupo) throws GrupoException {
+    public boolean delete(Player player) throws GrupoException {
 
         if (!Config.CONTAINS_ADD(player)) {
             throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
@@ -103,8 +103,7 @@ public class GrupoController {
         if (grupo == null) {
             throw new GrupoException("Digite o nome ou ID do grupo!!!");
         }
-
-        if(GrupoConfig.DELETE(grupo)){
+        if (GrupoConfig.DELETE(grupo)) {
             GRUPO_LIST.remove(grupo);
             GRUPO_MAP_ID.remove(grupo.getCodigo());
             GRUPO_MAP_NAME.remove(grupo.getName());
