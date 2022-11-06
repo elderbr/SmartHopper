@@ -100,7 +100,7 @@ public class GrupoComando implements CommandExecutor {
                 grupoController.getGrupo(cmd);// Pega o nome ou ID digitado
             }
             grupo = grupoController.getListGrupo().get(0);
-            grupoController.delete(player, grupo);
+            grupoController.delete(player);
             Msg.PlayerTodos("$l$6O grupo $c" + grupo.getName() + "$6 foi removido pelo o ADM $e" + player.getName() + "$6!!!");
             return true;
         } catch (GrupoException e) {
