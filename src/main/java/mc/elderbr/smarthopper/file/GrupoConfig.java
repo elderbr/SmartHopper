@@ -134,7 +134,7 @@ public class GrupoConfig {
         try {
             // REMOVENDO O GRUPO DO ARQUIVO grupo.yml
             YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
-            config.set(grupo.getName(), null);
+            config.set(grupo.getName().toLowerCase(), null);
             config.save(fileConfig);
             // REMOVENDO O GRUPO DA VARIAVEL GLOBAL
             VGlobal.GRUPO_LIST.remove(grupo);

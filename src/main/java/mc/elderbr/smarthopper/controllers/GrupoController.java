@@ -1,11 +1,15 @@
 package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.exceptions.GrupoException;
+import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.LivroEncantado;
 import mc.elderbr.smarthopper.model.Pocao;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -88,5 +92,26 @@ public class GrupoController {
 
     public List<Grupo> getListGrupo() {
         return listGrupo;
+    }
+
+    public boolean delete(Player player, Grupo grupo) throws GrupoException {
+
+        if (!Config.CONTAINS_ADD(player)) {
+            throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
+        }
+
+        if (grupo == null) {
+            throw new GrupoException("Digite o nome ou ID do grupo!!!");
+        }
+
+        if(GrupoConfig.DELETE(grupo)){
+            GRUPO_LIST.remove(grupo);
+            GRUPO_MAP_ID.remove(grupo.getCodigo());
+            GRUPO_MAP_NAME.remove(grupo.getName());
+            TRADUCAO_GRUPO.remove(grupo.getName().toLowerCase());
+            TRADUCAO_GRUPO.remove(grupo.getName());
+            return true;
+        }
+        return false;
     }
 }
