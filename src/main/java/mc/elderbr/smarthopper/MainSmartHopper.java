@@ -78,6 +78,8 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
     private void commands() {
 
+        getCommand("reload").setExecutor(new ConfigComando());
+
         getCommand("item").setExecutor(new ItemComando());
         getCommand("item").setTabCompleter(new ItemTabCompleter());
 

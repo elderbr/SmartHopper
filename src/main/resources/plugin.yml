@@ -28,3 +28,5 @@ commands:
   informacao:
     aliases: [infor, tutorial, config]
     description: Receberá um livro com os comandos basicos do Smart Hopper
+  reload:
+    description: Carrega os itens, grupos e tradução

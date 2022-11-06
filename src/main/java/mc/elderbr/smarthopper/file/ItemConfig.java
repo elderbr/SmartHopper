@@ -65,6 +65,7 @@ public class ItemConfig {
             item = new Item();
             item.setCodigo(config.getInt(names.concat(".item_id")));
             item.setName(config.getString(names.concat(".item_name")));
+            Msg.ServidorGreen("ITEM >> "+ item.getName());
 
             // Tradução dos itens
             if (config.get(names.concat(".item_lang")) != null) {
