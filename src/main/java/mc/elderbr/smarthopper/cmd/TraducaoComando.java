@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
@@ -17,10 +19,12 @@ public class TraducaoComando implements CommandExecutor {
 
     private Player player;
     private StringBuilder traducaoList = new StringBuilder();
+    private String traducao = null;
 
     private String codigo;
     private Item item;
     private Grupo grupo;
+    private ItemController itemController;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -28,41 +32,22 @@ public class TraducaoComando implements CommandExecutor {
         if (sender instanceof Player) {
 
             player = (Player) sender;
+            traducao = traducao(args);
 
-            if (command.getName().equalsIgnoreCase("traducaoitem")) {
-
-                if (args.length == 0) {
-                    Msg.PlayerRed(player, "Digite o código do item!!!");
-                    Msg.PlayerGreen(player, "/traducaoitem <código> <traducao>");
+            switch (command.getName().toLowerCase()) {
+                case "traducaoitem":
+                    itemController = new ItemController();
+                    try {
+                        item = itemController.getItem(args[0]);
+                        if (itemTraducao()) {
+                            Msg.PlayerTodos("$6A tradução para o item " + item.getName() + " foi alterada pelo $e" + player.getName());
+                            return true;
+                        }
+                    }catch (ItemException e){
+                        Msg.PlayerRed(player, e.getMessage());
+                    }
                     return false;
-                }
 
-                codigo = args[0];
-
-                if (!Config.CONTAINS_ADD(player)) {
-                    Msg.PlayerGold(player, "OPS, você não é adm do Smart Hopper!!!");
-                    return false;
-                }
-
-                try {
-                    item = VGlobal.ITEM_MAP_ID.get(Integer.parseInt(codigo));
-                } catch (NumberFormatException e) {
-                    Msg.PlayerRed(player, "Digite o código do item!!!");
-                    Msg.PlayerGreen(player, "/traducaoitem <código> <traducao>");
-                    return false;
-                }
-
-                if (item == null) {
-                    Msg.ItemNaoExiste(player, codigo);
-                    return false;
-                }
-                item.addTraducao(player.getLocale(), traducao(args));
-                if (ItemConfig.ADD_TRADUCAO(item)) {
-                    Msg.PlayerTodos("$6A tradução para o item " + item.getName() + " foi alterada pelo $e" + player.getName());
-                } else {
-                    Msg.ItemNaoExiste(player, codigo);
-                }
-                return false;
             }
 
 
@@ -96,12 +81,22 @@ public class TraducaoComando implements CommandExecutor {
                 }
 
                 grupo.addTraducao(player.getLocale(), traducao(args));
-                if(GrupoConfig.ADD_TRADUCAO(grupo)){
-                    Msg.PlayerTodos("$9O jogador $e"+ player.getName()+"$9 adicionou tradução para o grupo $e"+ grupo.getName()+"$9.");
-                }else{
+                if (GrupoConfig.ADD_TRADUCAO(grupo)) {
+                    Msg.PlayerTodos("$9O jogador $e" + player.getName() + "$9 adicionou tradução para o grupo $e" + grupo.getName() + "$9.");
+                } else {
                     Msg.PlayerGold(player, "Não foi possivél adicionar a tradução!!!");
                 }
             }
+        }
+        return false;
+    }
+
+    private boolean itemTraducao() {
+        try {
+            itemController.addTraducao(player, traducao);
+            return true;
+        } catch (ItemException e) {
+            Msg.PlayerRed(player, e.getMessage());
         }
         return false;
     }
