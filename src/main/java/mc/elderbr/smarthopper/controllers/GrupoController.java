@@ -94,6 +94,26 @@ public class GrupoController {
         return listGrupo;
     }
 
+    public boolean addTraducao(Player player, String traducao) throws GrupoException {
+        if (!Config.CONTAINS_ADD(player)) {
+            throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
+        }
+        if (traducao.isEmpty()) {
+            throw new GrupoException("Digite a tradução para o grupo!!!");
+        }
+
+        if (traducao.length() < 3) {
+            throw new GrupoException("A tradução não pode ser menor que 3 caracteres!!!");
+        }
+
+        if (grupo == null) {
+            throw new GrupoException("Digite o nome ou ID do grupo!!!");
+        }
+
+        grupo.addTraducao(player.getLocale(), traducao);
+        return GrupoConfig.ADD_TRADUCAO(grupo);
+    }
+
     public boolean delete(Player player) throws GrupoException {
 
         if (!Config.CONTAINS_ADD(player)) {
