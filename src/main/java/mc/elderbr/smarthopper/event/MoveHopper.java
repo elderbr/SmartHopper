@@ -144,7 +144,9 @@ public class MoveHopper implements Listener {
 
         } catch (Exception e) {
             event.setCancelled(false);
-            Msg.ServidorRed(e.getMessage());
+            if(e.getClass() == ItemException.class) {
+                Msg.ServidorRed(e.getMessage());
+            }
         }
 
     }
