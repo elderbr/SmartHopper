@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Funil;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Msg;
 
 import java.util.*;
 
@@ -217,6 +218,7 @@ public class Grupo implements Funil {
             for (String itemName : VGlobal.ITEM_NAME_LIST) {
                 if (pertence(nameGrupo, itemName) && grupo.isContains(itemName)) {
                     grupo.addList(itemName);
+                    Msg.ServidorBlue(nameGrupo+" >> item: "+ itemName);
                 }
             }
 

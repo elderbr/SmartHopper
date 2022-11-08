@@ -158,6 +158,8 @@ public class GrupoConfig {
             grupo.setName(config.getString(name.concat(".grupo_name")));
             VGlobal.TRADUCAO_GRUPO.put(grupo.getName().toLowerCase(), grupo);
 
+            Msg.ServidorBlue("Grupo: "+ grupo.getName());
+
             // PEGANDO O MAIOR CÓDIGO DO GRUPO
             if (grupo.getCodigo() > VGlobal.CD_MAX.get(0)) {
                 VGlobal.CD_MAX.set(0, grupo.getCodigo());
