@@ -26,11 +26,14 @@ public class Item implements Funil {
     private boolean bloqueado = false;
     private Map<String, String> traducao = new HashMap<>();
 
+    private ItemStack itemStack;
+
     public Item() {
     }
 
     public Item(ItemStack itemStack) {
         name = toItemStack(itemStack);
+        this.itemStack = itemStack;
     }
 
     public Item(String name) {
@@ -126,6 +129,26 @@ public class Item implements Funil {
 
     public static ItemStack ParseItemStack(String name) {
         return new ItemStack(Material.valueOf(name.toUpperCase().replaceAll("\\s", "_")));
+    }
+
+    public Item parse(){
+        PotionMeta meta = null;
+        String potionName = null;
+        switch (itemStack.getType()){
+            case POTION:
+            case LINGERING_POTION:
+            case SPLASH_POTION:
+                if(itemStack.getItemMeta()!=null){
+                    meta = (PotionMeta) itemStack.getItemMeta();
+                    potionName = meta.getBasePotionData().getType().name();
+                }
+                Msg.ServidorGreen("potion meta >> "+ potionName, getClass());
+                name = toItemStack(itemStack)+" ".concat(potionName.replaceAll("_"," ").toLowerCase());
+                break;
+            default:
+                name = toItemStack(itemStack);
+        }
+        return this;
     }
 
     public static Item PARSE(ItemStack itemStackInventory) {

@@ -89,7 +89,7 @@ public class InventarioEvent implements Listener, Botao {
                         // Percorrendo todos os itens do inventario
                         for (ItemStack itemStack : inventory.getContents()) {
                             if (itemStack != null) {
-                                grupo.addList(new Item(itemStack).getName());
+                                grupo.addList(new Item(itemStack).parse().getName());
                             }
                         }
                         player.closeInventory();
@@ -114,7 +114,7 @@ public class InventarioEvent implements Listener, Botao {
                         // Percorrendo todos os itens do inventario
                         for (ItemStack itemStack : inventory.getContents()) {
                             if (itemStack != null) {
-                                grupo.addList(new Item(itemStack).getName());
+                                grupo.addList(new Item(itemStack).parse().getName());
                             }
                         }
                         player.closeInventory();
