@@ -215,10 +215,11 @@ public class Grupo implements Funil {
             Grupo grupo = new Grupo();
             grupo.setName(nameGrupo);
 
+            Msg.ServidorBlue("Grupo: "+nameGrupo);
+
             for (String itemName : VGlobal.ITEM_NAME_LIST) {
                 if (pertence(nameGrupo, itemName) && grupo.isContains(itemName)) {
                     grupo.addList(itemName);
-                    Msg.ServidorBlue(nameGrupo+" >> item: "+ itemName);
                 }
             }
 
