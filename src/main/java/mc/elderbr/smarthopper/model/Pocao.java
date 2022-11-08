@@ -26,7 +26,7 @@ public class Pocao {
         this.itemStack = itemStack;
     }
 
-    public Pocao(@NotNull String name) {
+    public Pocao(@NotNull String name) throws ItemException {
         this.name = name;
         parseItemStack();
     }

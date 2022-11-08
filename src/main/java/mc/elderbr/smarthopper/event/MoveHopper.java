@@ -2,8 +2,10 @@ package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.controllers.SmartHopper;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -142,6 +144,7 @@ public class MoveHopper implements Listener {
 
         } catch (Exception e) {
             event.setCancelled(false);
+            Msg.ServidorRed(e.getMessage());
         }
 
     }

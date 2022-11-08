@@ -15,6 +15,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_ID;
+import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_ID;
+
 public class SmartHopper {
 
 
@@ -74,10 +77,10 @@ public class SmartHopper {
                     try {
                         codigo = Integer.parseInt(names.replaceAll("[#i]", ""));
                     } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!");
+                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
                     }
                     // Pegando o item na memória
-                    item = VGlobal.ITEM_MAP_ID.get(codigo);
+                    item = ITEM_MAP_ID.get(codigo);
                     if (item == null) {
                         throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
                     }
@@ -95,7 +98,7 @@ public class SmartHopper {
                         throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
                     }
                     // Buscando o grupo em memória
-                    grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                    grupo = GRUPO_MAP_ID.get(codigo);
                     if (grupo == null) {
                         throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
                     }
@@ -117,7 +120,7 @@ public class SmartHopper {
                 throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
             }
             // Pegando o item na memória
-            item = VGlobal.ITEM_MAP_ID.get(codigo);
+            item = ITEM_MAP_ID.get(codigo);
             if (item == null) {
                 throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
             }
@@ -136,7 +139,7 @@ public class SmartHopper {
                 throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
             }
             // Buscando o grupo em memória
-            grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+            grupo = GRUPO_MAP_ID.get(codigo);
             if (grupo == null) {
                 throw new ItemException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
             }
@@ -190,18 +193,17 @@ public class SmartHopper {
                     try {
                         codigo = Integer.parseInt(names.replaceAll("[#i]", ""));
                     } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!");
+                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
                     }
                     // Pegando o item na memória
-                    item = VGlobal.ITEM_MAP_ID.get(codigo);
+                    item = ITEM_MAP_ID.get(codigo);
                     if (item == null) {
                         throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
                     }
                     // Se conter cerquilha o item é negado
                     item.setBloqueado(name.contains("#"));
                     listType.add(item);
-                }
-
+                }else
                 // Se o nome do hopper conter a letra G se trata de grupo
                 if (names.substring(0, 2).contains("g")) {
                     // Pegando o código do grupo
@@ -211,13 +213,15 @@ public class SmartHopper {
                         throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
                     }
                     // Buscando o grupo em memória
-                    grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+                    grupo = GRUPO_MAP_ID.get(codigo);
                     if (grupo == null) {
                         throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
                     }
                     // Se conter cerquilha o grupo é negado
                     grupo.setBloqueado(name.contains("#"));
                     listType.add(grupo);
+                }else{
+                    throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
                 }
             }
             type = listType;
@@ -233,7 +237,7 @@ public class SmartHopper {
                 throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
             }
             // Pegando o item na memória
-            item = VGlobal.ITEM_MAP_ID.get(codigo);
+            item = ITEM_MAP_ID.get(codigo);
             if (item == null) {
                 throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
             }
@@ -252,7 +256,7 @@ public class SmartHopper {
                 throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
             }
             // Buscando o grupo em memória
-            grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
+            grupo = GRUPO_MAP_ID.get(codigo);
             if (grupo == null) {
                 throw new ItemException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
             }
