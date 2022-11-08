@@ -27,6 +27,7 @@ public class Item implements Funil {
     private Map<String, String> traducao = new HashMap<>();
 
     private ItemStack itemStack;
+    private final String enchanted_book = "enchanted book";
 
     public Item() {
     }
@@ -84,7 +85,7 @@ public class Item implements Funil {
     }
 
     public ItemStack parseItemStack() {
-        ItemStack itemStack = null;
+        itemStack = null;
         if (name.contains("potion")) {
             String potion = null;
             if (name.contains("lingering")) {
@@ -105,10 +106,10 @@ public class Item implements Funil {
             }
             return itemStack;
         }
-        if (name.contains("enchanted book")) {
+        if (name.contains(enchanted_book)) {
             itemStack = new ItemStack(Material.ENCHANTED_BOOK);
             //
-            String encantamento = getName().replaceAll("enchanted book", "").trim();
+            String encantamento = getName().replaceAll(enchanted_book, "").trim();
             NamespacedKey key = null;
             for (Enchantment enchantment : Enchantment.values()) {
                 String nameEnch = enchantment.getKey().getKey().replaceAll("_", " ").toLowerCase();
@@ -119,6 +120,7 @@ public class Item implements Funil {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
             meta.addStoredEnchant(Enchantment.getByKey(key), 1, true);
             itemStack.setItemMeta(meta);
+            return itemStack;
         }
         return Item.ParseItemStack(name);
     }
@@ -132,18 +134,23 @@ public class Item implements Funil {
     }
 
     public Item parse(){
-        PotionMeta meta = null;
-        String potionName = null;
         switch (itemStack.getType()){
             case POTION:
             case LINGERING_POTION:
             case SPLASH_POTION:
+                PotionMeta meta = null;
+                String potionName = null;
                 if(itemStack.getItemMeta()!=null){
                     meta = (PotionMeta) itemStack.getItemMeta();
                     potionName = meta.getBasePotionData().getType().name();
                 }
-                Msg.ServidorGreen("potion meta >> "+ potionName, getClass());
                 name = toItemStack(itemStack)+" ".concat(potionName.replaceAll("_"," ").toLowerCase());
+                break;
+            case ENCHANTED_BOOK:
+                EnchantmentStorageMeta metaBock = (EnchantmentStorageMeta) itemStack.getItemMeta();
+                for(Enchantment enchantment : metaBock.getStoredEnchants().keySet()){
+                    name = enchanted_book+" "+enchantment.getKey().getKey().toLowerCase().replaceAll("_"," ");
+                }
                 break;
             default:
                 name = toItemStack(itemStack);

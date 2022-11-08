@@ -70,9 +70,7 @@ public class InventarioEvent implements Listener, Botao {
         if (inventoryCustom.isAdm()) {
             if (event.isLeftClick()) {
                 if (itemClick != null && itemClick.equals(BtnSalva())) {
-
                     inventory.removeItem(BtnSalva());// Remove o botão salvar antes de passar pelo os item
-
                     if(inventory.isEmpty()){
                         Msg.PlayerGold(player,"Adicione item para o grupo!!!");
                         inventory.setItem(53, BtnSalva());
