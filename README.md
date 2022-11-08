@@ -89,6 +89,11 @@ do jogador. O jogador precisa está online para ser adicionado.
 
 ---
 
+### Comando reload
+- Carrega as informações do Smart Hopper sem precisar reiniciar o servidor
+
+---
+
 ## Como usar
 
 É importa ter um funil principal onde leva os itens para os funis que fazem a conexão formando uma encanação.
