@@ -100,8 +100,7 @@ public class Item extends Funil {
             Item item = new Item(cod, name);
             // Salvando no atributo global
             ITEM_LIST.add(item);
-            ITEM_MAP_ID.put(item.getId(), item);
-            ITEM_MAP_NAME.put(item.getName(), item);
+            SET(item);// Atualiza ou adiciona o item no atributo global
             cod++;
         }
     }
@@ -112,5 +111,14 @@ public class Item extends Funil {
 
     public static String ToName(@NotNull ItemStack itemStack) {
         return itemStack.getType().getKey().getKey().toLowerCase().replaceAll("_", " ");
+    }
+
+    /***
+     * Adiciona ou atualiza os atributos globais do item
+     * @param item
+     */
+    public static void SET(@NotNull Item item){
+        ITEM_MAP_ID.put(item.getId(), item);
+        ITEM_MAP_NAME.put(item.getName(), item);
     }
 }
