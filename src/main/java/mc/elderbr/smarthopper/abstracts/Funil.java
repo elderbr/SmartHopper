@@ -18,17 +18,17 @@ public abstract class Funil {
     public abstract Funil setBlocked(boolean blocked);
     public abstract boolean isBlocked();
 
-    public List<Traducao> addLinguagem(Traducao traducao){
+    public List<Traducao> addTraducao(Traducao traducao){
         traducaoList.add(traducao);
         return traducaoList;
     }
 
-    public List<Traducao> removeLinguagem(Traducao traducao){
+    public List<Traducao> removeTraducao(Traducao traducao){
         traducaoList.remove(traducao);
         return traducaoList;
     }
 
-    public List<Traducao> getLangList(){
+    public List<Traducao> getListTraducao(){
         return traducaoList;
     }
 
