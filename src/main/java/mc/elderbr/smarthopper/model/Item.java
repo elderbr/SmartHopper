@@ -78,6 +78,11 @@ public class Item extends Funil {
         return listGrupo;
     }
 
+    /*************************************************************
+     *
+     *              Metodo que criar os itens
+     *
+     **************************************************************/
     public static void CreateItem() {
         for (Material m : Material.values()) {
             ItemStack itemStack = new ItemStack(m);

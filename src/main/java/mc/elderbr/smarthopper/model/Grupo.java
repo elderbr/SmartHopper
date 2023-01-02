@@ -1,20 +1,22 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.interfaces.Funil;
+import mc.elderbr.smarthopper.abstracts.Funil;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 
 import java.util.*;
 
-public class Grupo implements Funil {
+import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_LIST;
 
-    private int codigo;
+public class Grupo extends Funil {
+
+    private int id;
     private String name;
 
-    private boolean bloqueado;
-    private Map<String, String> traducao = new HashMap<>();
-    private List<String> listItem = new ArrayList<>();
+    private boolean blocked;
+
+    private List<Item> listItem = new ArrayList<>();
 
     // Auxiliar
     private static List<String> grupoList;
@@ -23,14 +25,14 @@ public class Grupo implements Funil {
     }
 
     @Override
-    public Funil setCodigo(int codigo) {
-        this.codigo = codigo;
+    public Funil setId(int id) {
+        this.id = id;
         return this;
     }
 
     @Override
-    public int getCodigo() {
-        return codigo;
+    public int getId() {
+        return id;
     }
 
     @Override
@@ -45,32 +47,15 @@ public class Grupo implements Funil {
     }
 
     @Override
-    public boolean isBloqueado() {
-        return bloqueado;
+    public boolean isBlocked() {
+        return blocked;
     }
 
     @Override
-    public Funil setBloqueado(boolean bloqueado) {
-        this.bloqueado = bloqueado;
+    public Funil setBlocked(boolean blocked) {
+        this.blocked = blocked;
         return this;
     }
-
-    @Override
-    public Map<String, String> getTraducao() {
-        return traducao;
-    }
-
-    public List<String> getListItem() {
-        return listItem;
-    }
-
-    public Grupo addList(String item) {
-        if (!listItem.contains(item)) {
-            listItem.add(item);
-        }
-        return this;
-    }
-
 
     public static List<String> CreateGrupos() {
 
@@ -195,9 +180,6 @@ public class Grupo implements Funil {
         grupoList.add("potion weakness");
 
         createGrupoItem();
-
-        // ALTERA PARA VERDADEIRO A ATUALIZAÇÃO DO GRUPO
-        //Config.SetUpdateGrupo(true);
         return grupoList;
     }
 
@@ -225,6 +207,7 @@ public class Grupo implements Funil {
 
             // Ferramentas de Pedras
             if (grupo.getName().equals("stone tools")) {
+
                 grupo.addList("stone sword");
                 grupo.addList("stone shovel");
                 grupo.addList("stone pickaxe");
