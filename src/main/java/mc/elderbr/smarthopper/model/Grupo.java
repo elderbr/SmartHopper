@@ -1,13 +1,14 @@
 package mc.elderbr.smarthopper.model;
 
-import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.abstracts.Funil;
+import mc.elderbr.smarthopper.exceptions.ItemException;
+import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 
-import java.util.*;
-
-import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_LIST;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Grupo extends Funil {
 
@@ -55,6 +56,20 @@ public class Grupo extends Funil {
     public Funil setBlocked(boolean blocked) {
         this.blocked = blocked;
         return this;
+    }
+
+    public Grupo addListItem(Item item) {
+        listItem.add(item);
+        return this;
+    }
+
+    public Grupo removeListItem(Item item) {
+        listItem.remove(item);
+        return this;
+    }
+
+    public List<Item> getListItem() {
+        return listItem;
     }
 
     public static List<String> CreateGrupos() {
@@ -197,108 +212,115 @@ public class Grupo extends Funil {
             Grupo grupo = new Grupo();
             grupo.setName(nameGrupo);
 
-            Msg.ServidorBlue("Grupo: "+nameGrupo);
+            Msg.ServidorBlue("Grupo: " + nameGrupo);
 
-            for (String itemName : VGlobal.ITEM_NAME_LIST) {
-                if (pertence(nameGrupo, itemName) && grupo.isContains(itemName)) {
-                    grupo.addList(itemName);
+            try {
+                for (String itemName : VGlobal.ITEM_NAME_LIST) {
+                    if (pertence(nameGrupo, itemName) && grupo.isContains(itemName)) {
+                        grupo.addListItem(Item.GET(itemName));
+                    }
                 }
-            }
 
-            // Ferramentas de Pedras
-            if (grupo.getName().equals("stone tools")) {
+                // Ferramentas de Pedras
+                if (grupo.getName().equals("stone tools")) {
 
-                grupo.addList("stone sword");
-                grupo.addList("stone shovel");
-                grupo.addList("stone pickaxe");
-                grupo.addList("stone axe");
-                grupo.addList("stone hoe");
-            }
 
-            // Ferramentas de Ferro
-            if (grupo.getName().equals("iron tools")) {
-                grupo.addList("iron sword");
-                grupo.addList("iron shovel");
-                grupo.addList("iron pickaxe");
-                grupo.addList("iron axe");
-                grupo.addList("iron hoe");
-            }
+                    grupo.addListItem(Item.GET("stone sword"));
 
-            // Ferramentas de Ouro
-            if (grupo.getName().equals("golden tools")) {
-                grupo.addList("golden sword");
-                grupo.addList("golden shovel");
-                grupo.addList("golden pickaxe");
-                grupo.addList("golden axe");
-                grupo.addList("golden hoe");
-            }
+                    grupo.addListItem(Item.GET("stone sword"));
+                    grupo.addListItem(Item.GET("stone shovel"));
+                    grupo.addListItem(Item.GET("stone pickaxe"));
+                    grupo.addListItem(Item.GET("stone axe"));
+                    grupo.addListItem(Item.GET("stone hoe"));
+                }
 
-            // Ferramentas de Diamante
-            if (grupo.getName().equals("diamond tools")) {
-                grupo.addList("diamond sword");
-                grupo.addList("diamond shovel");
-                grupo.addList("diamond pickaxe");
-                grupo.addList("diamond axe");
-                grupo.addList("diamond hoe");
-            }
+                // Ferramentas de Ferro
+                if (grupo.getName().equals("iron tools")) {
+                    grupo.addListItem(Item.GET("iron sword"));
+                    grupo.addListItem(Item.GET("iron shovel"));
+                    grupo.addListItem(Item.GET("iron pickaxe"));
+                    grupo.addListItem(Item.GET("iron axe"));
+                    grupo.addListItem(Item.GET("iron hoe"));
+                }
 
-            // Ferramentas de netherite
-            if (grupo.getName().equals("netherite tools")) {
-                grupo.addList("netherite sword");
-                grupo.addList("netherite shovel");
-                grupo.addList("netherite pickaxe");
-                grupo.addList("netherite axe");
-                grupo.addList("netherite hoe");
-            }
+                // Ferramentas de Ouro
+                if (grupo.getName().equals("golden tools")) {
+                    grupo.addListItem(Item.GET("golden sword"));
+                    grupo.addListItem(Item.GET("golden shovel"));
+                    grupo.addListItem(Item.GET("golden pickaxe"));
+                    grupo.addListItem(Item.GET("golden axe"));
+                    grupo.addListItem(Item.GET("golden hoe"));
+                }
 
-            // ITENS PARA SEREM ASSADOS
-            if (grupo.getName().equals("carne crua")) {
-                grupo.addList("potato");
-                grupo.addList("beef");
-                grupo.addList("porkchop");
-                grupo.addList("mutton");
-                grupo.addList("chicken");
-                grupo.addList("rabbit");
-                grupo.addList("cod");
-                grupo.addList("salmon");
-                grupo.addList("kelp");
-            }
+                // Ferramentas de Diamante
+                if (grupo.getName().equals("diamond tools")) {
+                    grupo.addListItem(Item.GET("diamond sword"));
+                    grupo.addListItem(Item.GET("diamond shovel"));
+                    grupo.addListItem(Item.GET("diamond pickaxe"));
+                    grupo.addListItem(Item.GET("diamond axe"));
+                    grupo.addListItem(Item.GET("diamond hoe"));
+                }
 
-            // GRUPO DE FLORES
-            if (grupo.getName().equals("flowers")) {
-                grupo.addList("grass");
-                grupo.addList("fern");
-                grupo.addList("dead bush");
-                grupo.addList("seagrass");
-                grupo.addList("sea pickle");
-                grupo.addList("dandelion");
-                grupo.addList("poppy");
-                grupo.addList("blue orchid");
-                grupo.addList("allium");
-                grupo.addList("azure bluet");
-                grupo.addList("red tulip");
-                grupo.addList("orange tulip");
-                grupo.addList("white tulip");
-                grupo.addList("pink tulip");
-                grupo.addList("oxeye daisy");
-                grupo.addList("cornflower");
-                grupo.addList("lily of the valley");
-                grupo.addList("lily pad");
-                grupo.addList("wither rose");
-                grupo.addList("rose bush");
-                grupo.addList("weeping vines");
-                grupo.addList("twisting vines");
-                grupo.addList("vine");
-                grupo.addList("sunflower");
-                grupo.addList("lilac");
-                grupo.addList("peony");
-                grupo.addList("tall grass");
-                grupo.addList("large fern");
+                // Ferramentas de netherite
+                if (grupo.getName().equals("netherite tools")) {
+                    grupo.addListItem(Item.GET("netherite sword"));
+                    grupo.addListItem(Item.GET("netherite shovel"));
+                    grupo.addListItem(Item.GET("netherite pickaxe"));
+                    grupo.addListItem(Item.GET("netherite axe"));
+                    grupo.addListItem(Item.GET("netherite hoe"));
+                }
+
+                // ITENS PARA SEREM ASSADOS
+                if (grupo.getName().equals("carne crua")) {
+                    grupo.addListItem(Item.GET("potato"));
+                    grupo.addListItem(Item.GET("beef"));
+                    grupo.addListItem(Item.GET("porkchop"));
+                    grupo.addListItem(Item.GET("mutton"));
+                    grupo.addListItem(Item.GET("chicken"));
+                    grupo.addListItem(Item.GET("rabbit"));
+                    grupo.addListItem(Item.GET("cod"));
+                    grupo.addListItem(Item.GET("salmon"));
+                    grupo.addListItem(Item.GET("kelp"));
+                }
+
+                // GRUPO DE FLORES
+                if (grupo.getName().equals("flowers")) {
+                    grupo.addListItem(Item.GET("grass"));
+                    grupo.addListItem(Item.GET("fern"));
+                    grupo.addListItem(Item.GET("dead bush"));
+                    grupo.addListItem(Item.GET("seagrass"));
+                    grupo.addListItem(Item.GET("sea pickle"));
+                    grupo.addListItem(Item.GET("dandelion"));
+                    grupo.addListItem(Item.GET("poppy"));
+                    grupo.addListItem(Item.GET("blue orchid"));
+                    grupo.addListItem(Item.GET("allium"));
+                    grupo.addListItem(Item.GET("azure bluet"));
+                    grupo.addListItem(Item.GET("red tulip"));
+                    grupo.addListItem(Item.GET("orange tulip"));
+                    grupo.addListItem(Item.GET("white tulip"));
+                    grupo.addListItem(Item.GET("pink tulip"));
+                    grupo.addListItem(Item.GET("oxeye daisy"));
+                    grupo.addListItem(Item.GET("cornflower"));
+                    grupo.addListItem(Item.GET("lily of the valley"));
+                    grupo.addListItem(Item.GET("lily pad"));
+                    grupo.addListItem(Item.GET("wither rose"));
+                    grupo.addListItem(Item.GET("rose bush"));
+                    grupo.addListItem(Item.GET("weeping vines"));
+                    grupo.addListItem(Item.GET("twisting vines"));
+                    grupo.addListItem(Item.GET("vine"));
+                    grupo.addListItem(Item.GET("sunflower"));
+                    grupo.addListItem(Item.GET("lilac"));
+                    grupo.addListItem(Item.GET("peony"));
+                    grupo.addListItem(Item.GET("tall grass"));
+                    grupo.addListItem(Item.GET("large fern"));
+                }
+            } catch (ItemException e) {
+                Msg.ServidorErro("Erro ao pegar o item do grupo!!!", "createGrupoItem", Grupo.class, e);
             }
 
             // LISTA DE NOMES DE GRUPO GLOBAL
             if (grupo.getListItem().size() > 1 && !VGlobal.GRUPO_NAME_LIST.contains(grupo.getName())) {
-                grupo.setCodigo(codigo);
+                grupo.setId(codigo);
                 codigo++;
                 VGlobal.GRUPO_NAME_LIST.add(grupo.name);
                 VGlobal.GRUPO_LIST.add(grupo);
