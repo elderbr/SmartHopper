@@ -3,18 +3,14 @@ package mc.elderbr.smarthopper.model;
 public class Traducao {
 
     private String lang;
-    private String traducao;
-    private Item item;
-    private Grupo grupo;
+    private String translation;
 
     public Traducao() {
     }
 
-    public Traducao(String lang, String traducao, Item item, Grupo grupo) {
+    public Traducao(String lang, String translation) {
         this.lang = lang;
-        this.traducao = traducao;
-        this.item = item;
-        this.grupo = grupo;
+        this.translation = translation;
     }
 
     public String getLang() {
@@ -27,29 +23,11 @@ public class Traducao {
     }
 
     public String getTraducao() {
-        return traducao;
+        return translation;
     }
 
-    public Traducao setTraducao(String traducao) {
-        this.traducao = traducao;
-        return this;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public Traducao setItem(Item item) {
-        this.item = item;
-        return this;
-    }
-
-    public Grupo getGrupo() {
-        return grupo;
-    }
-
-    public Traducao setGrupo(Grupo grupo) {
-        this.grupo = grupo;
+    public Traducao setTraducao(String translation) {
+        this.translation = translation;
         return this;
     }
 }
