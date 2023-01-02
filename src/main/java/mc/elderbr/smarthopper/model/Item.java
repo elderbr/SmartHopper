@@ -1,9 +1,15 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.abstracts.Funil;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class Item extends Funil {
 
@@ -12,6 +18,18 @@ public class Item extends Funil {
     private boolean blocked = false;
 
     private List<Grupo> listGrupo = new ArrayList<>();
+
+    public Item() {
+    }
+
+    public Item(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Item(ItemStack itemStack) {
+        name = toName(itemStack);
+    }
 
     @Override
     public Funil setId(int id) {
@@ -58,5 +76,41 @@ public class Item extends Funil {
 
     public List<Grupo> getListGrupo() {
         return listGrupo;
+    }
+
+    public static void CreateItem() {
+        for (Material m : Material.values()) {
+            ItemStack itemStack = new ItemStack(m);
+            if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.getType().isItem()) {
+                Item item = new Item(itemStack);
+                if (!ITEM_NAME_LIST.contains(item.getName())) {
+                    ITEM_NAME_LIST.add(item.getName());
+                }
+            }
+        }
+
+        Pocao.Create();// POÇÕES E SEU EFEITOS
+        LivroEncantado.Create();// LIVRO ENCANTADOS
+
+        Collections.sort(ITEM_NAME_LIST);// Organizando em ordem alfabetica
+
+        // Criando itens com código e nome e adicionando na lista global
+        int cod = 1;
+        for (String name : ITEM_NAME_LIST) {
+            Item item = new Item(cod, name);
+            // Salvando no atributo global
+            ITEM_LIST.add(item);
+            ITEM_MAP_ID.put(item.getId(), item);
+            ITEM_MAP_NAME.put(item.getName(), item);
+            cod++;
+        }
+    }
+
+    public String toName(@NotNull ItemStack itemStack) {
+        return itemStack.getType().getKey().getKey().toLowerCase().replaceAll("_", " ");
+    }
+
+    public static String ToName(@NotNull ItemStack itemStack) {
+        return itemStack.getType().getKey().getKey().toLowerCase().replaceAll("_", " ");
     }
 }
