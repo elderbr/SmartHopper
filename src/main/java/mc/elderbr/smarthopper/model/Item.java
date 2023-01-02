@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.abstracts.Funil;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -125,5 +126,31 @@ public class Item extends Funil {
     public static void SET(@NotNull Item item){
         ITEM_MAP_ID.put(item.getId(), item);
         ITEM_MAP_NAME.put(item.getName(), item);
+    }
+
+    /***
+     * Busca o item no atributo global pelo o nome
+     * @param name do item que seja pesquisar
+     * @return Item
+     * @throws ItemException
+     */
+    public static Item GET(@NotNull String name) throws ItemException {
+        if(ITEM_MAP_NAME.get(name) == null){
+            throw new ItemException("O item não está na lista de item!!!");
+        }
+        return ITEM_MAP_NAME.get(name);
+    }
+
+    /**
+     * Busca o item no atributo global buscando pelo ID
+     * @param id número do item
+     * @return Item
+     * @throws ItemException
+     */
+    public static Item GET(@NotNull Integer id) throws ItemException {
+        if(ITEM_MAP_ID.get(id) == null){
+            throw new ItemException("O item não está na lista de item!!!");
+        }
+        return ITEM_MAP_ID.get(id);
     }
 }
