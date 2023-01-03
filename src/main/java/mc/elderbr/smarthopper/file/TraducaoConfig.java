@@ -4,13 +4,11 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
@@ -165,15 +163,22 @@ public class TraducaoConfig {
                 if (lang.equals("grupo")) {
                     traducao.setLang("pt_br");
                     Grupo grupo = GRUPO_MAP_NAME.get(traducao.getName());
-                    if(grupo!=null){
+                    if (grupo != null) {
                         grupo.addTranslation(traducao.getLang(), traducao.getTranslation());
                         Grupo.SET(grupo);
+
+                        // Adicionando tradução do grupo
+                        TRADUCAO_GRUPO.put(grupo.getName(), grupo);
+                        TRADUCAO_GRUPO.put(traducao.getTranslation(), grupo);
                     }
                 } else {
                     Item item = ITEM_MAP_NAME.get(traducao.getName());
-                    if(item != null){
+                    if (item != null) {
                         item.addTranslation(traducao.getLang(), traducao.getTranslation());
                         Item.SET(item);
+                        // Adicionando a tradução na variavel global
+                        TRADUCAO_ITEM.put(item.getName().toLowerCase(), item);
+                        TRADUCAO_ITEM.put(traducao.getTranslation().toLowerCase(), item);
                     }
                 }
             }
