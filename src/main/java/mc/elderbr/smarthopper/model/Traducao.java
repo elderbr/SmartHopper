@@ -24,20 +24,12 @@ public class Traducao {
         return this;
     }
 
-    public String getTraducao() {
+    public String getTranslation() {
         return translation;
     }
 
-    public Traducao setTraducao(String translation) {
+    public Traducao setTranslation(String translation) {
         this.translation = translation;
         return this;
-    }
-
-    public String toTraducao(){
-        return translation;
-    }
-
-    public String toTraducao(Player player){
-        return translation;
     }
 }

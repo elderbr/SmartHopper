@@ -1,6 +1,8 @@
 package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Traducao;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
@@ -8,13 +10,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Map;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.TRADUCAO_GRUPO_LISTA;
+import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class TraducaoConfig {
     private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
 
     private String name;
-    private String traducao;
+    private Traducao traducao;
 
     private BufferedWriter escrever;
     private BufferedReader reader;
@@ -149,10 +151,16 @@ public class TraducaoConfig {
             yml = YamlConfiguration.loadConfiguration(files);
             // Nome do linguagem
             lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
-            if (lang.equals("grupo")) {
-              for(Map.Entry<String, Object> grups : yml.getValues(false).entrySet()){
-                  TRADUCAO_GRUPO_LISTA.put(grups.getKey(), grups.getValue().toString());
-              }
+            for (Map.Entry<String, Object> value : yml.getValues(false).entrySet()) {
+                traducao = new Traducao();
+                traducao.setLang(lang);
+                traducao.setTranslation(value.getValue().toString());
+                if (lang.equals("grupo")) {
+                    traducao.setLang("pt_br");
+                    TRADUCAO_GRUPO_NAME.put(value.getKey(), traducao);
+                } else {
+                    TRADUCAO_ITEM_NAME.put(value.getKey(), traducao);
+                }
             }
             //files.delete();
         }
