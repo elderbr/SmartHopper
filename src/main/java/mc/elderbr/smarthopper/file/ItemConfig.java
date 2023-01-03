@@ -72,33 +72,29 @@ public class ItemConfig {
             if (config.get(names.concat(".item_lang")) != null) {
                 MemorySection memorySection = ((MemorySection) config.get(names.concat(".item_lang")));
                 for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
-                    item.addTraducao(new Traducao(langs.getKey(), langs.getValue().toString()));
-                    VGlobal.TRADUCAO_ITEM_LIST.put(langs.getValue().toString().toLowerCase(), item);// Adicionando a tradução para o item
-                    VGlobal.TRADUCAO_ITEM_NAME_LIST.add(langs.getValue().toString().toLowerCase());
+                    item.addTranslation(langs.getKey(), langs.getValue().toString());
+                    //VGlobal.TRADUCAO_ITEM_LIST.put(langs.getValue().toString().toLowerCase(), item);// Adicionando a tradução para o item
+                    //VGlobal.TRADUCAO_ITEM_NAME_LIST.add(langs.getValue().toString().toLowerCase());
                 }
             }
             // Adicionando item na variavel global
             VGlobal.ITEM_LIST.add(item);
             VGlobal.ITEM_MAP_ID.put(item.getId(), item);
             VGlobal.ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
-            VGlobal.TRADUCAO_ITEM_LIST.put(names.toLowerCase(), item);// Adicionando a tradução para o item
-            VGlobal.TRADUCAO_ITEM_NAME_LIST.add(names.toLowerCase());
+            //VGlobal.TRADUCAO_ITEM_LIST.put(names.toLowerCase(), item);// Adicionando a tradução para o item
+            //VGlobal.TRADUCAO_ITEM_NAME_LIST.add(names.toLowerCase());
         }
     }
 
     private void add(Item item) {
         config.set(item.getName().concat(".item_id"), item.getId());
         config.set(item.getName().concat(".item_name"), item.getName());
-        if (!item.getListTraducao().isEmpty()) {
-            config.set(item.getName().concat(".item_lang"), item.getListTraducao());
-        }
         save();
     }
 
     public static boolean ADD_TRADUCAO(Item item) {
         try {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-            config.set(item.getName().concat(".item_lang"), item.getListTraducao());
             config.save(ITEM_FILE);
             return true;
         } catch (IOException e) {

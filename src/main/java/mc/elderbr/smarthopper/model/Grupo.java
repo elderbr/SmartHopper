@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.TRADUCAO_GRUPO;
 
 public class Grupo extends Funil {
 
@@ -59,12 +58,6 @@ public class Grupo extends Funil {
     public Funil setBlocked(boolean blocked) {
         this.blocked = blocked;
         return this;
-    }
-
-    @Override
-    public String toTraducao(Player player) {
-        // TODO: PEGA A TRADUÇÃO DO GRUPO
-        return name;
     }
 
     public Grupo addListItem(Item item) {

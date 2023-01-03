@@ -35,11 +35,7 @@ public class GrupoTabCompleter implements TabCompleter {
                     cmd = Utils.NAME_ARRAY(args);
                     if (args.length >= 1) {
                         grupoList = new ArrayList<>();
-                        for(String traducao : VGlobal.TRADUCAO_GRUPO.keySet()){
-                            if(traducao.contains(cmd)){
-                                grupoList.add(traducao);
-                            }
-                        }
+
                         return grupoList;
                     }
             }

@@ -8,10 +8,13 @@ import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_ID;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
 
@@ -40,14 +43,19 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         saveDefaultConfig();
         config = new Config();
 
+        // Tradução
+        traducaoConfig = new TraducaoConfig();
+
         // Lendo e criando os itens
         Item.CreateItem();// Criando todos os itens
 
+        Item item = ITEM_MAP_ID.get(1);
+        Msg.ServidorBlue("item: "+ item.getName()+" - "+ item.toTranslation("pt_br"), getClass());
+        Msg.ServidorBlue("item: "+ item.getName()+" - "+ item.toTranslation("pt_en"), getClass());
+
+
         // Lendo e criando os grupos
         //Grupo.CreateGrupos();// Criando todos os grupos
-
-        // Tradução
-        traducaoConfig = new TraducaoConfig();
 
         // Salvando os item no arquivo item.yml
         //itemConfig = new ItemConfig();
@@ -96,7 +104,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getCommand("informacao").setExecutor(new LivroComando());
     }
 
-    private void events(){
+    private void events() {
         //getServer().getPluginManager().registerEvents(new InventarioEvent(), this);
         //getServer().getPluginManager().registerEvents(new ClickHopper(), this);
         //getServer().getPluginManager().registerEvents(new MoveHopper(), this);

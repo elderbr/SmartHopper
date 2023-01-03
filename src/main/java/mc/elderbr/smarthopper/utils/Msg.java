@@ -79,11 +79,11 @@ public class Msg {
 
     //========================== ITEM =================================================//
     public static void Item(Player player, Item item) {
-        player.sendMessage(Color("$2Item: $6" + item.toTraducao(player) + "$e ID: " + item.getId()));
+        player.sendMessage(Color("$2Item: $6" + item.toTranslation(player) + "$e ID: " + item.getId()));
     }
 
     public static void ItemNegar(Player player, Item item) {
-        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao(player) + "$e ID: " + item.getId()));
+        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTranslation(player) + "$e ID: " + item.getId()));
     }
 
     public static void ItemNaoExiste(Player player, String name) {
@@ -93,9 +93,9 @@ public class Msg {
     //========================== GRUPO =================================================//
     public static void Grupo(Player player, Grupo grupo) {
         if(grupo.isBlocked()){
-            player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTraducao(player) + "$e ID: " + grupo.getId()));
+            player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTranslation(player) + "$e ID: " + grupo.getId()));
         }else {
-            player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getId()));
+            player.sendMessage(Color("$9Grupo: $e" + grupo.toTranslation(player) + " $6ID: " + grupo.getId()));
         }
     }
 
@@ -103,7 +103,7 @@ public class Msg {
         Bukkit.getServer().getConsoleSender().sendMessage(
                 "Grupo ID: " + grupo.getId()
                         + "\nnome: " + grupo.getName()
-                        + "\nTraducao: " + grupo.getListTraducao()
+                        + "\nTraducao: " + grupo.getTranslation()
         );
     }
 
@@ -112,23 +112,23 @@ public class Msg {
     }
 
     public static void GrupoNegar(Player player, Grupo grupo) {
-        player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTraducao(player) + "$e ID: " + grupo.getId()));
+        player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTranslation(player) + "$e ID: " + grupo.getId()));
     }
 
     public static void getType(Player player, Object value){
         if(value instanceof Item item){
             if(item.isBlocked()){
-                player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao(player) + "$e ID: " + item.getId()));
+                player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTranslation(player) + "$e ID: " + item.getId()));
             }else {
-                player.sendMessage(Color("$2Item: $6" + item.toTraducao(player) + "$e ID: " + item.getId()));
+                player.sendMessage(Color("$2Item: $6" + item.toTranslation(player) + "$e ID: " + item.getId()));
             }
             return;
         }
         if(value instanceof Grupo grupo){
             if(grupo.isBlocked()){
-                player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTraducao(player) + "$e ID: " + grupo.getId()));
+                player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTranslation(player) + "$e ID: " + grupo.getId()));
             }else {
-                player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getId()));
+                player.sendMessage(Color("$9Grupo: $e" + grupo.toTranslation(player) + " $6ID: " + grupo.getId()));
             }
             return;
         }
@@ -137,16 +137,16 @@ public class Msg {
             for(Object obj : listaType){
                 if(obj instanceof Item item){
                     if(item.isBlocked()){
-                        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTraducao(player) + "$e ID: " + item.getId()));
+                        player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTranslation(player) + "$e ID: " + item.getId()));
                     }else {
-                        player.sendMessage(Color("$2Item: $6" + item.toTraducao(player) + "$e ID: " + item.getId()));
+                        player.sendMessage(Color("$2Item: $6" + item.toTranslation(player) + "$e ID: " + item.getId()));
                     }
                 }
                 if(obj instanceof Grupo grupo){
                     if(grupo.isBlocked()){
-                        player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTraducao(player) + "$e ID: " + grupo.getId()));
+                        player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTranslation(player) + "$e ID: " + grupo.getId()));
                     }else {
-                        player.sendMessage(Color("$9Grupo: $e" + grupo.toTraducao(player) + " $6ID: " + grupo.getId()));
+                        player.sendMessage(Color("$9Grupo: $e" + grupo.toTranslation(player) + " $6ID: " + grupo.getId()));
                     }
                 }
             }

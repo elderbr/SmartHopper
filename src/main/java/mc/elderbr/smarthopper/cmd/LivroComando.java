@@ -51,7 +51,7 @@ public class LivroComando implements CommandExecutor {
                 list = new ArrayList<>();
                 String lang = null;
                 for (Grupo grupos : VGlobal.GRUPO_MAP_NAME.values()) {
-                    lang = Utils.ToUTF(grupos.toTraducao(player));
+                    lang = Utils.ToUTF(grupos.toTranslation(player));
                     if (lang != null && !list.contains(lang)) {
                         list.add(lang);
                     }

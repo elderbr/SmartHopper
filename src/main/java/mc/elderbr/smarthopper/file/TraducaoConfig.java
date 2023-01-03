@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
@@ -151,17 +152,22 @@ public class TraducaoConfig {
             yml = YamlConfiguration.loadConfiguration(files);
             // Nome do linguagem
             lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
+
+            LANG_NAME_LIST.add(lang);
+
             for (Map.Entry<String, Object> value : yml.getValues(false).entrySet()) {
                 traducao = new Traducao();
                 traducao.setLang(lang);
+                traducao.setName(value.getKey());
                 traducao.setTranslation(value.getValue().toString());
                 if (lang.equals("grupo")) {
                     traducao.setLang("pt_br");
-                    TRADUCAO_GRUPO_NAME.put(value.getKey(), traducao);
+                    TRADUCAO_GRUPO_LIST.add(traducao);
                 } else {
-                    TRADUCAO_ITEM_NAME.put(value.getKey(), traducao);
+                    TRADUCAO_ITEM_LIST.add(traducao);
                 }
             }
+
             //files.delete();
         }
     }

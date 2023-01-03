@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 public class Traducao {
 
     private String lang;
+    private String name;
     private String translation;
 
     public Traducao() {
@@ -24,6 +25,14 @@ public class Traducao {
         return this;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getTranslation() {
         return translation;
     }
@@ -31,5 +40,9 @@ public class Traducao {
     public Traducao setTranslation(String translation) {
         this.translation = translation;
         return this;
+    }
+    @Override
+    public String toString(){
+        return (translation == null ? name : translation);
     }
 }

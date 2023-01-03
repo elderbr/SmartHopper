@@ -40,12 +40,7 @@ public class ItemTabCompleter implements TabCompleter {
                 cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
                 if (cmd.length() > 0) {
                     itemList = new ArrayList<>();
-                    for (String items : VGlobal.TRADUCAO_ITEM_NAME_LIST) {
-                        if (items.contains(cmd)) {
-                            item = VGlobal.TRADUCAO_ITEM_LIST.get(items);
-                            //itemList.add(item.toTraducao(player));
-                        }
-                    }
+
                     return itemList;
                 }
             }
