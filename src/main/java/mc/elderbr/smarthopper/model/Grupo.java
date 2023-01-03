@@ -5,12 +5,13 @@ import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class Grupo extends Funil {
 
@@ -225,10 +226,6 @@ public class Grupo extends Funil {
 
                 // Ferramentas de Pedras
                 if (grupo.getName().equals("stone tools")) {
-
-
-                    grupo.addListItem(Item.GET("stone sword"));
-
                     grupo.addListItem(Item.GET("stone sword"));
                     grupo.addListItem(Item.GET("stone shovel"));
                     grupo.addListItem(Item.GET("stone pickaxe"));
@@ -321,11 +318,10 @@ public class Grupo extends Funil {
             }
 
             // LISTA DE NOMES DE GRUPO GLOBAL
-            if (grupo.getListItem().size() > 1 && !VGlobal.GRUPO_NAME_LIST.contains(grupo.getName())) {
+            if (grupo.getListItem().size() > 1 && !GRUPO_NAME_LIST.contains(grupo.getName())) {
                 grupo.setId(codigo);
+                SET(grupo);
                 codigo++;
-                VGlobal.GRUPO_NAME_LIST.add(grupo.name);
-                VGlobal.GRUPO_LIST.add(grupo);
             }
         }
         Config.SET_VERSION();// Alterando para versão atual
@@ -427,6 +423,17 @@ public class Grupo extends Funil {
                 }
             default:
                 return true;
+        }
+    }
+
+    public static void SET(@NotNull Grupo grupo){
+        GRUPO_MAP_ID.put(grupo.getId(), grupo);
+        GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+        if(!GRUPO_NAME_LIST.contains(grupo.getName())) {
+            GRUPO_NAME_LIST.add(grupo.name);
+        }
+        if(!GRUPO_LIST.contains(grupo)) {
+            GRUPO_LIST.add(grupo);
         }
     }
 

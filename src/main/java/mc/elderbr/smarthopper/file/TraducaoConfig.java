@@ -1,6 +1,8 @@
 package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -162,9 +164,17 @@ public class TraducaoConfig {
                 traducao.setTranslation(value.getValue().toString());
                 if (lang.equals("grupo")) {
                     traducao.setLang("pt_br");
-                    TRADUCAO_GRUPO_LIST.add(traducao);
+                    Grupo grupo = GRUPO_MAP_NAME.get(traducao.getName());
+                    if(grupo!=null){
+                        grupo.addTranslation(traducao.getLang(), traducao.getTranslation());
+                        Grupo.SET(grupo);
+                    }
                 } else {
-                    TRADUCAO_ITEM_LIST.add(traducao);
+                    Item item = ITEM_MAP_NAME.get(traducao.getName());
+                    if(item != null){
+                        item.addTranslation(traducao.getLang(), traducao.getTranslation());
+                        Item.SET(item);
+                    }
                 }
             }
 

@@ -17,7 +17,6 @@ public class Item extends Funil {
     private int id = 0;
     private String name;
     private boolean blocked = false;
-    private Map<String, String> translation = new HashMap<>();
     private List<Grupo> listGrupo = new ArrayList<>();
 
 
@@ -66,10 +65,6 @@ public class Item extends Funil {
         return blocked;
     }
 
-    public Map<String, String> getTranslation() {
-        return translation;
-    }
-
     public Item addListGrupo(Grupo grupo) {
         listGrupo.add(grupo);
         return this;
@@ -109,13 +104,6 @@ public class Item extends Funil {
         int cod = 1;
         for (String name : ITEM_NAME_LIST) {
             Item item = new Item(cod, name);
-            for (Traducao trad : TRADUCAO_ITEM_LIST) {
-                if (trad.getName().equalsIgnoreCase(name)) {
-                    item.addTranslation(trad.getLang(), trad.getTranslation());
-                }
-            }
-            // Salvando no atributo global
-            ITEM_LIST.add(item);
             SET(item);// Atualiza ou adiciona o item no atributo global
             cod++;
         }
@@ -136,6 +124,12 @@ public class Item extends Funil {
     public static void SET(@NotNull Item item) {
         ITEM_MAP_ID.put(item.getId(), item);
         ITEM_MAP_NAME.put(item.getName(), item);
+        if(!ITEM_LIST.contains(item)) {
+            ITEM_LIST.add(item);
+        }
+        if(!ITEM_NAME_LIST.contains(item.getName())){
+            ITEM_NAME_LIST.add(item.getName());
+        }
     }
 
     /***
