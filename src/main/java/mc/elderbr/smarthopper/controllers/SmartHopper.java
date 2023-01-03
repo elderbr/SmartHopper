@@ -85,7 +85,7 @@ public class SmartHopper {
                         throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
                     }
                     // Se conter cerquilha o item é negado
-                    item.setBloqueado(name.contains("#"));
+                    item.setBlocked(name.contains("#"));
                     listType.add(item);
                 }
 
@@ -103,7 +103,7 @@ public class SmartHopper {
                         throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
                     }
                     // Se conter cerquilha o grupo é negado
-                    grupo.setBloqueado(name.contains("#"));
+                    grupo.setBlocked(name.contains("#"));
                     listType.add(grupo);
                 }
             }
@@ -125,7 +125,7 @@ public class SmartHopper {
                 throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
             }
             // Se conter cerquilha o item é negado
-            item.setBloqueado(name.contains("#"));
+            item.setBlocked(name.contains("#"));
             type = item;
             return;
         }
@@ -144,7 +144,7 @@ public class SmartHopper {
                 throw new ItemException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
             }
             // Se conter cerquilha o grupo é negado
-            grupo.setBloqueado(name.contains("#"));
+            grupo.setBlocked(name.contains("#"));
             type = grupo;
         }
     }
@@ -201,7 +201,7 @@ public class SmartHopper {
                         throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
                     }
                     // Se conter cerquilha o item é negado
-                    item.setBloqueado(name.contains("#"));
+                    item.setBlocked(name.contains("#"));
                     listType.add(item);
                 }else
                 // Se o nome do hopper conter a letra G se trata de grupo
@@ -218,7 +218,7 @@ public class SmartHopper {
                         throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
                     }
                     // Se conter cerquilha o grupo é negado
-                    grupo.setBloqueado(name.contains("#"));
+                    grupo.setBlocked(name.contains("#"));
                     listType.add(grupo);
                 }else{
                     throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
@@ -242,7 +242,7 @@ public class SmartHopper {
                 throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
             }
             // Se conter cerquilha o item é negado
-            item.setBloqueado(name.contains("#"));
+            item.setBlocked(name.contains("#"));
             type = item;
             return type;
         }
@@ -261,7 +261,7 @@ public class SmartHopper {
                 throw new ItemException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
             }
             // Se conter cerquilha o grupo é negado
-            grupo.setBloqueado(name.contains("#"));
+            grupo.setBlocked(name.contains("#"));
             type = grupo;
         }
         return type;

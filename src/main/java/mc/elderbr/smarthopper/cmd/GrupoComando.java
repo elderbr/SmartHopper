@@ -1,7 +1,5 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.controllers.GrupoController;
-import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -23,14 +21,12 @@ public class GrupoComando implements CommandExecutor {
     private ItemStack itemStack;
     public InventoryCustom inventory;
 
-    private GrupoController grupoController;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (sender instanceof Player) {
 
-            grupoController = new GrupoController();
             myArgs = args;
 
             player = (Player) sender;
@@ -53,30 +49,7 @@ public class GrupoComando implements CommandExecutor {
     }
 
     private boolean show() {
-        try {
-            if (myArgs.length == 0) {
-                grupoController.getGrupo(itemStack);// Se não houver argumentos busca o item que estiver na mão do jogador
-            } else {
-                grupoController.getGrupo(cmd);// Pega o nome ou ID digitado
-            }
 
-            // Mostra todos os grupos que contem o item
-            Msg.PlayerGold(player, "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-            for (Grupo grupo : grupoController.getListGrupo()) {
-                Msg.Grupo(player, grupo);
-            }
-
-            // Se existir apenas um grupo para o item mostra o inventario
-            if (grupoController.getListGrupo().size() == 1) {
-                grupo = grupoController.getListGrupo().get(0);
-                inventory = new InventoryCustom(player);
-                inventory.create(grupo);
-                player.openInventory(inventory.getInventory(1));
-            }
-            return true;
-        } catch (GrupoException e) {
-            Msg.PlayerGold(player, e.getMessage());
-        }
         return false;
     }
 
@@ -93,19 +66,7 @@ public class GrupoComando implements CommandExecutor {
     }
 
     private boolean delete() {
-        try {
-            if (myArgs.length == 0) {
-                grupoController.getGrupo(itemStack);// Se não houver argumentos busca o item que estiver na mão do jogador
-            } else {
-                grupoController.getGrupo(cmd);// Pega o nome ou ID digitado
-            }
-            grupo = grupoController.getListGrupo().get(0);
-            grupoController.delete(player);
-            Msg.PlayerTodos("$l$6O grupo $c" + grupo.getName() + "$6 foi removido pelo o ADM $e" + player.getName() + "$6!!!");
-            return true;
-        } catch (GrupoException e) {
-            Msg.PlayerGold(player, e.getMessage());
-        }
+
         return false;
     }
 }

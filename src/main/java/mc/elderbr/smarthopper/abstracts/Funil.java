@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.abstracts;
 
 import mc.elderbr.smarthopper.model.Traducao;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ public abstract class Funil {
         return traducaoList;
     }
 
+    public abstract String toTraducao(Player player);
+
     public List<Traducao> getListTraducao(){
         return traducaoList;
     }
@@ -36,4 +39,5 @@ public abstract class Funil {
     public String toString(){
         return getClass().getSimpleName();
     }
+
 }

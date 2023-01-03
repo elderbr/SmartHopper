@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.abstracts.Funil;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,6 +64,12 @@ public class Item extends Funil {
     @Override
     public boolean isBlocked() {
         return blocked;
+    }
+
+    @Override
+    public String toTraducao(Player player) {
+        // TODO: PEGA A TRADUÇÃO DO ITEM
+        return name;
     }
 
     public Item addListGrupo(Grupo grupo) {

@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.MemorySection;
@@ -63,7 +64,7 @@ public class ItemConfig {
             if (config.get(names) == null) continue;
 
             item = new Item();
-            item.setCodigo(config.getInt(names.concat(".item_id")));
+            item.setId(config.getInt(names.concat(".item_id")));
             item.setName(config.getString(names.concat(".item_name")));
             Msg.ServidorGreen("Item: "+ item.getName());
 
@@ -71,14 +72,14 @@ public class ItemConfig {
             if (config.get(names.concat(".item_lang")) != null) {
                 MemorySection memorySection = ((MemorySection) config.get(names.concat(".item_lang")));
                 for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
-                    item.addTraducao(langs.getKey(), langs.getValue().toString());
+                    item.addTraducao(new Traducao(langs.getKey(), langs.getValue().toString()));
                     VGlobal.TRADUCAO_ITEM_LIST.put(langs.getValue().toString().toLowerCase(), item);// Adicionando a tradução para o item
                     VGlobal.TRADUCAO_ITEM_NAME_LIST.add(langs.getValue().toString().toLowerCase());
                 }
             }
             // Adicionando item na variavel global
             VGlobal.ITEM_LIST.add(item);
-            VGlobal.ITEM_MAP_ID.put(item.getCodigo(), item);
+            VGlobal.ITEM_MAP_ID.put(item.getId(), item);
             VGlobal.ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
             VGlobal.TRADUCAO_ITEM_LIST.put(names.toLowerCase(), item);// Adicionando a tradução para o item
             VGlobal.TRADUCAO_ITEM_NAME_LIST.add(names.toLowerCase());
@@ -86,10 +87,10 @@ public class ItemConfig {
     }
 
     private void add(Item item) {
-        config.set(item.getName().concat(".item_id"), item.getCodigo());
+        config.set(item.getName().concat(".item_id"), item.getId());
         config.set(item.getName().concat(".item_name"), item.getName());
-        if (!item.getTraducao().isEmpty()) {
-            config.set(item.getName().concat(".item_lang"), item.getTraducao());
+        if (!item.getListTraducao().isEmpty()) {
+            config.set(item.getName().concat(".item_lang"), item.getListTraducao());
         }
         save();
     }
@@ -97,7 +98,7 @@ public class ItemConfig {
     public static boolean ADD_TRADUCAO(Item item) {
         try {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-            config.set(item.getName().concat(".item_lang"), item.getTraducao());
+            config.set(item.getName().concat(".item_lang"), item.getListTraducao());
             config.save(ITEM_FILE);
             return true;
         } catch (IOException e) {

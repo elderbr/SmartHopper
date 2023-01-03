@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
+import org.bukkit.entity.Player;
+
 public class Traducao {
 
     private String lang;
@@ -29,5 +31,13 @@ public class Traducao {
     public Traducao setTraducao(String translation) {
         this.translation = translation;
         return this;
+    }
+
+    public String toTraducao(){
+        return translation;
+    }
+
+    public String toTraducao(Player player){
+        return translation;
     }
 }

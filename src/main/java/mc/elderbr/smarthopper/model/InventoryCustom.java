@@ -102,50 +102,7 @@ public class InventoryCustom implements InterfaceInventario, Botao {
     }
 
     public void create(@NotNull Object name) {
-        if (name instanceof String titule) {
-            this.name = titule.toLowerCase().replaceAll(Msg.Color("$lGrupo: $r"), "");
-            this.codigo = Utils.ParseNumber(this.name);
-            if (codigo > 0) {
-                type = InventarioType.NORMAL;
-                grupo = VGlobal.GRUPO_MAP_ID.get(codigo);
-            } else {
-                type = InventarioType.NOVO;
-                grupo = new Grupo();
-                grupo.setName(this.name);
-                grupo.addTraducao(player.getLocale(), this.name);
-            }
-        }
-        if (name instanceof Grupo grup) {
-            grupo = grup;
-            type = InventarioType.NORMAL;
-            this.codigo = grup.getCodigo();
-            this.name = grup.getName();
-            traducao = grup.getTraducao();
-        }
 
-        inventory = Bukkit.createInventory(null, 54, toTitulo(player));
-
-        // Paginação
-        pagQuant = (grupo.getListItem().size() / 54.0);
-        pagMap = new HashMap<>();
-        listItem = new ArrayList<>();
-        for (int i = 0; i < grupo.getListItem().size(); i++) {
-            listItem.add(grupo.getListItem().get(i));
-            if (pagQuant < 0.99 && (grupo.getListItem().size() - 1) == i) {
-                pagMap.put(1, listItem);
-                listItem = new ArrayList<>();
-            }
-            if (pagQuant > 0.98 && pagQuant < 1.95) {
-                if (i == 52) {
-                    pagMap.put(1, listItem);
-                    listItem = new ArrayList<>();
-                }
-                if ((grupo.getListItem().size() - 1) == i) {
-                    pagMap.put(2, listItem);
-                    listItem = new ArrayList<>();
-                }
-            }
-        }
     }
 
     public Inventory getInventory(@NotNull int pag) {
@@ -155,22 +112,7 @@ public class InventoryCustom implements InterfaceInventario, Botao {
             return inventory;
         }
 
-        if (pagQuant > 0 && pagQuant < 0.99) {
-            for (String values : pagMap.get(pag)) {
-                inventory.addItem(new Item(values).parseItemStack());
-            }
-            if (Config.CONTAINS_ADD(player)) {
-                inventory.setItem(53, BtnSalva());
-            }
-        }
-        if (pagQuant > 0.98 && pagQuant < 1.95) {
-            for (String values : pagMap.get(pag)) {
-                inventory.addItem(new Item(values).parseItemStack());
-            }
-            if (pag == 1) {
-                inventory.setItem(53, BtnProximo());
-            }
-        }
+
         return inventory;
     }
 

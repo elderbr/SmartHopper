@@ -1,16 +1,14 @@
 package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Map;
+
+import static mc.elderbr.smarthopper.interfaces.VGlobal.TRADUCAO_GRUPO_LISTA;
 
 public class TraducaoConfig {
     private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
@@ -152,29 +150,11 @@ public class TraducaoConfig {
             // Nome do linguagem
             lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
             if (lang.equals("grupo")) {
-                for (Grupo grupo : VGlobal.GRUPO_LIST) {
-                    for (Map.Entry<String, Object> obj : yml.getValues(false).entrySet()) {
-                        name = obj.getKey();
-                        traducao = String.valueOf(obj.getValue());
-                        if (name.equals(grupo.getName())) {
-                            VGlobal.GRUPO_LIST.get(grupo.getCodigo()-1).addTraducao("pt_br", traducao);
-                            break;
-                        }
-                    }
-                }
-            } else {
-                for (Item item : VGlobal.ITEM_LIST) {
-                    for (Map.Entry<String, Object> obj : yml.getValues(false).entrySet()) {
-                        name = obj.getKey();
-                        traducao = String.valueOf(obj.getValue());
-                        if (name.equals(item.getName())) {
-                            VGlobal.ITEM_LIST.get(item.getCodigo()-1).addTraducao(lang, traducao);
-                            break;
-                        }
-                    }
-                }
+              for(Map.Entry<String, Object> grups : yml.getValues(false).entrySet()){
+                  TRADUCAO_GRUPO_LISTA.put(grups.getKey(), grups.getValue().toString());
+              }
             }
-            files.delete();
+            //files.delete();
         }
     }
 
