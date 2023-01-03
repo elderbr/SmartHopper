@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.ARQUIVO;
+import static mc.elderbr.smarthopper.interfaces.VGlobal.TRADUCAO_ITEM;
 
 public class ItemConfig {
 
@@ -54,17 +55,18 @@ public class ItemConfig {
      ********************************/
     public void load() {
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-        Msg.ServidorBlue("Lendo o arquivo item.yml", getClass());
         for(String value : config.getValues(false).keySet()){
             item = new Item();
             item.setId(config.getInt(value.concat(".item_id")));
             item.setName(config.getString(value.concat(".item_name")));
-            Msg.ServidorBlue("item da vez: "+ item, getClass());
+            // ADICIONANDO TRADUÇÃO
+            TRADUCAO_ITEM.put(item.getName(), item);// ADICIONANDO TRADUÇÃO GLOBAL
             if(config.get(value.concat(".item_lang"))!=null) {
                 MemorySection memorySection = (MemorySection) config.get(value.concat(".item_lang"));
                 for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
-                    Msg.ServidorBlue("lang: "+ langs.getKey()+" - translation: "+ langs.getValue().toString(), getClass());
                     item.addTranslation(langs.getKey(), langs.getValue().toString());
+                    TRADUCAO_ITEM.put(item.getName(), item);// ADICIONANDO TRADUÇÃO GLOBAL
+                    TRADUCAO_ITEM.put(langs.getValue().toString(), item);// ADICIONANDO TRADUÇÃO GLOBAL
                 }
             }
             Item.SET(item);
