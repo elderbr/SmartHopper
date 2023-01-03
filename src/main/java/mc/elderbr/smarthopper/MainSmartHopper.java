@@ -53,18 +53,14 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Tradução
         traducaoConfig = new TraducaoConfig();
 
-        Grupo grupo = GRUPO_MAP_ID.get(10);
-        Msg.ServidorBlue("Grupo: "+ grupo.getName()+" - translation: "+ grupo.toTranslation("pt_br"), getClass());
-        Msg.ServidorBlue("Grupo: "+ grupo.getName()+" - translation: "+ grupo.toTranslation("pt_bs"), getClass());
-
         // Salvando os item no arquivo item.yml
-        //itemConfig = new ItemConfig();
+        itemConfig = new ItemConfig();
 
         // Salvando os grupo no arquivo grupo.yml
         //grupoConfig = new GrupoConfig();
 
         // Comandos
-        //commands();
+        commands();
 
         // Eventos
         //events();

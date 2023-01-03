@@ -20,8 +20,6 @@ public class ItemConfig {
 
     private static File ITEM_FILE = new File(ARQUIVO, "item.yml");
     private YamlConfiguration config;
-
-    private int idItem = 1;
     private Item item;
 
     private List<String> list = new ArrayList<>();
@@ -55,40 +53,30 @@ public class ItemConfig {
      *
      ********************************/
     public void load() {
-
-        VGlobal.ITEM_LIST.clear();// Limpando a lista de item
-
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-        for (String names : VGlobal.ITEM_NAME_LIST) {
-
-            if (config.get(names) == null) continue;
-
+        Msg.ServidorBlue("Lendo o arquivo item.yml", getClass());
+        for(String value : config.getValues(false).keySet()){
             item = new Item();
-            item.setId(config.getInt(names.concat(".item_id")));
-            item.setName(config.getString(names.concat(".item_name")));
-            Msg.ServidorGreen("Item: "+ item.getName());
-
-            // Tradução dos itens
-            if (config.get(names.concat(".item_lang")) != null) {
-                MemorySection memorySection = ((MemorySection) config.get(names.concat(".item_lang")));
+            item.setId(config.getInt(value.concat(".item_id")));
+            item.setName(config.getString(value.concat(".item_name")));
+            Msg.ServidorBlue("item da vez: "+ item, getClass());
+            if(config.get(value.concat(".item_lang"))!=null) {
+                MemorySection memorySection = (MemorySection) config.get(value.concat(".item_lang"));
                 for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
+                    Msg.ServidorBlue("lang: "+ langs.getKey()+" - translation: "+ langs.getValue().toString(), getClass());
                     item.addTranslation(langs.getKey(), langs.getValue().toString());
-                    //VGlobal.TRADUCAO_ITEM_LIST.put(langs.getValue().toString().toLowerCase(), item);// Adicionando a tradução para o item
-                    //VGlobal.TRADUCAO_ITEM_NAME_LIST.add(langs.getValue().toString().toLowerCase());
                 }
             }
-            // Adicionando item na variavel global
-            VGlobal.ITEM_LIST.add(item);
-            VGlobal.ITEM_MAP_ID.put(item.getId(), item);
-            VGlobal.ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
-            //VGlobal.TRADUCAO_ITEM_LIST.put(names.toLowerCase(), item);// Adicionando a tradução para o item
-            //VGlobal.TRADUCAO_ITEM_NAME_LIST.add(names.toLowerCase());
+            Item.SET(item);
         }
     }
 
     private void add(Item item) {
         config.set(item.getName().concat(".item_id"), item.getId());
         config.set(item.getName().concat(".item_name"), item.getName());
+        if(item.getTranslation().size()>0) {
+            config.set(item.getName().concat(".item_lang"), item.getTranslation());
+        }
         save();
     }
 

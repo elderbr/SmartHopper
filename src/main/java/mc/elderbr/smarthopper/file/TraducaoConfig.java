@@ -182,8 +182,7 @@ public class TraducaoConfig {
                     }
                 }
             }
-
-            //files.delete();
+            files.delete();
         }
     }
 
