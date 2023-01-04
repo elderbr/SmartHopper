@@ -57,7 +57,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         itemConfig = new ItemConfig();
 
         // Salvando os grupo no arquivo grupo.yml
-        //grupoConfig = new GrupoConfig();
+        grupoConfig = new GrupoConfig();
 
         // Comandos
         commands();

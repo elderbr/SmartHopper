@@ -7,9 +7,7 @@ import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
@@ -75,50 +73,28 @@ public class Grupo extends Funil {
         return listItem;
     }
 
+    public List<String> getListNameItem(){
+        List<String> lista = new ArrayList<>();
+        for(Item item : getListItem()){
+            lista.add(item.getName());
+        }
+        return lista;
+    }
+
     public static List<String> CreateGrupos() {
 
         grupoList = new ArrayList<>();
-        String name = null;
+        StringBuilder nameGrupoAux = new StringBuilder();
 
-        for (String item : VGlobal.ITEM_NAME_LIST) {
-
-            grupoList.add(item);
-
-            String[] split = item.split("\\s");
-            int size = item.split("\\s").length;
-
-            for (int i = 0; i < size; i++) {
-
-                grupoList.add(split[i]);
-
-                if ((i + 1) < size) {
-                    name = split[i] + " " + split[i + 1];
-                    if (!grupoList.contains(name)) {
-                        grupoList.add(name);
-                    }
-                }
-                if ((i + 2) < size) {
-                    name = split[i] + " " + split[i + 1] + " " + split[i + 2];
-                    if (!grupoList.contains(name)) {
-                        grupoList.add(name);
-                    }
-                }
-                if ((i + 3) < size) {
-                    name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3];
-                    if (!grupoList.contains(name)) {
-                        grupoList.add(name);
-                    }
-                }
-                if ((i + 4) < size) {
-                    name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3] + " " + split[i + 4];
-                    if (!grupoList.contains(name)) {
-                        grupoList.add(name);
-                    }
-                }
-                if ((i + 5) < size) {
-                    name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3] + " " + split[i + 4] + " " + split[i + 5];
-                    if (!grupoList.contains(name)) {
-                        grupoList.add(name);
+        // Pegando o nome do grupo
+        for (String nameItem : ITEM_NAME_LIST) {
+            if (nameItem.split("\\s").length > 0) {
+                String[] nameSplit = nameItem.split("\\s");
+                nameGrupoAux = new StringBuilder();
+                for (String nameGrupo : nameSplit) {
+                    nameGrupoAux.append(nameGrupo.concat(" "));
+                    if (!grupoList.contains(nameGrupoAux.toString().trim())) {
+                        grupoList.add(nameGrupoAux.toString().trim());
                     }
                 }
             }
@@ -196,7 +172,6 @@ public class Grupo extends Funil {
         grupoList.add("potion water");
         grupoList.add("potion water breathing");
         grupoList.add("potion weakness");
-
         createGrupoItem();
         return grupoList;
     }
@@ -205,172 +180,44 @@ public class Grupo extends Funil {
      * Adiciona item na lista do grupo
      */
     private static void createGrupoItem() {
-        Collections.sort(grupoList);
-        int codigo = 1;
-        for (String nameGrupo : grupoList) {
-
-            // NÃO É NOME VALIDO DE GRUPOS
-            if (NotGrupo().contains(nameGrupo)) continue;
-
+        List<String> listGrupoName = new ArrayList<>();
+        Map<String, Grupo> map = new HashMap<>();
+        for (String grup : grupoList) {
             Grupo grupo = new Grupo();
-            grupo.setName(nameGrupo);
-
-            Msg.ServidorBlue("Grupo: " + nameGrupo);
-
-            try {
-                for (String itemName : VGlobal.ITEM_NAME_LIST) {
-                    if (pertence(nameGrupo, itemName) && grupo.isContains(itemName)) {
-                        grupo.addListItem(Item.GET(itemName));
-                    }
+            grupo.setName(grup);
+            for (String itemName : ITEM_NAME_LIST) {
+                if (IsContent(grup, itemName)) {
+                    Item item = ITEM_MAP_NAME.get(itemName);
+                    grupo.addListItem(item);
                 }
-
-                // Ferramentas de Pedras
-                if (grupo.getName().equals("stone tools")) {
-                    grupo.addListItem(Item.GET("stone sword"));
-                    grupo.addListItem(Item.GET("stone shovel"));
-                    grupo.addListItem(Item.GET("stone pickaxe"));
-                    grupo.addListItem(Item.GET("stone axe"));
-                    grupo.addListItem(Item.GET("stone hoe"));
-                }
-
-                // Ferramentas de Ferro
-                if (grupo.getName().equals("iron tools")) {
-                    grupo.addListItem(Item.GET("iron sword"));
-                    grupo.addListItem(Item.GET("iron shovel"));
-                    grupo.addListItem(Item.GET("iron pickaxe"));
-                    grupo.addListItem(Item.GET("iron axe"));
-                    grupo.addListItem(Item.GET("iron hoe"));
-                }
-
-                // Ferramentas de Ouro
-                if (grupo.getName().equals("golden tools")) {
-                    grupo.addListItem(Item.GET("golden sword"));
-                    grupo.addListItem(Item.GET("golden shovel"));
-                    grupo.addListItem(Item.GET("golden pickaxe"));
-                    grupo.addListItem(Item.GET("golden axe"));
-                    grupo.addListItem(Item.GET("golden hoe"));
-                }
-
-                // Ferramentas de Diamante
-                if (grupo.getName().equals("diamond tools")) {
-                    grupo.addListItem(Item.GET("diamond sword"));
-                    grupo.addListItem(Item.GET("diamond shovel"));
-                    grupo.addListItem(Item.GET("diamond pickaxe"));
-                    grupo.addListItem(Item.GET("diamond axe"));
-                    grupo.addListItem(Item.GET("diamond hoe"));
-                }
-
-                // Ferramentas de netherite
-                if (grupo.getName().equals("netherite tools")) {
-                    grupo.addListItem(Item.GET("netherite sword"));
-                    grupo.addListItem(Item.GET("netherite shovel"));
-                    grupo.addListItem(Item.GET("netherite pickaxe"));
-                    grupo.addListItem(Item.GET("netherite axe"));
-                    grupo.addListItem(Item.GET("netherite hoe"));
-                }
-
-                // ITENS PARA SEREM ASSADOS
-                if (grupo.getName().equals("carne crua")) {
-                    grupo.addListItem(Item.GET("potato"));
-                    grupo.addListItem(Item.GET("beef"));
-                    grupo.addListItem(Item.GET("porkchop"));
-                    grupo.addListItem(Item.GET("mutton"));
-                    grupo.addListItem(Item.GET("chicken"));
-                    grupo.addListItem(Item.GET("rabbit"));
-                    grupo.addListItem(Item.GET("cod"));
-                    grupo.addListItem(Item.GET("salmon"));
-                    grupo.addListItem(Item.GET("kelp"));
-                }
-
-                // GRUPO DE FLORES
-                if (grupo.getName().equals("flowers")) {
-                    grupo.addListItem(Item.GET("grass"));
-                    grupo.addListItem(Item.GET("fern"));
-                    grupo.addListItem(Item.GET("dead bush"));
-                    grupo.addListItem(Item.GET("seagrass"));
-                    grupo.addListItem(Item.GET("sea pickle"));
-                    grupo.addListItem(Item.GET("dandelion"));
-                    grupo.addListItem(Item.GET("poppy"));
-                    grupo.addListItem(Item.GET("blue orchid"));
-                    grupo.addListItem(Item.GET("allium"));
-                    grupo.addListItem(Item.GET("azure bluet"));
-                    grupo.addListItem(Item.GET("red tulip"));
-                    grupo.addListItem(Item.GET("orange tulip"));
-                    grupo.addListItem(Item.GET("white tulip"));
-                    grupo.addListItem(Item.GET("pink tulip"));
-                    grupo.addListItem(Item.GET("oxeye daisy"));
-                    grupo.addListItem(Item.GET("cornflower"));
-                    grupo.addListItem(Item.GET("lily of the valley"));
-                    grupo.addListItem(Item.GET("lily pad"));
-                    grupo.addListItem(Item.GET("wither rose"));
-                    grupo.addListItem(Item.GET("rose bush"));
-                    grupo.addListItem(Item.GET("weeping vines"));
-                    grupo.addListItem(Item.GET("twisting vines"));
-                    grupo.addListItem(Item.GET("vine"));
-                    grupo.addListItem(Item.GET("sunflower"));
-                    grupo.addListItem(Item.GET("lilac"));
-                    grupo.addListItem(Item.GET("peony"));
-                    grupo.addListItem(Item.GET("tall grass"));
-                    grupo.addListItem(Item.GET("large fern"));
-                }
-            } catch (ItemException e) {
-                Msg.ServidorErro("Erro ao pegar o item do grupo!!!", "createGrupoItem", Grupo.class, e);
             }
-
-            // LISTA DE NOMES DE GRUPO GLOBAL
-            if (grupo.getListItem().size() > 1 && !GRUPO_NAME_LIST.contains(grupo.getName())) {
-                grupo.setId(codigo);
-                SET(grupo);
-                codigo++;
+            if (grupo.getListItem().size() > 1) {
+                map.put(grup, grupo);
+                listGrupoName.add(grup);
             }
         }
-        Config.SET_VERSION();// Alterando para versão atual
+        Collections.sort(listGrupoName);
+        int id = 1;
+        for (String grup : listGrupoName) {
+            Grupo grupo = map.get(grup);
+            grupo.setId(id);
+            for(Item item : grupo.getListItem()){
+                item.addListGrupo(grupo);
+                Item.SET(item);
+            }
+            SET(grupo);
+            id++;
+        }
+
     }
 
-    public boolean isContains(Item item) {
-        return this.getListItem().contains(item.getName());
-    }
-
-    public boolean isContains(String item) {
-
-        String name = null;
-        String[] split = item.split("\\s");
-        int size = item.split("\\s").length;
-
-        if (this.getName().equals(item)) return true;
-
-        for (int i = 0; i < size; i++) {
-
-            name = split[i];
-            if (this.getName().equals(name)) return true;
-
-            if ((i + 1) < size) {
-                name = split[i] + " " + split[i + 1];
-                if (this.getName().equals(name)) {
-                    return true;
-                }
-            }
-            if ((i + 2) < size) {
-                name = split[i] + " " + split[i + 1] + " " + split[i + 2];
-                if (this.getName().equals(name)) {
-                    return true;
-                }
-            }
-            if ((i + 3) < size) {
-                name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3];
-                if (this.getName().equals(name)) {
-                    return true;
-                }
-            }
-            if ((i + 4) < size) {
-                name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3] + " " + split[i + 4];
-                if (this.getName().equals(name)) {
-                    return true;
-                }
-            }
-            if ((i + 5) < size) {
-                name = split[i] + " " + split[i + 1] + " " + split[i + 2] + " " + split[i + 3] + " " + split[i + 4] + " " + split[i + 4];
-                if (this.getName().equals(name)) {
+    private static boolean IsContent(String grup, String item) {
+        StringBuilder sb = new StringBuilder();
+        String[] nameSplit = item.split("\\s");
+        if (nameSplit.length > 0) {
+            for (String nameItem : nameSplit) {
+                sb.append(nameItem + " ");
+                if (grup.equalsIgnoreCase(sb.toString().trim())) {
                     return true;
                 }
             }
@@ -426,13 +273,13 @@ public class Grupo extends Funil {
         }
     }
 
-    public static void SET(@NotNull Grupo grupo){
+    public static void SET(@NotNull Grupo grupo) {
         GRUPO_MAP_ID.put(grupo.getId(), grupo);
         GRUPO_MAP_NAME.put(grupo.getName(), grupo);
-        if(!GRUPO_NAME_LIST.contains(grupo.getName())) {
+        if (!GRUPO_NAME_LIST.contains(grupo.getName())) {
             GRUPO_NAME_LIST.add(grupo.name);
         }
-        if(!GRUPO_LIST.contains(grupo)) {
+        if (!GRUPO_LIST.contains(grupo)) {
             GRUPO_LIST.add(grupo);
         }
     }
