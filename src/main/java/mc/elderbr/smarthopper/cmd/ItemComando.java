@@ -5,15 +5,12 @@ import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class ItemComando implements CommandExecutor {
 
@@ -35,7 +32,7 @@ public class ItemComando implements CommandExecutor {
 
             item = null;
 
-            if(!command.getName().equalsIgnoreCase("item")){
+            if (!command.getName().equalsIgnoreCase("item")) {
                 return false;
             }
 
@@ -46,7 +43,7 @@ public class ItemComando implements CommandExecutor {
                     item = itemController.getItem(itemStack);
                 }
                 Msg.Item(player, item);
-            }catch (ItemException e){
+            } catch (ItemException e) {
                 Msg.PlayerGold(player, e.getMessage());
             }
 
