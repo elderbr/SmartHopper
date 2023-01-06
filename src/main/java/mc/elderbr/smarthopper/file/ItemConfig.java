@@ -42,7 +42,7 @@ public class ItemConfig {
 
     public void createYML() {
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-        for (Item item : ITEM_MAP_NAME.values()) {
+        for (Item item : ITEM_LIST) {
             add(item);// Salvando o arquivo item.yml
         }
     }
