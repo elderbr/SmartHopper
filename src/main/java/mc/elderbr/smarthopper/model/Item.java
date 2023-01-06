@@ -159,8 +159,17 @@ public class Item extends Funil {
         return ITEM_MAP_ID.get(id);
     }
 
+
     @Override
     public String toString() {
         return name;
+    }
+    public String toInfor() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", blocked=" + blocked +
+                ", listGrupo=" + listGrupo +
+                '}';
     }
 }

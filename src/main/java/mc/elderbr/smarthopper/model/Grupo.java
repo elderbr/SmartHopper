@@ -1,9 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.abstracts.Funil;
-import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,9 +70,9 @@ public class Grupo extends Funil {
         return listItem;
     }
 
-    public List<String> getListNameItem(){
+    public List<String> getListNameItem() {
         List<String> lista = new ArrayList<>();
-        for(Item item : getListItem()){
+        for (Item item : getListItem()) {
             lista.add(item.getName());
         }
         return lista;
@@ -84,19 +81,59 @@ public class Grupo extends Funil {
     public static List<String> CreateGrupos() {
 
         grupoList = new ArrayList<>();
-        StringBuilder nameGrupoAux = new StringBuilder();
-
         // Pegando o nome do grupo
         for (String nameItem : ITEM_NAME_LIST) {
             if (nameItem.split("\\s").length > 0) {
+                //
                 String[] nameSplit = nameItem.split("\\s");
-                nameGrupoAux = new StringBuilder();
-                for (String nameGrupo : nameSplit) {
-                    nameGrupoAux.append(nameGrupo.concat(" "));
-                    if (!grupoList.contains(nameGrupoAux.toString().trim())) {
-                        grupoList.add(nameGrupoAux.toString().trim());
+                for (int i = 0; i < nameSplit.length; i++) {
+                    String name = nameSplit[i];
+                    if (!grupoList.contains(name)) {
+                        grupoList.add(name);
+                    }
+                    // Passo 1
+                    if (i + 1 == nameSplit.length) {
+                        continue;
+                    }
+                    name = nameSplit[i] + " " + nameSplit[i + 1];
+                    if (!grupoList.contains(name)) {
+                        grupoList.add(name);
+                    }
+                    // Passo 2
+                    if (i + 2 == nameSplit.length) {
+                        continue;
+                    }
+                    name = nameSplit[i] + " " + nameSplit[i + 1] + " " + nameSplit[i + 2];
+                    if (!grupoList.contains(name)) {
+                        grupoList.add(name);
+                    }
+                    // Passo 3
+                    if (i + 3 == nameSplit.length) {
+                        continue;
+                    }
+                    name = nameSplit[i] + " " + nameSplit[i + 1] + " " + nameSplit[i + 2] + " " + nameSplit[i + 3];
+                    if (!grupoList.contains(name)) {
+                        grupoList.add(name);
+                    }
+                    // Passo 4
+                    if (i + 4 == nameSplit.length) {
+                        continue;
+                    }
+                    name = nameSplit[i] + " " + nameSplit[i + 1] + " " + nameSplit[i + 2] + " " + nameSplit[i + 3] + " " + nameSplit[i + 4];
+                    if (!grupoList.contains(name)) {
+                        grupoList.add(name);
+                    }
+                    // Passo 5
+                    if (i + 5 == nameSplit.length) {
+                        continue;
+                    }
+                    name = nameSplit[i] + " " + nameSplit[i + 1] + " " + nameSplit[i + 2] + " " + nameSplit[i + 3] + " " + nameSplit[i + 4] + " " + nameSplit[i + 5];
+                    if (!grupoList.contains(name)) {
+                        grupoList.add(name);
                     }
                 }
+            } else {
+                grupoList.add(nameItem);
             }
         }
 
@@ -172,6 +209,7 @@ public class Grupo extends Funil {
         grupoList.add("potion water");
         grupoList.add("potion water breathing");
         grupoList.add("potion weakness");
+
         createGrupoItem();
         return grupoList;
     }
@@ -187,8 +225,7 @@ public class Grupo extends Funil {
             grupo.setName(grup);
             for (String itemName : ITEM_NAME_LIST) {
                 if (IsContent(grup, itemName)) {
-                    Item item = ITEM_MAP_NAME.get(itemName);
-                    grupo.addListItem(item);
+                    grupo.addListItem(ITEM_MAP_NAME.get(itemName));
                 }
             }
             if (grupo.getListItem().size() > 1) {
@@ -201,7 +238,8 @@ public class Grupo extends Funil {
         for (String grup : listGrupoName) {
             Grupo grupo = map.get(grup);
             grupo.setId(id);
-            for(Item item : grupo.getListItem()){
+            for (String itemName : grupo.getListNameItem()) {
+                Item item = ITEM_MAP_NAME.get(itemName);
                 item.addListGrupo(grupo);
                 Item.SET(item);
             }
@@ -212,15 +250,61 @@ public class Grupo extends Funil {
     }
 
     private static boolean IsContent(String grup, String item) {
-        StringBuilder sb = new StringBuilder();
+        String name = null;
         String[] nameSplit = item.split("\\s");
         if (nameSplit.length > 0) {
-            for (String nameItem : nameSplit) {
-                sb.append(nameItem + " ");
-                if (grup.equalsIgnoreCase(sb.toString().trim())) {
+            for (int i = 0; i < nameSplit.length; i++) {
+                if (grup.equalsIgnoreCase(nameSplit[i])) {
+                    return true;
+                }
+
+                // Passo 1
+                if (i + 1 == nameSplit.length) {
+                    continue;
+                }
+                name = nameSplit[i] + " " + nameSplit[i + 1];
+                if (grup.equalsIgnoreCase(name)) {
+                    return true;
+                }
+
+                // Passo 2
+                if (i + 2 == nameSplit.length) {
+                    continue;
+                }
+                name = nameSplit[i] + " " + nameSplit[i + 1] + " " + nameSplit[i + 2];
+                if (grup.equalsIgnoreCase(name)) {
+                    return true;
+                }
+
+                // Passo 3
+                if (i + 3 == nameSplit.length) {
+                    continue;
+                }
+                name = nameSplit[i] + " " + nameSplit[i + 1] + " " + nameSplit[i + 2] + " " + nameSplit[i + 3];
+                if (grup.equalsIgnoreCase(name)) {
+                    return true;
+                }
+
+                // Passo 4
+                if (i + 4 == nameSplit.length) {
+                    continue;
+                }
+                name = nameSplit[i] + " " + nameSplit[i + 1] + " " + nameSplit[i + 2] + " " + nameSplit[i + 3] + " " + nameSplit[i + 4];
+                if (grup.equalsIgnoreCase(name)) {
+                    return true;
+                }
+
+                // Passo 5
+                if (i + 5 == nameSplit.length) {
+                    continue;
+                }
+                name = nameSplit[i] + " " + nameSplit[i + 1] + " " + nameSplit[i + 2] + " " + nameSplit[i + 3] + " " + nameSplit[i + 4] + " " + nameSplit[i + 5];
+                if (grup.equalsIgnoreCase(name)) {
                     return true;
                 }
             }
+        } else {
+            return (grup.equalsIgnoreCase(item));
         }
         return false;
     }

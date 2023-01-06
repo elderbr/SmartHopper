@@ -50,6 +50,7 @@ public class ItemComando implements CommandExecutor {
                 item = ITEM_MAP_NAME.get(Item.ToName(itemStack));
             }
             if(item != null){
+                Msg.ServidorBlue("item: "+ item.toInfor(), getClass());
                 Msg.Item(player, item);
             }else{
                 Msg.PlayerGold(player, String.format("O item %s não existe", cmd));

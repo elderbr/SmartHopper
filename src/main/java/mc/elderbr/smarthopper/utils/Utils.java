@@ -1,4 +1,5 @@
 package mc.elderbr.smarthopper.utils;
+
 import mc.elderbr.smarthopper.model.Item;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Material;

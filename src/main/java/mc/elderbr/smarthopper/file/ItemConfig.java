@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.ARQUIVO;
-import static mc.elderbr.smarthopper.interfaces.VGlobal.TRADUCAO_ITEM;
+import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class ItemConfig {
 
@@ -43,7 +42,7 @@ public class ItemConfig {
 
     public void createYML() {
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-        for (Item item : VGlobal.ITEM_LIST) {
+        for (Item item : ITEM_MAP_NAME.values()) {
             add(item);// Salvando o arquivo item.yml
         }
     }
