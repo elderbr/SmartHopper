@@ -221,6 +221,10 @@ public class Grupo extends Funil {
         List<String> listGrupoName = new ArrayList<>();
         Map<String, Grupo> map = new HashMap<>();
         for (String grup : grupoList) {
+
+            // NÃO É NOME VALIDO DE GRUPOS
+            if (NotGrupo().contains(grup)) continue;
+
             Grupo grupo = new Grupo();
             grupo.setName(grup);
             for (String itemName : ITEM_NAME_LIST) {
