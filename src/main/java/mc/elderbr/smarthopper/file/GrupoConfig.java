@@ -61,7 +61,9 @@ public class GrupoConfig {
         config.set(name.concat(".grupo_id"), grupo.getId());
         config.set(name.concat(".grupo_name"), grupo.getName());
         config.set(name.concat(".grupo_item"), grupo.getListNameItem());
-        config.set(name.concat(".grupo_lang"), grupo.getTranslation());
+        if(grupo.getTranslation().size()>0) {
+            config.set(name.concat(".grupo_lang"), grupo.getTranslation());
+        }
         save();
     }
 
