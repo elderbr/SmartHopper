@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -22,6 +23,8 @@ public class ItemComando implements CommandExecutor {
     private String cmd;
     private ItemStack itemStack;
 
+    private ItemController itemController = new ItemController();
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -36,24 +39,15 @@ public class ItemComando implements CommandExecutor {
                 return false;
             }
 
-            if(cmd.length()>0){
-                try{
-                    item = ITEM_MAP_ID.get(Integer.parseInt(cmd));
-                }catch (NumberFormatException e){
-                    item = TRADUCAO_ITEM.get(cmd);
+            try {
+                if (cmd.length() > 0) {
+                    item = itemController.getItem(cmd);
+                } else {
+                    item = itemController.getItem(itemStack);
                 }
-            }else {
-                if (itemStack.getType() == Material.AIR) {
-                    Msg.PlayerGold(player, "Digite o nome ou ID do item ou segure um item na mão!!!");
-                    return false;
-                }
-                item = ITEM_MAP_NAME.get(Item.ToName(itemStack));
-            }
-            if(item != null){
-                Msg.ServidorBlue("item: "+ item.toInfor(), getClass());
                 Msg.Item(player, item);
-            }else{
-                Msg.PlayerGold(player, String.format("O item %s não existe", cmd));
+            }catch (ItemException e){
+                Msg.PlayerGold(player, e.getMessage());
             }
 
         }
