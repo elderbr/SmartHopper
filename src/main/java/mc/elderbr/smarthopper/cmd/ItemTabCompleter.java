@@ -1,8 +1,6 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static mc.elderbr.smarthopper.interfaces.VGlobal.TRADUCAO_ITEM;
 
 public class ItemTabCompleter implements TabCompleter {
 
@@ -29,18 +29,19 @@ public class ItemTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)) {
-            Msg.ServidorGold("Comando apenas para jogadores!!!");
-            return null;
-        }
-
         if (sender instanceof Player) {
             player = (Player) sender;
             if (command.getName().equalsIgnoreCase("item")) {
                 cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
                 if (cmd.length() > 0) {
                     itemList = new ArrayList<>();
-
+                    for(Item item : TRADUCAO_ITEM.values()){
+                        if(item.getName().toLowerCase().contains(cmd.toLowerCase())
+                                || item.toTranslation(player).toLowerCase().contains(cmd.toLowerCase())){
+                            itemList.add(item.getName());
+                            itemList.add(item.toTranslation(player));
+                        }
+                    }
                     return itemList;
                 }
             }
