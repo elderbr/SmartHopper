@@ -21,6 +21,7 @@ public class ItemConfig {
     private static File ITEM_FILE = new File(ARQUIVO, "item.yml");
     private YamlConfiguration config;
     private Item item;
+    private String lang, translation;
 
     private List<String> list = new ArrayList<>();
 
@@ -63,9 +64,12 @@ public class ItemConfig {
             if(config.get(value.concat(".item_lang"))!=null) {
                 MemorySection memorySection = (MemorySection) config.get(value.concat(".item_lang"));
                 for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
-                    item.addTranslation(langs.getKey(), langs.getValue().toString());
-                    TRADUCAO_ITEM.put(item.getName(), item);// ADICIONANDO TRADUÇÃO GLOBAL
-                    TRADUCAO_ITEM.put(langs.getValue().toString(), item);// ADICIONANDO TRADUÇÃO GLOBAL
+
+                    lang = langs.getKey();
+                    translation = langs.getValue().toString();
+
+                    item.addTranslation(lang, translation);
+                    TRADUCAO_ITEM.put(translation, item);// ADICIONANDO TRADUÇÃO GLOBAL
                 }
             }
             Item.SET(item);

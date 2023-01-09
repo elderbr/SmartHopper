@@ -5,6 +5,7 @@ import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +48,7 @@ public class ItemController {
             }
         }
         if (item == null) {
-            throw new ItemException("Digite o nome ou ID do item, ou segure um item na mão!!!");
+            throw new ItemException("Não foi possivél encontrar o item, digite o nome ou ID do item, ou segure um item na mão!!!");
         }
         return item;
     }

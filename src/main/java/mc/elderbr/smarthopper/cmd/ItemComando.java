@@ -27,7 +27,7 @@ public class ItemComando implements CommandExecutor {
 
         if (sender instanceof Player) {
             player = (Player) sender;
-            cmd = Utils.NAME_ARRAY(args).toLowerCase();// PEGA O NOME DO ITEM DIGITADO
+            cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
             itemStack = player.getInventory().getItemInMainHand();// PEGA O NOME DO ITEM NA MÃO
 
             item = null;
