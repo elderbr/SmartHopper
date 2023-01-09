@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.file;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.MemorySection;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_LIST;
+import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class GrupoConfig {
 
@@ -24,6 +25,7 @@ public class GrupoConfig {
     private Grupo grupo;
     private String lang;
     private String traducao;
+    private Item item;
 
     public GrupoConfig() {
         if (!fileConfig.exists()) {
@@ -35,7 +37,7 @@ public class GrupoConfig {
             }
         }
         VGlobal.CD_MAX.add(1);// O ÚLTIMO CODIGO DO GRUPO
-        //reload();
+        reload();
     }
 
     public void create() {
@@ -168,29 +170,35 @@ public class GrupoConfig {
             }
 
             // TRADUÇÃO
+            TRADUCAO_GRUPO.put(grupo.getName(), grupo);
             if (config.get(name.concat(".grupo_lang")) != null) {
                 MemorySection tradMemory = (MemorySection) config.get(name.concat(".grupo_lang"));
                 for (Map.Entry<String, Object> langs : tradMemory.getValues(false).entrySet()) {
                     lang = langs.getKey();
                     traducao = langs.getValue().toString();
                     grupo.addTranslation(lang, traducao);
-                    // Variavel Global
-                    //VGlobal.TRADUCAO_GRUPO.put(traducao.toLowerCase(), grupo);
+                    TRADUCAO_GRUPO.put(traducao, grupo);// Variavel Global
                 }
             }
 
             // ITEM DO GRUPO
-            for (Object items : config.getList(name.concat(".grupo_item"))) {
-                // TODO: CODIGO PARA SER VERIFICADO DEPOIS
-                //grupo.addListItem(items.toString());
+            for (Object itemName : config.getList(name.concat(".grupo_item"))) {
+                item = ITEM_MAP_NAME.get(itemName.toString());
+                item.addListGrupo(grupo);
+
+                grupo.addListItem(item);
+                Item.SET(item);
             }
 
             // ADICIONANDO NA VARIAVEL GLOBAL
-            GRUPO_LIST.add(grupo);
-            VGlobal.GRUPO_MAP_ID.put(grupo.getId(), grupo);
-            VGlobal.GRUPO_MAP_NAME.put(grupo.getName().toLowerCase(), grupo);
+            SET(grupo);
 
         }
+    }
+
+    private void SET(Grupo grupo) {
+        GRUPO_MAP_ID.put(grupo.getId(), grupo);
+        GRUPO_MAP_NAME.put(grupo.getName(), grupo);
     }
 
     private void add(@NotNull String key, @NotNull String value, List<String> comentario) {
