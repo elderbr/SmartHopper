@@ -78,6 +78,10 @@ public class Grupo extends Funil {
         return lista;
     }
 
+    public boolean isContains(Item item){
+        return grupoList.contains(item);
+    }
+
     public static List<String> CreateGrupos() {
 
         grupoList = new ArrayList<>();
