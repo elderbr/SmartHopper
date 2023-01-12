@@ -42,17 +42,17 @@ public class SmartHopper {
         myHopper = null;
         if (hopper instanceof Hopper funil) {
             myHopper = funil;
-        }
+        }else
         if (hopper instanceof Inventory inventory) {
             if (inventory.getType() == InventoryType.HOPPER) {
                 myHopper = (Hopper) inventory.getLocation().getBlock().getState();
             }
-        }
+        }else
         if (hopper instanceof Block block) {
             if (block.getType() == Material.HOPPER) {
                 myHopper = (Hopper) block.getState();
             }
-        }
+        }else
         if (myHopper == null) {// Se não existir o hopper
             return;
         }
