@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.controllers.SmartHopper;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -17,7 +19,9 @@ public class GrupoComando implements CommandExecutor {
     private Player player;
     private String cmd;
     private String[] myArgs;
-    public Grupo grupo;
+    private Grupo grupo;
+    private GrupoController grupoController;
+
     private ItemStack itemStack;
     public InventoryCustom inventory;
 
@@ -28,6 +32,7 @@ public class GrupoComando implements CommandExecutor {
         if (sender instanceof Player) {
 
             myArgs = args;
+            grupoController = new GrupoController();
 
             player = (Player) sender;
             itemStack = player.getInventory().getItemInMainHand();
@@ -49,7 +54,11 @@ public class GrupoComando implements CommandExecutor {
     }
 
     private boolean show() {
-
+        try {
+            Msg.getType(player, grupoController.getGrupo(cmd));
+        } catch (Exception e) {
+            Msg.ServidorErro("Erro ao mostrar informações do grupo!!!", "show()", getClass(), e);
+        }
         return false;
     }
 
