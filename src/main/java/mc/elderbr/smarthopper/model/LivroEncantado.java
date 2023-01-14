@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -39,7 +40,7 @@ public class LivroEncantado {
         if (itemStack.getType() == Material.ENCHANTED_BOOK) {
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
             for (Enchantment key : meta.getStoredEnchants().keySet()) {
-                return Livro + key;
+                return Livro + key.getKey().getKey().replaceAll("_", " ").toLowerCase();
             }
         }
         return null;
