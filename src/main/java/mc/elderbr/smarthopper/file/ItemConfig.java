@@ -88,7 +88,9 @@ public class ItemConfig {
     public static boolean ADD_TRADUCAO(Item item) {
         try {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
+            config.set(item.getName().concat(".item_lang"), item.getTranslation());
             config.save(ITEM_FILE);
+            Item.SET(item);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

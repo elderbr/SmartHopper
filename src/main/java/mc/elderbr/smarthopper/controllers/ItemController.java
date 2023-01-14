@@ -21,6 +21,10 @@ public class ItemController {
     public ItemController() {
     }
 
+    public Item getItem() {
+        return item;
+    }
+
     public Item getItem(@NotNull Object obj) throws ItemException {
         id = 0;
         name = null;
@@ -53,23 +57,44 @@ public class ItemController {
         return item;
     }
 
-    public boolean addTranslation(@NotNull Player player, @NotNull String translation) throws ItemException {
+    public boolean addTranslation(@NotNull Player player, @NotNull String[] args) throws ItemException {
+
+        // Verifica se o jogar é administrador do SmartHopper
         if (!Config.CONTAINS_ADD(player)) {
             throw new ItemException("Você não tem permissão para adicionar a tradução ao item!!!");
         }
+
+        // Verifica se existe o código do item e a tradução
+        if(args.length < 2){
+            throw new ItemException("Digite /traducaoitem <código do item> <tradução>!!!");
+        }
+
+        // Pegando a tradução
+        String translation = convertTranslation(args);
+        // A tradução precisa conter mais do 2 letras
         if (translation.length() < 3) {
             throw new ItemException("O tradução precisa conter mais do que 2 letras!!!");
         }
-        if (TRADUCAO_ITEM.get(translation) != null) {
-            throw new ItemException("Essa tradução já existe!!!");
+
+        try{
+            id = Integer.parseInt(args[0]);
+        }catch (NumberFormatException e){
+            throw new ItemException("O código "+ args[0] +" não é valido!!!");
         }
+        item = ITEM_MAP_ID.get(id);
         if (item == null) {
-            throw new ItemException("Selecione o item para traduzir!!!");
+            throw new ItemException("O código "+ args[0] +" não está na lista de item!!!");
         }
         item.addTranslation(player.getLocale(), translation);
         TRADUCAO_ITEM.put(translation, item);
-        ItemConfig.ADD_TRADUCAO(item);
-        Item.SET(item);
-        return true;
+        return ItemConfig.ADD_TRADUCAO(item);
+    }
+
+    private String convertTranslation(String[] args){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i < args.length; i++){
+            sb.append(args[i].concat(" "));
+        }
+        return sb.toString().trim();
     }
 }
