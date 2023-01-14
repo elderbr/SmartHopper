@@ -29,6 +29,10 @@ public class GrupoController {
     public GrupoController() {
     }
 
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
     public List<Grupo> getGrupo(@NotNull Object itemObj) throws GrupoException {
         listGrupo = new ArrayList<>();
         if (itemObj instanceof String nameItem) {
@@ -90,24 +94,46 @@ public class GrupoController {
         return listGrupo;
     }
 
-    public boolean addTraducao(Player player, String traducao) throws GrupoException {
+    public boolean addTraducao(@NotNull Player player, @NotNull String[] args) throws GrupoException {
+        // Verifica se o jogador é o administrador do SmartHopper
         if (!Config.CONTAINS_ADD(player)) {
             throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
         }
-        if (traducao.isEmpty()) {
-            throw new GrupoException("Digite a tradução para o grupo!!!");
+
+        // Verifica se existe o ID do grupo e a tradução
+        if(args.length < 2){
+            throw new GrupoException("Digite /addtraducao [código do grupo] [tradução]!!!");
         }
 
+        // Pegando a tradução do grupo
+        String traducao = convertTraducao(args);
+        // A tradução precisa conter pelo menos 3 caracteres
         if (traducao.length() < 3) {
             throw new GrupoException("A tradução não pode ser menor que 3 caracteres!!!");
         }
 
+        // Buscando o grupo pelo código
+        codigo = 0;
+        try{
+            codigo = Integer.parseInt(args[0]);
+        }catch (NumberFormatException e){
+            throw new GrupoException(String.format("O código %s não é valido!!!", args[0]));
+        }
+        grupo = GRUPO_MAP_ID.get(codigo);
         if (grupo == null) {
-            throw new GrupoException("Digite o nome ou ID do grupo!!!");
+            throw new GrupoException(String.format("O código %s não está na lista de grupos!!!", args[0]));
         }
 
         grupo.addTranslation(player.getLocale(), traducao);
         return GrupoConfig.ADD_TRADUCAO(grupo);
+    }
+
+    private String convertTraducao(String[] args){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i < args.length;i++){
+            sb.append(args[i].concat(" "));
+        }
+        return sb.toString().trim();
     }
 
     public boolean delete(Player player) throws GrupoException {

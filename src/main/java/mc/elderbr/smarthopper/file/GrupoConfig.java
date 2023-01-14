@@ -128,7 +128,7 @@ public class GrupoConfig {
 
             GRUPO_MAP_ID.put(grupo.getId(), grupo);
             GRUPO_MAP_NAME.put(grupo.getName(), grupo);
-            //TRADUCAO_GRUPO.put(grupo.getName(), grupo);
+            TRADUCAO_GRUPO.put(grupo.getName(), grupo);
 
             return true;
         } catch (IOException e) {

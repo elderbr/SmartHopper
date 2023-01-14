@@ -1,9 +1,8 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
-import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,12 +13,8 @@ import org.jetbrains.annotations.NotNull;
 public class TraducaoComando implements CommandExecutor {
 
     private Player player;
-    private StringBuilder traducaoList = new StringBuilder();
-    private String traducao = null;
-
-    private String codigo;
-    private Item item;
     private Grupo grupo;
+    private GrupoController grupoController;
 
 
     @Override
@@ -28,18 +23,25 @@ public class TraducaoComando implements CommandExecutor {
         if (sender instanceof Player) {
 
             player = (Player) sender;
-            traducao = traducao(args);
 
-
+            switch (command.getName().toLowerCase()) {
+                case "traducaogrupo":
+                    grupoController = new GrupoController();
+                    try {
+                        if (grupoController.addTraducao(player, args)) {
+                            grupo = grupoController.getGrupo();
+                            Msg.PlayerTodos("Tradução adicionada par ao grupo $9" + grupo.getName() + "$r em $8$l" + player.getLocale() + " $rcomo $8$l" + grupo.toTranslation(player) + "!");
+                            return true;
+                        } else {
+                            Msg.PlayerGold(player, "Ocorreu um erro ao adicionar a tradução!");
+                        }
+                    } catch (GrupoException e) {
+                        Msg.PlayerGold(player, e.getMessage());
+                    }
+                    break;
+                case "traducaoitem":
+            }
         }
         return false;
-    }
-
-    private String traducao(String[] cmd) {
-        StringBuilder tradStr = new StringBuilder();
-        for (int i = 1; i < cmd.length; i++) {
-            tradStr.append(cmd[i] + " ");
-        }
-        return tradStr.toString().trim();
     }
 }
