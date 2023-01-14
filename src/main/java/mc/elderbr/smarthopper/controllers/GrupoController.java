@@ -63,7 +63,7 @@ public class GrupoController {
             }
 
 
-            for (Grupo grup : GRUPO_LIST) {
+            for (Grupo grup : GRUPO_MAP_NAME.values()) {
                 if (grup.isContains(item)) {
                     listGrupo.add(grup);
                 }
@@ -120,7 +120,6 @@ public class GrupoController {
             throw new GrupoException("Digite o nome ou ID do grupo!!!");
         }
         if (GrupoConfig.DELETE(grupo)) {
-            GRUPO_LIST.remove(grupo);
             GRUPO_MAP_ID.remove(grupo.getId());
             GRUPO_MAP_NAME.remove(grupo.getName());
             TRADUCAO_GRUPO.remove(grupo.getName().toLowerCase());

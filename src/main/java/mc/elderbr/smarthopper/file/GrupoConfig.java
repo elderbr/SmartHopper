@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class GrupoConfig {
 
-    private static File fileConfig = new File(VGlobal.ARQUIVO, "grupo.yml");
+    private static File fileConfig = new File(ARQUIVO, "grupo.yml");
     private YamlConfiguration config;
 
     private Grupo grupo;
@@ -28,24 +29,29 @@ public class GrupoConfig {
     private Item item;
 
     public GrupoConfig() {
+        // Cria o arquivo grupo.yml se não existir
         if (!fileConfig.exists()) {
             try {
+                // Criando o arquivo grupo.yml
                 fileConfig.createNewFile();
+                // Criando grupo no arquivo grupo.yml
                 create();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        VGlobal.CD_MAX.add(1);// O ÚLTIMO CODIGO DO GRUPO
+        CD_MAX.add(0, 1);// O ÚLTIMO CODIGO DO GRUPO
         reload();
     }
 
     public void create() {
         config = YamlConfiguration.loadConfiguration(fileConfig);
-        for (Grupo grupos : GRUPO_LIST) {
-            add(grupos);
+        Collections.sort(GRUPO_NAME_LIST);
+        for (String name : GRUPO_NAME_LIST) {
+            grupo = GRUPO_MAP_NAME.get(name);
+            Msg.ServidorBlue("Criando o grupo "+ grupo.getName()+" - ID: "+ grupo.getId());
+            add(grupo);
         }
-        GRUPO_LIST.clear();
     }
 
     private void save() {
@@ -63,7 +69,7 @@ public class GrupoConfig {
         config.set(name.concat(".grupo_id"), grupo.getId());
         config.set(name.concat(".grupo_name"), grupo.getName());
         config.set(name.concat(".grupo_item"), grupo.getListNameItem());
-        if(grupo.getTranslation().size()>0) {
+        if (grupo.getTranslation().size() > 0) {
             config.set(name.concat(".grupo_lang"), grupo.getTranslation());
         }
         save();
@@ -71,7 +77,7 @@ public class GrupoConfig {
 
     public static boolean ADD(Grupo grupo) {
         String name = grupo.getName().toLowerCase();
-        if (VGlobal.GRUPO_MAP_NAME.get(name) == null) {
+        if (GRUPO_MAP_NAME.get(name) == null) {
             try {
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
 
@@ -81,9 +87,8 @@ public class GrupoConfig {
                 config.set(name.concat(".grupo_item"), grupo.getListItem());
                 config.save(fileConfig);
 
-                GRUPO_LIST.add(grupo);
-                VGlobal.GRUPO_MAP_ID.put(grupo.getId(), grupo);
-                VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+                GRUPO_MAP_ID.put(grupo.getId(), grupo);
+                GRUPO_MAP_NAME.put(grupo.getName(), grupo);
 
                 return true;
             } catch (IOException e) {
@@ -94,7 +99,7 @@ public class GrupoConfig {
 
     public static boolean UPDATE(Grupo grupo) {
         String name = grupo.getName().toLowerCase();
-        if (VGlobal.GRUPO_MAP_NAME.get(name) != null) {
+        if (GRUPO_MAP_NAME.get(name) != null) {
             try {
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
 
@@ -104,9 +109,8 @@ public class GrupoConfig {
                 config.set(name.concat(".grupo_item"), grupo.getListItem());
                 config.save(fileConfig);
 
-                GRUPO_LIST.add(grupo);
-                VGlobal.GRUPO_MAP_ID.put(grupo.getId(), grupo);
-                VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+                GRUPO_MAP_ID.put(grupo.getId(), grupo);
+                GRUPO_MAP_NAME.put(grupo.getName(), grupo);
 
                 return true;
             } catch (IOException e) {
@@ -122,10 +126,9 @@ public class GrupoConfig {
             config.set(grupo.getName().toLowerCase().concat(".grupo_lang"), grupo.getTranslation());
             config.save(fileConfig);
 
-            GRUPO_LIST.add(grupo);
-            VGlobal.GRUPO_MAP_ID.put(grupo.getId(), grupo);
-            VGlobal.GRUPO_MAP_NAME.put(grupo.getName(), grupo);
-            //VGlobal.TRADUCAO_GRUPO.put(grupo.getName(), grupo);
+            GRUPO_MAP_ID.put(grupo.getId(), grupo);
+            GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+            //TRADUCAO_GRUPO.put(grupo.getName(), grupo);
 
             return true;
         } catch (IOException e) {
@@ -140,33 +143,34 @@ public class GrupoConfig {
             config.set(grupo.getName().toLowerCase(), null);
             config.save(fileConfig);
             // REMOVENDO O GRUPO DA VARIAVEL GLOBAL
-            GRUPO_LIST.remove(grupo);
-            VGlobal.GRUPO_MAP_ID.remove(grupo.getId());
-            VGlobal.GRUPO_MAP_NAME.remove(grupo.getName());
+            GRUPO_MAP_ID.remove(grupo.getId());
+            GRUPO_MAP_NAME.remove(grupo.getName());
             return true;
         } catch (Exception e) {
         }
         return false;
     }
 
+    /***
+     * Faz a leitura do arquivo grupo.yml
+     */
     public void reload() {
-        GRUPO_LIST.clear();
         config = YamlConfiguration.loadConfiguration(fileConfig);
         String name = null;
+        // Percorrendo os grupos
         for (Map.Entry<String, Object> obj : config.getValues(false).entrySet()) {
-
-            name = obj.getKey().toString();
+            // Nome do grupo
+            name = obj.getKey();
 
             grupo = new Grupo();
             grupo.setId(config.getInt(name.concat(".grupo_id")));
             grupo.setName(config.getString(name.concat(".grupo_name")));
-            //VGlobal.TRADUCAO_GRUPO.put(grupo.getName().toLowerCase(), grupo);
 
             Msg.ServidorBlue("Grupo: "+ grupo.getName());
 
             // PEGANDO O MAIOR CÓDIGO DO GRUPO
-            if (grupo.getId() > VGlobal.CD_MAX.get(0)) {
-                VGlobal.CD_MAX.set(0, grupo.getId());
+            if (grupo.getId() > CD_MAX.get(0)) {
+                CD_MAX.set(0, grupo.getId());
             }
 
             // TRADUÇÃO
@@ -184,21 +188,19 @@ public class GrupoConfig {
             // ITEM DO GRUPO
             for (Object itemName : config.getList(name.concat(".grupo_item"))) {
                 item = ITEM_MAP_NAME.get(itemName.toString());
+                // Adicionando grupo no item
                 item.addListGrupo(grupo);
 
+                // Adicionando item no grupo
                 grupo.addListItem(item);
+                // Salvando o atributo global
                 Item.SET(item);
             }
 
             // ADICIONANDO NA VARIAVEL GLOBAL
-            SET(grupo);
+            Grupo.SET(grupo);
 
         }
-    }
-
-    private void SET(Grupo grupo) {
-        GRUPO_MAP_ID.put(grupo.getId(), grupo);
-        GRUPO_MAP_NAME.put(grupo.getName(), grupo);
     }
 
     private void add(@NotNull String key, @NotNull String value, List<String> comentario) {

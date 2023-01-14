@@ -18,7 +18,11 @@ public interface VGlobal {
     List<Jogador> JOGADOR_LIST = new ArrayList<>();
     List<String> ADM_LIST = new ArrayList<>();
 
-    // Grupo
+    /*********************************************************
+     *
+     *                      GRUPO
+     *
+     *********************************************************/
     // TODOS OS IDs DO GRUPO QUE RETORNA O NOME EM INGLÊS
     Map<Integer, Grupo> GRUPO_MAP_ID = new HashMap<>();
     // TODOS OS NOMES DO GRUPO QUE RETORNA O NOME EM INGLÊS
@@ -28,9 +32,13 @@ public interface VGlobal {
     // TODOS OS NOMES DO GRUPO
     List<String> GRUPO_NAME_LIST = new ArrayList<>();
     // LISTA DE GRUPO
-    List<Grupo> GRUPO_LIST = new ArrayList<>();
     List<Integer> CD_MAX = new ArrayList<>();
 
+    /*********************************************************
+     *
+     *                      ITEM
+     *
+     *********************************************************/
     // Items
     List<Item> ITEM_LIST = new ArrayList<>();
     Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();

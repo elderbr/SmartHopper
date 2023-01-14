@@ -137,7 +137,9 @@ public class Grupo extends Funil {
                     }
                 }
             } else {
-                grupoList.add(nameItem);
+                if(!grupoList.contains(nameItem)) {
+                    grupoList.add(nameItem);
+                }
             }
         }
 
@@ -222,7 +224,11 @@ public class Grupo extends Funil {
      * Adiciona item na lista do grupo
      */
     private static void createGrupoItem() {
+        // Limpando a lista dos nomes do grupo
+        GRUPO_NAME_LIST.clear();
+        // Lista de nomes do grupo auxiliar
         List<String> listGrupoName = new ArrayList<>();
+        // Mapa com os nome do grupo auxiliar
         Map<String, Grupo> map = new HashMap<>();
         for (String grup : grupoList) {
 
@@ -231,26 +237,43 @@ public class Grupo extends Funil {
 
             Grupo grupo = new Grupo();
             grupo.setName(grup);
+            // Buscando item que o grupo possa ter
             for (String itemName : ITEM_NAME_LIST) {
+                // Verifica se grupo pertence ao grupo
                 if (IsContent(grup, itemName)) {
                     grupo.addListItem(ITEM_MAP_NAME.get(itemName));
                 }
             }
+            // Verifica se o grupo contém mais do que 1 item se adiciona na lista
             if (grupo.getListItem().size() > 1) {
-                map.put(grup, grupo);
-                listGrupoName.add(grup);
+                // Lista de nomes do grupo
+                if(!listGrupoName.contains(grup)) {
+                    map.put(grup, grupo);// Adicionando na lista de mapa do grupo
+                    listGrupoName.add(grup);
+                }
             }
         }
+        // Organizando a lista de nomes do grupo em ordem alfabetica
         Collections.sort(listGrupoName);
+        // Id auxiliar para adicionar ao grupo
         int id = 1;
+        // Percorrendo a lista de nomes do grupo
         for (String grup : listGrupoName) {
+            // Buscando o grupo na lista do mapa
             Grupo grupo = map.get(grup);
+            // Setando o ID do grupo
             grupo.setId(id);
+
+            // Adicionando grupo no item
             for (String itemName : grupo.getListNameItem()) {
+                // Buscando o item na mémoria
                 Item item = ITEM_MAP_NAME.get(itemName);
+                // Adicionando o grupo no item
                 item.addListGrupo(grupo);
+                // Salvando o item no atributo global
                 Item.SET(item);
             }
+            // Salvando o grupo no atributo global
             SET(grupo);
             id++;
         }
@@ -327,6 +350,7 @@ public class Grupo extends Funil {
         list.add("on a");
         list.add("the");
         list.add("on a stick");
+        list.add("of the sea");
         return list;
     }
 
@@ -369,10 +393,7 @@ public class Grupo extends Funil {
         GRUPO_MAP_ID.put(grupo.getId(), grupo);
         GRUPO_MAP_NAME.put(grupo.getName(), grupo);
         if (!GRUPO_NAME_LIST.contains(grupo.getName())) {
-            GRUPO_NAME_LIST.add(grupo.name);
-        }
-        if (!GRUPO_LIST.contains(grupo)) {
-            GRUPO_LIST.add(grupo);
+            GRUPO_NAME_LIST.add(grupo.getName());
         }
     }
 
