@@ -91,7 +91,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // TRADUÇÃO
         getCommand("traducaoitem").setExecutor(new TraducaoComando());
+        getCommand("traducaoitem").setTabCompleter(new TraducaoTabCompleter());
         getCommand("traducaogrupo").setExecutor(new TraducaoComando());
+        getCommand("traducaogrupo").setTabCompleter(new TraducaoTabCompleter());
 
         // CONFIGURAÇÃO
         getCommand("addadm").setExecutor(new AdministradorComando());

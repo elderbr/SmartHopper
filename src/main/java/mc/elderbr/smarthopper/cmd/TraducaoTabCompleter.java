@@ -13,9 +13,9 @@ public class TraducaoTabCompleter  implements TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 2){
-            return Arrays.asList("codigo");
+        if(args.length == 1){
+            return Arrays.asList("código");
         }
-        return Arrays.asList("grupo");
+        return Arrays.asList("tradução");
     }
 }
