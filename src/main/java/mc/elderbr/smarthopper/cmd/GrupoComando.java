@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.SmartHopper;
+import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -14,12 +15,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class GrupoComando implements CommandExecutor {
 
     private Player player;
     private String cmd;
     private String[] myArgs;
     private Grupo grupo;
+    private List<Grupo> listGrupo;
     private GrupoController grupoController;
 
     private ItemStack itemStack;
@@ -55,7 +59,18 @@ public class GrupoComando implements CommandExecutor {
 
     private boolean show() {
         try {
-            Msg.getType(player, grupoController.getGrupo(cmd));
+            if(cmd.length()>0) {
+                listGrupo = grupoController.getGrupo(cmd);
+            }else{
+                listGrupo = grupoController.getGrupo(itemStack);
+            }
+            if (listGrupo.size() == 1) {
+                grupo = listGrupo.get(0);
+                inventory = new InventoryCustom(player, grupo);
+                inventory.create();
+                inventory.show();
+            }
+            Msg.getType(player, listGrupo);
         } catch (Exception e) {
             Msg.ServidorErro("Erro ao mostrar informações do grupo!!!", "show()", getClass(), e);
         }
@@ -68,9 +83,13 @@ public class GrupoComando implements CommandExecutor {
             return false;
         }
 
-        inventory = new InventoryCustom(player);
-        inventory.create(cmd);
-        player.openInventory(inventory.getInventory(1));
+        try {
+            inventory = new InventoryCustom(player, cmd);
+            inventory.create();
+            inventory.show();
+        } catch (GrupoException e) {
+            Msg.PlayerGold(player, e.getMessage());
+        }
         return false;
     }
 

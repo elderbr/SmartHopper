@@ -54,24 +54,17 @@ public class GrupoController {
             }
 
             name = Item.ToName(itemStack);
-            item = ITEM_MAP_NAME.get(name);
 
             if (name.contains("potion")) {
                 Pocao pocao = new Pocao(itemStack);
                 item = pocao.getItem();
-            }
-
-            if (name.contains("enchanted book")) {
+            } else if (name.contains("enchanted book")) {
                 LivroEncantado livroEncantado = new LivroEncantado(itemStack);
                 item = livroEncantado.getItem();
+            } else {
+                item = ITEM_MAP_NAME.get(name);
             }
-
-
-            for (Grupo grup : GRUPO_MAP_NAME.values()) {
-                if (grup.isContains(item)) {
-                    listGrupo.add(grup);
-                }
-            }
+            listGrupo = item.getListGrupo();
             grupo = listGrupo.get(0);
             return listGrupo;
         }
@@ -101,7 +94,7 @@ public class GrupoController {
         }
 
         // Verifica se existe o ID do grupo e a tradução
-        if(args.length < 2){
+        if (args.length < 2) {
             throw new GrupoException("Digite /addtraducao [código do grupo] [tradução]!!!");
         }
 
@@ -114,9 +107,9 @@ public class GrupoController {
 
         // Buscando o grupo pelo código
         codigo = 0;
-        try{
+        try {
             codigo = Integer.parseInt(args[0]);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new GrupoException(String.format("O código %s não é valido!!!", args[0]));
         }
         grupo = GRUPO_MAP_ID.get(codigo);
@@ -128,9 +121,9 @@ public class GrupoController {
         return GrupoConfig.ADD_TRADUCAO(grupo);
     }
 
-    private String convertTraducao(String[] args){
+    private String convertTraducao(String[] args) {
         StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < args.length;i++){
+        for (int i = 1; i < args.length; i++) {
             sb.append(args[i].concat(" "));
         }
         return sb.toString().trim();

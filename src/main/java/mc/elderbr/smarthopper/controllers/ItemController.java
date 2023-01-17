@@ -6,8 +6,15 @@ import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.LivroEncantado;
 import mc.elderbr.smarthopper.model.Pocao;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
@@ -68,6 +75,48 @@ public class ItemController {
             throw new ItemException("Não foi possivél encontrar o item, digite o nome ou ID do item, ou segure um item na mão!!!");
         }
         return item;
+    }
+
+    public static ItemStack ParseItemStack(@NotNull Item item) {
+        ItemStack itemStack = null;
+        String name = item.getName();
+        if (name.contains("potion")) {
+            String potion = null;
+            if (name.contains("lingering")) {
+                potion = name.replaceAll("lingering potion", "").trim();
+                itemStack = new ItemStack(Material.LINGERING_POTION);
+            } else if (name.contains("splash")) {
+                potion = name.replaceAll("splash potion", "").trim();
+                itemStack = new ItemStack(Material.SPLASH_POTION);
+            } else {
+                potion = name.replaceAll("potion", "").trim();
+                itemStack = new ItemStack(Material.POTION);
+            }
+
+            if (!potion.isEmpty()) {
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                meta.setBasePotionData(new PotionData(PotionType.valueOf(potion.replaceAll("\\s", "_").toUpperCase())));
+                itemStack.setItemMeta(meta);
+            }
+            return itemStack;
+        }
+        if (name.contains("enchanted book")) {
+            itemStack = new ItemStack(Material.ENCHANTED_BOOK);
+            //
+            String encantamento = item.getName().replaceAll("enchanted book", "").trim();
+            NamespacedKey key = null;
+            for (Enchantment enchantment : Enchantment.values()) {
+                String nameEnch = enchantment.getKey().getKey().replaceAll("_", " ").toLowerCase();
+                if (encantamento.equalsIgnoreCase(nameEnch)) {
+                    key = enchantment.getKey();
+                }
+            }
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            meta.addStoredEnchant(Enchantment.getByKey(key), 1, true);
+            itemStack.setItemMeta(meta);
+            return itemStack;
+        }
+        return new ItemStack(Material.valueOf(name.replaceAll("\\s","_").toUpperCase()));
     }
 
     public boolean addTranslation(@NotNull Player player, @NotNull String[] args) throws ItemException {

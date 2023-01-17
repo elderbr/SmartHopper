@@ -1,13 +1,12 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.enums.InventarioType;
+import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.interfaces.Funil;
-import mc.elderbr.smarthopper.interfaces.InterfaceInventario;
-import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
-import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,114 +19,59 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InventoryCustom implements InterfaceInventario, Botao {
+public class InventoryCustom implements Botao {
 
     private Player player;
     private int codigo = 0;
     private String name;
-    private List<String> listItem = new ArrayList<>();
-    private Map<String, String> traducao = new HashMap<>();
     private Inventory inventory;
+    private String titulo = null;
     private InventarioType type;
 
-    private ItemStack barreira = new ItemStack(Material.BARRIER);
     private Grupo grupo;
 
     // PAGINAÇÃO
     private int pag = 1;
     private double pagQuant;
-    List<ItemStack> listItemStack;
-    private Map<Integer, List<String>> pagMap = new HashMap<>();
 
     public InventoryCustom(@NotNull Player player) {
         this.player = player;
     }
-
-    @Override
-    public String setPlayer(Player player) {
+    public InventoryCustom(@NotNull Player player, @NotNull String name) {
         this.player = player;
-        return player.getName();
-    }
-
-    @Override
-    public Player getPlayer() {
-        return player;
-    }
-
-    @Override
-    public boolean isAdm() {
-        return Config.CONTAINS_ADD(player);
-    }
-
-    @Override
-    public Funil setCodigo(int codigo) {
-        this.codigo = codigo;
-        return this;
-    }
-
-    @Override
-    public int getCodigo() {
-        return codigo;
-    }
-
-    @Override
-    public InventoryCustom setName(String name) {
         this.name = name;
-        return this;
     }
 
-    @Override
-    public String getName() {
-        return name.replaceAll(Msg.Color("$lGrupo: $r"), "");
+    public InventoryCustom(Player player, Grupo grupo) {
+        this.player = player;
+        this.grupo = grupo;
     }
 
-    @Override
-    public boolean isBloqueado() {
-        return false;
-    }
-
-    @Override
-    public Funil setBloqueado(boolean bloqueado) {
-        return null;
-    }
-
-    @Override
-    public Map<String, String> getTraducao() {
-        return traducao;
-    }
-
-    @Override
-    public List<String> getLista() {
-        return listItem;
-    }
-
-    public void create(@NotNull Object name) {
-
-    }
-
-    public Inventory getInventory(@NotNull int pag) {
-
-        if (type == InventarioType.NOVO) {
-            inventory.setItem(53, BtnSalva());
-            return inventory;
+    public InventoryCustom create() throws GrupoException {
+        if(grupo != null) {
+            titulo = Msg.Color("$lGrupo: $r" +grupo.toTranslation(player)+ " $lID: $r" + grupo.getId());
+            inventory = Bukkit.createInventory(null, 54, titulo);
+            for(Item item : grupo.getListItem()){
+                addItem(item);
+            }
+        }else{
+            if(name == null || name.isEmpty()){
+                throw new GrupoException("Para criar um novo grupo digite o nome do grupo!!!");
+            }
+            titulo = Msg.Color("$lGrupo: $r" + name);
+            inventory = Bukkit.createInventory(null, 54, titulo);
         }
-
-
-        return inventory;
-    }
-
-    @Override
-    public InterfaceInventario setType(InventarioType type) {
-        this.type = type;
         return this;
     }
-
-    @Override
-    public InventarioType getType() {
-        return type;
+    public void addItem(@NotNull ItemStack itemStack){
+        inventory.addItem(itemStack);
+    }
+    public void addItem(@NotNull Item item){
+        inventory.addItem(ItemController.ParseItemStack(item));
     }
 
-    public Grupo getGrupo() {
-        return grupo;
+    public InventoryCustom show(){
+        player.openInventory(inventory);
+        return this;
     }
 }

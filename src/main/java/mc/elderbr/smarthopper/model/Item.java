@@ -2,13 +2,13 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.abstracts.Funil;
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
@@ -124,10 +124,10 @@ public class Item extends Funil {
     public static void SET(@NotNull Item item) {
         ITEM_MAP_ID.put(item.getId(), item);
         ITEM_MAP_NAME.put(item.getName(), item);
-        if(!ITEM_LIST.contains(item)) {
+        if (!ITEM_LIST.contains(item)) {
             ITEM_LIST.add(item);
         }
-        if(!ITEM_NAME_LIST.contains(item.getName())){
+        if (!ITEM_NAME_LIST.contains(item.getName())) {
             ITEM_NAME_LIST.add(item.getName());
         }
     }
@@ -164,6 +164,7 @@ public class Item extends Funil {
     public String toString() {
         return name;
     }
+
     public String toInfor() {
         return "Item{" +
                 "id=" + id +
