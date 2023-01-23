@@ -1,6 +1,8 @@
 package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.SmartHopper;
+import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
@@ -39,6 +41,10 @@ public class ClickHopper implements Listener {
         block = event.getClickedBlock();
         try {
             smartHopper = new SmartHopper(block);
+            if(smartHopper.getType() instanceof Grupo grupo){
+                InventoryCustom inventoryCustom = new InventoryCustom(player, grupo);
+                inventoryCustom.create().show();
+            }
             Msg.getType(player, smartHopper.getType());
         } catch (Exception e) {
             Msg.PlayerGold(player, e.getMessage());
