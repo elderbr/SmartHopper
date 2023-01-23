@@ -79,7 +79,8 @@ public class Grupo extends Funil {
     }
 
     public boolean isContains(Item item){
-        return grupoList.contains(item);
+        Grupo grupo = GRUPO_MAP_ID.get(id);
+        return grupo.getListItem().contains(item);
     }
 
     public static List<String> CreateGrupos() {
@@ -87,9 +88,6 @@ public class Grupo extends Funil {
         grupoList = new ArrayList<>();
         // Pegando o nome do grupo
         for (String nameItem : ITEM_NAME_LIST) {
-            if(nameItem.equalsIgnoreCase("enchanted book efficiency")){
-                Msg.ServidorBlue("item name: "+ nameItem, Grupo.class);
-            }
             if (nameItem.split("\\s").length > 0) {
                 //
                 String[] nameSplit = nameItem.split("\\s");
@@ -180,7 +178,7 @@ public class Grupo extends Funil {
             // Buscando item que o grupo possa ter
             for (String itemName : ITEM_NAME_LIST) {
                 // Verifica se grupo pertence ao grupo
-                if (IsContent(grup, itemName)) {
+                if (pertence(grupo.getName(), itemName) && IsContent(grup, itemName)) {
                     grupo.addListItem(ITEM_MAP_NAME.get(itemName));
                 }
             }
