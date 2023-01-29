@@ -35,15 +35,20 @@ public class GrupoController {
 
     public List<Grupo> getGrupo(@NotNull Object itemObj) throws GrupoException {
         listGrupo = new ArrayList<>();
+
+        // SE O OBJETO FOR UMA STRING
         if (itemObj instanceof String nameItem) {
+            // SE A STRING ESTIVER VAZIA
             if (nameItem.isEmpty()) {
                 throw new GrupoException("$6Digite o nome do grupo ou ID!!!");
             }
-            name = nameItem;
             nameGrupo = nameItem.toLowerCase().replaceAll("[#g]", "");
             try {
                 codigo = Integer.parseInt(nameGrupo);
+                name = nameItem;
             } catch (NumberFormatException e) {
+                name = nameGrupo;
+                codigo = 0;
             }
         } else if (itemObj instanceof Integer id) {
             codigo = id;
