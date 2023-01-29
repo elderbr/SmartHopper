@@ -75,6 +75,7 @@ public class Grupo extends Funil {
         for (Item item : getListItem()) {
             lista.add(item.getName());
         }
+        Collections.sort(lista);// Organizando em ordem alfabetica
         return lista;
     }
 
