@@ -71,8 +71,9 @@ public class GrupoComando implements CommandExecutor {
                 inventory.show();
             }
             Msg.getType(player, listGrupo);
+            return true;
         } catch (Exception e) {
-            Msg.ServidorErro("Erro ao mostrar informações do grupo!!!", "show()", getClass(), e);
+            Msg.PlayerGold(player, e.getMessage());
         }
         return false;
     }
