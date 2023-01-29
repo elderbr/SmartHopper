@@ -106,7 +106,7 @@ public class GrupoConfig {
                 config.set(name.concat(".grupo_id"), grupo.getId());
                 config.set(name.concat(".grupo_name"), grupo.getName());
                 config.set(name.concat(".grupo_lang"), grupo.getTranslation());
-                config.set(name.concat(".grupo_item"), grupo.getListItem());
+                config.set(name.concat(".grupo_item"), grupo.getListNameItem());
                 config.save(fileConfig);
 
                 GRUPO_MAP_ID.put(grupo.getId(), grupo);
