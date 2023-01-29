@@ -103,9 +103,10 @@ public class GrupoConfig {
             try {
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
 
-                config.set(name.concat(".grupo_id"), grupo.getId());
-                config.set(name.concat(".grupo_name"), grupo.getName());
                 config.set(name.concat(".grupo_lang"), grupo.getTranslation());
+
+                // Atualizando a lista de itens do grupo
+                config.set(name.concat(".grupo_item"), null);
                 config.set(name.concat(".grupo_item"), grupo.getListNameItem());
                 config.save(fileConfig);
 
