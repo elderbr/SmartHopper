@@ -89,6 +89,10 @@ public class Item extends Funil {
             ItemStack itemStack = new ItemStack(m);
             if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.getType().isItem()) {
                 Item item = new Item(itemStack);
+
+                // Se item não pode está na lista
+                if(item.getName().equalsIgnoreCase("enchanted book")) continue;
+
                 if (!ITEM_NAME_LIST.contains(item.getName())) {
                     ITEM_NAME_LIST.add(item.getName());
                 }
@@ -158,7 +162,6 @@ public class Item extends Funil {
         }
         return ITEM_MAP_ID.get(id);
     }
-
 
     @Override
     public String toString() {
