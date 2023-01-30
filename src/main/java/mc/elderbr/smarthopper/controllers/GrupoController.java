@@ -52,6 +52,7 @@ public class GrupoController {
             }
         } else if (itemObj instanceof Integer id) {
             codigo = id;
+            name = String.valueOf(id);
         } else if (itemObj instanceof ItemStack itemStack) {
 
             if (itemStack.getType() == Material.AIR) {
