@@ -25,8 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_ID;
-import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_NAME;
+import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class InventoryCustom implements Botao {
 
@@ -35,7 +34,6 @@ public class InventoryCustom implements Botao {
     private String name, titulo;
     private Inventory inventory;
     private Grupo grupo;
-    private GrupoController grupoController = new GrupoController();
     private boolean isGrupo = false;
 
     // PAGINAÇÃO
@@ -54,8 +52,7 @@ public class InventoryCustom implements Botao {
         if(name.isEmpty()){
             throw new GrupoException("O nome do grupo não pode está vazio!!!");
         }
-        grupoController.getGrupo(this.name);
-        grupo = grupoController.getGrupo();
+        grupo = TRADUCAO_GRUPO.get(name);// Buscando o grupo em memória
     }
 
     public InventoryCustom(@NotNull Player player, @NotNull InventoryClickEvent inventoryClick) throws GrupoException {
@@ -78,11 +75,7 @@ public class InventoryCustom implements Botao {
         // Grupo existente
         if(titulo.contains("ID")) {
             codigo = Utils.ParseNumber(titulo.substring(titulo.indexOf("ID:"), titulo.length()));// Pegando o código do grupo
-            grupoController.getGrupo(codigo);
-            grupo = grupoController.getGrupo();
-        }else{
-            grupo = new Grupo();
-            grupo.setName(name);
+            grupo = GRUPO_MAP_ID.get(codigo);
         }
     }
 
@@ -155,7 +148,8 @@ public class InventoryCustom implements Botao {
 
         this.pag = pag;
 
-        if (pagMap.get(pag) == null) {
+        // Se o grupo existir e não houver itens mostrar a mensagem de erro
+        if (grupo != null && pagMap.get(pag) == null) {
             throw new GrupoException("Nâo foi possivel exibir os itens do grupo!");
         }
 
@@ -186,8 +180,11 @@ public class InventoryCustom implements Botao {
                 }
         }
 
-        for (Item item : pagMap.get(pag)) {
-            addItem(item);
+        // Se existir o grupo mostrar os itens do grupos
+        if(grupo != null) {
+            for (Item item : pagMap.get(pag)) {
+                addItem(item);
+            }
         }
 
         player.openInventory(inventory);

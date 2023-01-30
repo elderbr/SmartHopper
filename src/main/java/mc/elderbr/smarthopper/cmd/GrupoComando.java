@@ -79,6 +79,8 @@ public class GrupoComando implements CommandExecutor {
     }
 
     private boolean add() {
+
+        // Verifica se o jogador é adm do Smart hopper
         if (!Config.CONTAINS_ADD(player)) {
             Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
             return false;
@@ -86,8 +88,7 @@ public class GrupoComando implements CommandExecutor {
 
         try {
             inventory = new InventoryCustom(player, cmd);
-            inventory.create();
-            inventory.show();
+            inventory.create().show();
         } catch (GrupoException e) {
             Msg.PlayerGold(player, e.getMessage());
         }
