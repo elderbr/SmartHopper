@@ -2,7 +2,6 @@ package mc.elderbr.smarthopper.interfaces;
 
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Traducao;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
@@ -14,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface VGlobal {
-
-    List<Jogador> JOGADOR_LIST = new ArrayList<>();
     List<String> ADM_LIST = new ArrayList<>();
 
     /*********************************************************
@@ -40,10 +37,18 @@ public interface VGlobal {
      *
      *********************************************************/
     // Items
+
+    Map<Integer, Integer> ITEM_ID = new HashMap<>();
     List<Item> ITEM_LIST = new ArrayList<>();
     Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();
     Map<String, Item> ITEM_MAP_NAME = new HashMap<>();
     List<String> ITEM_NAME_LIST = new ArrayList<>();
+
+    /*********************************************************
+     *
+     *                      TRADUÇÃO
+     *
+     *********************************************************/
 
     // LISTA DO LANGS DISPONIVEL
     List<String> LANG_NAME_LIST = new ArrayList<>();
@@ -52,16 +57,12 @@ public interface VGlobal {
     Map<String, Item> TRADUCAO_ITEM = new HashMap<>();
     Map<String, Grupo> TRADUCAO_GRUPO = new HashMap<>();
 
-    // LIVROS ENCANTADOS
-    List<String> BOOK_ENCHANTMENTE_LIST = new ArrayList<>();
-    Map<String, Enchantment> BOOK_ENCHANTEMENT_MAP = new HashMap<>();
-
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();
-    int VERSION_INT = Integer.parseInt(VERSION.replaceAll("[.]",""));
+    int VERSION_INT = Integer.parseInt(VERSION.replaceAll("[.]", ""));
 
     File ARQUIVO = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper").getDataFolder().getAbsoluteFile();
-    File FILE_LANG = new File(ARQUIVO+File.separator+"lang");
+    File FILE_LANG = new File(ARQUIVO + File.separator + "lang");
 
 
 }

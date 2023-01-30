@@ -1,8 +1,6 @@
 package mc.elderbr.smarthopper.file;
 
-import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Debug;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.MemorySection;
@@ -54,14 +52,17 @@ public class ItemConfig {
      *
      ********************************/
     public void load() {
+
+        ITEM_ID.put(0, 1);// Setando o primeiro número para código do item
+
         config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-        for(String value : config.getValues(false).keySet()){
+        for (String value : config.getValues(false).keySet()) {
             item = new Item();
             item.setId(config.getInt(value.concat(".item_id")));
             item.setName(config.getString(value.concat(".item_name")));
             // ADICIONANDO TRADUÇÃO
             TRADUCAO_ITEM.put(item.getName(), item);// ADICIONANDO TRADUÇÃO GLOBAL
-            if(config.get(value.concat(".item_lang"))!=null) {
+            if (config.get(value.concat(".item_lang")) != null) {
                 MemorySection memorySection = (MemorySection) config.get(value.concat(".item_lang"));
                 for (Map.Entry<String, Object> langs : memorySection.getValues(false).entrySet()) {
 
@@ -72,6 +73,10 @@ public class ItemConfig {
                     TRADUCAO_ITEM.put(translation, item);// ADICIONANDO TRADUÇÃO GLOBAL
                 }
             }
+            // Pegando o maior número do código do item
+            if (ITEM_ID.get(0) < item.getId()) {
+                ITEM_ID.put(0, item.getId() + 1);
+            }
             Item.SET(item);
         }
     }
@@ -79,7 +84,7 @@ public class ItemConfig {
     private void add(Item item) {
         config.set(item.getName().concat(".item_id"), item.getId());
         config.set(item.getName().concat(".item_name"), item.getName());
-        if(item.getTranslation().size()>0) {
+        if (item.getTranslation().size() > 0) {
             config.set(item.getName().concat(".item_lang"), item.getTranslation());
         }
         save();
