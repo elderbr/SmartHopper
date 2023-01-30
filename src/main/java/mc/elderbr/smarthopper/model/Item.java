@@ -96,6 +96,9 @@ public class Item extends Funil {
                 if (!ITEM_NAME_LIST.contains(item.getName())) {
                     ITEM_NAME_LIST.add(item.getName());
                 }
+                if (!ITEM_NAME_LIST_UPDATE.contains(item.getName())) {
+                    ITEM_NAME_LIST_UPDATE.add(item.getName());
+                }
             }
         }
 

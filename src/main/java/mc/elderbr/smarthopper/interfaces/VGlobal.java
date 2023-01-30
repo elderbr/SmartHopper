@@ -43,6 +43,7 @@ public interface VGlobal {
     Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();
     Map<String, Item> ITEM_MAP_NAME = new HashMap<>();
     List<String> ITEM_NAME_LIST = new ArrayList<>();
+    List<String> ITEM_NAME_LIST_UPDATE = new ArrayList<>();
 
     /*********************************************************
      *

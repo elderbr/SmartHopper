@@ -77,7 +77,17 @@ public class ItemConfig {
             if (ITEM_ID.get(0) < item.getId()) {
                 ITEM_ID.put(0, item.getId() + 1);
             }
-            Item.SET(item);
+            Item.SET(item);// Adicionando no atributo global
+        }
+
+        // Adicionar os novos itens
+        for (String value : ITEM_NAME_LIST_UPDATE) {
+            if (config.get(value) == null) {// Verificando se o item existe no arquivo item.yml
+                item = new Item(ITEM_ID.get(0), value);// Criando um novo item
+                add(item);// Adicionando no arquivo item.yml
+                Item.SET(item);// Adicionando no atributo global
+                ITEM_ID.replace(0, item.getId()+1);// Incrementando ao código do item
+            }
         }
     }
 
