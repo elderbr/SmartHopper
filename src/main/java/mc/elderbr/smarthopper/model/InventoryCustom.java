@@ -49,7 +49,7 @@ public class InventoryCustom implements Botao {
         this.player = player;
         this.name = name;
 
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             throw new GrupoException("O nome do grupo não pode está vazio!!!");
         }
         grupo = TRADUCAO_GRUPO.get(name);// Buscando o grupo em memória
@@ -73,13 +73,16 @@ public class InventoryCustom implements Botao {
         isGrupo = true;
 
         // Grupo existente
-        if(titulo.contains("ID")) {
+        if (titulo.contains("ID")) {
             codigo = Utils.ParseNumber(titulo.substring(titulo.indexOf("ID:"), titulo.length()));// Pegando o código do grupo
             grupo = GRUPO_MAP_ID.get(codigo);
         }
+        name = titulo.substring(titulo.indexOf("§r"), titulo.length());// Pegando o nome do grupo novo
+        grupo = new Grupo();
+        grupo.setName(name);
     }
 
-    public InventoryCustom(@NotNull Player player,@NotNull  Grupo grupo) {
+    public InventoryCustom(@NotNull Player player, @NotNull Grupo grupo) {
         this.player = player;
         this.grupo = grupo;
 
@@ -90,7 +93,7 @@ public class InventoryCustom implements Botao {
 
     public InventoryCustom create() throws GrupoException {
         // Se o grupo exitir busca informações
-        if (grupo != null) {
+        if (grupo != null && grupo.getId() > 0) {
             // Nome do grupo
             titulo = Msg.Color("$lGrupo: $r" + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
             inventory = Bukkit.createInventory(null, 54, titulo);// Quantidade de espaço do baú
@@ -181,7 +184,7 @@ public class InventoryCustom implements Botao {
         }
 
         // Se existir o grupo mostrar os itens do grupos
-        if(grupo != null) {
+        if (grupo != null) {
             for (Item item : pagMap.get(pag)) {
                 addItem(item);
             }
@@ -200,6 +203,7 @@ public class InventoryCustom implements Botao {
     }
 
     public boolean save() {
+        grupo.setId(CD_MAX.get(0)+1);
         for (ItemStack itemStack : inventory.getContents()) {
             if (itemStack == null || itemStack.getType() == Material.AIR) continue;
             Item item = new Item(itemStack);
@@ -211,7 +215,7 @@ public class InventoryCustom implements Botao {
                 grupo.addListItem(item);
             }
         }
-        return GrupoConfig.UPDATE(grupo);
+        return GrupoConfig.ADD(grupo);
     }
 
     public void setInventory(Inventory inventory) {
