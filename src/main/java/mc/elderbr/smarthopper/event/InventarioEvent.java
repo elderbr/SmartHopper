@@ -37,7 +37,8 @@ public class InventarioEvent implements Listener, Botao {
         // Criando o inventario personalizado do grupo
         try {
             inventoryCustom = new InventoryCustom(player, event);
-            inventoryCustom.create();
+            inventoryCustom.addItem(event);
+            return;
         } catch (GrupoException e) {
             Msg.PlayerRed(player, e.getMessage());
         }

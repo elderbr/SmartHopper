@@ -1,14 +1,11 @@
 package mc.elderbr.smarthopper.model;
 
-import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
-import mc.elderbr.smarthopper.enums.InventarioType;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
-import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.Botao;
-import mc.elderbr.smarthopper.interfaces.Funil;
+import mc.elderbr.smarthopper.interfaces.Jogador;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Bukkit;
@@ -23,16 +20,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class InventoryCustom implements Botao {
 
+    private final Class CLAZZ = getClass();
     private Player player;
     private int codigo = 0;
     private String name, titulo;
     private Inventory inventory;
+    private Inventory inventoryTop;
+    private Inventory inventoryBottom;
+
+    private ItemStack itemStack;
+    private ItemStack itemStackClicked;
     private Grupo grupo;
     private boolean isGrupo = false;
 
@@ -57,7 +59,6 @@ public class InventoryCustom implements Botao {
 
     public InventoryCustom(@NotNull Player player, @NotNull InventoryClickEvent inventoryClick) throws GrupoException {
         // VERIFICA SE O INVENTARIO É BAÚ
-
         if (inventoryClick.getView().getTopInventory().getType() != InventoryType.CHEST) {
             return;
         }
@@ -134,11 +135,50 @@ public class InventoryCustom implements Botao {
     }
 
     public void addItem(@NotNull ItemStack itemStack) {
-        inventory.addItem(itemStack);
+        if (player.isOp() || ADM_LIST.contains(player)) {
+            itemStack.setAmount(1);
+            inventory.addItem(itemStack);
+        }
     }
 
     public void addItem(@NotNull Item item) {
         inventory.addItem(ItemController.ParseItemStack(item));
+    }
+
+    public void addItem(InventoryClickEvent event) {
+        player = (Player) event.getWhoClicked();
+
+        if (grupo != null) {
+
+            // Cancela o movimento ou clique do item
+            event.setCancelled(true);
+
+            // Se não for adm do servidor ou do SmartHopper retorna
+            if(!player.isOp() && !Config.CONTAINS_ADD(player)){
+                return;
+            }
+
+            // Inventario superior
+            inventoryTop = player.getOpenInventory().getTopInventory();
+            // Inventario inferior
+            inventoryBottom = player.getOpenInventory().getBottomInventory();
+
+            // Item que foi clicado
+            itemStackClicked = event.getCurrentItem();
+            // Copiando o tipo do item clicado
+            itemStack = new ItemStack(itemStackClicked.getType());
+            itemStack.setAmount(1);
+            // Se for clicado com o botão esquerdo adiciona o item
+            if (event.isLeftClick()) {
+                if (!inventoryTop.contains(itemStack)) {
+                    inventoryTop.addItem(itemStack);
+                }
+            }
+            // Removendo o item do inventario superior
+            if (event.isRightClick() && inventoryTop.contains(itemStack)) {
+                inventoryTop.removeItem(itemStack);
+            }
+        }
     }
 
     public InventoryCustom show() throws GrupoException {
@@ -203,7 +243,7 @@ public class InventoryCustom implements Botao {
     }
 
     public boolean save() {
-        grupo.setId(CD_MAX.get(0)+1);
+        grupo.setId(CD_MAX.get(0) + 1);
         for (ItemStack itemStack : inventory.getContents()) {
             if (itemStack == null || itemStack.getType() == Material.AIR) continue;
             Item item = new Item(itemStack);
@@ -217,6 +257,8 @@ public class InventoryCustom implements Botao {
         }
         return GrupoConfig.ADD(grupo);
     }
+
+    
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
