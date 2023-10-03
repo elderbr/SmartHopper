@@ -187,12 +187,11 @@ public class InventoryCustom implements Botao, VGlobal {
                 }
                 break;
             case 2:
-                inventory.setItem(52, BtnAnteriorPag1());
                 if (pagMap.size() == 2) {
                     if(player.isOp() || Config.CONTAINS_ADD(player)) {
+                        inventory.setItem(52, BtnAnteriorPag1());
                         inventory.setItem(53, BtnSalva());
                     }else{
-                        inventory.setItem(52, new ItemStack(Material.AIR));
                         inventory.setItem(53, BtnAnteriorPag1());
                     }
                 } else {
@@ -200,9 +199,13 @@ public class InventoryCustom implements Botao, VGlobal {
                 }
                 break;
             case 3:
-                inventory.setItem(52, BtnAnteriorPag2());
                 if (pagMap.size() == 3) {
-                    inventory.setItem(53, BtnSalva());
+                    if(player.isOp() || Config.CONTAINS_ADD(player)) {
+                        inventory.setItem(52, BtnAnteriorPag2());
+                        inventory.setItem(53, BtnSalva());
+                    }else{
+                        inventory.setItem(53, BtnAnteriorPag2());
+                    }
                 }
                 break;
         }
