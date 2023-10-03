@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -167,11 +166,9 @@ public class InventoryCustom implements Botao, VGlobal {
         // Titulo do grupo
         titulo = Msg.Color("$lGrupo: $r" + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
         inventory = Bukkit.createInventory(null, 54, titulo);
-        Msg.ServidorBlue("antes Pag: " + pag , CLAZZ);
         if (pagMap.get(pag) == null) {
             pag -= 1;
         }
-        Msg.ServidorBlue("Pag: " + pag + " - list: " + pagMap.get(pag), CLAZZ);
         for (Item item : pagMap.get(pag)) {
             inventory.addItem(item.parseItemStack());
         }
@@ -179,7 +176,7 @@ public class InventoryCustom implements Botao, VGlobal {
         switch (pag) {
             case 1:
                 if (pagMap.size() == 1) {
-                    if(player.isOp() || Config.CONTAINS_ADD(player)) {
+                    if (player.isOp() || Config.CONTAINS_ADD(player)) {
                         inventory.setItem(53, BtnSalva());
                     }
                 } else {
@@ -188,10 +185,10 @@ public class InventoryCustom implements Botao, VGlobal {
                 break;
             case 2:
                 if (pagMap.size() == 2) {
-                    if(player.isOp() || Config.CONTAINS_ADD(player)) {
+                    if (player.isOp() || Config.CONTAINS_ADD(player)) {
                         inventory.setItem(52, BtnAnteriorPag1());
                         inventory.setItem(53, BtnSalva());
-                    }else{
+                    } else {
                         inventory.setItem(53, BtnAnteriorPag1());
                     }
                 } else {
@@ -200,10 +197,10 @@ public class InventoryCustom implements Botao, VGlobal {
                 break;
             case 3:
                 if (pagMap.size() == 3) {
-                    if(player.isOp() || Config.CONTAINS_ADD(player)) {
+                    if (player.isOp() || Config.CONTAINS_ADD(player)) {
                         inventory.setItem(52, BtnAnteriorPag2());
                         inventory.setItem(53, BtnSalva());
-                    }else{
+                    } else {
                         inventory.setItem(53, BtnAnteriorPag2());
                     }
                 }

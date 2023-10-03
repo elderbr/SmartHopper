@@ -13,7 +13,6 @@ public class InventarioEvent implements Listener, Botao {
 
     private final Class CLAZZ = getClass();
     private Player player;
-    private int pag = 1;
     private InventoryCustom inventoryCustom;
 
 
