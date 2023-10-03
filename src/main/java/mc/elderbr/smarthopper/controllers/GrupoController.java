@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.controllers;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.LivroEncantado;
@@ -14,14 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
+public class GrupoController implements VGlobal {
 
-public class GrupoController {
-
-    private int codigo;
+    private int id;
     private String name;
-    private String nameGrupo;
     private Grupo grupo;
     private List<Grupo> listGrupo;
     private Item item;
@@ -33,59 +32,50 @@ public class GrupoController {
         return grupo;
     }
 
-    public List<Grupo> getGrupo(@NotNull Object itemObj) throws GrupoException {
+    public Grupo getGrupo(int id) throws GrupoException {
+        if (id < 1) {
+            throw new GrupoException("$6O código do grupo não é valido!!!");
+        }
+        return GRUPO_MAP_ID.get(id);
+    }
+
+    public Grupo getGrupo(@NotNull String name) throws GrupoException {
+        // SE A STRING ESTIVER VAZIA
+        if (name.isEmpty()) {
+            throw new GrupoException("$6Digite o nome do grupo ou ID!!!");
+        }
+
+        // Tenta converte o nome em Inteiro se consegui busca o número do ID no banco dos grupos
+        try {
+            id = Integer.parseInt(name.toLowerCase().replaceAll("[^0-9]",""));
+            return GRUPO_MAP_ID.get(id);// Buscando o número do ID no banco dos grupos
+        }catch (NumberFormatException e){}
+
+        // Verifica se contém o item pelo o nome buscando o nome e a tradução
+        if(!isContains(name)){
+            throw new GrupoException("O grupo pesquisado não existe!");
+        }
+        return grupo;
+    }
+
+    public List<Grupo> getGrupo(ItemStack itemStack) throws GrupoException {
         listGrupo = new ArrayList<>();
-
-        // SE O OBJETO FOR UMA STRING
-        if (itemObj instanceof String nameItem) {
-            // SE A STRING ESTIVER VAZIA
-            if (nameItem.isEmpty()) {
-                throw new GrupoException("$6Digite o nome do grupo ou ID!!!");
-            }
-            nameGrupo = nameItem.toLowerCase().replaceAll("[#g]", "");
-            try {
-                codigo = Integer.parseInt(nameGrupo);
-                name = nameItem;
-            } catch (NumberFormatException e) {
-                name = nameGrupo;
-                codigo = 0;
-            }
-        } else if (itemObj instanceof Integer id) {
-            codigo = id;
-            name = String.valueOf(id);
-        } else if (itemObj instanceof ItemStack itemStack) {
-
-            if (itemStack.getType() == Material.AIR) {
-                throw new GrupoException("$cSegure o item na mão ou digite o código do grupo!!!");
-            }
-
-            name = Item.ToName(itemStack);
-
-            if (name.contains("potion")) {
-                Pocao pocao = new Pocao(itemStack);
-                item = pocao.getItem();
-            } else if (name.contains("enchanted book")) {
-                LivroEncantado livroEncantado = new LivroEncantado(itemStack);
-                item = livroEncantado.getItem();
-            } else {
-                item = ITEM_MAP_NAME.get(name);
-            }
-            listGrupo = item.getListGrupo();
-            grupo = listGrupo.get(0);
-            return listGrupo;
+        if (itemStack.getType() == Material.AIR) {
+            throw new GrupoException("$cSegure o item na mão ou digite o nome ou o código do grupo!!!");
         }
 
-        if (codigo > 0) {
-            grupo = GRUPO_MAP_ID.get(codigo);
+        name = Item.ToName(itemStack);
+
+        if (name.contains("potion")) {
+            Pocao pocao = new Pocao(itemStack);
+            item = pocao.getItem();
+        } else if (name.contains("enchanted book")) {
+            LivroEncantado livroEncantado = new LivroEncantado(itemStack);
+            item = livroEncantado.getItem();
         } else {
-            grupo = TRADUCAO_GRUPO.get(nameGrupo);
+            item = ITEM_MAP_NAME.get(name);
         }
-
-        if (grupo == null) {
-            throw new GrupoException("$cO grupo$6 " + name + "$c não é valido!!!");
-        }
-        grupo.setBlocked(name.contains("#"));
-        listGrupo.add(grupo);
+        listGrupo = item.getListGrupo();
         return listGrupo;
     }
 
@@ -112,13 +102,13 @@ public class GrupoController {
         }
 
         // Buscando o grupo pelo código
-        codigo = 0;
+        id = 0;
         try {
-            codigo = Integer.parseInt(args[0]);
+            id = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
             throw new GrupoException(String.format("O código %s não é valido!!!", args[0]));
         }
-        grupo = GRUPO_MAP_ID.get(codigo);
+        grupo = GRUPO_MAP_ID.get(id);
         if (grupo == null) {
             throw new GrupoException(String.format("O código %s não está na lista de grupos!!!", args[0]));
         }
@@ -150,6 +140,16 @@ public class GrupoController {
             TRADUCAO_GRUPO.remove(grupo.getName().toLowerCase());
             TRADUCAO_GRUPO.remove(grupo.getName());
             return true;
+        }
+        return false;
+    }
+
+    public boolean isContains(String name){
+        for(Map.Entry<String, Grupo> grupName : TRADUCAO_GRUPO.entrySet()){
+            if(name.toLowerCase().equalsIgnoreCase(grupName.getKey().toLowerCase())){
+                grupo = grupName.getValue();
+                return true;
+            }
         }
         return false;
     }

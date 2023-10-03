@@ -1,7 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.abstracts.Funil;
-import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -26,6 +26,14 @@ public class Grupo extends Funil {
     @Override
     public Funil setId(int id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public Funil setId(String id) {
+        try {
+            this.id = Integer.parseInt(id.replaceAll("[^0-9]", ""));
+        }catch (NumberFormatException e){}
         return this;
     }
 
@@ -58,6 +66,11 @@ public class Grupo extends Funil {
 
     public Grupo addListItem(Item item) {
         listItem.add(item);
+        return this;
+    }
+
+    public Grupo addListItem(ItemStack itemStack) {
+        listItem.add(new Item(itemStack));
         return this;
     }
 
@@ -340,4 +353,5 @@ public class Grupo extends Funil {
     public String toString() {
         return name;
     }
+
 }

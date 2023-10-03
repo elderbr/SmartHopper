@@ -10,6 +10,8 @@ public abstract class Funil {
 
     public abstract Funil setId(int id);
 
+    public abstract Funil setId(String id);
+
     public abstract int getId();
 
     public abstract Funil setName(String name);
@@ -48,6 +50,21 @@ public abstract class Funil {
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+
+    public String toParameters() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n======== Dados do "+ getClass().getSimpleName()+" ========\n");
+        if (getId() > 0) {
+            sb.append("ID: ").append(getId()).append("\n");
+        }
+        if (getName() != null && !getName().isEmpty()) {
+            sb.append("Name: ").append(getName()).append("\n");
+        }
+        if (getTranslation().size() > 0) {
+            sb.append("Langs: ").append(getTranslation());
+        }
+        return sb.toString();
     }
 
 }

@@ -39,6 +39,14 @@ public class Item extends Funil {
     }
 
     @Override
+    public Funil setId(String id) {
+        try {
+            this.id = Integer.parseInt(id.replaceAll("[^0-9]", ""));
+        }catch (NumberFormatException e){}
+        return this;
+    }
+
+    @Override
     public int getId() {
         return id;
     }
@@ -164,6 +172,10 @@ public class Item extends Funil {
             throw new ItemException("O item não está na lista de item!!!");
         }
         return ITEM_MAP_ID.get(id);
+    }
+
+    public ItemStack parseItemStack(){
+        return new ItemStack(Material.getMaterial(name.toUpperCase().replaceAll("[\s]","_")));
     }
 
     @Override

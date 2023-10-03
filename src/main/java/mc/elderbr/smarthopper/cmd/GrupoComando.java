@@ -1,7 +1,6 @@
 package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.controllers.GrupoController;
-import mc.elderbr.smarthopper.controllers.SmartHopper;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.model.Grupo;
@@ -59,19 +58,16 @@ public class GrupoComando implements CommandExecutor {
 
     private boolean show() {
         try {
-            if(cmd.length()>0) {
-                listGrupo = grupoController.getGrupo(cmd);
-            }else{
-                listGrupo = grupoController.getGrupo(itemStack);
-            }
-            if (listGrupo.size() == 1) {
-                grupo = listGrupo.get(0);
+            if (cmd.length() > 0) {
+                grupo = grupoController.getGrupo(cmd);
                 inventory = new InventoryCustom(player, grupo);
-                inventory.create();
                 inventory.show();
+                return true;
+            } else {
+                listGrupo = grupoController.getGrupo(itemStack);
+                Msg.getType(player, listGrupo);
+                return true;
             }
-            Msg.getType(player, listGrupo);
-            return true;
         } catch (Exception e) {
             Msg.PlayerGold(player, e.getMessage());
         }

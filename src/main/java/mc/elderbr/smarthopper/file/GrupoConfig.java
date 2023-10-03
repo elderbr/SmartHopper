@@ -4,7 +4,6 @@ package mc.elderbr.smarthopper.file;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,9 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
-
-public class GrupoConfig {
+public class GrupoConfig implements VGlobal {
 
     private static File fileConfig = new File(ARQUIVO, "grupo.yml");
     private YamlConfiguration config;
