@@ -84,7 +84,7 @@ public class GrupoComando implements CommandExecutor {
 
         try {
             inventory = new InventoryCustom(player, cmd);
-            inventory.create().show();
+            inventory.create();
         } catch (GrupoException e) {
             Msg.PlayerGold(player, e.getMessage());
         }
