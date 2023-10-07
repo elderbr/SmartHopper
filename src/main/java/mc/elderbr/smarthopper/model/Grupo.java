@@ -83,6 +83,14 @@ public class Grupo extends Funil {
         return listItem;
     }
 
+    public List<ItemStack> getListItemStack(){
+        List<ItemStack> list = new ArrayList<>();
+        for(Item item : listItem){
+            list.add(item.parseItemStack());
+        }
+        return list;
+    }
+
     public List<String> getListNameItem() {
         List<String> lista = new ArrayList<>();
         for (Item item : getListItem()) {

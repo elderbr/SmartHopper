@@ -215,7 +215,6 @@ public class InventoryCustom implements Botao, VGlobal {
     }
 
     public void addItem(InventoryClickEvent event) {
-        player = (Player) event.getWhoClicked();
 
         // Inventario do superior
         inventoryTop = player.getOpenInventory().getTopInventory();
@@ -223,21 +222,15 @@ public class InventoryCustom implements Botao, VGlobal {
             return;
         }
 
-        if (titulo.contains("Grupo")) {
-
-            // Cancela o movimento ou clique do item
-            event.setCancelled(true);
+        if (grupo != null) {
 
             // Se não for adm do servidor ou do SmartHopper retorna
             if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
                 return;
             }
-
-            // Inventario inferior
-            inventoryBottom = player.getOpenInventory().getBottomInventory();
-
-            // Item que foi clicado
             itemStackClicked = event.getCurrentItem();
+            if (itemStackClicked == null || itemStackClicked.getType().isAir()) return;
+
             // Copiando o tipo do item clicado
             itemStack = new ItemStack(itemStackClicked.getType());
             itemStack.setAmount(1);
@@ -254,18 +247,25 @@ public class InventoryCustom implements Botao, VGlobal {
         }
     }
 
-    public void btnNext() throws GrupoException {
+    public void btnNavegation() throws GrupoException {
 
         if (grupo == null || itemStackClicked == null || itemStackClicked.getType() == Material.AIR) return;
 
+        if(BtnAnteriorPag1().equals(itemStackClicked)){
+            pag = 1;
+            show();
+        }else
         if (BtnProximoPag2().equals(itemStackClicked)) {
             pag = 2;
+            show();
         } else if (BtnProximoPag3().equals(itemStackClicked)) {
             pag = 3;
-        } else {
-            pag = 1;
+            show();
         }
-        show();
+    }
+
+    public Grupo getGrupo(){
+        return grupo;
     }
 
     public boolean isGrupo() {
@@ -314,5 +314,15 @@ public class InventoryCustom implements Botao, VGlobal {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public boolean isContains(ItemStack itemStack){
+        itemStack = new ItemStack(itemStack.getType());
+        for(Item item : grupo.getListItem()){
+            if(item.parseItemStack().hashCode() == itemStack.hashCode()){
+                return true;
+            }
+        }
+        return false;
     }
 }

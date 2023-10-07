@@ -68,4 +68,26 @@ public interface Botao {
         btn.setItemMeta(meta);
         return btn;
     }
+
+    default boolean equalButton(ItemStack itemStack){
+        if(itemStack.equals(BtnSalva())){
+            return true;
+        }
+        if(itemStack.equals(BtnProximo())){
+            return true;
+        }
+        if(itemStack.equals(BtnProximoPag2())){
+            return true;
+        }
+        if(itemStack.equals(BtnAnteriorPag1())){
+            return true;
+        }
+        if(itemStack.equals(BtnAnteriorPag2())){
+            return true;
+        }
+        if(itemStack.equals(BtnProximoPag3())){
+            return true;
+        }
+        return false;
+    }
 }
