@@ -80,8 +80,8 @@ public class GrupoConfig implements VGlobal {
 
                 config.set(name.concat(".grupo_id"), grupo.getId());
                 config.set(name.concat(".grupo_name"), grupo.getName());
-                config.set(name.concat(".grupo_lang"), grupo.getListItem());
-                config.set(name.concat(".grupo_item"), grupo.getListItem());
+                config.set(name.concat(".grupo_lang"), grupo.getTranslation());
+                config.set(name.concat(".grupo_item"), grupo.getListNameItem());
                 config.save(fileConfig);
 
                 GRUPO_MAP_ID.put(grupo.getId(), grupo);
@@ -89,6 +89,7 @@ public class GrupoConfig implements VGlobal {
 
                 return true;
             } catch (IOException e) {
+                Msg.ServidorErro("Erro ao salvar novo grupo!!!", "ADD(Grupo grupo)", GrupoConfig.class, e);
             }
         }
         return false;
