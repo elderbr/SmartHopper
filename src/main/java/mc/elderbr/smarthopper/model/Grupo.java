@@ -111,6 +111,7 @@ public class Grupo extends Funil {
         return listItem.contains(item);
     }
 
+
     public boolean containsItem(ItemStack itemStack){
         return listItem.contains(ITEM_MAP_NAME.get(Item.ToName(itemStack)));
     }
@@ -379,5 +380,9 @@ public class Grupo extends Funil {
             sb.append("\n- ").append(item.getName());
         }
         return super.toParameters();
+    }
+
+    public boolean equals(@NotNull Grupo grupo){
+        return id == grupo.getId();
     }
 }
