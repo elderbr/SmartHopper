@@ -8,6 +8,7 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.LivroEncantado;
 import mc.elderbr.smarthopper.model.Pocao;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +53,7 @@ public class GrupoController implements VGlobal {
         }catch (NumberFormatException e){}
 
         // Verifica se contém o item pelo o nome buscando o nome e a tradução
-        if(!isContains(name)){
+        if(!findName(name)){
             throw new GrupoException("O grupo pesquisado não existe!");
         }
         return grupo;
@@ -151,6 +152,22 @@ public class GrupoController implements VGlobal {
                 return true;
             }
         }
+        return false;
+    }
+
+    public boolean findName(String name){
+        for(Map.Entry<String, Grupo> grup : GRUPO_MAP_NAME.entrySet()){
+            grupo = grup.getValue();
+            if(name.toLowerCase().equalsIgnoreCase(grup.getKey())){
+                return true;
+            }
+            if(grup.getValue().getTranslation().size()>0) {
+                if (grupo.getTranslation().containsValue(name.toLowerCase())) {
+                    return true;
+                }
+            }
+        }
+        grupo = null;
         return false;
     }
 }
