@@ -39,8 +39,18 @@ public abstract class Funil {
         return Utils.toUP(translation.get(player.getLocale()) == null ? getName() : translation.get(player.getLocale()));
     }
 
+    public Object addTranslation(Player player) {
+        this.translation.put(player.getLocale(), getName());
+        return this;
+    }
+
     public Object addTranslation(String lang, String translation) {
         this.translation.put(lang, translation);
+        return this;
+    }
+
+    public Object addTranslation(Player player, String translation) {
+        this.translation.put(player.getLocale(), translation);
         return this;
     }
 
