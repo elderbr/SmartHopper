@@ -12,7 +12,7 @@ import java.util.List;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
-public class Item extends Funil {
+public class Item extends Funil implements Comparable<Item> {
 
     private int id = 0;
     private String name;
@@ -190,5 +190,10 @@ public class Item extends Funil {
                 ", blocked=" + blocked +
                 ", listGrupo=" + listGrupo +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NotNull Item newItem) {
+        return this.name.compareTo(newItem.name);
     }
 }

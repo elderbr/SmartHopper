@@ -222,12 +222,14 @@ public class InventoryCustom implements Botao, VGlobal {
             return;
         }
 
+        // Verifica se existe grupo
         if (grupo != null) {
 
             // Se não for adm do servidor ou do SmartHopper retorna
             if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
                 return;
             }
+            // Pegando o item que foi clicado
             itemStackClicked = event.getCurrentItem();
             if (itemStackClicked == null || itemStackClicked.getType().isAir()) return;
 
@@ -236,13 +238,11 @@ public class InventoryCustom implements Botao, VGlobal {
             itemStack.setAmount(1);
             // Se for clicado com o botão esquerdo adiciona o item
             if (event.isLeftClick()) {
-                if (!inventoryTop.contains(itemStack)) {
+                if (!grupo.getListItemStack().contains(itemStack)) {
                     inventoryTop.addItem(itemStack);
+                    grupo.addListItem(itemStack);
+                    Msg.ServidorBlue("Adicionando item: "+ new Item(itemStack).getName(), CLAZZ);
                 }
-            }
-            // Removendo o item do inventario superior
-            if (event.isRightClick() && inventoryTop.contains(itemStack)) {
-                inventoryTop.removeItem(itemStack);
             }
         }
     }
@@ -251,11 +251,10 @@ public class InventoryCustom implements Botao, VGlobal {
 
         if (grupo == null || itemStackClicked == null || itemStackClicked.getType() == Material.AIR) return;
 
-        if(BtnAnteriorPag1().equals(itemStackClicked)){
+        if (BtnAnteriorPag1().equals(itemStackClicked)) {
             pag = 1;
             show();
-        }else
-        if (BtnProximoPag2().equals(itemStackClicked)) {
+        } else if (BtnProximoPag2().equals(itemStackClicked)) {
             pag = 2;
             show();
         } else if (BtnProximoPag3().equals(itemStackClicked)) {
@@ -264,7 +263,7 @@ public class InventoryCustom implements Botao, VGlobal {
         }
     }
 
-    public Grupo getGrupo(){
+    public Grupo getGrupo() {
         return grupo;
     }
 
@@ -276,53 +275,11 @@ public class InventoryCustom implements Botao, VGlobal {
         return pagMap.size();
     }
 
-    public boolean save() {
-        grupo.setId(CD_MAX.get(0) + 1);
-        for (ItemStack itemStack : inventory.getContents()) {
-            if (itemStack == null || itemStack.getType() == Material.AIR) continue;
-            Item item = new Item(itemStack);
-            if (!itemStack.equals(BtnSalva())
-                    && !itemStack.equals(BtnAnteriorPag1())
-                    && !itemStack.equals(BtnProximo())
-                    && !grupo.getListItem().contains(item)
-            ) {
-                grupo.addListItem(item);
-            }
-        }
-        return GrupoConfig.ADD(grupo);
-    }
-
-    public void saves() {
-        if (player.isOp() || Config.CONTAINS_ADD(player)) {
-            if (itemStackClicked.equals(BtnSalva())) {
-                for (ItemStack itemStack : inventoryTop.getContents()) {
-                    if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getType() == Material.BARRIER)
-                        continue;
-                    grupo.addListItem(itemStack);
-                }
-                Msg.ServidorBlue("salvar o lista de item do grupo", CLAZZ);
-                for (Item item : grupo.getListItem()) {
-                    Msg.ServidorBlue("item: " + item, CLAZZ);
-                }
-            }
-        }
-    }
-
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
 
     public Inventory getInventory() {
         return inventory;
-    }
-
-    public boolean isContains(ItemStack itemStack){
-        itemStack = new ItemStack(itemStack.getType());
-        for(Item item : grupo.getListItem()){
-            if(item.parseItemStack().hashCode() == itemStack.hashCode()){
-                return true;
-            }
-        }
-        return false;
     }
 }

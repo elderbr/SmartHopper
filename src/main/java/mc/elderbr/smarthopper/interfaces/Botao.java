@@ -70,24 +70,21 @@ public interface Botao {
     }
 
     default boolean equalButton(ItemStack itemStack){
-        if(itemStack.equals(BtnSalva())){
-            return true;
+        if(itemStack == null
+                || itemStack.getType() != Material.BARRIER
+                || !itemStack.hasItemMeta()
+                || !itemStack.getItemMeta().hasCustomModelData()
+                || itemStack.getItemMeta().getCustomModelData() < 1
+                ){
+            return false;
         }
-        if(itemStack.equals(BtnProximo())){
-            return true;
+        switch (itemStack.getItemMeta().getCustomModelData()){
+            case 10:
+            case 11:
+            case 12:
+                return true;
+            default:
+                return false;
         }
-        if(itemStack.equals(BtnProximoPag2())){
-            return true;
-        }
-        if(itemStack.equals(BtnAnteriorPag1())){
-            return true;
-        }
-        if(itemStack.equals(BtnAnteriorPag2())){
-            return true;
-        }
-        if(itemStack.equals(BtnProximoPag3())){
-            return true;
-        }
-        return false;
     }
 }

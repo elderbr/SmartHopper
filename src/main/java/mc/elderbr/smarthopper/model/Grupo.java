@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.abstracts.Funil;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +34,8 @@ public class Grupo extends Funil {
     public Funil setId(String id) {
         try {
             this.id = Integer.parseInt(id.replaceAll("[^0-9]", ""));
-        }catch (NumberFormatException e){}
+        } catch (NumberFormatException e) {
+        }
         return this;
     }
 
@@ -70,7 +72,7 @@ public class Grupo extends Funil {
     }
 
     public Grupo addListItem(ItemStack itemStack) {
-        listItem.add(new Item(itemStack));
+        listItem.add(ITEM_MAP_NAME.get(Item.ToName(itemStack)));
         return this;
     }
 
@@ -78,14 +80,19 @@ public class Grupo extends Funil {
         listItem.remove(item);
         return this;
     }
+    public Grupo removeListItem(ItemStack itemStack) {
+        listItem.remove(ITEM_MAP_NAME.get(Item.ToName(itemStack)));
+        return this;
+    }
 
     public List<Item> getListItem() {
+        Collections.sort(listItem);
         return listItem;
     }
 
-    public List<ItemStack> getListItemStack(){
+    public List<ItemStack> getListItemStack() {
         List<ItemStack> list = new ArrayList<>();
-        for(Item item : listItem){
+        for (Item item : listItem) {
             list.add(item.parseItemStack());
         }
         return list;
@@ -93,16 +100,19 @@ public class Grupo extends Funil {
 
     public List<String> getListNameItem() {
         List<String> lista = new ArrayList<>();
-        for (Item item : getListItem()) {
+        for (Item item : listItem) {
             lista.add(item.getName());
         }
         Collections.sort(lista);// Organizando em ordem alfabetica
         return lista;
     }
 
-    public boolean isContains(Item item){
-        Grupo grupo = GRUPO_MAP_ID.get(id);
-        return grupo.getListItem().contains(item);
+    public boolean isContains(Item item) {
+        return listItem.contains(item);
+    }
+
+    public boolean containsItem(ItemStack itemStack){
+        return listItem.contains(ITEM_MAP_NAME.get(Item.ToName(itemStack)));
     }
 
     public static List<String> CreateGrupos() {
@@ -160,7 +170,7 @@ public class Grupo extends Funil {
                     }
                 }
             } else {
-                if(!grupoList.contains(nameItem)) {
+                if (!grupoList.contains(nameItem)) {
                     grupoList.add(nameItem);
                 }
             }
@@ -207,7 +217,7 @@ public class Grupo extends Funil {
             // Verifica se o grupo contém mais do que 1 item se adiciona na lista
             if (grupo.getListItem().size() > 1) {
                 // Lista de nomes do grupo
-                if(!listGrupoName.contains(grup)) {
+                if (!listGrupoName.contains(grup)) {
                     map.put(grup, grupo);// Adicionando na lista de mapa do grupo
                     listGrupoName.add(grup);
                 }
@@ -362,4 +372,12 @@ public class Grupo extends Funil {
         return name;
     }
 
+    @Override
+    public String toParameters() {
+        sb.append("\n======== Lista de item ========");
+        for(Item item : listItem) {
+            sb.append("\n- ").append(item.getName());
+        }
+        return super.toParameters();
+    }
 }

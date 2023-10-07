@@ -1,22 +1,17 @@
 package mc.elderbr.smarthopper.event;
 
-import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
-import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InventarioEvent implements Listener, Botao {
 
@@ -27,7 +22,6 @@ public class InventarioEvent implements Listener, Botao {
 
     private ItemStack itemClicked;
     private Grupo grupo;
-    private List<ItemStack> listItemStack = new ArrayList<>();
     private InventoryClickEvent event;
 
     @EventHandler
@@ -46,44 +40,65 @@ public class InventarioEvent implements Listener, Botao {
             inventory = player.getOpenInventory().getTopInventory();
             if (grupo == null) {
                 grupo = inventoryCustom.getGrupo();
-                listItemStack = inventoryCustom.getGrupo().getListItemStack();
             }
-            addItem();// Adicionando item ao grupo
-            removeItem();// Removendo item do grupo
+
+            add();// Adicionando item ao grupo
+            remove();// Removendo item do grupo
+            save();// Salvando o grupo
 
         } catch (Exception e) {
             Msg.PlayerRed(player, e.getMessage());
         }
     }
 
-    private void addItem() {
+    private void add() {
         // Se o clique for com o botão direito do mouse
         if (event.isLeftClick()) {
             // Se o botão for igual ao botões personalizados
-            if(equalButton(itemClicked)){
+            if (equalButton(itemClicked)) {
                 return;
             }
             // Verifica se o item está na lista do inventário
-            if (!listItemStack.contains(itemClicked)) {
+            if (!grupo.containsItem(itemClicked)) {
+                // Adicionando o item no inventário aberto
                 inventory.addItem(new ItemStack(itemClicked.getType()));
-            }else{
-                Msg.PlayerGold(player, "O item "+ Item.ToName(itemClicked)+" já está na lista do grupo!!!");
+                // Adicionando o item na lista de item do grupo
+                grupo.addListItem(itemClicked);
             }
         }
     }
 
-    private void removeItem() {
+    private void remove() {
         // Se for clicado com o botão direito do mouse no item
         if (event.isRightClick()) {
-            if(equalButton(itemClicked)) return;
+
+            if (equalButton(itemClicked)) return;
+
+            // Verifica se o jogador é ADM
+            if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
+
             // Verificando se o item está na lista do inventário
             if (inventory.contains(itemClicked)) {
                 inventory.removeItem(itemClicked);
             }
+
             // Verificando se o item está lista
-            if(listItemStack.contains(itemClicked)){
-                listItemStack.remove(itemClicked);
-            }
+            grupo.removeListItem(itemClicked);
+
+        }
+    }
+
+    private void save() {
+        // Verificar se foi clicado com o botão esquerdo do mouse no botão salvar(save)
+        if (event.isLeftClick() && itemClicked.equals(BtnSalva())) {
+
+            // Verifica se o jogador é ADM
+            if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
+            GrupoConfig.UPDATE(grupo);// Atualizando o grupo
+            player.closeInventory();// Fechando o inventário do jogador
+
+            // Envia mensagem para todos os jogadores online
+            Msg.PlayerTodos("$e$lO jogador " + player.getName() + " alterou o grupo " + grupo.getName() + "!!!");
         }
     }
 }

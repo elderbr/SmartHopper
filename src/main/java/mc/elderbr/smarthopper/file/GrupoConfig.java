@@ -46,7 +46,7 @@ public class GrupoConfig implements VGlobal {
         Collections.sort(GRUPO_NAME_LIST);
         for (String name : GRUPO_NAME_LIST) {
             grupo = GRUPO_MAP_NAME.get(name);
-            Msg.ServidorBlue("Criando o grupo "+ grupo.getName()+" - ID: "+ grupo.getId());
+            Msg.ServidorBlue("Criando o grupo " + grupo.getName() + " - ID: " + grupo.getId());
             add(grupo);
         }
     }
@@ -96,23 +96,26 @@ public class GrupoConfig implements VGlobal {
 
     public static boolean UPDATE(Grupo grupo) {
         String name = grupo.getName().toLowerCase();
-        if (GRUPO_MAP_NAME.get(name) != null) {
-            try {
-                YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
+        try {
+            // Acessando o arquivo de configuração do grupo -> Grupo.yml
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
 
+            // Verifica se contém tradução para o grupo
+            if(grupo.getTranslation().size()>0) {
                 config.set(name.concat(".grupo_lang"), grupo.getTranslation());
-
-                // Atualizando a lista de itens do grupo
-                config.set(name.concat(".grupo_item"), null);
-                config.set(name.concat(".grupo_item"), grupo.getListNameItem());
-                config.save(fileConfig);
-
-                GRUPO_MAP_ID.put(grupo.getId(), grupo);
-                GRUPO_MAP_NAME.put(grupo.getName(), grupo);
-
-                return true;
-            } catch (IOException e) {
             }
+
+            // Atualizando a lista de itens do grupo
+            config.set(name.concat(".grupo_item"), null);
+            config.set(name.concat(".grupo_item"), grupo.getListNameItem());
+            config.save(fileConfig);// Salvando o grupo no arquivo -> Grupo.yml
+
+            //Atualiza a variavel global
+            GRUPO_MAP_ID.put(grupo.getId(), grupo);
+            GRUPO_MAP_NAME.put(grupo.getName(), grupo);
+
+            return true;
+        } catch (IOException e) {
         }
         return false;
     }
@@ -164,7 +167,7 @@ public class GrupoConfig implements VGlobal {
             grupo.setId(config.getInt(name.concat(".grupo_id")));
             grupo.setName(config.getString(name.concat(".grupo_name")));
 
-            Msg.ServidorBlue("Grupo: "+ grupo.getName());
+            Msg.ServidorBlue("Grupo: " + grupo.getName());
 
             // PEGANDO O MAIOR CÓDIGO DO GRUPO
             if (grupo.getId() > CD_MAX.get(0)) {
