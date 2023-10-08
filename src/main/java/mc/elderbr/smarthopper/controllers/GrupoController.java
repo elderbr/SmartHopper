@@ -101,7 +101,7 @@ public class GrupoController implements VGlobal {
 
     public boolean delete(Player player) throws GrupoException {
 
-        if (!Config.CONTAINS_ADD(player)) {
+        if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
             throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
         }
 
@@ -109,8 +109,6 @@ public class GrupoController implements VGlobal {
             throw new GrupoException("Digite o nome ou ID do grupo!!!");
         }
         if (GrupoConfig.DELETE(grupo)) {
-            GRUPO_MAP_ID.remove(grupo.getId());
-            GRUPO_MAP_NAME.remove(grupo.getName());
             TRADUCAO_GRUPO.remove(grupo.getName().toLowerCase());
             TRADUCAO_GRUPO.remove(grupo.getName());
             return true;
