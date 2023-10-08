@@ -77,12 +77,18 @@ public class GrupoComando implements CommandExecutor {
     private boolean add() {
 
         // Verifica se o jogador é adm do Smart hopper
-        if (!Config.CONTAINS_ADD(player)) {
+        if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
             Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
             return false;
         }
 
         try {
+            // Verifica se o grupo já existe
+            if(grupoController.findName(cmd)!=null){
+                Msg.PlayerGold(player, "O grupo já existe!!!");
+                show();// Mostra o grupo
+                return false;
+            }
             inventory = new InventoryCustom(player, cmd);
             inventory.create();
         } catch (GrupoException e) {
