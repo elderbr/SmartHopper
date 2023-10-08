@@ -59,7 +59,7 @@ public class GrupoComando implements CommandExecutor {
     private boolean show() {
         try {
             if (cmd.length() > 0) {
-                grupo = grupoController.getGrupo(cmd);
+                grupo = grupoController.findName(cmd);
                 inventory = new InventoryCustom(player, grupo);
                 inventory.show();
                 return true;
