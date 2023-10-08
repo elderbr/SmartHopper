@@ -8,7 +8,6 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.LivroEncantado;
 import mc.elderbr.smarthopper.model.Pocao;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,32 +29,6 @@ public class GrupoController implements VGlobal {
     }
 
     public Grupo getGrupo() {
-        return grupo;
-    }
-
-    public Grupo getGrupo(int id) throws GrupoException {
-        if (id < 1) {
-            throw new GrupoException("$6O código do grupo não é valido!!!");
-        }
-        return GRUPO_MAP_ID.get(id);
-    }
-
-    public Grupo getGrupo(@NotNull String name) throws GrupoException {
-        // SE A STRING ESTIVER VAZIA
-        if (name.isEmpty()) {
-            throw new GrupoException("$6Digite o nome do grupo ou ID!!!");
-        }
-
-        // Tenta converte o nome em Inteiro se consegui busca o número do ID no banco dos grupos
-        try {
-            id = Integer.parseInt(name.toLowerCase().replaceAll("[^0-9]",""));
-            return GRUPO_MAP_ID.get(id);// Buscando o número do ID no banco dos grupos
-        }catch (NumberFormatException e){}
-
-        // Verifica se contém o item pelo o nome buscando o nome e a tradução
-        if(!findName(name)){
-            throw new GrupoException("O grupo pesquisado não existe!");
-        }
         return grupo;
     }
 
@@ -145,29 +118,45 @@ public class GrupoController implements VGlobal {
         return false;
     }
 
-    public boolean isContains(String name){
-        for(Map.Entry<String, Grupo> grupName : TRADUCAO_GRUPO.entrySet()){
-            if(name.toLowerCase().equalsIgnoreCase(grupName.getKey().toLowerCase())){
-                grupo = grupName.getValue();
-                return true;
+    public Grupo findName(@NotNull String name) throws GrupoException {
+        // Buscando o grupo pelo o código
+        try {
+            int codigo = Integer.parseInt(name.replaceAll("[^0-9]", ""));
+            if (codigo < 1) {
+                throw new GrupoException("O código do grupo é invalido!!!");
             }
+            return grupo = GRUPO_MAP_ID.get(codigo);
+        } catch (NumberFormatException e) {
         }
-        return false;
-    }
 
-    public boolean findName(String name){
-        for(Map.Entry<String, Grupo> grup : GRUPO_MAP_NAME.entrySet()){
+        // Buscando o grupo pelo o nome
+        for (Map.Entry<String, Grupo> grup : GRUPO_MAP_NAME.entrySet()) {
             grupo = grup.getValue();
-            if(name.toLowerCase().equalsIgnoreCase(grup.getKey())){
-                return true;
+            if (name.toLowerCase().equalsIgnoreCase(grup.getKey())) {
+                return grupo;
             }
-            if(grup.getValue().getTranslation().size()>0) {
+            if (grup.getValue().getTranslation().size() > 0) {
                 if (grupo.getTranslation().containsValue(name.toLowerCase())) {
-                    return true;
+                    return grupo;
                 }
             }
         }
         grupo = null;
-        return false;
+        return grupo;
+    }
+
+    public Grupo findId(@NotNull int id) throws GrupoException {
+        if (id < 1) {
+            throw new GrupoException("$6O código do grupo não é valido!!!");
+        }
+        return GRUPO_MAP_ID.get(id);
+    }
+
+    public Grupo findItem(@NotNull Item item) throws GrupoException {
+        return findName(item.getName());
+    }
+
+    public Grupo findItemStack(@NotNull ItemStack itemStack) throws GrupoException {
+        return findName(new Item(itemStack).getName());
     }
 }
