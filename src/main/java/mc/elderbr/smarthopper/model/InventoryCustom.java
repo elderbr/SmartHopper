@@ -25,6 +25,9 @@ import java.util.List;
 public class InventoryCustom implements Botao, VGlobal {
 
     private final Class CLAZZ = getClass();
+
+    private final String TITULO_GRUP_NEW = "§lNovo Grupo: §r";
+    private final String TITULO_GRUP = "§lGrupo: §r";
     private Player player;
     private String name, titulo;
     private Inventory inventory;
@@ -54,10 +57,15 @@ public class InventoryCustom implements Botao, VGlobal {
 
         if (titulo.contains("Grupo")) {
             event.setCancelled(true);
-            if (grupo != null && !grupo.equals(grupoCtrl.getGrupo(titulo))) {
-                grupo = grupoCtrl.getGrupo(titulo);
-            } else {
-                grupo = grupoCtrl.getGrupo(titulo);
+            if(titulo.contains(TITULO_GRUP_NEW)) {
+                grupo = new Grupo();
+                grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW,""));
+                if(grupoCtrl.findName(grupo.getName()) != null){
+                    grupo = grupoCtrl.findName(grupo.getName());
+                    throw new GrupoException("O grupo já existe!!!");
+                }
+            }else{
+                grupo = grupoCtrl.findName(titulo);
             }
             createPagination();
         }
@@ -80,6 +88,8 @@ public class InventoryCustom implements Botao, VGlobal {
         if (name.isEmpty()) {
             throw new GrupoException("O nome do grupo não pode está vazio!!!");
         }
+        grupo = new Grupo();
+        grupo.setName(name);
     }
 
     public InventoryCustom(@NotNull Player player, @NotNull Grupo grupo) {
@@ -121,44 +131,14 @@ public class InventoryCustom implements Botao, VGlobal {
     }
 
     public InventoryCustom create() throws GrupoException {
-        // Se o grupo exitir busca informações
-        if (grupo != null && grupo.getId() > 0) {
-            // Nome do grupo
-            titulo = Msg.Color("$lGrupo: $r" + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
-            inventory = Bukkit.createInventory(null, 54, titulo);// Quantidade de espaço do baú
-
-            // Paginação
-            int listSize = grupo.getListItem().size();
-            pagMap = new HashMap<>();
-
-            // Adicionando os itens no inventário
-            if (listSize > 53) {
-                for (int i = 0; i < 53; i++) {
-                    Item item = grupo.getListItem().get(i);
-                    listItem.add(item);
-                }
-                pagMap.put(1, listItem);
-
-                listItem = new ArrayList<>();
-                for (int i = 53; i < listSize; i++) {
-                    Item item = grupo.getListItem().get(i);
-                    listItem.add(item);
-                }
-                pagMap.put(2, listItem);
-            } else {
-                for (int i = 0; i < listSize; i++) {
-                    Item item = grupo.getListItem().get(i);
-                    listItem.add(item);
-                }
-                pagMap.put(1, listItem);
-            }
-        } else {
-            if (name == null || name.isEmpty()) {
-                throw new GrupoException("Para criar um novo grupo digite o nome do grupo!!!");
-            }
-            titulo = Msg.Color("$lGrupo: $r" + name);
-            inventory = Bukkit.createInventory(null, 54, titulo);
+        if (GRUPO_MAP_NAME.get(grupo.getName().toLowerCase()) != null) {
+            throw new GrupoException("O grupo " + grupo.getName() + " já existe!!!");
         }
+        // Nome do grupo
+        titulo = Msg.Color(TITULO_GRUP_NEW.concat(grupo.getName()));
+        inventory = Bukkit.createInventory(null, 54, titulo);// Quantidade de espaço do baú
+        inventory.setItem(53, BtnSalva());
+        player.openInventory(inventory);
         return this;
     }
 
@@ -241,7 +221,6 @@ public class InventoryCustom implements Botao, VGlobal {
                 if (!grupo.getListItemStack().contains(itemStack)) {
                     inventoryTop.addItem(itemStack);
                     grupo.addListItem(itemStack);
-                    Msg.ServidorBlue("Adicionando item: "+ new Item(itemStack).getName(), CLAZZ);
                 }
             }
         }
