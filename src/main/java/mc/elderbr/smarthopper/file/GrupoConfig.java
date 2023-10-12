@@ -168,6 +168,11 @@ public class GrupoConfig implements VGlobal {
             grupo.setId(config.getInt(name.concat(".grupo_id")));
             grupo.setName(config.getString(name.concat(".grupo_name")));
 
+            // Adicionando o nome do grupo na lista de nomes na mémoria
+            if(!GRUPO_NAME_LIST.contains(grupo.getName())){
+                GRUPO_NAME_LIST.add(grupo.getName());
+            }
+
             Msg.ServidorBlue("Grupo: " + grupo.getName());
 
             // PEGANDO O MAIOR CÓDIGO DO GRUPO
@@ -184,6 +189,11 @@ public class GrupoConfig implements VGlobal {
                     traducao = langs.getValue().toString();
                     grupo.addTranslation(lang, traducao);
                     TRADUCAO_GRUPO.put(traducao, grupo);// Variavel Global
+
+                    // Adicionando a tradução na lista de nome do grupo na mémoria
+                    if(!GRUPO_NAME_LIST.contains(traducao)){
+                        GRUPO_NAME_LIST.add(traducao);
+                    }
                 }
             }
 
