@@ -59,12 +59,22 @@ public class GrupoComando implements CommandExecutor {
     private boolean show() {
         try {
             if (cmd.length() > 0) {
+                // Busca o grupo pelo o nome
                 grupo = grupoCtrl.findName(cmd);
+                // Mostra mensagem se não existir o grupo
+                if(grupo == null){
+                    Msg.GrupoNaoExiste(player, cmd);
+                    return false;
+                }
+                // Criando o inventário do grupo
                 inventory = new InventoryCustom(player, grupo);
+                // Mostra o inventário com os itens do grupo
                 inventory.show();
                 return true;
             } else {
+                // Busca todos os grupos que contém o item no grupo
                 listGrupo = grupoCtrl.getGrupo(itemStack);
+                // Mostra a mensagem dos nomes dos grupos que possui o item
                 Msg.getType(player, listGrupo);
                 return true;
             }
@@ -89,6 +99,7 @@ public class GrupoComando implements CommandExecutor {
                 show();// Mostra o grupo
                 return false;
             }
+            // Criando o inventário
             inventory = new InventoryCustom(player, cmd);
             inventory.create();
         } catch (GrupoException e) {
