@@ -80,12 +80,12 @@ public class InventoryCustom implements Botao, VGlobal {
         this.name = name;
 
         // Verifica se o jogador é adm
-        if (!Config.CONTAINS_ADD(player)) {
+        if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
             throw new GrupoException("Ops, você não Adm do Smart Hopper!!!");
         }
 
         // Verificar se o nome do grupo contem texto
-        if (name.isEmpty()) {
+        if (name.isBlank()) {
             throw new GrupoException("O nome do grupo não pode está vazio!!!");
         }
         grupo = new Grupo();
