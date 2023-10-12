@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -49,14 +50,13 @@ public class InventoryCustom implements Botao, VGlobal {
     private InventoryCustom() {
     }
 
-    public InventoryCustom(InventoryClickEvent event) throws GrupoException {
-        player = (Player) event.getWhoClicked();
+    public InventoryCustom(InventoryOpenEvent event) throws GrupoException {
+        player = (Player) event.getPlayer();
         inventoryTop = event.getView().getTopInventory();
         titulo = event.getView().getTitle();
-        itemStackClicked = event.getCurrentItem();
 
         if (titulo.contains("Grupo")) {
-            event.setCancelled(true);
+
             if(titulo.contains(TITULO_GRUP_NEW)) {
                 grupo = new Grupo();
                 grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW,""));
@@ -144,7 +144,7 @@ public class InventoryCustom implements Botao, VGlobal {
 
     public InventoryCustom show() throws GrupoException {
         // Titulo do grupo
-        titulo = Msg.Color("$lGrupo: $r" + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
+        titulo = Msg.Color(TITULO_GRUP+ grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
         inventory = Bukkit.createInventory(null, 54, titulo);
         if (pagMap.get(pag) == null) {
             pag -= 1;
@@ -226,8 +226,9 @@ public class InventoryCustom implements Botao, VGlobal {
         }
     }
 
-    public void btnNavegation() throws GrupoException {
+    public void btnNavegation(InventoryClickEvent event) throws GrupoException {
 
+        itemStackClicked = event.getCurrentItem();
         if (grupo == null || itemStackClicked == null || itemStackClicked.getType() == Material.AIR) return;
 
         if (BtnAnteriorPag1().equals(itemStackClicked)) {

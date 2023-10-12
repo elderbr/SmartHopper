@@ -1,17 +1,24 @@
 package mc.elderbr.smarthopper.event;
 
+import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.CD_MAX;
 
@@ -21,29 +28,43 @@ public class InventarioEvent implements Listener, Botao {
     private Player player;
     private InventoryCustom inventoryCustom;
     private Inventory inventory;
+    private List<ItemStack> listItemStack = new ArrayList<>();
 
     private ItemStack itemClicked;
     private Grupo grupo;
     private InventoryClickEvent event;
 
     @EventHandler
+    public void openInventory(InventoryOpenEvent event){
+        try {
+            grupo = null;
+            player = (Player) event.getPlayer();
+            inventoryCustom = new InventoryCustom(event);
+            inventory = event.getInventory();
+            // Se o grupo existir copia
+            if(inventoryCustom.getGrupo()!=null) {
+                grupo = inventoryCustom.getGrupo().clone();
+                listItemStack = new ArrayList<>(grupo.getListItemStack());
+            }
+        } catch (Exception e) {
+            Msg.PlayerGold(player, e.getMessage());
+        }
+    }
+
+    @EventHandler
     public void InventoryClick(InventoryClickEvent event) {
         player = (Player) event.getWhoClicked();
         this.event = event;
         try {
-            inventoryCustom = new InventoryCustom(event);
-            inventoryCustom.btnNavegation();
+
             itemClicked = event.getCurrentItem();
 
             if (itemClicked == null || itemClicked.getType().isAir()) return;
-            if (inventoryCustom.getGrupo() == null) return;
+            if (grupo == null) return;
+            event.setCancelled(true);// Cancela o movimento do item pelo o player
             if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
-
-            inventory = player.getOpenInventory().getTopInventory();
-            if (grupo == null) {
-                grupo = inventoryCustom.getGrupo();
-            }
-
+            // Evento que navega entre os itens do grupo
+            inventoryCustom.btnNavegation(event);
             add();// Adicionando item ao grupo
             remove();// Removendo item do grupo
             save();// Salvando o grupo
@@ -82,12 +103,13 @@ public class InventarioEvent implements Listener, Botao {
             if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
 
             // Verificando se o item está na lista do inventário
-            if (inventory.contains(itemClicked)) {
-                inventory.removeItem(itemClicked);
+            ItemStack newItem = new ItemStack(itemClicked.getType());
+            if (inventory.contains(newItem)) {
+                inventory.removeItem(newItem);
             }
 
             // Verificando se o item está lista
-            grupo.removeListItem(itemClicked);
+            grupo.removeListItem(newItem);
 
         }
     }
