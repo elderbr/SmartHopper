@@ -8,7 +8,6 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.LivroEncantado;
 import mc.elderbr.smarthopper.model.Pocao;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class GrupoController implements VGlobal {
 
@@ -129,8 +127,8 @@ public class GrupoController implements VGlobal {
         }
 
         // Buscando o grupo pelo o nome
-        for(String nameGrup : GRUPO_NAME_LIST){
-            if(nameGrup.equalsIgnoreCase(name)){
+        for (String nameGrup : GRUPO_NAME_LIST) {
+            if (nameGrup.equalsIgnoreCase(name)) {
                 return TRADUCAO_GRUPO.get(nameGrup);
             }
         }
@@ -160,7 +158,7 @@ public class GrupoController implements VGlobal {
     public List<String> findNameContains(String name) {
         List<String> list = new ArrayList<>();
         for (String grup : GRUPO_NAME_LIST) {
-            if (grup.contains(name) || grup.equalsIgnoreCase(name)) {
+            if (grup.toLowerCase().contains(name.toLowerCase()) || grup.equalsIgnoreCase(name)) {
                 if (!list.contains(grup)) {
                     list.add(grup);
                 }
