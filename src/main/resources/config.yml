@@ -2,14 +2,18 @@
 author: ElderBR
 discord: ElderBR#5398
 #Versão do plugin
-version: 4.0.6
+version: 4.0.7
 # Verifica se os itens estão atualizados
 item atualizado: true
 #Verifica se os grupos estão atualizados
 grupo atualizado: true
-# Usa textura personalizada para os botões de navegação dos itens do grupo
+# Para ter uma visualização melhor use a textura personalizada do Smart Hopper
+# a textura traz imagens para os botões de navegação de pagina do grupo
+# textura do botão próxima página
+# textura do botão anterior retorna a página anterior
+# textura do botão salvar que salva ou atera o grupo
 # link texture pack http://elderbr.com/minecraft/textures/SmartHopper.zip
-isUseTexture: true;
+useTexture: true;
 #Adminsitradores é responsável por adicionar ou remover operadores
 #Fica responsável por adicionar, alterar ou remover grupos
 adm:
