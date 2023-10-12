@@ -1,7 +1,6 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,15 +9,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class GrupoTabCompleter implements TabCompleter {
 
     private Player player;
     private String cmd;
-    private List<String> grupoList;
+    private GrupoController grupoCtrl = new GrupoController();
 
     @Nullable
     @Override
@@ -27,17 +24,12 @@ public class GrupoTabCompleter implements TabCompleter {
         if (sender instanceof Player) {
             player = (Player) sender;
 
-
             switch (command.getName().toLowerCase()) {
                 case "grupo":
                 case "addgrupo":
                 case "removegrupo":
                     cmd = Utils.NAME_ARRAY(args);
-                    if (args.length >= 1) {
-                        grupoList = new ArrayList<>();
-
-                        return grupoList;
-                    }
+                    return grupoCtrl.findNameContains(cmd);
             }
         }
         return null;
