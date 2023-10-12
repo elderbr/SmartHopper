@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class Config implements VGlobal{
+public class Config implements VGlobal {
 
     private static final File FILE_CONFIG = new File(VGlobal.ARQUIVO, "config.yml");
     private BufferedWriter escrever;
@@ -51,12 +51,12 @@ public class Config implements VGlobal{
         }
     }
 
-    public static void SET_VERSION(){
+    public static void SET_VERSION() {
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
         YML.set("version", VERSION);
         try {
             SAVE();
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar a versão do plugin!");
         }
     }
@@ -76,12 +76,13 @@ public class Config implements VGlobal{
         }
         return false;
     }
-    public static boolean CONTAINS_ADD(Object player){
+
+    public static boolean CONTAINS_ADD(Object player) {
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
-        if(player instanceof Player player1) {
+        if (player instanceof Player player1) {
             return YML.getList("adm").contains(player1.getName());
         }
-        if(player instanceof String){
+        if (player instanceof String) {
             return YML.getList("adm").contains(player);
         }
         return false;
@@ -102,13 +103,13 @@ public class Config implements VGlobal{
         return false;
     }
 
-    public void reload(){
+    public void reload() {
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
-        for(Object adm : YML.getList("adm")){
+        for (Object adm : YML.getList("adm")) {
             VGlobal.ADM_LIST.add(adm.toString());
         }
         // Adicionando a lista de linguagem
-        for(Object lang : YML.getList("lang")){
+        for (Object lang : YML.getList("lang")) {
             VGlobal.LANG_NAME_LIST.add(lang.toString());
         }
         Collections.sort(VGlobal.ADM_LIST);
@@ -165,7 +166,7 @@ public class Config implements VGlobal{
         // VERSÃO DO PLUGIN
         add("version", VGlobal.VERSION, Arrays.asList("Versão atual do plugin"));
 
-        add("isUseTexture", true, Arrays.asList("Usa textura personalizada para os botões de navegação dos itens do grupo"));
+        add("useTexture", true, Arrays.asList("Usa textura personalizada para os botões de navegação dos itens do grupo"));
 
         // Administrador do Smart Hopper
         add("adm", Arrays.asList("ElderBR"),
@@ -185,7 +186,7 @@ public class Config implements VGlobal{
         YML.set(key, list);
     }
 
-    public static void SetUpdateItem(@NotNull  boolean status) {
+    public static void SetUpdateItem(@NotNull boolean status) {
         try {
             YML.setComments("item atualizado", Arrays.asList("Se a lista de item está atualizado"));
             YML.set("item atualizado", status);
@@ -218,21 +219,26 @@ public class Config implements VGlobal{
      *  USO DA TEXTURA NO SERVIDOR
      *
      */
-    public static boolean ExistUseTexture(){
+    public static boolean ExistUseTexture() {
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
-        return (YML.get("isUseTexture")!=null);
+        return (YML.get("useTexture") != null);
     }
-    public static boolean IsUseTexture(){
+
+    public static boolean IsUseTexture() {
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
-        return YML.getBoolean("isUseTexture");
+        return YML.getBoolean("useTexture");
     }
 
     public static void SetUseTexture(boolean use) throws IOException {
         YML = YamlConfiguration.loadConfiguration(FILE_CONFIG);
-        YML.setComments("isUseTexture",
-                Arrays.asList("Usa textura personalizada para os botões de navegação dos itens do grupo"
-                , "link texture pack http://elderbr.com/minecraft/textures/SmartHopper.zip"));
-        YML.set("isUseTexture", use);
+        YML.set("useTexture", use);
+        YML.setComments("useTexture",
+                Arrays.asList("Para ter uma visualização melhor use a textura personalizada do Smart Hopper"
+                        , "a textura traz imagens para os botões de navegação de pagina do grupo"
+                        , "textura do botão próxima página"
+                        , "textura do botão anterior retorna a página anterior"
+                        , "textura do botão salvar que salva ou altera o grupo"
+                        , "link texture pack http://elderbr.com/minecraft/textures/SmartHopper.zip"));
         SAVE();
     }
 
