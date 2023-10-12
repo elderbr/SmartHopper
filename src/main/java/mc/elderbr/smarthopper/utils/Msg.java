@@ -91,6 +91,26 @@ public class Msg {
     }
 
     //========================== GRUPO =================================================//
+    public static void SystemGrupo(Grupo grupo){
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n======== GRUPO ========\n");
+        if(grupo.getId() > 1){
+            sb.append("ID: ").append(grupo.getId()).append("\n");
+        }
+        if(!grupo.getName().isBlank()){
+            sb.append("Name: ").append(grupo.getName()).append("\n");
+        }
+        if(grupo.getTranslation().size()>0){
+            sb.append("lang:\n");
+            sb.append(grupo.getTranslation()).append("\n");
+        }
+
+        sb.append("======== Lista de item ========");
+        for(Item item : grupo.getListItem()) {
+            sb.append("\n- ").append(item.getName());
+        }
+        Bukkit.getServer().getConsoleSender().sendMessage(sb.toString());
+    }
     public static void Grupo(Player player, Grupo grupo) {
         if(grupo.isBlocked()){
             player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTranslation(player) + "$e ID: " + grupo.getId()));
