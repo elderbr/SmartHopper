@@ -133,9 +133,14 @@ public class GrupoController implements VGlobal {
             if (name.toLowerCase().equalsIgnoreCase(grup.getKey())) {
                 return grupo;
             }
+            // Verifica se existe tradução para o grupo
             if (grup.getValue().getTranslation().size() > 0) {
-                if (grupo.getTranslation().containsValue(name.toLowerCase())) {
-                    return grupo;
+                // Percorrendo todas as traduções do grupo
+                for (Map.Entry<String, String> lang : grupo.getTranslation().entrySet()) {
+                    // Compara o nome pesquisado com a tradução
+                    if(lang.getValue().toLowerCase().equalsIgnoreCase(name)){
+                        return grupo;
+                    }
                 }
             }
         }
