@@ -101,7 +101,7 @@ public class GrupoComando implements CommandExecutor {
         try {
             grupo = grupoCtrl.findName(cmd);
             if(grupo == null){
-                Msg.PlayerGold(player, String.format("O grupo %s não existe!!!", cmd));
+                Msg.GrupoNaoExiste(player, cmd);
                 return false;
             }
             if(grupoCtrl.delete(player)){
