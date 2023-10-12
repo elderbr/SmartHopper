@@ -43,7 +43,7 @@ public class ClickHopper implements Listener {
             smartHopper = new SmartHopper(block);
             if(smartHopper.getType() instanceof Grupo grupo){
                 InventoryCustom inventoryCustom = new InventoryCustom(player, grupo);
-                inventoryCustom.create().show();
+                inventoryCustom.show();
             }
             Msg.getType(player, smartHopper.getType());
         } catch (Exception e) {
