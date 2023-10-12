@@ -376,6 +376,7 @@ public class Grupo extends Funil implements Cloneable {
     @Override
     public Grupo clone() throws CloneNotSupportedException {
         Grupo clone = (Grupo) super.clone();
+        clone.listItem = new ArrayList<>(listItem);
         return clone;
     }
 
