@@ -9,7 +9,7 @@ import java.util.*;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
-public class Grupo extends Funil {
+public class Grupo extends Funil implements Cloneable {
 
     private int id;
     private String name;
@@ -374,12 +374,9 @@ public class Grupo extends Funil {
     }
 
     @Override
-    public String toParameters() {
-        sb.append("\n======== Lista de item ========");
-        for(Item item : listItem) {
-            sb.append("\n- ").append(item.getName());
-        }
-        return super.toParameters();
+    public Grupo clone() throws CloneNotSupportedException {
+        Grupo clone = (Grupo) super.clone();
+        return clone;
     }
 
     public boolean equals(@NotNull Grupo grupo){
