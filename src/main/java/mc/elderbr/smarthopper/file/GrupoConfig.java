@@ -11,9 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GrupoConfig implements VGlobal {
 
@@ -198,8 +196,16 @@ public class GrupoConfig implements VGlobal {
             }
 
             // ITEM DO GRUPO
-            for (Object itemName : config.getList(name.concat(".grupo_item"))) {
-                item = ITEM_MAP_NAME.get(itemName.toString());
+            List<Object> itemList = new ArrayList<>(config.getList(name.concat(".grupo_item")));
+            Iterator<Object> listItem = itemList.listIterator();
+            while (listItem.hasNext()) {
+                item = ITEM_MAP_NAME.get(listItem.next().toString());
+                if(item == null){
+                    listItem.remove();
+                    config.set(name.concat(".grupo_item"), listItem);
+                    save();
+                    continue;
+                }
                 // Adicionando grupo no item
                 item.addListGrupo(grupo);
 
@@ -208,7 +214,12 @@ public class GrupoConfig implements VGlobal {
                 // Salvando o atributo global
                 Item.SET(item);
             }
-
+            // Se não existir item no grupo
+            if(grupo.getListItem().isEmpty()){
+                GrupoConfig.DELETE(grupo);// Apaga o grupo do arquivo Grupo.yml
+                continue;
+            }
+            Msg.Grupo(grupo, getClass());
             // ADICIONANDO NA VARIAVEL GLOBAL
             Grupo.SET(grupo);
 
