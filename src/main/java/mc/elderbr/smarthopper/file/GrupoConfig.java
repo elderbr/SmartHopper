@@ -219,7 +219,6 @@ public class GrupoConfig implements VGlobal {
                 GrupoConfig.DELETE(grupo);// Apaga o grupo do arquivo Grupo.yml
                 continue;
             }
-            Msg.Grupo(grupo, getClass());
             // ADICIONANDO NA VARIAVEL GLOBAL
             Grupo.SET(grupo);
 
