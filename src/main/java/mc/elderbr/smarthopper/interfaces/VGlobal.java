@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -43,6 +44,9 @@ public interface VGlobal {
     Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();
     Map<String, Item> ITEM_MAP_NAME = new HashMap<>();
     List<String> ITEM_NAME_LIST = new ArrayList<>();
+
+    List<String> ITEM_NAME_LIST_DEFAULT = new ArrayList<>();
+
     List<String> ITEM_NAME_LIST_UPDATE = new ArrayList<>();
 
     /*********************************************************
@@ -58,11 +62,19 @@ public interface VGlobal {
     Map<String, Item> TRADUCAO_ITEM = new HashMap<>();
     Map<String, Grupo> TRADUCAO_GRUPO = new HashMap<>();
 
+    /*********************************************************
+     *
+     *                    Livros Encantados
+     *
+     *********************************************************/
+    Map<String, ItemStack> ENCHANTEMENT_BOOK = new HashMap<>();
+
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();
     int VERSION_INT = Integer.parseInt(VERSION.replaceAll("[.]", ""));
 
     File ARQUIVO = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper").getDataFolder().getAbsoluteFile();
+    File ITEM_FILE = new File(ARQUIVO, "item.yml");
     File FILE_LANG = new File(ARQUIVO + File.separator + "lang");
 
 
