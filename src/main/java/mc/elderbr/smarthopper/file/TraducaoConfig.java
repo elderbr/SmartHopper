@@ -167,10 +167,6 @@ public class TraducaoConfig {
                     if (grupo != null) {
                         grupo.addTranslation(traducao.getLang(), traducao.getTranslation());
                         Grupo.SET(grupo);
-
-                        // Adicionando tradução do grupo
-                        TRADUCAO_GRUPO.put(grupo.getName(), grupo);
-                        TRADUCAO_GRUPO.put(traducao.getTranslation(), grupo);
                     }
                 } else {
                     Item item = ITEM_MAP_NAME.get(traducao.getName());

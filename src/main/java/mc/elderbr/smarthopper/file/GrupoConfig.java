@@ -35,7 +35,6 @@ public class GrupoConfig implements VGlobal {
                 e.printStackTrace();
             }
         }
-        CD_MAX.add(0, 1);// O ÚLTIMO CODIGO DO GRUPO
         reload();
     }
 
@@ -128,7 +127,6 @@ public class GrupoConfig implements VGlobal {
 
             GRUPO_MAP_ID.put(grupo.getId(), grupo);
             GRUPO_MAP_NAME.put(grupo.getName(), grupo);
-            TRADUCAO_GRUPO.put(grupo.getName(), grupo);
 
             return true;
         } catch (IOException e) {
@@ -155,74 +153,6 @@ public class GrupoConfig implements VGlobal {
      * Faz a leitura do arquivo grupo.yml
      */
     public void reload() {
-        config = YamlConfiguration.loadConfiguration(fileConfig);
-        String name = null;
-        // Percorrendo os grupos
-        for (Map.Entry<String, Object> obj : config.getValues(false).entrySet()) {
-            // Nome do grupo
-            name = obj.getKey();
-
-            grupo = new Grupo();
-            grupo.setId(config.getInt(name.concat(".grupo_id")));
-            grupo.setName(config.getString(name.concat(".grupo_name")));
-
-            // Adicionando o nome do grupo na lista de nomes na mémoria
-            if(!GRUPO_NAME_LIST.contains(grupo.getName())){
-                GRUPO_NAME_LIST.add(grupo.getName());
-            }
-
-            Msg.ServidorBlue("Grupo: " + grupo.getName());
-
-            // PEGANDO O MAIOR CÓDIGO DO GRUPO
-            if (grupo.getId() > CD_MAX.get(0)) {
-                CD_MAX.set(0, grupo.getId());
-            }
-
-            // TRADUÇÃO
-            TRADUCAO_GRUPO.put(grupo.getName(), grupo);
-            if (config.get(name.concat(".grupo_lang")) != null) {
-                MemorySection tradMemory = (MemorySection) config.get(name.concat(".grupo_lang"));
-                for (Map.Entry<String, Object> langs : tradMemory.getValues(false).entrySet()) {
-                    lang = langs.getKey();
-                    traducao = langs.getValue().toString();
-                    grupo.addTranslation(lang, traducao);
-                    TRADUCAO_GRUPO.put(traducao, grupo);// Variavel Global
-
-                    // Adicionando a tradução na lista de nome do grupo na mémoria
-                    if(!GRUPO_NAME_LIST.contains(traducao)){
-                        GRUPO_NAME_LIST.add(traducao);
-                    }
-                }
-            }
-
-            // ITEM DO GRUPO
-            List<Object> itemList = new ArrayList<>(config.getList(name.concat(".grupo_item")));
-            Iterator<Object> listItem = itemList.listIterator();
-            while (listItem.hasNext()) {
-                item = ITEM_MAP_NAME.get(listItem.next().toString());
-                if(item == null){
-                    listItem.remove();
-                    config.set(name.concat(".grupo_item"), listItem);
-                    save();
-                    continue;
-                }
-                // Adicionando grupo no item
-                item.addListGrupo(grupo);
-
-                // Adicionando item no grupo
-                grupo.addListItem(item);
-                // Salvando o atributo global
-                Item.SET(item);
-            }
-            // Se não existir item no grupo
-            if(grupo.getListItem().isEmpty()){
-                GrupoConfig.DELETE(grupo);// Apaga o grupo do arquivo Grupo.yml
-                continue;
-            }
-            // ADICIONANDO NA VARIAVEL GLOBAL
-            Grupo.SET(grupo);
-
-        }
     }
 
     private void add(@NotNull String key, @NotNull String value, List<String> comentario) {

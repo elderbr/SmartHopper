@@ -49,7 +49,7 @@ public class TraducaoComando implements CommandExecutor {
                     grupoController = new GrupoController();
                     try {
                         if (grupoController.addTraducao(player, args)) {
-                            grupo = grupoController.getGrupo();
+                            //grupo = grupoController.findByGrupoItemStack();
                             Msg.PlayerTodos("Tradução adicionada para o grupo $9" + grupo.getName() + "$r em $8$l" + player.getLocale() + " $rcomo $8$l" + grupo.toTranslation(player) + "!");
                             return true;
                         } else {

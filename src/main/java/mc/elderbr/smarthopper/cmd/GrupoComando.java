@@ -60,7 +60,7 @@ public class GrupoComando implements CommandExecutor {
         try {
             if (cmd.length() > 0) {
                 // Busca o grupo pelo o nome
-                grupo = grupoCtrl.findName(cmd);
+                grupo = grupoCtrl.findByName(cmd);
                 // Mostra mensagem se não existir o grupo
                 if(grupo == null){
                     Msg.GrupoNaoExiste(player, cmd);
@@ -73,7 +73,14 @@ public class GrupoComando implements CommandExecutor {
                 return true;
             } else {
                 // Busca todos os grupos que contém o item no grupo
-                listGrupo = grupoCtrl.getGrupo(itemStack);
+                listGrupo = grupoCtrl.findByItemStack(itemStack);
+                // Se a lista de item que possuir o grupo for igual a 1
+                if(listGrupo.size()==1){
+                    // Criando o inventário do grupo
+                    inventory = new InventoryCustom(player, listGrupo.get(0));
+                    inventory.show();// Mostra o inventário com os itens do grupo
+                    return true;
+                }
                 // Mostra a mensagem dos nomes dos grupos que possui o item
                 Msg.getType(player, listGrupo);
                 return true;
@@ -94,7 +101,7 @@ public class GrupoComando implements CommandExecutor {
 
         try {
             // Verifica se o grupo já existe
-            if (grupoCtrl.findName(cmd) != null) {
+            if (grupoCtrl.findByName(cmd) != null) {
                 Msg.PlayerGold(player, "O grupo já existe!!!");
                 show();// Mostra o grupo
                 return false;
@@ -110,13 +117,13 @@ public class GrupoComando implements CommandExecutor {
 
     private boolean delete() {
         try {
-            grupo = grupoCtrl.findName(cmd);
+            grupo = grupoCtrl.findByName(cmd);
             if(grupo == null){
                 Msg.GrupoNaoExiste(player, cmd);
                 return false;
             }
-            if(grupoCtrl.delete(player)){
-                Msg.PlayerTodos(String.format("$eO jogador %s apagou o grupo %s!!!", player.getName(), grupo.getName()));
+            if(grupoCtrl.delete(player, grupo)){
+                Msg.PlayerTodos(String.format("$eO jogador $c%s $eapagou o grupo $c%s$e!!!", player.getName(), grupo.getName()));
                 return true;
             }
         } catch (GrupoException e) {

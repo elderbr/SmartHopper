@@ -7,13 +7,7 @@ import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ItemDao implements VGlobal {
@@ -73,8 +67,6 @@ public class ItemDao implements VGlobal {
             try {
                 ConfigurationSection section = config.getConfigurationSection(obj.getKey());
 
-                Msg.ServidorGreen("Item ID: "+ section.getInt("id")+" - NAME: "+ section.getString("name"), getClass());
-
                 Item item = new Item();
                 item.setId(section.getInt("id"));
                 item.setName(section.getString("name"));
@@ -85,8 +77,8 @@ public class ItemDao implements VGlobal {
                     }
                 }
 
-                if(item.getId() < 1 || item.getName() == null){
-                    Msg.ServidorGreen("Item desconhecido: "+ obj.getKey()+" - ID: "+ item.getId()+" - NAME: "+ item.getName(), getClass());
+                if (item.getId() < 1 || item.getName() == null) {
+                    Msg.ServidorRed("Item desconhecido: " + obj.getKey());
                     Msg.PularLinha(getClass());
                     continue;
                 }

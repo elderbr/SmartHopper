@@ -4,7 +4,6 @@ import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -60,12 +59,12 @@ public class InventoryCustom implements Botao, VGlobal {
             if(titulo.contains(TITULO_GRUP_NEW)) {
                 grupo = new Grupo();
                 grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW,""));
-                if(grupoCtrl.findName(grupo.getName()) != null){
-                    grupo = grupoCtrl.findName(grupo.getName());
+                if(grupoCtrl.findByName(grupo.getName()) != null){
+                    grupo = grupoCtrl.findByName(grupo.getName());
                     throw new GrupoException("O grupo já existe!!!");
                 }
             }else{
-                grupo = grupoCtrl.findName(titulo);
+                grupo = grupoCtrl.findByName(titulo);
             }
             createPagination();
         }

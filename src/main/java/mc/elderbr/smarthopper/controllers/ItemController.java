@@ -18,7 +18,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -31,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
-import static org.bukkit.Bukkit.getServer;
 
 public class ItemController {
 
@@ -109,34 +107,29 @@ public class ItemController {
     }
 
     public Item findByItemStack(ItemStack itemStack) throws ItemException {
-        if (itemStack == null) {
+        if (itemStack == null || itemStack.getType().isAir()) {
             throw new ItemException("Item invalido!!!");
         }
-        Item newItem = ITEM_MAP_NAME.get(Item.ToName(itemStack));
-        if (newItem == null) {
+        item = ITEM_MAP_NAME.get(Item.ToName(itemStack));
+        if (item == null) {
             throw new ItemException("O item não existe!!!");
         }
         return item;
     }
 
-    public void findAll() {
-        Msg.ServidorGreen("Iniciado o findAll", getClass());
-        itemDao.findAll();
-        Msg.ServidorGreen("Finalizado findAll", getClass());
-    }
-
-    public void isUpdate() {
-        clean();
-        findAll();
+    public static void findAll() {
+        clean();// Remove todos os texto que contenha "item_"
+        ItemDao dao = new ItemDao();
+        dao.findAll();// Carrega todos os itens na variavel global
         for (String name : ItemCreate.Create()) {
             try {
-                if (ITEM_MAP_NAME.get(name)==null) {
-                    item = new Item();
+                if (ITEM_MAP_NAME.get(name) == null) {
+                    Item item = new Item();
                     item.setName(name);
-                    save(item);
+                    dao.save(item);
                 }
             } catch (ItemException e) {
-                Msg.ServidorErro(e, "isUpdate()", getClass());
+                Msg.ServidorErro(e, "findAll()", ItemController.class);
             }
         }
     }
@@ -330,8 +323,7 @@ public class ItemController {
         return null;
     }
 
-    public void clean() {
-        Msg.ServidorGreen("Iniciado o clear", getClass());
+    private static void clean() {
         List<String> list = new ArrayList<>();
         String txt = null;
         if (ITEM_FILE.exists()) {
@@ -340,7 +332,7 @@ public class ItemController {
                     list.add(txt.replaceAll("item_", "").replaceAll("[\']", ""));
                 }
             } catch (IOException e) {
-                Msg.ServidorErro(e, "clean()", getClass());
+                Msg.ServidorErro(e, "clean()", ItemController.class);
             }
             if (list.size() > 0) {
                 try (BufferedWriter writer = Files.newBufferedWriter(ITEM_FILE.toPath(), StandardCharsets.UTF_8)) {
@@ -350,10 +342,9 @@ public class ItemController {
                         writer.flush();
                     }
                 } catch (IOException e) {
-                    Msg.ServidorErro(e, "clean()", getClass());
+                    Msg.ServidorErro(e, "clean()", ItemController.class);
                 }
             }
         }
-        Msg.ServidorGreen("Finalizado o clear", getClass());
     }
 }

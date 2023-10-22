@@ -1,26 +1,22 @@
 package mc.elderbr.smarthopper.event;
 
-import mc.elderbr.smarthopper.exceptions.GrupoException;
+import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
-import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static mc.elderbr.smarthopper.interfaces.VGlobal.CD_MAX;
 
 public class InventarioEvent implements Listener, Botao {
 
@@ -32,6 +28,7 @@ public class InventarioEvent implements Listener, Botao {
 
     private ItemStack itemClicked;
     private Grupo grupo;
+    private GrupoController grupoCtrl = new GrupoController();
     private InventoryClickEvent event;
 
     @EventHandler
@@ -117,27 +114,29 @@ public class InventarioEvent implements Listener, Botao {
     }
 
     private void save() {
-        // Verificar se foi clicado com o botão esquerdo do mouse no botão salvar(save)
-        if (event.isLeftClick() && itemClicked.equals(BtnSalva())) {
-            String msg = "Ops, algo deu errado!!!";
-            // Verifica se o jogador é ADM
-            if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
-            if (grupo.getId() < 1) {
-                grupo.setId(CD_MAX.get(0) + 1);
-                grupo.addTranslation(player);
-                if (GrupoConfig.ADD(grupo)) {
-                    CD_MAX.add(0, grupo.getId());
-                    msg = String.format("$eO jogador %s adicionou um novo grupo %s!!!", player.getName(), grupo.getName());
+        try {
+            // Verificar se foi clicado com o botão esquerdo do mouse no botão salvar(save)
+            if (event.isLeftClick() && itemClicked.equals(BtnSalva())) {
+                String msg = "Ops, algo deu errado!!!";
+                // Verifica se o jogador é ADM
+                if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
+                if (grupo.getId() < 1) {
+                    grupo.addTranslation(player);
+                    if (grupoCtrl.save(grupo)) {
+                        msg = String.format("$eO jogador $c%s $eadicionou um novo grupo $c%s$e!!!", player.getName(), grupo.getName());
+                    }
+                } else {
+                    grupoCtrl.update(grupo);// Atualizando o grupo
+                    msg = String.format("$eO jogador $c%s $ealterou o grupo $c%s$e!!!", player.getName(), grupo.getName());
                 }
-            } else {
-                GrupoConfig.UPDATE(grupo);// Atualizando o grupo
-                msg = "$e$lO jogador " + player.getName() + " alterou o grupo " + grupo.getName() + "!!!";
-            }
-            player.closeInventory();// Fechando o inventário do jogador
+                player.closeInventory();// Fechando o inventário do jogador
 
-            // Envia mensagem para todos os jogadores online
-            Msg.PlayerTodos(msg);
-            grupo = null;
+                // Envia mensagem para todos os jogadores online
+                Msg.PlayerTodos(msg);
+                grupo = null;
+            }
+        }catch (Exception e){
+            Msg.PlayerRed(player, e.getMessage());
         }
     }
 }

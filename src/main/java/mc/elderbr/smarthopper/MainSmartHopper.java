@@ -2,7 +2,9 @@ package mc.elderbr.smarthopper;
 
 
 import mc.elderbr.smarthopper.cmd.*;
+import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
@@ -52,19 +54,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         saveDefaultConfig();
         config = new Config();
 
-        try {
-            ItemController itemCtrl = new ItemController();
-            itemCtrl.isUpdate();
-            //ItemController.Create();
-        }catch (Exception e){
-            Msg.ServidorErro(e, "", getClass());
-        }
+        ItemController.findAll();// Busca todos os item e salva na variavel global
+        GrupoController.findAll();// Busca todos os grupos e salva na variavel global
 
-        // Lendo e criando os itens
-        //Item.CreateItem();// Criando todos os itens
-
-        // Lendo e criando os grupos
-        //Grupo.CreateGrupos();// Criando todos os grupos
 
         // Tradução
         //traducaoConfig = new TraducaoConfig();
