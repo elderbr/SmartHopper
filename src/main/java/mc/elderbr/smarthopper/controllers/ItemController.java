@@ -1,33 +1,183 @@
 package mc.elderbr.smarthopper.controllers;
 
+import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.ItemCreate;
 import mc.elderbr.smarthopper.model.LivroEncantado;
 import mc.elderbr.smarthopper.model.Pocao;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
+import static org.bukkit.Bukkit.getServer;
 
 public class ItemController {
 
     private int id;
     private String name;
     private Item item;
+    private ItemDao itemDao = new ItemDao();
     private Pocao pocao;
     private LivroEncantado livro;
 
     public ItemController() {
+    }
+
+    public Item save(Item item) throws ItemException {
+
+        if (item == null) {
+            throw new ItemException("Item invalido!!!");
+        }
+        if (item.getName().isBlank()) {
+            throw new ItemException("Digite o nome do item!!!");
+        }
+        if (ITEM_MAP_NAME.get(item.getName().toLowerCase()) != null) {
+            throw new ItemException("O item já existe!!!");
+        }
+        item.setId(ID());
+        itemDao.save(item);
+
+        return ITEM_MAP_NAME.get(item.getName().toLowerCase());
+    }
+
+    public Item save(ItemStack itemStack) throws ItemException {
+        if (itemStack == null || itemStack.getType().isAir() || !itemStack.getType().isItem()) {
+            throw new ItemException("Item invalido!!!");
+        }
+        Item item = new Item(itemStack);
+        if (ITEM_MAP_NAME.get(item.getName().toLowerCase()) != null) {
+            throw new ItemException("O item já existe!!!");
+        }
+        item.setId(ID());
+        itemDao.save(item);
+        return item;
+    }
+
+    public Item findByID(int id) throws ItemException {
+        if (id < 1) {
+            throw new ItemException("ID do invalido!!!");
+        }
+        Item item = ITEM_MAP_ID.get(id);
+        if (item == null) {
+            throw new ItemException("O item não existe!!!");
+        }
+        return item;
+    }
+
+    public Item findByName(String name) throws ItemException {
+        if (name.isBlank()) {
+            throw new ItemException("Nome do item invalido!!!");
+        }
+        Item item = ITEM_MAP_NAME.get(name);
+        if (item == null) {
+            throw new ItemException("O item não existe!!!");
+        }
+        return item;
+    }
+
+    public Item findByItem(Item item) throws ItemException {
+        if (item == null || item.getName().isBlank()) {
+            throw new ItemException("Item invalido!!!");
+        }
+        Item newItem = ITEM_MAP_NAME.get(item.getName().toLowerCase());
+        if (newItem == null) {
+            throw new ItemException("O item não existe!!!");
+        }
+        return item;
+    }
+
+    public Item findByItemStack(ItemStack itemStack) throws ItemException {
+        if (itemStack == null) {
+            throw new ItemException("Item invalido!!!");
+        }
+        Item newItem = ITEM_MAP_NAME.get(Item.ToName(itemStack));
+        if (newItem == null) {
+            throw new ItemException("O item não existe!!!");
+        }
+        return item;
+    }
+
+    public void findAll() {
+        Msg.ServidorGreen("Iniciado o findAll", getClass());
+        itemDao.findAll();
+        Msg.ServidorGreen("Finalizado findAll", getClass());
+    }
+
+    public void isUpdate() {
+        clean();
+        findAll();
+        for (String name : ItemCreate.Create()) {
+            try {
+                if (ITEM_MAP_NAME.get(name)==null) {
+                    item = new Item();
+                    item.setName(name);
+                    save(item);
+                }
+            } catch (ItemException e) {
+                Msg.ServidorErro(e, "isUpdate()", getClass());
+            }
+        }
+    }
+
+    public Item update(Item item) throws ItemException {
+        String name = item.getName().toLowerCase();
+        try {
+            if (item == null) {
+                throw new ItemException("Item invalido!!!");
+            }
+            if (item.getName().isBlank()) {
+                throw new ItemException("Digite o nome do item!!!");
+            }
+            if (ITEM_MAP_NAME.get(name) == null) {
+                throw new ItemException("O item não existe!!!");
+            }
+            item.setId(ITEM_MAP_NAME.get(name).getId());
+            itemDao.update(item);
+        } catch (ItemException e) {
+            throw new ItemException("Erro ao atualizar o item!!!");
+        }
+        return ITEM_MAP_NAME.get(name);
+    }
+
+    public void delete(Item item) throws ItemException {
+        if (item == null || item.getName().isBlank()) {
+            throw new ItemException("Item invalido!!!");
+        }
+        Item newItem = ITEM_MAP_NAME.get(item.getName().toLowerCase());
+        if (newItem == null) {
+            throw new ItemException("Item invalido!!!");
+        }
+        itemDao.delete(item);
+    }
+
+    public static void Create() {
+        ItemCreate.Create();
+        for (String name : ITEM_NAME_LIST_DEFAULT) {
+            Msg.ServidorGreen("item: " + name, ItemController.class);
+        }
+        Msg.ServidorGreen("item size: " + ITEM_NAME_LIST_DEFAULT.size(), ItemController.class);
     }
 
     public Item getItem() {
@@ -35,44 +185,42 @@ public class ItemController {
     }
 
     public Item getItem(@NotNull Object obj) throws ItemException {
-        id = 0;
-        name = null;
-        if (obj instanceof Integer number) {
-            id = number;
-        } else if (obj instanceof String nameItem) {
-            try {
-                id = Integer.parseInt(nameItem);
-            } catch (NumberFormatException e) {
-                name = nameItem;
+
+        if (obj instanceof ItemStack itemStack) {
+
+            if (itemStack.getType().isAir() || itemStack.getType() == Material.AIR) {
+                throw new ItemException("Digite o nome ou ID do item, ou segura um item na mão!!");
             }
-        } else if (obj instanceof ItemStack itemStack) {
+            ItemMeta meta = itemStack.getItemMeta();
             switch (itemStack.getType()) {
+                case ENCHANTED_BOOK:
+                    return LivroEncantado.getItem(itemStack);
                 case POTION:
                 case SPLASH_POTION:
                 case LINGERING_POTION:
-                    pocao = new Pocao(itemStack);
-                    name = pocao.getPotion();
-                    break;
-                case ENCHANTED_BOOK:
-                    livro = new LivroEncantado(itemStack);
-                    name = livro.getBook();
-                    break;
+                    return Pocao.getItem(itemStack);
                 default:
                     name = Item.ToName(itemStack);
             }
-
-        }
-
-        if (id > 0) {
-            item = ITEM_MAP_ID.get(id);
-        } else {
             item = ITEM_MAP_NAME.get(name);
+        } else if (obj instanceof String itemName) {
+            name = itemName.toLowerCase();
+
+            if (name.isBlank()) {
+                throw new ItemException("Digite o nome do item ou ID!!!");
+            }
+            try {
+                id = Integer.parseInt(name.replaceAll("[^0-9]", ""));
+                item = ITEM_MAP_ID.get(id);
+            } catch (NumberFormatException e) {
+                item = ITEM_MAP_NAME.get(name.toLowerCase());
+            }
             if (item == null) {
-                item = TRADUCAO_ITEM.get(name);
+                item = findByTraducao(name);
             }
         }
         if (item == null) {
-            throw new ItemException("Não foi possivél encontrar o item, digite o nome ou ID do item, ou segure um item na mão!!!");
+            throw new ItemException("O item " + obj + " não existe!!!");
         }
         return item;
     }
@@ -116,19 +264,19 @@ public class ItemController {
             itemStack.setItemMeta(meta);
             return itemStack;
         }
-        return new ItemStack(Material.valueOf(name.replaceAll("\\s","_").toUpperCase()));
+        return new ItemStack(Material.valueOf(name.replaceAll("\\s", "_").toUpperCase()));
     }
 
     public boolean addTranslation(@NotNull Player player, @NotNull String[] args) throws ItemException {
 
-        // Verifica se o jogar é administrador do SmartHopper
-        if (!Config.CONTAINS_ADD(player)) {
-            throw new ItemException("Você não tem permissão para adicionar a tradução ao item!!!");
-        }
-
         // Verifica se existe o código do item e a tradução
         if (args.length < 2) {
             throw new ItemException("Digite /traducaoitem <código do item> <tradução>!!!");
+        }
+
+        // Verifica se o jogar é administrador do SmartHopper
+        if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
+            throw new ItemException("Você não tem permissão para adicionar a tradução ao item!!!");
         }
 
         // Pegando a tradução
@@ -148,8 +296,7 @@ public class ItemController {
             throw new ItemException("O código " + args[0] + " não está na lista de item!!!");
         }
         item.addTranslation(player.getLocale(), translation);
-        TRADUCAO_ITEM.put(translation, item);
-        return ItemConfig.ADD_TRADUCAO(item);
+        return itemDao.update(item);
     }
 
     private String convertTranslation(String[] args) {
@@ -158,5 +305,55 @@ public class ItemController {
             sb.append(args[i].concat(" "));
         }
         return sb.toString().trim();
+    }
+
+    // Pega o último ID adicionando
+    private int ID() {
+        int id = 0;
+        for (Item item : ITEM_MAP_NAME.values()) {
+            if (id < item.getId()) {
+                id = item.getId();
+            }
+        }
+        id++;
+        return id;
+    }
+
+    private Item findByTraducao(String name) {
+        for (Item items : ITEM_MAP_NAME.values()) {
+            for (Map.Entry<String, String> langs : items.getTranslation().entrySet()) {
+                if (name.equalsIgnoreCase(langs.getValue())) {
+                    return items;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void clean() {
+        Msg.ServidorGreen("Iniciado o clear", getClass());
+        List<String> list = new ArrayList<>();
+        String txt = null;
+        if (ITEM_FILE.exists()) {
+            try (BufferedReader reader = Files.newBufferedReader(ITEM_FILE.toPath(), StandardCharsets.UTF_8)) {
+                while ((txt = reader.readLine()) != null) {
+                    list.add(txt.replaceAll("item_", "").replaceAll("[\']", ""));
+                }
+            } catch (IOException e) {
+                Msg.ServidorErro(e, "clean()", getClass());
+            }
+            if (list.size() > 0) {
+                try (BufferedWriter writer = Files.newBufferedWriter(ITEM_FILE.toPath(), StandardCharsets.UTF_8)) {
+                    for (String arg : list) {
+                        writer.write(arg);
+                        writer.newLine();
+                        writer.flush();
+                    }
+                } catch (IOException e) {
+                    Msg.ServidorErro(e, "clean()", getClass());
+                }
+            }
+        }
+        Msg.ServidorGreen("Finalizado o clear", getClass());
     }
 }

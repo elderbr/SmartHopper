@@ -68,9 +68,13 @@ public class ItemDao implements VGlobal {
     }
 
     public void findAll() {
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
         for (Map.Entry<String, Object> obj : config.getValues(false).entrySet()) {
             try {
                 ConfigurationSection section = config.getConfigurationSection(obj.getKey());
+
+                Msg.ServidorGreen("Item ID: "+ section.getInt("id")+" - NAME: "+ section.getString("name"), getClass());
+
                 Item item = new Item();
                 item.setId(section.getInt("id"));
                 item.setName(section.getString("name"));
@@ -82,7 +86,8 @@ public class ItemDao implements VGlobal {
                 }
 
                 if(item.getId() < 1 || item.getName() == null){
-                    Msg.ServidorGreen("Item desconhecido: "+ obj.getKey(), getClass());
+                    Msg.ServidorGreen("Item desconhecido: "+ obj.getKey()+" - ID: "+ item.getId()+" - NAME: "+ item.getName(), getClass());
+                    Msg.PularLinha(getClass());
                     continue;
                 }
 

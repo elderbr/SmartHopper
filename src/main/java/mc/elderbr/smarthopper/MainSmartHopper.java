@@ -2,10 +2,13 @@ package mc.elderbr.smarthopper;
 
 
 import mc.elderbr.smarthopper.cmd.*;
+import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.event.TextureEvent;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
@@ -13,13 +16,14 @@ import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.LivroEncantado;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_ID;
+import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
 
@@ -48,20 +52,28 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         saveDefaultConfig();
         config = new Config();
 
+        try {
+            ItemController itemCtrl = new ItemController();
+            itemCtrl.isUpdate();
+            //ItemController.Create();
+        }catch (Exception e){
+            Msg.ServidorErro(e, "", getClass());
+        }
+
         // Lendo e criando os itens
-        Item.CreateItem();// Criando todos os itens
+        //Item.CreateItem();// Criando todos os itens
 
         // Lendo e criando os grupos
-        Grupo.CreateGrupos();// Criando todos os grupos
+        //Grupo.CreateGrupos();// Criando todos os grupos
 
         // Tradução
-        traducaoConfig = new TraducaoConfig();
+        //traducaoConfig = new TraducaoConfig();
 
         // Salvando os item no arquivo item.yml
-        itemConfig = new ItemConfig();
+        //itemConfig = new ItemConfig();
 
         // Salvando os grupo no arquivo grupo.yml
-        grupoConfig = new GrupoConfig();
+        //grupoConfig = new GrupoConfig();
 
         // Comandos
         commands();

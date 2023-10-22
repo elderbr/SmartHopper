@@ -2,20 +2,12 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.jetbrains.annotations.NotNull;
 
-import javax.management.ValueExp;
-
-import java.util.HashMap;
 import java.util.Map;
-
-import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_NAME;
-import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_NAME_LIST;
 
 public class LivroEncantado implements VGlobal {
     private static final String Livro = "enchanted book ";
@@ -36,13 +28,13 @@ public class LivroEncantado implements VGlobal {
                 EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
                 meta.addStoredEnchant(enchantment, i, true);
                 itemStack.setItemMeta(meta);
-                ENCHANTEMENT_BOOK.put(nameEnchantment, itemStack);
+                ENCHANTEMENT_BOOK_MAP.put(nameEnchantment, itemStack);
             }
         }
     }
 
     public static ItemStack getItemStack(String name){
-        return ENCHANTEMENT_BOOK.get(name);
+        return ENCHANTEMENT_BOOK_MAP.get(name);
     }
 
     public static Item getItem(ItemStack itemStack) throws ItemException {

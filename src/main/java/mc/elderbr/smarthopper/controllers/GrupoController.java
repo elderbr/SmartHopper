@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.exceptions.GrupoException;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
@@ -40,11 +41,13 @@ public class GrupoController implements VGlobal {
         name = Item.ToName(itemStack);
 
         if (name.contains("potion")) {
-            Pocao pocao = new Pocao(itemStack);
-            item = pocao.getItem();
+            try {
+                item = Pocao.getItem(itemStack);
+            } catch (ItemException e) {
+                throw new RuntimeException(e);
+            }
         } else if (name.contains("enchanted book")) {
-            LivroEncantado livroEncantado = new LivroEncantado(itemStack);
-            item = livroEncantado.getItem();
+
         } else {
             item = ITEM_MAP_NAME.get(name);
         }
