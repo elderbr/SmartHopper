@@ -34,34 +34,11 @@ public class ItemCreate implements VGlobal {
                 }
             }
         }
-
-        // Criando item de poções
-        for (PotionType potion : PotionType.values()) {
-            name = "potion " + potion.name().replaceAll("_", " ").toLowerCase();
-            for(int i = 1; i <= potion.getMaxLevel(); i++) {
-                String potionName = name.concat(" "+ i);
-
-                if (!ITEM_NAME_LIST_DEFAULT.contains(potionName)) {
-                    ITEM_NAME_LIST_DEFAULT.add(potionName);
-                }
-                if (!ITEM_NAME_LIST_DEFAULT.contains("splash " + potionName)) {
-                    ITEM_NAME_LIST_DEFAULT.add("splash " + potionName);
-                }
-                if (!ITEM_NAME_LIST_DEFAULT.contains("lingering " + potionName)) {
-                    ITEM_NAME_LIST_DEFAULT.add("lingering " + potionName);
-                }
-            }
-        }
-
         // Criando livros encantados
-        for (Enchantment enchantment : Enchantment.values()) {
-            name = "enchanted book " + enchantment.getKey().getKey().replaceAll("_", " ");
-            for(int i = 1; i <= enchantment.getMaxLevel(); i++){
-                if (!ITEM_NAME_LIST_DEFAULT.contains(name.concat(" "+ i))) {
-                    ITEM_NAME_LIST_DEFAULT.add(name.concat(" "+ i));
-                }
-            }
-        }
+        LivroEncantado.Create();
+        // Criando Poções
+        Pocao.Create();
+        // Organizando em ordem alfabetica
         Collections.sort(ITEM_NAME_LIST_DEFAULT);
         return ITEM_NAME_LIST_DEFAULT;
     }
