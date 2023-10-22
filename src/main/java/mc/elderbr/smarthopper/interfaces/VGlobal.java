@@ -3,7 +3,6 @@ package mc.elderbr.smarthopper.interfaces;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -79,7 +78,15 @@ public interface VGlobal {
      *                    Livros Encantados
      *
      *********************************************************/
-    Map<String, ItemStack> ENCHANTEMENT_BOOK = new HashMap<>();
+    Map<String, ItemStack> ENCHANTEMENT_BOOK_MAP = new HashMap<>();
+
+    /*********************************************************
+     *
+     *                    Poções
+     *
+     *********************************************************/
+    Map<String, ItemStack> POTION_MAP = new HashMap<>();
+
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();
