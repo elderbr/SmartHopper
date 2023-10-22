@@ -1,67 +1,74 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.exceptions.ItemException;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 
+import javax.management.ValueExp;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_NAME;
 import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_NAME_LIST;
 
-public class LivroEncantado {
-
-    private String name;
+public class LivroEncantado implements VGlobal {
     private static final String Livro = "enchanted book ";
-    private ItemStack itemStack = new ItemStack(Material.ENCHANTED_BOOK);
+    private final ItemStack itemStack = new ItemStack(Material.ENCHANTED_BOOK);
 
     public LivroEncantado() {
     }
 
-    public LivroEncantado(@NotNull String name) {
-        this.name = name;
-    }
-
-    public LivroEncantado(@NotNull ItemStack itemStack) {
-        this.itemStack = itemStack;
-    }
-
     public static void Create() {
-        ItemStack itemStack = null;
         for (Enchantment enchantment : Enchantment.values()) {
             String name = Livro + enchantment.getKey().getKey().replaceAll("_", " ");
-            if (!ITEM_NAME_LIST.contains(name)) {
-                ITEM_NAME_LIST.add(name);
+            for (int i = 1; i <= enchantment.getMaxLevel(); i++) {
+                String nameEnchantment = name.concat(" " + i);
+                if (ITEM_NAME_LIST_DEFAULT.contains(nameEnchantment)) {
+                    ITEM_NAME_LIST_DEFAULT.add(nameEnchantment);
+                }
+                ItemStack itemStack = new ItemStack(Material.ENCHANTED_BOOK);
+                EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+                meta.addStoredEnchant(enchantment, i, true);
+                itemStack.setItemMeta(meta);
+                ENCHANTEMENT_BOOK.put(nameEnchantment, itemStack);
             }
         }
     }
 
-    public String getBook() {
-        if (itemStack.getType() == Material.ENCHANTED_BOOK) {
+    public static ItemStack getItemStack(String name){
+        return ENCHANTEMENT_BOOK.get(name);
+    }
+
+    public static Item getItem(ItemStack itemStack) throws ItemException {
+        if(itemStack.getType() == Material.ENCHANTED_BOOK){
             EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
-            for (Enchantment key : meta.getStoredEnchants().keySet()) {
-                return Livro + key.getKey().getKey().replaceAll("_", " ").toLowerCase();
+            Map<Enchantment, Integer> store = meta.getStoredEnchants();
+            Enchantment enchantment = store.keySet().iterator().next();
+            int nivel = store.values().iterator().next();
+            String name = Livro + enchantment.getKey().getKey().toLowerCase().replaceAll("_"," ")+" "+nivel;
+            Item item = ITEM_MAP_NAME.get(name);
+            if (item==null){
+                throw new ItemException("Item não existe!!!");
             }
+            return item;
         }
-        return null;
+        throw new ItemException("Item não existe!!!");
     }
 
-    public ItemStack parseItemStack() {
-        String book = name
-                .replaceAll(Livro, "").trim()
-                .replaceAll("\\s", "_").toUpperCase();
-        itemStack = new ItemStack(Material.getMaterial(book));
-        return itemStack;
-    }
-
-    public Item getItem() {
-        if (itemStack.getType() == Material.ENCHANTED_BOOK) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) itemStack.getItemMeta();
-            for (Enchantment key : meta.getStoredEnchants().keySet()) {
-                name = Livro + key.getKey().getKey().replaceAll("_", " ").toLowerCase();
-                break;
-            }
+    public static Item getItem(String name) throws ItemException {
+        if(name.isBlank()){
+            throw new ItemException("Segure o item na mão ou digite o nome do item ou ID!!!");
         }
-        return ITEM_MAP_NAME.get(name);
+        Item item = ITEM_MAP_NAME.get(name);
+        if(item == null){
+            throw new ItemException(String.format("O item %s não existe!!!", name));
+        }
+        return item;
     }
 }
