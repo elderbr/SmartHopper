@@ -44,8 +44,20 @@ public interface VGlobal {
     Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();
     Map<String, Item> ITEM_MAP_NAME = new HashMap<>();
     List<String> ITEM_NAME_LIST = new ArrayList<>();
+    default void ADD_ITEM_NAME_LIST(String name){
+        if(name.isBlank()) return;
+        if(!ITEM_NAME_LIST.contains(name)){
+            ITEM_NAME_LIST.add(name);
+        }
+    }
 
     List<String> ITEM_NAME_LIST_DEFAULT = new ArrayList<>();
+    default void ADD_ITEM_NAME_LIST_DEFAULT(String name) {
+        if (name.isBlank()) return;
+        if (!ITEM_NAME_LIST_DEFAULT.contains(name)) {
+            ITEM_NAME_LIST_DEFAULT.add(name);
+        }
+    }
 
     List<String> ITEM_NAME_LIST_UPDATE = new ArrayList<>();
 
