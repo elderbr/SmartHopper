@@ -21,12 +21,18 @@ public class GrupoDao implements VGlobal {
     public boolean save(Grupo grupo) throws GrupoException {
         String name = grupo.getName().toLowerCase();
         try {
+            config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
             config.set(name.concat(".id"), grupo.getId());
             config.set(name.concat(".name"), grupo.getName());
             if (!grupo.getTranslation().isEmpty()) {
                 config.set(name.concat(".lang"), grupo.getTranslation());
             }
             config.set(name.concat(".item"), grupo.getListNameItem());
+            for(Item item : grupo.getListItem()){
+                item.addListGrupo(grupo);
+                ITEM_MAP_ID.put(item.getId(), item);
+                ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
+            }
             config.save(GRUPO_FILE);
 
             GRUPO_MAP_ID.put(grupo.getId(), grupo);
@@ -41,6 +47,7 @@ public class GrupoDao implements VGlobal {
     }
 
     public Grupo findByName(String name) {
+        config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
         ConfigurationSection section = config.getConfigurationSection(name);
 
         Msg.ServidorBlue("Grup: " + name);
@@ -82,6 +89,7 @@ public class GrupoDao implements VGlobal {
     public boolean update(Grupo grupo) throws GrupoException {
         String name = grupo.getName().toLowerCase();
         try {
+            config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
             if (!grupo.getTranslation().isEmpty()) {
                 config.set(name.concat(".lang"), grupo.getTranslation());
             }
@@ -101,6 +109,7 @@ public class GrupoDao implements VGlobal {
 
     public boolean delete(Grupo grupo) throws GrupoException {
         try {
+            config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
             config.set(grupo.getName().toLowerCase(), null);
             config.save(GRUPO_FILE);
 

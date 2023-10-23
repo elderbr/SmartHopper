@@ -53,6 +53,7 @@ public class InventoryCustom implements Botao, VGlobal {
         player = (Player) event.getPlayer();
         inventoryTop = event.getView().getTopInventory();
         titulo = event.getView().getTitle();
+        grupo = null;
 
         if (titulo.contains("Grupo")) {
 
