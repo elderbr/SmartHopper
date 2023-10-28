@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class LivroEncantado implements VGlobal {
     private static final String Livro = "enchanted book ";
-    private final ItemStack itemStack = new ItemStack(Material.ENCHANTED_BOOK);
 
     public LivroEncantado() {
     }
@@ -21,7 +20,7 @@ public class LivroEncantado implements VGlobal {
             String name = Livro + enchantment.getKey().getKey().replaceAll("_", " ");
             for (int i = 1; i <= enchantment.getMaxLevel(); i++) {
                 String nameEnchantment = name.concat(" " + i);
-                if (ITEM_NAME_LIST_DEFAULT.contains(nameEnchantment)) {
+                if (!ITEM_NAME_LIST_DEFAULT.contains(nameEnchantment)) {
                     ITEM_NAME_LIST_DEFAULT.add(nameEnchantment);
                 }
                 ItemStack itemStack = new ItemStack(Material.ENCHANTED_BOOK);
