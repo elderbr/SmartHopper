@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
@@ -33,7 +34,7 @@ public class InventoryCustom implements Botao, VGlobal {
     private Inventory inventory;
     private Inventory inventoryTop;
     private Inventory inventoryBottom;
-
+    private ItemController itemCtrl = new ItemController();
     private ItemStack itemStack;
     private ItemStack itemStackClicked;
     private Grupo grupo;
@@ -57,14 +58,14 @@ public class InventoryCustom implements Botao, VGlobal {
 
         if (titulo.contains("Grupo")) {
 
-            if(titulo.contains(TITULO_GRUP_NEW)) {
+            if (titulo.contains(TITULO_GRUP_NEW)) {
                 grupo = new Grupo();
-                grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW,""));
-                if(grupoCtrl.findByName(grupo.getName()) != null){
+                grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW, ""));
+                if (grupoCtrl.findByName(grupo.getName()) != null) {
                     grupo = grupoCtrl.findByName(grupo.getName());
                     throw new GrupoException("O grupo já existe!!!");
                 }
-            }else{
+            } else {
                 grupo = grupoCtrl.findByName(titulo);
             }
             createPagination();
@@ -144,13 +145,18 @@ public class InventoryCustom implements Botao, VGlobal {
 
     public InventoryCustom show() throws GrupoException {
         // Titulo do grupo
-        titulo = Msg.Color(TITULO_GRUP+ grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
+        titulo = Msg.Color(TITULO_GRUP + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
         inventory = Bukkit.createInventory(null, 54, titulo);
         if (pagMap.get(pag) == null) {
             pag -= 1;
         }
         for (Item item : pagMap.get(pag)) {
-            inventory.addItem(item.parseItemStack());
+            try {
+                itemStack = itemCtrl.parseItemStack(item);
+                inventory.addItem(itemStack);
+            } catch (ItemException e) {
+                throw new RuntimeException("O item com o nome "+ item.getName()+" não está sendo recolhecido!!!");
+            }
         }
 
         switch (pag) {

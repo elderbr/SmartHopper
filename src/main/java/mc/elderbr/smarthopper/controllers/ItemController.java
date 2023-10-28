@@ -135,6 +135,23 @@ public class ItemController {
         }
     }
 
+    public ItemStack parseItemStack(Item item) throws ItemException {
+        if(item == null){
+            throw new ItemException("Segure o item na mão ou digite o nome o ID do item!!!");
+        }
+        if(item.getName().contains("enchanted book")){
+            return ENCHANTEMENT_BOOK_MAP.get(item.getName());
+        }
+        if(item.getName().contains("potion")){
+            return POTION_MAP.get(item.getName());
+        }
+        ItemStack itemStack = new ItemStack(item.parseItemStack());
+        if(itemStack == null) {
+            throw new ItemException("Segure o item na mão ou digite o nome o ID do item!!!");
+        }
+        return itemStack;
+    }
+
     public Item update(Item item) throws ItemException {
         String name = item.getName().toLowerCase();
         try {
