@@ -7,6 +7,7 @@ import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
+import mc.elderbr.smarthopper.model.GrupoCreate;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
@@ -81,12 +82,12 @@ public class GrupoController implements VGlobal {
         return listGrupo;
     }
 
-    public Grupo findNameTranslation(String name){
+    public Grupo findNameTranslation(String name) {
         grupo = GRUPO_MAP_NAME.get(name);
-        if(grupo == null){
-            for(Grupo grup : GRUPO_MAP_NAME.values()){
-                for(String lang : grup.getTranslation().values()){
-                    if(lang.equalsIgnoreCase(name)){
+        if (grupo == null) {
+            for (Grupo grup : GRUPO_MAP_NAME.values()) {
+                for (String lang : grup.getTranslation().values()) {
+                    if (lang.equalsIgnoreCase(name)) {
                         return grup;
                     }
                 }
@@ -96,11 +97,11 @@ public class GrupoController implements VGlobal {
     }
 
     public boolean update(Grupo grupo) throws GrupoException {
-        if(grupo == null || grupo.getId() < 1 || grupo.getName() == null){
+        if (grupo == null || grupo.getId() < 1 || grupo.getName() == null) {
             throw new GrupoException("Grupo invalido!!!");
         }
         this.grupo = GRUPO_MAP_NAME.get(grupo.getName().toLowerCase());
-        if(this.grupo == null){
+        if (this.grupo == null) {
             throw new GrupoException(String.format("O grupo %s não existe!!!", grupo.getName()));
         }
         return grupoDao.update(grupo);
@@ -161,7 +162,6 @@ public class GrupoController implements VGlobal {
     }
 
 
-
     public List<String> findNameContains(String name) {
         List<String> list = new ArrayList<>();
         for (String grup : GRUPO_NAME_LIST) {
@@ -177,15 +177,25 @@ public class GrupoController implements VGlobal {
     public static void findAll() {
         clear();
         GrupoDao dao = new GrupoDao();
+        GrupoCreate.NewNome();
         dao.findAll();
-        // Percorrendo a lista do grupo e adicionando o grupo no item
-        for (Grupo grupo : GRUPO_MAP_NAME.values()) {
-            for (String itemName : grupo.getListNameItem()) {
-                Item item = ITEM_MAP_NAME.get(itemName.toLowerCase());
-                if (item == null) continue;
-                item.addListGrupo(grupo);
-                ITEM_MAP_ID.put(item.getId(), item);
-                ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
+        if(GRUPO_MAP_NAME.size()<1){
+            GrupoCreate.NEW();
+        }else {
+            ItemController itemCtrl = new ItemController();
+            // Percorrendo a lista do grupo e adicionando o grupo no item
+            for (Grupo grupo : GRUPO_MAP_NAME.values()) {
+                try {
+                    for (String itemName : grupo.getListNameItem()) {
+                        Item item = itemCtrl.findByName(itemName);
+                        if (item == null) continue;
+                        item.addListGrupo(grupo);
+                        ITEM_MAP_ID.put(item.getId(), item);
+                        ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
+                    }
+                } catch (ItemException e) {
+                    Msg.ServidorErro(e, "findAll()", GrupoController.class);
+                }
             }
         }
     }
@@ -225,4 +235,14 @@ public class GrupoController implements VGlobal {
         id++;
         return id;
     }
+
+    public static void CREATE() {
+        GrupoDao dao = new GrupoDao();
+        GrupoCreate.NewNome();
+        if (dao.findByName("acacia") == null) {
+            GrupoCreate.NEW();
+        }
+    }
+
+
 }

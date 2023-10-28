@@ -125,6 +125,7 @@ public class ItemController {
             try {
                 if (ITEM_MAP_NAME.get(name) == null) {
                     Item item = new Item();
+                    item.setId(ID());
                     item.setName(name);
                     dao.save(item);
                 }
@@ -166,11 +167,21 @@ public class ItemController {
     }
 
     public static void Create() {
+        ItemDao dao = new ItemDao();
         ItemCreate.Create();
+        int id = 1;
         for (String name : ITEM_NAME_LIST_DEFAULT) {
             Msg.ServidorGreen("item: " + name, ItemController.class);
+            try {
+                Item item = new Item();
+                item.setId(id);
+                item.setName(name);
+                dao.save(item);
+                id++;
+            } catch (ItemException e) {
+                Msg.ServidorErro(e, "Create()", ItemController.class);
+            }
         }
-        Msg.ServidorGreen("item size: " + ITEM_NAME_LIST_DEFAULT.size(), ItemController.class);
     }
 
     public Item getItem() {
@@ -301,7 +312,7 @@ public class ItemController {
     }
 
     // Pega o último ID adicionando
-    private int ID() {
+    private static int ID() {
         int id = 0;
         for (Item item : ITEM_MAP_NAME.values()) {
             if (id < item.getId()) {
