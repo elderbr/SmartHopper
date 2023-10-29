@@ -1,5 +1,7 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
@@ -23,14 +25,15 @@ public class ConfigComando implements CommandExecutor {
 
             switch (command.getName().toLowerCase()) {
                 case "reload":
-                    if(!Config.CONTAINS_ADD(player)){
+                    if(player.isOp() && !Config.CONTAINS_ADD(player)){
                         Msg.PlayerGold(player, "Você não tem permissão!!!");
                         return false;
                     }
-                    TraducaoConfig traducaoConfig = new TraducaoConfig();
-                    ItemConfig itemConfig = new ItemConfig();
-                    GrupoConfig grupoConfig = new GrupoConfig();
-                    Msg.PlayerGreen(player, "Dados do Smart Hopper carregado...");
+                    Msg.PlayerTodos("Smart Hopper foi reiniciado...");
+                    ItemController.findAll();
+                    GrupoController.findAll();
+                    new TraducaoConfig();
+                    Msg.PlayerTodos("Dados do Smart Hopper carregados...");
                     return true;
             }
         }
