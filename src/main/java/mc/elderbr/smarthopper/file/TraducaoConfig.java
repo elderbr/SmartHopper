@@ -9,16 +9,12 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.Map;
-
-import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
 public class TraducaoConfig {
     private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
@@ -56,16 +52,6 @@ public class TraducaoConfig {
             createGrupoBR();
         }
         reload();// Lendo todas as traduções
-    }
-
-    public YamlConfiguration configBR() {
-        yml = YamlConfiguration.loadConfiguration(fileBR);
-        return yml;
-    }
-
-    public YamlConfiguration configPT() {
-        yml = YamlConfiguration.loadConfiguration(filePT);
-        return yml;
     }
 
     private void createBR() {
@@ -162,15 +148,19 @@ public class TraducaoConfig {
             // Nome do linguagem
             lang = yml.getString("lang");
 
-            if(lang == null) continue;
+            if (lang == null) {
+                Msg.ServidorRed(String.format("No arquivo %s não está definido o lang!!!", files.getName()));
+                continue;
+            }
 
-            for(Map.Entry<String, Object> map : yml.getValues(false).entrySet()){
+            for (Map.Entry<String, Object> map : yml.getValues(false).entrySet()) {
                 // Procurando e salvando a tradução para o item
                 try {
                     Item item = itemCtrl.findByName(map.getKey());
-                    if(item == null) continue;
+                    if (item == null) continue;
                     item.addTranslation(lang, map.getValue().toString());
                     itemCtrl.update(item);
+                    Msg.ServidorGreen("$2Adicionando tradução para o item $6" + item.getName());
                 } catch (ItemException e) {
 
                 }
@@ -178,9 +168,10 @@ public class TraducaoConfig {
                 // Procurando e salvando a tradução para o grupo
                 try {
                     Grupo grupo = grupoCtrl.findByName(map.getKey());
-                    if(grupo == null) continue;
+                    if (grupo == null) continue;
                     grupo.addTranslation(lang, map.getValue().toString());
                     grupoCtrl.update(grupo);
+                    Msg.ServidorBlue("$9Adicionando tradução para o grupo $6" + grupo.getName());
                 } catch (GrupoException e) {
 
                 }

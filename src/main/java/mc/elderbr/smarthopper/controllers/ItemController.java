@@ -137,6 +137,7 @@ public class ItemController {
                     item.setId(ID());
                     item.setName(name);
                     dao.save(item);
+                    Msg.ServidorGreen("$2Criando o item $e"+ name);
                 }
             } catch (ItemException e) {
                 Msg.ServidorErro(e, "findAll()", ItemController.class);
