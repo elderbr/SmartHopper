@@ -178,6 +178,7 @@ public class InventoryCustom implements Botao, VGlobal {
                         inventory.setItem(53, BtnAnteriorPag1());
                     }
                 } else {
+                    inventory.setItem(52, BtnAnteriorPag1());
                     inventory.setItem(53, BtnProximoPag3());
                 }
                 break;
@@ -245,6 +246,9 @@ public class InventoryCustom implements Botao, VGlobal {
             show();
         } else if (BtnProximoPag3().equals(itemStackClicked)) {
             pag = 3;
+            show();
+        }else if(BtnAnteriorPag2().equals(itemStackClicked)){
+            pag = 2;
             show();
         }
     }
