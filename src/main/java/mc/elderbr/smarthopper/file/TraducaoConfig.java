@@ -46,7 +46,6 @@ public class TraducaoConfig {
             }
             createGrupoBR();
         }
-
         reload();// Lendo todas as traduções
     }
 

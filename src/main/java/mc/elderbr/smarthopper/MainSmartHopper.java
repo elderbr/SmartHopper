@@ -59,7 +59,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         GrupoController.findAll();// Busca todos os grupos e salva na variavel global
 
         // Tradução
-        //traducaoConfig = new TraducaoConfig();
+        traducaoConfig = new TraducaoConfig();
 
         // Salvando os item no arquivo item.yml
         //itemConfig = new ItemConfig();

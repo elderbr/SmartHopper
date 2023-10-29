@@ -20,8 +20,7 @@ public class TraducaoComando implements CommandExecutor {
     private Item item;
     private ItemController itemController;
     private Grupo grupo;
-    private GrupoController grupoController;
-
+    private GrupoController grupoController = new GrupoController();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -46,10 +45,9 @@ public class TraducaoComando implements CommandExecutor {
                     }
                     break;
                 case "traducaogrupo":
-                    grupoController = new GrupoController();
                     try {
                         if (grupoController.addTraducao(player, args)) {
-                            //grupo = grupoController.findByGrupoItemStack();
+                            grupo = grupoController.getGrupo();
                             Msg.PlayerTodos("Tradução adicionada para o grupo $9" + grupo.getName() + "$r em $8$l" + player.getLocale() + " $rcomo $8$l" + grupo.toTranslation(player) + "!");
                             return true;
                         } else {

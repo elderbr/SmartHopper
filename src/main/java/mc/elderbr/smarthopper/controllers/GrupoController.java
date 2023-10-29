@@ -109,7 +109,7 @@ public class GrupoController implements VGlobal {
 
     public boolean addTraducao(@NotNull Player player, @NotNull String[] args) throws GrupoException {
         // Verifica se o jogador é o administrador do SmartHopper
-        if (!Config.CONTAINS_ADD(player)) {
+        if (player.isOp() && !Config.CONTAINS_ADD(player)) {
             throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
         }
 
@@ -138,7 +138,7 @@ public class GrupoController implements VGlobal {
         }
 
         grupo.addTranslation(player.getLocale(), traducao);
-        return GrupoConfig.ADD_TRADUCAO(grupo);
+        return grupoDao.update(grupo);
     }
 
     private String convertTraducao(String[] args) {
@@ -234,6 +234,10 @@ public class GrupoController implements VGlobal {
         }
         id++;
         return id;
+    }
+
+    public Grupo getGrupo(){
+        return grupo;
     }
 
     public static void CREATE() {
