@@ -3,10 +3,6 @@ author: ElderBR
 discord: ElderBR#5398
 #Versão do plugin
 version: 4.0.7
-# Verifica se os itens estão atualizados
-item atualizado: true
-#Verifica se os grupos estão atualizados
-grupo atualizado: true
 # Para ter uma visualização melhor use a textura personalizada do Smart Hopper
 # a textura traz imagens para os botões de navegação de pagina do grupo
 # textura do botão próxima página
