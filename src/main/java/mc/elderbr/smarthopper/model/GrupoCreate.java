@@ -26,15 +26,15 @@ public class GrupoCreate implements VGlobal {
                     name = value.trim();
                     if (name.length() < 2) continue;
                     if (NotGrupo().contains(name)) continue;
-                    if (!listNameGrup.contains(name)) {
-                        listNameGrup.add(name);
+                    if (!listNameGrup.contains(name.replaceAll("bricks","brick"))) {
+                        listNameGrup.add(name.replaceAll("bricks","brick"));
                     }
                 }
 
                 nameGrup = new StringBuilder();
                 for (String value : listName) {
                     nameGrup.append(value).append(" ");
-                    name = nameGrup.toString().trim();
+                    name = nameGrup.toString().trim().replaceAll("bricks","brick");
                     if (name.length() < 2) continue;
                     if (NotGrupo().contains(name)) continue;
                     if (!listNameGrup.contains(name)) {
@@ -49,7 +49,7 @@ public class GrupoCreate implements VGlobal {
                         nameGrup = new StringBuilder();
                         for (String value : listName) {
                             nameGrup.append(value).append(" ");
-                            name = nameGrup.toString().trim();
+                            name = nameGrup.toString().trim().replaceAll("bricks","brick");
                             if (name.length() < 2) continue;
                             if (NotGrupo().contains(name)) continue;
                             if (!listNameGrup.contains(name)) {
@@ -59,8 +59,8 @@ public class GrupoCreate implements VGlobal {
                     }
                 }
             } else {
-                if (!listNameGrup.contains(itemName)) {
-                    listNameGrup.add(itemName);
+                if (!listNameGrup.contains(itemName.replaceAll("bricks","brick"))) {
+                    listNameGrup.add(itemName.replaceAll("bricks","brick"));
                 }
             }
         }
@@ -78,7 +78,7 @@ public class GrupoCreate implements VGlobal {
 
             for (String itemName : ITEM_NAME_LIST_DEFAULT) {
                 if (pertence(grupName, itemName)) {
-                    if (contains(grupName, itemName)) {
+                    if (contains(grupName.replaceAll("bricks","brick"), itemName.replaceAll("bricks","brick"))) {
                         if (!grupo.getListItem().contains(ITEM_MAP_NAME.get(itemName))) {
                             grupo.addListItem(ITEM_MAP_NAME.get(itemName));
                         }
