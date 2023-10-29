@@ -11,51 +11,53 @@ import java.util.ArrayList;
 
 public class Msg {
 
+    private final static String ServerMsg = ChatColor.GREEN + " SmartHopper >> ";
+
     public static void ServidorGreen(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + Color(msg));
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.DARK_GREEN + Color(msg));
     }
 
     public static void ServidorGreen(String msg, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + Color(msg) + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.DARK_GREEN + Color(msg) + " - Class: " + getClass.getSimpleName());
     }
 
     public static void ServidorGreen(String msg, String metodo, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + " SmartHopper >> " + Color(msg) + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.DARK_GREEN + Color(msg) + " - Class: " + getClass.getSimpleName());
     }
 
     public static void ServidorRed(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + " SmartHopper >> " + Color(msg));
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.RED + Color(msg));
     }
 
     public static void ServidorGold(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + Color(msg));
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.GOLD + Color(msg));
     }
 
     public static void ServidorGold(String msg, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + Color(msg) + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.GOLD + Color(msg) + " - Class: " + getClass.getSimpleName());
     }
 
     public static void ServidorWhite(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.WHITE + " SmartHopper >> " + Color(msg));
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.WHITE + Color(msg));
     }
 
     public static void ServidorColored(String msg, String msg1, String msg2) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD + " SmartHopper >> " + Color(msg) + " - " + ChatColor.YELLOW + msg1 + " - " + ChatColor.AQUA + msg2);
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + Color(msg) + " - " + ChatColor.YELLOW + msg1 + " - " + ChatColor.AQUA + msg2);
     }
 
     public static void ServidorBlue(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + " SmartHopper >> " + Color(msg));
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.BLUE + Color(msg));
     }
 
     public static void ServidorBlue(String msg, Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.BLUE + " SmartHopper >> " + Color(msg) + " - Class: " + getClass.getSimpleName());
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + ChatColor.BLUE + Color(msg) + " - Class: " + getClass.getSimpleName());
     }
 
     /**
      * @param getClass
      */
     public static void PularLinha(Class getClass) {
-        Bukkit.getServer().getConsoleSender().sendMessage("SmartHopper >> #====================================# - Class: " + getClass.getSimpleName() + "\n");
+        Bukkit.getServer().getConsoleSender().sendMessage(ServerMsg + " #====================================# - Class: " + getClass.getSimpleName() + "\n");
     }
 
     //========================== PLAYERS =================================================//
