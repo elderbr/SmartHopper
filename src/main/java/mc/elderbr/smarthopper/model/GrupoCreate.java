@@ -20,9 +20,6 @@ public class GrupoCreate implements VGlobal {
         String name;
 
         for (String itemName : ITEM_NAME_LIST_DEFAULT) {
-
-            //if (itemName.contains("potion") || itemName.contains("enchantement")) continue;
-
             if (itemName.contains(" ")) {
                 List<String> listName = Arrays.asList(itemName.split("\s"));
                 for (String value : listName) {
@@ -81,9 +78,6 @@ public class GrupoCreate implements VGlobal {
 
             for (String itemName : ITEM_NAME_LIST_DEFAULT) {
                 if (pertence(grupName, itemName)) {
-                    if (grupName.equals("dark oak") && itemName.contains("dark oak")) {
-                        Msg.ServidorGreen("grupo name: " + grupName + " - item name: " + itemName + " - contains: " + contains(grupName, itemName), GrupoCreate.class);
-                    }
                     if (contains(grupName, itemName)) {
                         if (!grupo.getListItem().contains(ITEM_MAP_NAME.get(itemName))) {
                             grupo.addListItem(ITEM_MAP_NAME.get(itemName));
@@ -97,7 +91,7 @@ public class GrupoCreate implements VGlobal {
                 try {
                     GrupoDao dao = new GrupoDao();
                     dao.save(grupo);
-                    Msg.Grupo(grupo, GrupoCreate.class);
+                    Msg.ServidorBlue("Criando o grupo: "+ grupo.getName());
                     id++;
                 } catch (GrupoException e) {
                     Msg.ServidorErro(e, "NEW()", GrupoCreate.class);

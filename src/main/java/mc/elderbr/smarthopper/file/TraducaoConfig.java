@@ -1,15 +1,21 @@
 package mc.elderbr.smarthopper.file;
 
+import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.exceptions.GrupoException;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.Traducao;
 import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Map;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
@@ -30,6 +36,9 @@ public class TraducaoConfig {
     private File fileBR = new File(directoryFile, "pt_br.yml");
     private File fileGrupoBR = new File(directoryFile, "grupo.yml");
     private File filePT = new File(directoryFile, "pt_pt.yml");
+
+    private ItemController itemCtrl = new ItemController();
+    private GrupoController grupoCtrl = new GrupoController();
 
     public TraducaoConfig() {
         // Criando o pasta lang
@@ -151,31 +160,29 @@ public class TraducaoConfig {
             // Lendo o arquivo de tradução
             yml = YamlConfiguration.loadConfiguration(files);
             // Nome do linguagem
-            lang = files.getName().substring(0, files.getName().indexOf(".")).trim().toLowerCase();
+            lang = yml.getString("lang");
 
-            LANG_NAME_LIST.add(lang);
+            if(lang == null) continue;
 
-            for (Map.Entry<String, Object> value : yml.getValues(false).entrySet()) {
-                traducao = new Traducao();
-                traducao.setLang(lang);
-                traducao.setName(value.getKey());
-                traducao.setTranslation(value.getValue().toString());
-                if (lang.equals("grupo")) {
-                    traducao.setLang("pt_br");
-                    Grupo grupo = GRUPO_MAP_NAME.get(traducao.getName());
-                    if (grupo != null) {
-                        grupo.addTranslation(traducao.getLang(), traducao.getTranslation());
-                        Grupo.SET(grupo);
-                    }
-                } else {
-                    Item item = ITEM_MAP_NAME.get(traducao.getName());
-                    if (item != null) {
-                        item.addTranslation(traducao.getLang(), traducao.getTranslation());
-                        Item.SET(item);
-                        // Adicionando a tradução na variavel global
-                        TRADUCAO_ITEM.put(item.getName().toLowerCase(), item);
-                        TRADUCAO_ITEM.put(traducao.getTranslation().toLowerCase(), item);
-                    }
+            for(Map.Entry<String, Object> map : yml.getValues(false).entrySet()){
+                // Procurando e salvando a tradução para o item
+                try {
+                    Item item = itemCtrl.findByName(map.getKey());
+                    if(item == null) continue;
+                    item.addTranslation(lang, map.getValue().toString());
+                    itemCtrl.update(item);
+                } catch (ItemException e) {
+
+                }
+
+                // Procurando e salvando a tradução para o grupo
+                try {
+                    Grupo grupo = grupoCtrl.findByName(map.getKey());
+                    if(grupo == null) continue;
+                    grupo.addTranslation(lang, map.getValue().toString());
+                    grupoCtrl.update(grupo);
+                } catch (GrupoException e) {
+
                 }
             }
             files.delete();
