@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public class TextureController {
     private final String url = "http://elderbr.com/minecraft/textures/SmartHopper.zip";
-    private final boolean USE_TEXTURE = Config.IsUseTexture();
 
     public TextureController() {
     }
@@ -39,7 +38,7 @@ public class TextureController {
     }
 
     public void aceitaTexture(PlayerResourcePackStatusEvent event) {
-        if(USE_TEXTURE) {
+        if (Config.IsUseTexture()) {
             if (event.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED) {
                 event.getPlayer().kickPlayer("§lPara entrar no nosso servidor precisa aceitar nossa textura!");
             }

@@ -13,7 +13,7 @@ grupo atualizado: true
 # textura do botão anterior retorna a página anterior
 # textura do botão salvar que salva ou atera o grupo
 # link texture pack http://elderbr.com/minecraft/textures/SmartHopper.zip
-useTexture: true;
+useTexture: true
 #Adminsitradores é responsável por adicionar ou remover operadores
 #Fica responsável por adicionar, alterar ou remover grupos
 adm:
