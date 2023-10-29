@@ -3,7 +3,9 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.abstracts.Funil;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -175,6 +177,13 @@ public class Item extends Funil implements Comparable<Item> {
     }
 
     public ItemStack parseItemStack(){
+        ItemStack itemStack = null;
+        if(name.contains("enchanted book")){
+            return ENCHANTEMENT_BOOK_MAP.get(name);
+        }
+        if(name.contains("potion")){
+            return POTION_MAP.get(name);
+        }
         return new ItemStack(Material.getMaterial(name.toUpperCase().replaceAll("[\s]","_")));
     }
 
