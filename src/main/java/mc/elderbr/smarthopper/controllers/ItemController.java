@@ -110,9 +110,18 @@ public class ItemController {
         if (itemStack == null || itemStack.getType().isAir()) {
             throw new ItemException("Item invalido!!!");
         }
-        item = ITEM_MAP_NAME.get(Item.ToName(itemStack));
+        switch (itemStack.getType()){
+            case ENCHANTED_BOOK:
+                return LivroEncantado.getItem(itemStack);
+            case POTION:
+            case SPLASH_POTION:
+            case LINGERING_POTION:
+                return Pocao.getItem(itemStack);
+            default:
+                item = findByName(Item.ToName(itemStack));
+        }
         if (item == null) {
-            throw new ItemException("O item não existe!!!");
+            throw new ItemException(String.format("O item %s não está na lista!!!", Item.ToName(itemStack)));
         }
         return item;
     }
