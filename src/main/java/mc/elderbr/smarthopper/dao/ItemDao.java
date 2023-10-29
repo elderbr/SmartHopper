@@ -97,8 +97,6 @@ public class ItemDao implements VGlobal {
     public boolean update(Item item) throws ItemException {
         try {
             name = item.getName().toLowerCase();
-            config.set(name.concat(".id"), item.getId());
-            config.set(name.concat(".name"), item.getName());
             if (item.getTranslation().size() > 0) {
                 config.set(name.concat(".lang"), item.getTranslation());
             }
