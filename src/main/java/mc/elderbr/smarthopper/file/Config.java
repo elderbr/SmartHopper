@@ -163,9 +163,13 @@ public class Config implements VGlobal {
         add("author", "ElderBR", Arrays.asList("Criado e desenvolvido"));
         add("discord", "ElderBR#5398", Arrays.asList("Entre em contato"));
 
+        //Tutoriais
+        add("tutorias", "https://youtube/fBIeZ57ka1M?si=ZqE5TQRG2KjlaHdD", Arrays.asList("Tutorial de como usar"));
+
         // VERSÃO DO PLUGIN
         add("version", VGlobal.VERSION, Arrays.asList("Versão atual do plugin"));
 
+        // Escolher em usar a textura
         add("useTexture", true, Arrays.asList("Usa textura personalizada para os botões de navegação dos itens do grupo"));
 
         // Administrador do Smart Hopper

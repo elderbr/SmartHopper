@@ -103,6 +103,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         getCommand("livro").setExecutor(new LivroComando());
         getCommand("informacao").setExecutor(new LivroComando());
+        getCommand("tutorial").setExecutor(new InformacaoComando());
     }
 
     private void events() {
