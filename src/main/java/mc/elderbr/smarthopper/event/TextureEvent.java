@@ -1,8 +1,6 @@
 package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.TextureController;
-import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

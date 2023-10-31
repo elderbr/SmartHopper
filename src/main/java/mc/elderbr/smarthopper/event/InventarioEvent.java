@@ -1,8 +1,7 @@
 package mc.elderbr.smarthopper.event;
 
+import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
-import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -63,7 +62,7 @@ public class InventarioEvent implements Listener, Botao {
             inventoryCustom.btnNavegation(event);
 
             // Verifica se o player é Adm do servidor ou do Smart Hopper
-            if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
+            if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
             add();// Adicionando item ao grupo
             remove();// Removendo item do grupo
             save();// Salvando o grupo
@@ -99,7 +98,7 @@ public class InventarioEvent implements Listener, Botao {
             if (equalButton(itemClicked)) return;
 
             // Verifica se o jogador é ADM
-            if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
+            if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
 
             // Verificando se o item está na lista do inventário
             ItemStack newItem = new ItemStack(itemClicked.getType());
@@ -119,7 +118,7 @@ public class InventarioEvent implements Listener, Botao {
             if (event.isLeftClick() && itemClicked.equals(BtnSalva())) {
                 String msg = "Ops, algo deu errado!!!";
                 // Verifica se o jogador é ADM
-                if (!player.isOp() && !Config.CONTAINS_ADD(player)) return;
+                if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
                 if (grupo.getId() < 1) {
                     grupo.addTranslation(player);
                     if (grupoCtrl.save(grupo)) {

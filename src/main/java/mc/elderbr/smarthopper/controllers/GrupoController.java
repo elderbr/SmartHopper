@@ -3,8 +3,6 @@ package mc.elderbr.smarthopper.controllers;
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.GrupoCreate;
@@ -109,7 +107,7 @@ public class GrupoController implements VGlobal {
 
     public boolean addTraducao(@NotNull Player player, @NotNull String[] args) throws GrupoException {
         // Verifica se o jogador é o administrador do SmartHopper
-        if (player.isOp() && !Config.CONTAINS_ADD(player)) {
+        if (player.isOp() && !AdmController.ContainsAdm(player)) {
             throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
         }
 
@@ -151,7 +149,7 @@ public class GrupoController implements VGlobal {
 
     public boolean delete(Player player, Grupo grupo) throws GrupoException {
 
-        if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
+        if (!player.isOp() && !AdmController.ContainsAdm(player)) {
             throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
         }
 

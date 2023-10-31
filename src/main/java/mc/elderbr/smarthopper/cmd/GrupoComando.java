@@ -1,8 +1,8 @@
 package mc.elderbr.smarthopper.cmd;
 
+import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
-import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -94,7 +94,7 @@ public class GrupoComando implements CommandExecutor {
     private boolean add() {
 
         // Verifica se o jogador é adm do Smart hopper
-        if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
+        if (!player.isOp() && !AdmController.ContainsAdm(player)) {
             Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
             return false;
         }

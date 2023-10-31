@@ -1,10 +1,8 @@
 package mc.elderbr.smarthopper.controllers;
 
-import mc.elderbr.smarthopper.file.Config;
+import mc.elderbr.smarthopper.dao.ConfigDao;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
-
-import java.io.IOException;
 
 public class TextureController {
     private final String url = "http://elderbr.com/minecraft/textures/SmartHopper.zip";
@@ -12,33 +10,18 @@ public class TextureController {
     public TextureController() {
     }
 
-    public boolean isUseTexture() {
-        if (!Config.ExistUseTexture()) {
-            setUseTexture(true);
-        }
-        return Config.IsUseTexture();
-    }
-
-    public void setUseTexture(boolean use) {
-        try {
-            Config.SetUseTexture(use);
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar o uso da textura no servidor!\n" + e.getMessage());
-        }
-    }
-
     public String getResourcePack() {
         return url;
     }
 
     public void carrega(Player player) {
-        if (Config.IsUseTexture()) {
+        if (ConfigDao.useTexture()) {
             player.setResourcePack(url);
         }
     }
 
     public void aceitaTexture(PlayerResourcePackStatusEvent event) {
-        if (Config.IsUseTexture()) {
+        if (ConfigDao.useTexture()) {
             if (event.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED) {
                 event.getPlayer().kickPlayer("§lPara entrar no nosso servidor precisa aceitar nossa textura!");
             }

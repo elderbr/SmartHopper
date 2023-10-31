@@ -2,7 +2,6 @@ package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.ItemCreate;
 import mc.elderbr.smarthopper.model.LivroEncantado;
@@ -306,7 +305,7 @@ public class ItemController {
         }
 
         // Verifica se o jogar é administrador do SmartHopper
-        if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
+        if (!player.isOp() && !AdmController.ContainsAdm(player)) {
             throw new ItemException("Você não tem permissão para adicionar a tradução ao item!!!");
         }
 

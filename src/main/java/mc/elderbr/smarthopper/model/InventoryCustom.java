@@ -1,10 +1,10 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -81,7 +81,7 @@ public class InventoryCustom implements Botao, VGlobal {
         this.name = name;
 
         // Verifica se o jogador é adm
-        if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
+        if (!player.isOp() && !AdmController.ContainsAdm(player)) {
             throw new GrupoException("Ops, você não Adm do Smart Hopper!!!");
         }
 
@@ -162,7 +162,7 @@ public class InventoryCustom implements Botao, VGlobal {
         switch (pag) {
             case 1:
                 if (pagMap.size() == 1) {
-                    if (player.isOp() || Config.CONTAINS_ADD(player)) {
+                    if (player.isOp() || AdmController.ContainsAdm(player)) {
                         inventory.setItem(53, BtnSalva());
                     }
                 } else {
@@ -171,7 +171,7 @@ public class InventoryCustom implements Botao, VGlobal {
                 break;
             case 2:
                 if (pagMap.size() == 2) {
-                    if (player.isOp() || Config.CONTAINS_ADD(player)) {
+                    if (player.isOp() || AdmController.ContainsAdm(player)) {
                         inventory.setItem(52, BtnAnteriorPag1());
                         inventory.setItem(53, BtnSalva());
                     } else {
@@ -184,7 +184,7 @@ public class InventoryCustom implements Botao, VGlobal {
                 break;
             case 3:
                 if (pagMap.size() == 3) {
-                    if (player.isOp() || Config.CONTAINS_ADD(player)) {
+                    if (player.isOp() || AdmController.ContainsAdm(player)) {
                         inventory.setItem(52, BtnAnteriorPag2());
                         inventory.setItem(53, BtnSalva());
                     } else {
@@ -213,7 +213,7 @@ public class InventoryCustom implements Botao, VGlobal {
         if (grupo != null) {
 
             // Se não for adm do servidor ou do SmartHopper retorna
-            if (!player.isOp() && !Config.CONTAINS_ADD(player)) {
+            if (!player.isOp() && !AdmController.ContainsAdm(player)) {
                 return;
             }
             // Pegando o item que foi clicado

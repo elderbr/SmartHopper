@@ -1,7 +1,9 @@
 package mc.elderbr.smarthopper.cmd;
 
-import mc.elderbr.smarthopper.file.Config;
-import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.controllers.AdmController;
+import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,55 +13,43 @@ import org.jetbrains.annotations.NotNull;
 
 public class AdministradorComando implements CommandExecutor {
 
-    private String player;
+    AdmController admCtrl = new AdmController();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (sender instanceof Player playerCommand) {
+        if (sender instanceof Player player) {
 
-            player = args[0].trim();
-
-            // VERIFICA SE EXISTE O NOME DO JOGADOR DIGITADO
-            if (args.length == 0 || player.length() < 4) {
-                Msg.PlayerGold(playerCommand, "Verifique se digitou o nome do jogador correto!!!");
-                return false;
-            }
-
-            // ADICIONANDO UM NOVO ADM
-            if (command.getName().equalsIgnoreCase("addAdm")) {
-
-                if (!playerCommand.isOp()) {
-                    Msg.PlayerGold(playerCommand, "Você não tem permissão para usar esse comando!!!");
-                    return false;
-                }
-
-                if (VGlobal.ADM_LIST.contains(player)) {
-                    Msg.PlayerGold(playerCommand, String.format("O jogador %s já é adm do Smart Hopper!!!", player));
-                    return false;
-                }
-
-                if (Config.ADD_ADM(player)) {
-                    Msg.PlayerTodos(String.format("$lO jogador $e%s $r$lé o novo administrador do $2Smart Hopper!!!", player));
-                    return false;
-                }else{
-                    Msg.PlayerRed(playerCommand, "Ocorreu um erro ao adicionar novo adm do Smart Hopper!!!");
-                }
-
-            }
-
-            // REMOVER ADMINISTRADOR
-            if (command.getName().equalsIgnoreCase("removerAdm")) {
-
-                if (!playerCommand.isOp()) {
-                    Msg.PlayerGold(playerCommand, "Você não tem permissão para usar esse comando!!!");
-                    return false;
-                }
-                // BUSCANDO JOGADOR NA LISTA
-                if(Config.CONTAINS_ADD(player) && Config.REMOVE_ADM(player)){
-                    Msg.PlayerTodos("$lO jogador $e"+ player +"$r$l foi $cremovido$r$l do Adm do $2Smart Hopper!!!");
-                }
-
+            switch (command.getName().toLowerCase()) {
+                case "addadm":
+                    try {
+                        admCtrl.addAdm(player, args);
+                        Msg.PlayerTodos(String.format("$lO jogador $e%s $r$lé o novo administrador do $2Smart Hopper!!!", args[0]));
+                        return true;
+                    } catch (Exception e) {
+                        Msg.PlayerRed(player, e.getMessage());
+                    }
+                    break;
+                case "removeradm":
+                    try {
+                        admCtrl.removeAdm(player, args);
+                        Msg.PlayerTodos("$lO jogador $e"+ args[0] +"$r$l foi $cremovido$r$l do Adm do $2Smart Hopper!!!");
+                        return true;
+                    } catch (Exception e) {
+                        Msg.PlayerRed(player, e.getMessage());
+                    }
+                    break;
+                case "reload":
+                    if(!player.isOp() && !admCtrl.containsAdm(player)){
+                        Msg.PlayerGold(player, "Você não tem permissão!!!");
+                        return false;
+                    }
+                    Msg.PlayerTodos("Smart Hopper foi reiniciado...");
+                    ItemController.findAll();
+                    GrupoController.findAll();
+                    new TraducaoConfig();
+                    Msg.PlayerTodos("Dados do Smart Hopper carregados...");
+                    return true;
             }
 
         }

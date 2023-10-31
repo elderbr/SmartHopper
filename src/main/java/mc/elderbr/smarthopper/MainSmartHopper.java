@@ -2,34 +2,24 @@ package mc.elderbr.smarthopper;
 
 
 import mc.elderbr.smarthopper.cmd.*;
+import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
-import mc.elderbr.smarthopper.dao.GrupoDao;
-import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.event.TextureEvent;
-import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.file.Config;
 import mc.elderbr.smarthopper.file.GrupoConfig;
 import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.LivroEncantado;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
-
 public class MainSmartHopper extends JavaPlugin implements Listener {
-
-    private Config config;
 
     // Item
     private Item item;
@@ -52,7 +42,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
-        config = new Config();
+        //config = new Config();
 
 
         ItemController.findAll();// Busca todos os item e salva na variavel global
@@ -60,6 +50,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Tradução
         traducaoConfig = new TraducaoConfig();
+
+        // Limpando o arquivo cofig.yml e rescrevendo
+        AdmController.Reset();
 
         // Comandos
         commands();
@@ -76,8 +69,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
     private void commands() {
 
-        getCommand("reload").setExecutor(new ConfigComando());
-
+        // ITEM
         getCommand("item").setExecutor(new ItemComando());
         getCommand("item").setTabCompleter(new ItemTabCompleter());
 
@@ -96,10 +88,10 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getCommand("traducaogrupo").setTabCompleter(new TraducaoTabCompleter());
 
         // CONFIGURAÇÃO
+        getCommand("reload").setExecutor(new AdministradorComando());
         getCommand("addadm").setExecutor(new AdministradorComando());
         getCommand("removeradm").setExecutor(new AdministradorComando());
         getCommand("removeradm").setTabCompleter(new AdministradorTabCompleter());
-        Config.SET_VERSION();// Atualiza a versão
 
         getCommand("livro").setExecutor(new LivroComando());
         getCommand("informacao").setExecutor(new LivroComando());
