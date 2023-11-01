@@ -30,15 +30,10 @@ public class AdministradorTabCompleter implements TabCompleter {
             player = (Player) sender;
             switch (command.getName().toLowerCase()) {
                 case "addadm":
-                    list = new ArrayList<>();
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        Jogador jogador = new Adm(p);
-                        list.add(jogador.getDsJogador());
-                    }
-                    return list;
                 case "removeradm":
                     list = new ArrayList<>();
                     for (String jogador : VGlobal.ADM_LIST) {
+                        if(jogador.equals(player.getName())) continue;
                         list.add(jogador);
                     }
                     return list;

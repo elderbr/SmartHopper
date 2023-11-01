@@ -90,6 +90,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // CONFIGURAÇÃO
         getCommand("reload").setExecutor(new AdministradorComando());
         getCommand("addadm").setExecutor(new AdministradorComando());
+        getCommand("addadm").setTabCompleter(new AdministradorTabCompleter());
         getCommand("removeradm").setExecutor(new AdministradorComando());
         getCommand("removeradm").setTabCompleter(new AdministradorTabCompleter());
 
