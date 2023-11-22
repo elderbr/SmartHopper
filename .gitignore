@@ -5,8 +5,12 @@
 *.ipr
 *.iws
 
-# IntelliJ
+### IntelliJ IDEA ###
 out/
+.idea
+*.iws
+*.iml
+*.ipr
 
 # Compiled class file
 *.class
