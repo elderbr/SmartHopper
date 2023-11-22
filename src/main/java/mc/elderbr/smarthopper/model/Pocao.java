@@ -26,7 +26,7 @@ public class Pocao implements VGlobal {
             }
             itemStack = new ItemStack(Material.POTION);
             meta = (PotionMeta) itemStack.getItemMeta();
-            meta.setBasePotionData(new PotionData(potion));
+            meta.setBasePotionType(potion);
             itemStack.setItemMeta(meta);
             POTION_MAP.put(name, itemStack);
 
@@ -35,7 +35,7 @@ public class Pocao implements VGlobal {
             }
             itemStack = new ItemStack(Material.SPLASH_POTION);
             meta = (PotionMeta) itemStack.getItemMeta();
-            meta.setBasePotionData(new PotionData(potion));
+            meta.setBasePotionType(potion);
             itemStack.setItemMeta(meta);
             POTION_MAP.put("splash " + name, itemStack);
 
@@ -44,7 +44,7 @@ public class Pocao implements VGlobal {
             }
             itemStack = new ItemStack(Material.LINGERING_POTION);
             meta = (PotionMeta) itemStack.getItemMeta();
-            meta.setBasePotionData(new PotionData(potion));
+            meta.setBasePotionType(potion);
             itemStack.setItemMeta(meta);
             POTION_MAP.put("lingering " + name, itemStack);
         }
