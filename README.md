@@ -18,10 +18,13 @@ Para usar o separador inteligente basta ter uma **bigorna** e renome o funil com
 
 > Download SmartHopper v4.0.8 [SmartHopper](https://github.com/elderbr/SmartHopper/raw/main/version/SmartHopper-4.0.8.jar)
 
- [![Spigot to Spigot](https://static.spigotmc.org/img/spigot.png)](https://www.spigotmc.org/resources/smarthopper.73646/) 
+<a href="https://www.spigotmc.org/resources/smarthopper.73646/" target="_blank">
+    <img  src="https://github.com/elderbr/assets/blob/main/smarthopper/spigotmc_logo.png?raw=true"  width="150"  height="150">
+</a>
 
- [![Curso Forge](https://i.imgur.com/9weYDWf.png)](https://legacy.curseforge.com/minecraft/bukkit-plugins/smarthopper)
-
+<a href="https://www.spigotmc.org/resources/smarthopper.73646/" target="_blank">
+    <img  src="https://github.com/elderbr/assets/blob/main/smarthopper/cursoforege_logo.png?raw=true"  width="150"  height="150">
+</a>
 
 ---
 
