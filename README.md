@@ -18,6 +18,8 @@ Para usar o separador inteligente basta ter uma **bigorna** e renome o funil com
 
 > Download SmartHopper v4.0.8 [SmartHopper](https://github.com/elderbr/SmartHopper/raw/main/version/SmartHopper-4.0.8.jar)
 
+> [![Spigot to Spigot](https://static.spigotmc.org/img/spigot.png)](https://www.spigotmc.org/resources/smarthopper.73646/)
+
 
 ---
 
