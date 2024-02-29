@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.interfaces;
 
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.model.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -84,15 +85,22 @@ public interface VGlobal {
      *********************************************************/
     Map<String, ItemStack> POTION_MAP = new HashMap<>();
 
+    /*********************************************************
+     *
+     *                      MESSAGE
+     *
+     *********************************************************/
+     Map<String, Message> MESSAGE_MAP = new HashMap<>();
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
-    String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();
+    String VERSION = SMARTHOPPER.getDescription().getVersion();
     int VERSION_INT = Integer.parseInt(VERSION.replaceAll("[.]", ""));
 
-    File ARQUIVO = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper").getDataFolder().getAbsoluteFile();
+    File ARQUIVO = SMARTHOPPER.getDataFolder().getAbsoluteFile();
     File ITEM_FILE = new File(ARQUIVO, "item.yml");
     File GRUPO_FILE = new File(ARQUIVO, "grupo.yml");
     File FILE_LANG = new File(ARQUIVO + File.separator + "lang");
+    File FILE_MESSAGE = new File(ARQUIVO, "message.yml");
 
 
 }
