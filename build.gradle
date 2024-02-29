@@ -20,4 +20,14 @@ dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'org.apache.commons:commons-text:1.9'
     compileOnly('org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT')
+    testImplementation(platform('org.junit:junit-bom:5.10.2'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

@@ -1,0 +1,39 @@
+notPermission: "Você não tem permissão!"
+restarter: "Smart Hopper foi reiniciado..."
+reload: "Dados do Smart Hopper carregados..."
+
+admNew: "O jogador %s é o novo administrador do Smart Hopper!"
+admRemove: "O jogador %s não é mais administrador do Smart Hopper!"
+
+itemNotExist: "O item %s não existe!"
+itemInvalid: "O item %s não existe!"
+itemNameInvalid: "O nome o item %s é invalido!"
+itemNameEnter: "Digite o nome do item!"
+itemCodeInvalid: "O código %s não é valido!"
+itemCodeEnter: "Segure o item na mão ou digite o nome o ID do item!"
+itemUpdateError: "Erro ao atualizar o item!"
+
+groupNotExist: "O grupo %s não existe!"
+groupNameEnter: "Digite o nome do grupo!"
+groupAddItem: "Adicione item no grupo para poder salvar!"
+groupCodeInvalid: "O código do grupo é invalido!"
+groupCodeEnter: "Segure o item na mão ou digite o nome ou o código do grupo!"
+groupNotExistItem: "Não existe grupo para o item %s!"
+groupAddSuccessfully: "Grupo %s adicionado com sucesso!"
+groupAddErro: "Erro ao adicionar novo grupo!"
+groupUpdateErro: "Erro ao atualizar o grupo!"
+groupDeleteErro: "Erro ao remover o grupo %s!"
+
+playerNameInvalid: "Nome do player invalido!"
+playerNameErro: "Digite o nome do player!"
+playerExist: "O jogador %s já está na lista de administradores do Smart Hopper!"
+playerNotExist: "O jogador %s não está na lista de administradores do Smart Hopper!"
+
+hopperInvalid: "O funil configurado com o nome %s não é valido!"
+
+texturePermission: "Para entrar no nosso servidor precisa aceitar nossa textura!"
+textureError: "Ocorreu um ao baixar a textura, tente novamente!"
+
+
+translationNameInvalid: "A tradução não pode ser menor que 3 caracteres!"
+translationNotPermission: "Você não tem permissão para adicionar a tradução ao item!"

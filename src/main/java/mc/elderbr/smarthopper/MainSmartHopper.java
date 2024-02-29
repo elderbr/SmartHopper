@@ -5,6 +5,8 @@ import mc.elderbr.smarthopper.cmd.*;
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.controllers.MessageController;
+import mc.elderbr.smarthopper.dao.MessageDao;
 import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
@@ -14,10 +16,13 @@ import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import static mc.elderbr.smarthopper.interfaces.VGlobal.FILE_MESSAGE;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
 
@@ -29,10 +34,13 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
     private GrupoConfig grupoConfig;
     private TraducaoConfig traducaoConfig;
 
+    // Criando o arquivo de mensagem
+    private MessageDao messageDao;
+
+
 
     @Override
     public void onEnable() {
-
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN +
                 "\n+---------------------------+\n" +
                 "| Smart Hopper              |\n" +
@@ -50,6 +58,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Tradução
         traducaoConfig = new TraducaoConfig();
+
+        messageDao = new MessageDao();
+        MessageController messageController = new MessageController();
 
         // Limpando o arquivo cofig.yml e rescrevendo
         AdmController.Reset();
