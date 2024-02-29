@@ -24,7 +24,7 @@ public class LivroController {
         List<String> lista = new ArrayList<>();
 
         //Pagina 1
-        lista.add("Para configurar o iltro vai precisar de uma bigorna e XP, coloque um ou mais funil na bigorna e " +
+        lista.add("Para configurar o livro vai precisar de uma bigorna e XP, coloque um ou mais funil na bigorna e " +
                 "renome com o nome do item ou grupo em inglês, mas é recomendado usar o ID. Pronto o funil está " +
                 "configurado. Se você não sabe qual é o ID configurou para o funil, basta clicar no ");
 
