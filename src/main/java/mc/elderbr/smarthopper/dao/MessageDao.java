@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.dao;
 
+import mc.elderbr.smarthopper.enums.MessageType;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Message;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -7,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MessageDao implements VGlobal {
 
@@ -61,6 +63,9 @@ public class MessageDao implements VGlobal {
         if (codes == null || codes.size() < 1) {
             return;
         }
+        if(config == null){
+            config = YamlConfiguration.loadConfiguration(FILE_MESSAGE);
+        }
         for (Message message : codes) {
             config.set(message.getCode(), message.getMsg());
             if (message.getComments() != null) {
@@ -84,37 +89,17 @@ public class MessageDao implements VGlobal {
     }
 
     private void create() {
+        List<String> list = new ArrayList<>();
 
-
-        List<String> sb = new ArrayList<>();
-        // Obtém o InputStream para o arquivo de recursos
-        InputStream inputStream = getClass().getResourceAsStream("/message.yml");
-
-        // Verifica se o recurso existe
-        if (inputStream == null) {
-            System.out.println("O arquivo message.yml não foi encontrado no diretório de recursos.");
-            return;
+        for(MessageType type : MessageType.values()){
+            list.add(type.name());
         }
 
-        // Usa o InputStream com um InputStreamReader e um BufferedReader para ler o arquivo
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                sb.add(linha);
-            }
-        } catch (IOException e) {
-            Msg.ServidorGold("Ocorreu um erro ao tentar ler o arquivo");
-        }
-
-        Collections.sort(sb);
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILE_MESSAGE)))) {
-            for (String msg : sb) {
-                writer.write(msg);
-                writer.newLine();
-                writer.flush();
-            }
-        } catch (IOException e) {
-            Msg.ServidorGold("Erro ao tentar criar o arquivo message.yml");
+        Collections.sort(list);
+        for(String value : list){
+            MessageType type = MessageType.valueOf(value);
+            Message message = new Message(type.getCode(), type.getMsg());
+            insert(message);
         }
     }
 }
