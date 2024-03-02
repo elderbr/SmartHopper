@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.dao.GrupoDao;
+import mc.elderbr.smarthopper.enums.MessageType;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
@@ -30,6 +31,7 @@ public class GrupoController implements VGlobal {
     private List<Grupo> listGrupo;
     private Item item;
     private ItemController itemCtrl = new ItemController();
+    private MessageController msgController = new MessageController();
 
     public GrupoController() {
     }
@@ -37,11 +39,11 @@ public class GrupoController implements VGlobal {
     public boolean save(Grupo grupo) throws GrupoException {
         // O grupo não pode nulo e precisa conter o nome
         if (grupo == null || grupo.getName().isBlank()) {
-            throw new GrupoException("Digite o nome do grupo!!!");
+            throw new GrupoException(msgController.select(MessageType.GROUP_NAME_ENTER));
         }
         // Verificar se existe item adicionado no grupo
         if (grupo.getListItem().isEmpty()) {
-            throw new GrupoException("Adicione item no grupo para poder salvar!!!");
+            throw new GrupoException(msgController.select(MessageType.GROUP_ADD_ITEM));
         }
         grupo.setId(ID());
         return grupoDao.save(grupo);
@@ -52,7 +54,7 @@ public class GrupoController implements VGlobal {
         try {
             int codigo = Integer.parseInt(name.replaceAll("[^0-9]", ""));
             if (codigo < 1) {
-                throw new GrupoException("O código do grupo é invalido!!!");
+                throw new GrupoException(msgController.select(MessageType.GROUP_CODE_INVALID, codigo));
             }
             grupo = GRUPO_MAP_ID.get(codigo);
         } catch (NumberFormatException e) {
@@ -65,17 +67,17 @@ public class GrupoController implements VGlobal {
         listGrupo = new ArrayList<>();
         // O item não pode nulo ou igual ao ar
         if (itemStack == null || itemStack.getType() == Material.AIR) {
-            throw new GrupoException("Segure o item na mão ou digite o nome ou o código do grupo!!!");
+            throw new GrupoException(msgController.select(MessageType.GROUP_CODE_ENTER));
         }
         name = Item.ToName(itemStack);// Pegando o nome do item
         try {
             item = itemCtrl.findByItemStack(itemStack);// Busca o item na memoria global
         } catch (ItemException e) {
-            throw new GrupoException(String.format("Não existe grupo para o item %s!!!", name));
+            throw new GrupoException(msgController.select(MessageType.GROUP_NOT_EXIST_ITEM, name));
         }
         listGrupo = item.getListGrupo();// Lista de grupo no item
         if (listGrupo.isEmpty()) {
-            throw new GrupoException(String.format("Não existe grupo para o item %s!!!", name));
+            throw new GrupoException(msgController.select(MessageType.GROUP_NOT_EXIST_ITEM, name));
         }
         return listGrupo;
     }
@@ -96,11 +98,11 @@ public class GrupoController implements VGlobal {
 
     public boolean update(Grupo grupo) throws GrupoException {
         if (grupo == null || grupo.getId() < 1 || grupo.getName() == null) {
-            throw new GrupoException("Grupo invalido!!!");
+            throw new GrupoException(msgController.select(MessageType.GROUP_NOT_EXIST));
         }
         this.grupo = GRUPO_MAP_NAME.get(grupo.getName().toLowerCase());
         if (this.grupo == null) {
-            throw new GrupoException(String.format("O grupo %s não existe!!!", grupo.getName()));
+            throw new GrupoException(msgController.select(MessageType.GROUP_NOT_EXIST));
         }
         return grupoDao.update(grupo);
     }
@@ -108,7 +110,7 @@ public class GrupoController implements VGlobal {
     public boolean addTraducao(@NotNull Player player, @NotNull String[] args) throws GrupoException {
         // Verifica se o jogador é o administrador do SmartHopper
         if (player.isOp() && !AdmController.ContainsAdm(player)) {
-            throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
+            throw new GrupoException(msgController.select(MessageType.ADM_NOT));
         }
 
         // Verifica se existe o ID do grupo e a tradução
@@ -120,7 +122,7 @@ public class GrupoController implements VGlobal {
         String traducao = convertTraducao(args);
         // A tradução precisa conter pelo menos 3 caracteres
         if (traducao.length() < 3) {
-            throw new GrupoException("A tradução não pode ser menor que 3 caracteres!!!");
+            throw new GrupoException(msgController.select(MessageType.TRANSLATION_NAME_INVALID));
         }
 
         // Buscando o grupo pelo código
@@ -128,11 +130,11 @@ public class GrupoController implements VGlobal {
         try {
             id = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            throw new GrupoException(String.format("O código %s não é valido!!!", args[0]));
+            throw new GrupoException(msgController.select(MessageType.GROUP_NOT_EXIST, args[0]));
         }
         grupo = GRUPO_MAP_ID.get(id);
         if (grupo == null) {
-            throw new GrupoException(String.format("O código %s não está na lista de grupos!!!", args[0]));
+            throw new GrupoException(msgController.select(MessageType.GROUP_NOT_EXIST, args[0]));
         }
 
         grupo.addTranslation(player.getLocale(), traducao);
@@ -150,11 +152,11 @@ public class GrupoController implements VGlobal {
     public boolean delete(Player player, Grupo grupo) throws GrupoException {
 
         if (!player.isOp() && !AdmController.ContainsAdm(player)) {
-            throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
+            throw new GrupoException(msgController.select(MessageType.ADM_NOT));
         }
 
         if (grupo == null || grupo.getId() < 1) {
-            throw new GrupoException("Digite o nome ou ID do grupo!!!");
+            throw new GrupoException(msgController.select(MessageType.GROUP_CODE_ENTER));
         }
         return grupoDao.delete(grupo);
     }

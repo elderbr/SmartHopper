@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.dao.ConfigDao;
+import mc.elderbr.smarthopper.enums.MessageType;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class AdmController implements VGlobal {
 
     private ConfigDao configDao = new ConfigDao();
+    private MessageController msgController = new MessageController();
 
     public AdmController() {
         configDao.findByAll();
@@ -18,17 +20,17 @@ public class AdmController implements VGlobal {
 
     public boolean addAdm(Player player, String[] args) throws Exception {
         if(!player.isOp()){
-            throw new Exception("Ops, você não pode usar esse comando, apenas adm do servidor!!!");
+            throw new Exception(msgController.select(MessageType.ADM_NOT));
         }
         if(args == null || args.length < 1){
-            throw new Exception("Digite o nome do player!!!");
+            throw new Exception(msgController.select(MessageType.PLAYER_NAME_INVALID));
         }
         if(args.length > 1){
-            throw new Exception("Digite apenas um nome!!!");
+            throw new Exception(msgController.select(MessageType.PLAYER_NAME_ERROR));
         }
         String name = args[0];
         if(configDao.containsAdm(name)){
-            throw new Exception(String.format("O jogador %s já está na lista de administradores do Smart Hopper!!!", name));
+            throw new Exception(msgController.select(MessageType.PLAYER_EXIST, name));
         }
         configDao.addAdm(name);
         return configDao.containsAdm(name);
@@ -36,20 +38,20 @@ public class AdmController implements VGlobal {
 
     public boolean removeAdm(Player player, String[] args) throws Exception {
         if(!player.isOp()){
-            throw new Exception("$r$lOps, você não pode usar esse comando, apenas adm do servidor!!!");
+            throw new Exception(msgController.select(MessageType.ADM_NOT));
         }
         if(args == null || args.length < 1){
-            throw new Exception("$lDigite o nome do player!!!");
+            throw new Exception(msgController.select(MessageType.PLAYER_NAME_ERROR));
         }
         if(args.length > 1){
-            throw new Exception("$lDigite apenas um nome!!!");
+            throw new Exception(msgController.select(MessageType.PLAYER_NAME_ERROR));
         }
         String name = args[0];
         if(name.length()<5){
-            throw new Exception("$lNome do player invalido!!!");
+            throw new Exception(msgController.select(MessageType.PLAYER_NAME_INVALID, name));
         }
         if(!configDao.containsAdm(name)){
-            throw new Exception(String.format("$r$lO jogador $e%s $r$lnão está na lista de administradores do $eSmart Hopper$r$l!!!", name));
+            throw new Exception(msgController.select(MessageType.ADM_NOT_EXIST, name));
         }
         configDao.removeAdm(name);
         return true;

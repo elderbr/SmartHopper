@@ -1,8 +1,8 @@
 package mc.elderbr.smarthopper.controllers;
 
 
+import mc.elderbr.smarthopper.enums.MessageType;
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Material;
@@ -19,8 +19,6 @@ import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_ID;
 import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_ID;
 
 public class SmartHopper {
-
-
     private int codigo;
     private String name;
     private Object type = null;
@@ -33,6 +31,8 @@ public class SmartHopper {
 
     private Grupo grupo;
 
+    private MessageController msgController = new MessageController();
+
     public SmartHopper() {
 
     }
@@ -42,18 +42,15 @@ public class SmartHopper {
         myHopper = null;
         if (hopper instanceof Hopper funil) {
             myHopper = funil;
-        }else
-        if (hopper instanceof Inventory inventory) {
+        } else if (hopper instanceof Inventory inventory) {
             if (inventory.getType() == InventoryType.HOPPER) {
                 myHopper = (Hopper) inventory.getLocation().getBlock().getState();
             }
-        }else
-        if (hopper instanceof Block block) {
+        } else if (hopper instanceof Block block) {
             if (block.getType() == Material.HOPPER) {
                 myHopper = (Hopper) block.getState();
             }
-        }else
-        if (myHopper == null) {// Se não existir o hopper
+        } else if (myHopper == null) {// Se não existir o hopper
             return;
         }
 
@@ -77,12 +74,12 @@ public class SmartHopper {
                     try {
                         codigo = Integer.parseInt(names.replaceAll("[#i]", ""));
                     } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
+                        throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, names), block);
                     }
                     // Pegando o item na memória
                     item = ITEM_MAP_ID.get(codigo);
                     if (item == null) {
-                        throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
+                        throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, codigo), block);
                     }
                     // Se conter cerquilha o item é negado
                     item.setBlocked(name.contains("#"));
@@ -95,12 +92,12 @@ public class SmartHopper {
                     try {
                         codigo = Integer.parseInt(names.replaceAll("[#g]", ""));
                     } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
+                        throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, names), block);
                     }
                     // Buscando o grupo em memória
                     grupo = GRUPO_MAP_ID.get(codigo);
                     if (grupo == null) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
+                        throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, codigo), block);
                     }
                     // Se conter cerquilha o grupo é negado
                     grupo.setBlocked(name.contains("#"));
@@ -117,12 +114,12 @@ public class SmartHopper {
             try {
                 codigo = Integer.parseInt(name.replaceAll("[#i]", ""));
             } catch (NumberFormatException e) {
-                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
+                throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
             }
             // Pegando o item na memória
             item = ITEM_MAP_ID.get(codigo);
             if (item == null) {
-                throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
+                throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
             }
             // Se conter cerquilha o item é negado
             item.setBlocked(name.contains("#"));
@@ -136,12 +133,12 @@ public class SmartHopper {
             try {
                 codigo = Integer.parseInt(name.replaceAll("[#g]", ""));
             } catch (NumberFormatException e) {
-                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
+                throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
             }
             // Buscando o grupo em memória
             grupo = GRUPO_MAP_ID.get(codigo);
             if (grupo == null) {
-                throw new ItemException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
+                throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
             }
             // Se conter cerquilha o grupo é negado
             grupo.setBlocked(name.contains("#"));
@@ -193,36 +190,36 @@ public class SmartHopper {
                     try {
                         codigo = Integer.parseInt(names.replaceAll("[#i]", ""));
                     } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
+                        throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
                     }
                     // Pegando o item na memória
                     item = ITEM_MAP_ID.get(codigo);
                     if (item == null) {
-                        throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
+                        throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
                     }
                     // Se conter cerquilha o item é negado
                     item.setBlocked(name.contains("#"));
                     listType.add(item);
-                }else
-                // Se o nome do hopper conter a letra G se trata de grupo
-                if (names.substring(0, 2).contains("g")) {
-                    // Pegando o código do grupo
-                    try {
-                        codigo = Integer.parseInt(names.replaceAll("[#g]", ""));
-                    } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
+                } else
+                    // Se o nome do hopper conter a letra G se trata de grupo
+                    if (names.substring(0, 2).contains("g")) {
+                        // Pegando o código do grupo
+                        try {
+                            codigo = Integer.parseInt(names.replaceAll("[#g]", ""));
+                        } catch (NumberFormatException e) {
+                            throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
+                        }
+                        // Buscando o grupo em memória
+                        grupo = GRUPO_MAP_ID.get(codigo);
+                        if (grupo == null) {
+                            throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
+                        }
+                        // Se conter cerquilha o grupo é negado
+                        grupo.setBlocked(name.contains("#"));
+                        listType.add(grupo);
+                    } else {
+                        throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
                     }
-                    // Buscando o grupo em memória
-                    grupo = GRUPO_MAP_ID.get(codigo);
-                    if (grupo == null) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
-                    }
-                    // Se conter cerquilha o grupo é negado
-                    grupo.setBlocked(name.contains("#"));
-                    listType.add(grupo);
-                }else{
-                    throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
-                }
             }
             type = listType;
             return type;
@@ -234,12 +231,12 @@ public class SmartHopper {
             try {
                 codigo = Integer.parseInt(name.replaceAll("[#i]", ""));
             } catch (NumberFormatException e) {
-                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
+                throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
             }
             // Pegando o item na memória
             item = ITEM_MAP_ID.get(codigo);
             if (item == null) {
-                throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
+                throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
             }
             // Se conter cerquilha o item é negado
             item.setBlocked(name.contains("#"));
@@ -253,12 +250,12 @@ public class SmartHopper {
             try {
                 codigo = Integer.parseInt(name.replaceAll("[#g]", ""));
             } catch (NumberFormatException e) {
-                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
+                throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
             }
             // Buscando o grupo em memória
             grupo = GRUPO_MAP_ID.get(codigo);
             if (grupo == null) {
-                throw new ItemException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
+                throw new ItemException(msgController.select(MessageType.HOPPER_INVALID, name), block);
             }
             // Se conter cerquilha o grupo é negado
             grupo.setBlocked(name.contains("#"));

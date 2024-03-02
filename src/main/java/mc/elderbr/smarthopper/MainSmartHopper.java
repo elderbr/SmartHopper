@@ -59,8 +59,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         // Tradução
         traducaoConfig = new TraducaoConfig();
 
+        // Criando o arquivo de message.yml
         messageDao = new MessageDao();
-        MessageController messageController = new MessageController();
+
 
         // Limpando o arquivo cofig.yml e rescrevendo
         AdmController.Reset();

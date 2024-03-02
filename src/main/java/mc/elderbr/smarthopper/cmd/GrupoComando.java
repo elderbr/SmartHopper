@@ -2,6 +2,8 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.controllers.MessageController;
+import mc.elderbr.smarthopper.enums.MessageType;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -27,6 +29,8 @@ public class GrupoComando implements CommandExecutor {
 
     private ItemStack itemStack;
     public InventoryCustom inventory;
+
+    private MessageController msgController = new MessageController();
 
 
     @Override
@@ -95,14 +99,14 @@ public class GrupoComando implements CommandExecutor {
 
         // Verifica se o jogador é adm do Smart hopper
         if (!player.isOp() && !AdmController.ContainsAdm(player)) {
-            Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
+            Msg.PlayerRed(player, msgController.select(MessageType.ADM_NOT));
             return false;
         }
 
         try {
             // Verifica se o grupo já existe
             if (grupoCtrl.findByName(cmd) != null) {
-                Msg.PlayerGold(player, "O grupo já existe!!!");
+                Msg.PlayerGold(player, msgController.select(MessageType.GROUP_NOT_EXIST, cmd));
                 show();// Mostra o grupo
                 return false;
             }
@@ -123,7 +127,7 @@ public class GrupoComando implements CommandExecutor {
                 return false;
             }
             if(grupoCtrl.delete(player, grupo)){
-                Msg.PlayerTodos(String.format("$eO jogador $c%s $eapagou o grupo $c%s$e!!!", player.getName(), grupo.getName()));
+                Msg.PlayerTodos(msgController.select(MessageType.GROUP_DELETE, player, grupo));
                 return true;
             }
         } catch (GrupoException e) {

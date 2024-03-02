@@ -2,6 +2,8 @@ package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.controllers.MessageController;
+import mc.elderbr.smarthopper.enums.MessageType;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -29,6 +31,8 @@ public class InventarioEvent implements Listener, Botao {
     private Grupo grupo;
     private GrupoController grupoCtrl = new GrupoController();
     private InventoryClickEvent event;
+
+    private MessageController messageController = new MessageController();
 
     @EventHandler
     public void openInventory(InventoryOpenEvent event){
@@ -116,17 +120,17 @@ public class InventarioEvent implements Listener, Botao {
         try {
             // Verificar se foi clicado com o botão esquerdo do mouse no botão salvar(save)
             if (event.isLeftClick() && itemClicked.equals(BtnSalva())) {
-                String msg = "Ops, algo deu errado!!!";
+                String msg = messageController.select(MessageType.ERROR);
                 // Verifica se o jogador é ADM
                 if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
                 if (grupo.getId() < 1) {
                     grupo.addTranslation(player);
                     if (grupoCtrl.save(grupo)) {
-                        msg = String.format("$eO jogador $c%s $eadicionou um novo grupo $c%s$e!!!", player.getName(), grupo.getName());
+                        msg = messageController.select(MessageType.GROUP_ADD, player, grupo);
                     }
                 } else {
                     grupoCtrl.update(grupo);// Atualizando o grupo
-                    msg = String.format("$eO jogador $c%s $ealterou o grupo $c%s$e!!!", player.getName(), grupo.getName());
+                    msg = messageController.select(MessageType.GROUP_UPDATE, player, grupo);
                 }
                 player.closeInventory();// Fechando o inventário do jogador
 

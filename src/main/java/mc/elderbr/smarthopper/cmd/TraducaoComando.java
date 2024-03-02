@@ -2,6 +2,8 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.controllers.MessageController;
+import mc.elderbr.smarthopper.enums.MessageType;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.model.Grupo;
@@ -22,6 +24,8 @@ public class TraducaoComando implements CommandExecutor {
     private Grupo grupo;
     private GrupoController grupoController = new GrupoController();
 
+    private MessageController msgController = new MessageController();
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -35,10 +39,10 @@ public class TraducaoComando implements CommandExecutor {
                     try {
                         if (itemController.addTranslation(player, args)) {
                             item = itemController.getItem();
-                            Msg.PlayerTodos("Tradução adicionada para o item $e" + item.getName() + "$r em $e" + player.getLocale() + "$r como $e" + item.toTranslation(player)+"$r!");
+                            Msg.PlayerTodos(msgController.select(MessageType.TRANSLATION_ITEM_ADD, player, item, player.getLocale()));
                             return true;
                         } else {
-                            Msg.PlayerGold(player, "Erro ao tentar adicionar a tradução para o item!!!");
+                            Msg.PlayerGold(player, msgController.select(MessageType.TRANSLATION_ERRO));
                         }
                     } catch (ItemException e) {
                         Msg.PlayerGold(player, e.getMessage());
@@ -48,10 +52,10 @@ public class TraducaoComando implements CommandExecutor {
                     try {
                         if (grupoController.addTraducao(player, args)) {
                             grupo = grupoController.getGrupo();
-                            Msg.PlayerTodos("Tradução adicionada para o grupo $9" + grupo.getName() + "$r em $8$l" + player.getLocale() + " $rcomo $8$l" + grupo.toTranslation(player) + "!");
+                            Msg.PlayerTodos(msgController.select(MessageType.TRANSLATION_GROUP_ADD, player, grupo, grupo.toTranslation(player)));
                             return true;
                         } else {
-                            Msg.PlayerGold(player, "Ocorreu um erro ao adicionar a tradução!");
+                            Msg.PlayerGold(player, msgController.select(MessageType.TRANSLATION_ERRO));
                         }
                     } catch (GrupoException e) {
                         Msg.PlayerGold(player, e.getMessage());

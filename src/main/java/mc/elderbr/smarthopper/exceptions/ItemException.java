@@ -1,11 +1,16 @@
 package mc.elderbr.smarthopper.exceptions;
 
+import mc.elderbr.smarthopper.controllers.MessageController;
+import mc.elderbr.smarthopper.enums.MessageType;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemException extends Exception {
+
+    private MessageController messageController = new MessageController();
+
     private String world, msg;
     private int x, y, z;
 
@@ -25,7 +30,7 @@ public class ItemException extends Exception {
         x = block.getLocation().getBlockX();
         y = block.getLocation().getBlockY();
         z = block.getLocation().getBlockZ();
-        msg = pularLinha + message + "\nHopper localizado no mundo " + world + " x: " + x + " | y: " + y + " | z: " + z;
+        msg = pularLinha + message + "\n"+ messageController.select(MessageType.HOPPER_LOCALIZATION) + world + " x: " + x + " | y: " + y + " | z: " + z;
     }
 
     @Override

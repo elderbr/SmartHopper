@@ -6,9 +6,8 @@ import mc.elderbr.smarthopper.model.Message;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MessageDao implements VGlobal {
 
@@ -100,6 +99,32 @@ public class MessageDao implements VGlobal {
             MessageType type = MessageType.valueOf(value);
             Message message = new Message(type.getCode(), type.getMsg());
             insert(message);
+        }
+    }
+
+    public void reload(){
+        List<String> list = new ArrayList<>();
+        List<String> msgConfList = new ArrayList<>();
+
+        // Percorrendo a mensagem no Enum
+        for(MessageType type : MessageType.values()){
+            list.add(type.name());
+        }
+        Collections.sort(list);
+
+        // Percorrendo o arquivo message.yml
+        for(String value : config.getValues(false).keySet()){
+            msgConfList.add(value);
+        }
+        Collections.sort(msgConfList);
+
+        // Comparando a lista
+        for(String value : list){
+            if(!msgConfList.contains(value)){
+                MessageType type = MessageType.valueOf(value);
+                Message message = new Message(type.getCode(), type.getMsg());
+                insert(message);
+            }
         }
     }
 }

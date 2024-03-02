@@ -309,7 +309,7 @@ public class ItemController {
 
         // Verifica se o jogar é administrador do SmartHopper
         if (!player.isOp() && !AdmController.ContainsAdm(player)) {
-            throw new ItemException(messageController.select(MessageType.Not_Permission));
+            throw new ItemException(messageController.select(MessageType.NOT_PERMISSION));
         }
 
         // Pegando a tradução
