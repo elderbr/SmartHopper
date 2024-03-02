@@ -6,7 +6,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +21,6 @@ public class ItemTabCompleter implements TabCompleter {
 
     private Player player;
     private String cmd;
-    private ItemStack itemStack;
     private List<String> itemList;
 
     @Nullable

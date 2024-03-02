@@ -112,7 +112,7 @@ public class ItemController {
         if (itemStack == null || itemStack.getType().isAir()) {
             throw new ItemException(messageController.select(MessageType.ITEM_CODE_ENTER));
         }
-        switch (itemStack.getType()){
+        switch (itemStack.getType()) {
             case ENCHANTED_BOOK:
                 return LivroEncantado.getItem(itemStack);
             case POTION:
@@ -139,7 +139,7 @@ public class ItemController {
                     item.setId(ID());
                     item.setName(name);
                     dao.save(item);
-                    Msg.ServidorGreen("$2Criando o item $e"+ name);
+                    Msg.ServidorGreen("$2Criando o item $e" + name);
                 }
             } catch (ItemException e) {
                 Msg.ServidorErro(e, "findAll()", ItemController.class);
@@ -148,17 +148,17 @@ public class ItemController {
     }
 
     public ItemStack parseItemStack(Item item) throws ItemException {
-        if(item == null){
+        if (item == null) {
             throw new ItemException(messageController.select(MessageType.ITEM_CODE_ENTER));
         }
-        if(item.getName().contains("enchanted book")){
+        if (item.getName().contains("enchanted book")) {
             return ENCHANTEMENT_BOOK_MAP.get(item.getName());
         }
-        if(item.getName().contains("potion")){
+        if (item.getName().contains("potion")) {
             return POTION_MAP.get(item.getName());
         }
         ItemStack itemStack = new ItemStack(item.parseItemStack());
-        if(itemStack == null) {
+        if (itemStack == null) {
             throw new ItemException(messageController.select(MessageType.ITEM_CODE_ENTER));
         }
         return itemStack;
@@ -309,24 +309,24 @@ public class ItemController {
 
         // Verifica se o jogar é administrador do SmartHopper
         if (!player.isOp() && !AdmController.ContainsAdm(player)) {
-            throw new ItemException("Você não tem permissão para adicionar a tradução ao item!!!");
+            throw new ItemException(messageController.select(MessageType.Not_Permission));
         }
 
         // Pegando a tradução
         String translation = convertTranslation(args);
         // A tradução precisa conter mais do 2 letras
         if (translation.length() < 3) {
-            throw new ItemException("O tradução precisa conter mais do que 2 letras!!!");
+            throw new ItemException(messageController.select(MessageType.TRANSLATION_NAME_INVALID));
         }
 
         try {
             id = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            throw new ItemException("O código " + args[0] + " não é valido!!!");
+            throw new ItemException(messageController.select(MessageType.ITEM_CODE_INVALID, args[0]));
         }
         item = ITEM_MAP_ID.get(id);
         if (item == null) {
-            throw new ItemException("O código " + args[0] + " não está na lista de item!!!");
+            throw new ItemException(messageController.select(MessageType.ITEM_CODE_INVALID, args[0]));
         }
         item.addTranslation(player.getLocale(), translation);
         return itemDao.update(item);
