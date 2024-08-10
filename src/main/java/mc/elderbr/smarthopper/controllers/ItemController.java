@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.exceptions.ItemException;
+import mc.elderbr.smarthopper.interfaces.IItemMsg;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.ItemCreate;
 import mc.elderbr.smarthopper.model.LivroEncantado;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
-public class ItemController {
+public class ItemController implements IItemMsg {
 
     private int id;
     private String name;
@@ -45,10 +46,10 @@ public class ItemController {
     public Item save(Item item) throws ItemException {
 
         if (item == null) {
-            throw new ItemException("Item invalido!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         if (item.getName().isBlank()) {
-            throw new ItemException("Digite o nome do item!!!");
+            throw new ItemException(ITEM_NAME_REQUIRED);
         }
         if (ITEM_MAP_NAME.get(item.getName().toLowerCase()) != null) {
             throw new ItemException("O item já existe!!!");
@@ -61,7 +62,7 @@ public class ItemController {
 
     public Item save(ItemStack itemStack) throws ItemException {
         if (itemStack == null || itemStack.getType().isAir() || !itemStack.getType().isItem()) {
-            throw new ItemException("Item invalido!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         Item item = new Item(itemStack);
         if (ITEM_MAP_NAME.get(item.getName().toLowerCase()) != null) {
@@ -74,40 +75,40 @@ public class ItemController {
 
     public Item findByID(int id) throws ItemException {
         if (id < 1) {
-            throw new ItemException("ID do invalido!!!");
+            throw new ItemException(ITEM_ID_INVALID);
         }
         Item item = ITEM_MAP_ID.get(id);
         if (item == null) {
-            throw new ItemException("O item não existe!!!");
+            throw new ItemException(ITEM_ID_INVALID);
         }
         return item;
     }
 
     public Item findByName(String name) throws ItemException {
         if (name.isBlank()) {
-            throw new ItemException("Nome do item invalido!!!");
+            throw new ItemException(ITEM_NAME_INVALID);
         }
         Item item = ITEM_MAP_NAME.get(name);
         if (item == null) {
-            throw new ItemException("O item não existe!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         return item;
     }
 
     public Item findByItem(Item item) throws ItemException {
         if (item == null || item.getName().isBlank()) {
-            throw new ItemException("Item invalido!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         Item newItem = ITEM_MAP_NAME.get(item.getName().toLowerCase());
         if (newItem == null) {
-            throw new ItemException("O item não existe!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         return item;
     }
 
     public Item findByItemStack(ItemStack itemStack) throws ItemException {
         if (itemStack == null || itemStack.getType().isAir()) {
-            throw new ItemException("Item invalido!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         switch (itemStack.getType()){
             case ENCHANTED_BOOK:
@@ -120,7 +121,7 @@ public class ItemController {
                 item = findByName(Item.ToName(itemStack));
         }
         if (item == null) {
-            throw new ItemException(String.format("O item %s não está na lista!!!", Item.ToName(itemStack)));
+            throw new ItemException(String.format(ITEM_NOT_LIST, Item.ToName(itemStack)));
         }
         return item;
     }
@@ -146,7 +147,7 @@ public class ItemController {
 
     public ItemStack parseItemStack(Item item) throws ItemException {
         if(item == null){
-            throw new ItemException("Segure o item na mão ou digite o nome o ID do item!!!");
+            throw new ItemException(ITEM_HOLD_HAND);
         }
         if(item.getName().contains("enchanted book")){
             return ENCHANTEMENT_BOOK_MAP.get(item.getName());
@@ -156,7 +157,7 @@ public class ItemController {
         }
         ItemStack itemStack = new ItemStack(item.parseItemStack());
         if(itemStack == null) {
-            throw new ItemException("Segure o item na mão ou digite o nome o ID do item!!!");
+            throw new ItemException(ITEM_HOLD_HAND);
         }
         return itemStack;
     }
@@ -165,29 +166,29 @@ public class ItemController {
         String name = item.getName().toLowerCase();
         try {
             if (item == null) {
-                throw new ItemException("Item invalido!!!");
+                throw new ItemException(ITEM_INVALID);
             }
             if (item.getName().isBlank()) {
-                throw new ItemException("Digite o nome do item!!!");
+                throw new ItemException(ITEM_NAME_INVALID);
             }
             if (ITEM_MAP_NAME.get(name) == null) {
-                throw new ItemException("O item não existe!!!");
+                throw new ItemException(ITEM_INVALID);
             }
             item.setId(ITEM_MAP_NAME.get(name).getId());
             itemDao.update(item);
         } catch (ItemException e) {
-            throw new ItemException("Erro ao atualizar o item!!!");
+            throw new ItemException(ITEM_UPDATE_ERROR);
         }
         return ITEM_MAP_NAME.get(name);
     }
 
     public void delete(Item item) throws ItemException {
         if (item == null || item.getName().isBlank()) {
-            throw new ItemException("Item invalido!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         Item newItem = ITEM_MAP_NAME.get(item.getName().toLowerCase());
         if (newItem == null) {
-            throw new ItemException("Item invalido!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         itemDao.delete(item);
     }
@@ -219,7 +220,7 @@ public class ItemController {
         if (obj instanceof ItemStack itemStack) {
 
             if (itemStack.getType().isAir() || itemStack.getType() == Material.AIR) {
-                throw new ItemException("Digite o nome ou ID do item, ou segura um item na mão!!");
+                throw new ItemException(ITEM_HOLD_HAND);
             }
             ItemMeta meta = itemStack.getItemMeta();
             switch (itemStack.getType()) {
@@ -237,7 +238,7 @@ public class ItemController {
             name = itemName.toLowerCase();
 
             if (name.isBlank()) {
-                throw new ItemException("Digite o nome do item ou ID!!!");
+                throw new ItemException(ITEM_HOLD_HAND);
             }
             try {
                 id = Integer.parseInt(name.replaceAll("[^0-9]", ""));
@@ -250,7 +251,7 @@ public class ItemController {
             }
         }
         if (item == null) {
-            throw new ItemException("O item " + obj + " não existe!!!");
+            throw new ItemException(ITEM_INVALID);
         }
         return item;
     }

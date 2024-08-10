@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.dao;
 
 import mc.elderbr.smarthopper.exceptions.ItemException;
+import mc.elderbr.smarthopper.interfaces.IItemMsg;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -10,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.IOException;
 import java.util.Map;
 
-public class ItemDao implements VGlobal {
+public class ItemDao implements VGlobal, IItemMsg {
 
     private final YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
     private String name;
@@ -20,7 +21,7 @@ public class ItemDao implements VGlobal {
             try {
                 ITEM_FILE.createNewFile();
             } catch (IOException e) {
-                Msg.ServidorErro(e, "Erro ao criar o arquivo item.yml", getClass());
+                Msg.ServidorErro(e, ITEM_FILE_ERROR, getClass());
             }
         }
     }
@@ -40,7 +41,7 @@ public class ItemDao implements VGlobal {
             ITEM_NAME_LIST.add(item.getName());
 
         } catch (IOException e) {
-            throw new ItemException("Erro ao salvar o item no arquivo item.yml!!!");
+            throw new ItemException(ITEM_SAVE_ERROR);
         }
         return true;
     }
@@ -106,7 +107,7 @@ public class ItemDao implements VGlobal {
             ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
 
         } catch (IOException e) {
-            throw new ItemException("Erro ao apagar o item!!!");
+            throw new ItemException(ITEM_DELETE_ERROR);
         }
         return true;
     }
@@ -121,7 +122,7 @@ public class ItemDao implements VGlobal {
             ITEM_NAME_LIST.remove(item.getName());
 
         } catch (IOException e) {
-            throw new ItemException("Erro ao apagar o item!!!");
+            throw new ItemException(ITEM_DELETE_ERROR);
         }
         return true;
     }
