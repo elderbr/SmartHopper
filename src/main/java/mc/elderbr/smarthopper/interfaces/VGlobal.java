@@ -86,10 +86,10 @@ public interface VGlobal {
 
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
-    String VERSION = VGlobal.SMARTHOPPER.getDescription().getVersion();
-    int VERSION_INT = Integer.parseInt(VERSION.replaceAll("[.]", ""));
+    String VERSION = SMARTHOPPER.getDescription().getVersion();
+    int VERSION_INT = Integer.parseInt(VERSION.replaceAll("[^0-9]", ""));
 
-    File ARQUIVO = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper").getDataFolder().getAbsoluteFile();
+    File ARQUIVO = SMARTHOPPER.getDataFolder().getAbsoluteFile();
     File ITEM_FILE = new File(ARQUIVO, "item.yml");
     File GRUPO_FILE = new File(ARQUIVO, "grupo.yml");
     File FILE_LANG = new File(ARQUIVO + File.separator + "lang");
