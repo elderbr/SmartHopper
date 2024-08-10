@@ -17,6 +17,8 @@ public class ConfigDao implements VGlobal {
     private YamlConfiguration config;
 
     private final String KEY_ADM = EConfig.ADM.getKey();
+    private final String KEY_TEXTURE = EConfig.TEXTURE.getKey();
+    private final String KEY_USE_TEXTURE = EConfig.USE_TEXTURE.getKey();
 
     public ConfigDao() {
         try {
@@ -51,6 +53,7 @@ public class ConfigDao implements VGlobal {
     }
 
     public void restart() {
+        config = YamlConfiguration.loadConfiguration(file);
         findByAll();// Carrega todos os nome do Adm
         deleteFile();// Deleta o arquivo config.yml
         createFile();// Cria o arquivo config.yml
@@ -58,9 +61,12 @@ public class ConfigDao implements VGlobal {
         saveDiscord();// Adicionando o discord no arquivo config.yml
         saveVersion();// Adicionando a versão no arquivo config.yml
         saveTutorial();// Adicionando o link do tutorial no arquivo config.yml
-        saveTexture();// Adicionando o link para o download da textura no arquivo config.yml
-        useTextureSave();// Adicionando a pergunta do uso da textura
-        save(ADM_LIST, EConfig.ADM);
+        if (config.get(KEY_TEXTURE) == null) {
+            saveTexture();// Adicionando o link para o download da textura no arquivo config.yml
+        }
+        if (config.get(KEY_USE_TEXTURE) == null) {
+            useTextureSave();// Adicionando a pergunta do uso da textura
+        }
     }
 
     public void addAdm(String name) {
