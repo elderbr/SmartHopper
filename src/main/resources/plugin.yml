@@ -32,3 +32,6 @@ commands:
     description: Vídeo que mostra como usar o SmartHopper
   reload:
     description: Carrega os itens, grupos e tradução
+  useTexture:
+    description: Opção para carregar a textura do Smart Hopper
+    usage: useTexture [ true | false ]
