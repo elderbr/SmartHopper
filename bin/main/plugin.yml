@@ -1,0 +1,34 @@
+name: SmartHopper
+version: 4.0.9
+main: mc.elderbr.smarthopper.MainSmartHopper
+api-version: 1.20
+authors: [ ElderBR ]
+commands:
+  item:
+    description: Mostra o número do ID do material
+  traducaoitem:
+    usage: /traducaoitem <codigo> <traducao>
+    description: Adicionar tradução ao item
+  grupo:
+    description: Mostra o número do Grupo do material
+  traducaogrupo:
+    usage: /traducaogrupo <codigo> <traducao>
+    description: Adicionar tradução para o grupo
+  addgrupo:
+    description: Adicionar novo grupo
+  removegrupo:
+    description: Remover grupo existente
+  addAdm:
+      description: Adiciona Administrador para o SmartHopper
+  removeradm:
+    description: Remove o jogador do Adm do SmartHopper
+  livro:
+    aliases: [ book, livro ]
+    description: Recebe um livro com os nomes de todos os grupos
+  informacao:
+    aliases: [infor, config]
+    description: Receberá um livro com os comandos basicos do Smart Hopper
+  tutorial:
+    description: Vídeo que mostra como usar o SmartHopper
+  reload:
+    description: Carrega os itens, grupos e tradução
