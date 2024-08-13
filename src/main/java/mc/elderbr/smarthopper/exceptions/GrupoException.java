@@ -2,7 +2,7 @@ package mc.elderbr.smarthopper.exceptions;
 
 import mc.elderbr.smarthopper.utils.Msg;
 
-public class GrupoException extends Exception{
+public class GrupoException extends RuntimeException{
 
     private String msg;
 

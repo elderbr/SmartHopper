@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemException extends Exception {
+public class ItemException extends RuntimeException {
     private String world, msg;
     private int x, y, z;
 

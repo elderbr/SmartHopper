@@ -7,10 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public interface VGlobal {
     List<String> ADM_LIST = new ArrayList<>();
@@ -40,7 +37,7 @@ public interface VGlobal {
     List<Item> ITEM_LIST = new ArrayList<>();
     Map<Integer, Item> ITEM_MAP_ID = new HashMap<>();
     Map<String, Item> ITEM_MAP_NAME = new HashMap<>();
-    List<String> ITEM_NAME_LIST = new ArrayList<>();
+    Set<String> ITEM_NAME_LIST = new TreeSet<>();
     default void ADD_ITEM_NAME_LIST(String name){
         if(name.isBlank()) return;
         if(!ITEM_NAME_LIST.contains(name)){

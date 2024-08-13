@@ -62,9 +62,9 @@ public class GrupoConfig implements VGlobal {
 
         config.set(name.concat(".grupo_id"), grupo.getId());
         config.set(name.concat(".grupo_name"), grupo.getName());
-        config.set(name.concat(".grupo_item"), grupo.getListNameItem());
-        if (grupo.getTranslation().size() > 0) {
-            config.set(name.concat(".grupo_lang"), grupo.getTranslation());
+        config.set(name.concat(".grupo_item"), grupo.getItems());
+        if (!grupo.getTranslations().isEmpty()) {
+            config.set(name.concat(".grupo_lang"), grupo.getTranslations());
         }
         save();
     }
@@ -77,8 +77,8 @@ public class GrupoConfig implements VGlobal {
 
                 config.set(name.concat(".grupo_id"), grupo.getId());
                 config.set(name.concat(".grupo_name"), grupo.getName());
-                config.set(name.concat(".grupo_lang"), grupo.getTranslation());
-                config.set(name.concat(".grupo_item"), grupo.getListNameItem());
+                config.set(name.concat(".grupo_lang"), grupo.getTranslations());
+                config.set(name.concat(".grupo_item"), grupo.getItems());
                 config.save(fileConfig);
 
                 GRUPO_MAP_ID.put(grupo.getId(), grupo);
@@ -99,13 +99,13 @@ public class GrupoConfig implements VGlobal {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
 
             // Verifica se contém tradução para o grupo
-            if(grupo.getTranslation().size()>0) {
-                config.set(name.concat(".grupo_lang"), grupo.getTranslation());
+            if(grupo.getTranslations().size()>0) {
+                config.set(name.concat(".grupo_lang"), grupo.getTranslations());
             }
 
             // Atualizando a lista de itens do grupo
             config.set(name.concat(".grupo_item"), null);
-            config.set(name.concat(".grupo_item"), grupo.getListNameItem());
+            config.set(name.concat(".grupo_item"), grupo.getItems());
             config.save(fileConfig);// Salvando o grupo no arquivo -> Grupo.yml
 
             //Atualiza a variavel global
@@ -122,7 +122,7 @@ public class GrupoConfig implements VGlobal {
         try {
 
             YamlConfiguration config = YamlConfiguration.loadConfiguration(fileConfig);
-            config.set(grupo.getName().toLowerCase().concat(".grupo_lang"), grupo.getTranslation());
+            config.set(grupo.getName().toLowerCase().concat(".grupo_lang"), grupo.getTranslations());
             config.save(fileConfig);
 
             GRUPO_MAP_ID.put(grupo.getId(), grupo);

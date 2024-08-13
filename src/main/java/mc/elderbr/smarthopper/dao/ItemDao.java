@@ -1,7 +1,7 @@
 package mc.elderbr.smarthopper.dao;
 
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.interfaces.IItemMsg;
+import mc.elderbr.smarthopper.interfaces.msg.ItemMsg;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.IOException;
 import java.util.Map;
 
-public class ItemDao implements VGlobal, IItemMsg {
+public class ItemDao implements VGlobal, ItemMsg {
 
     private final YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
     private String name;
@@ -31,8 +31,8 @@ public class ItemDao implements VGlobal, IItemMsg {
             name = item.getName().toLowerCase();
             config.set(name.concat(".id"), item.getId());
             config.set(name.concat(".name"), item.getName());
-            if (item.getTranslation().size() > 0) {
-                config.set(name.concat(".lang"), item.getTranslation());
+            if (!item.getTranslations().isEmpty()) {
+                config.set(name.concat(".lang"), item.getTranslations());
             }
             config.save(ITEM_FILE);
 
@@ -46,20 +46,12 @@ public class ItemDao implements VGlobal, IItemMsg {
         return true;
     }
 
-    public Item findByName(String name) {
-        ConfigurationSection section = config.getConfigurationSection(name);
-        if (section == null) return null;
+    public Item findById(Integer id){
+        return ITEM_MAP_ID.get(id);
+    }
 
-        Item item = new Item();
-        item.setId(section.getInt("id"));
-        item.setName(section.getString("name"));
-        ConfigurationSection mapLang = section.getConfigurationSection("lang");
-        if (mapLang != null) {
-            for (Map.Entry<String, Object> lang : mapLang.getValues(false).entrySet()) {
-                item.addTranslation(lang.getKey(), lang.getValue().toString());
-            }
-        }
-        return item;
+    public Item findByName(String name) {
+        return ITEM_MAP_NAME.get(name);
     }
 
     public void findAll() {
@@ -98,8 +90,8 @@ public class ItemDao implements VGlobal, IItemMsg {
     public boolean update(Item item) throws ItemException {
         try {
             name = item.getName().toLowerCase();
-            if (item.getTranslation().size() > 0) {
-                config.set(name.concat(".lang"), item.getTranslation());
+            if (!item.getTranslations().isEmpty()) {
+                config.set(name.concat(".lang"), item.getTranslations());
             }
             config.save(ITEM_FILE);
 

@@ -79,14 +79,14 @@ public class GrupoCreate implements VGlobal {
             for (String itemName : ITEM_NAME_LIST_DEFAULT) {
                 if (pertence(grupName, itemName)) {
                     if (contains(grupName.replaceAll("bricks","brick"), itemName.replaceAll("bricks","brick"))) {
-                        if (!grupo.getListItem().contains(ITEM_MAP_NAME.get(itemName))) {
-                            grupo.addListItem(ITEM_MAP_NAME.get(itemName));
+                        if (!grupo.getItems().contains(ITEM_MAP_NAME.get(itemName))) {
+                            grupo.addItems(ITEM_MAP_NAME.get(itemName).getName());
                         }
                     }
                 }
             }
 
-            if (grupo.getListItem().size() > 1) {
+            if (grupo.getItems().size() > 1) {
                 grupo.setId(id);
                 try {
                     GrupoDao dao = new GrupoDao();

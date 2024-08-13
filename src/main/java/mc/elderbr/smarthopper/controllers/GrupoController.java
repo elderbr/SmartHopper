@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.interfaces.msg.GrupMsg;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.GrupoCreate;
 import mc.elderbr.smarthopper.model.Item;
@@ -19,16 +20,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class GrupoController implements VGlobal {
+public class GrupoController implements GrupMsg, VGlobal {
 
-    private int id;
-    private String name;
-    private Grupo grupo;
     private GrupoDao grupoDao = new GrupoDao();
     private List<Grupo> listGrupo;
-    private Item item;
     private ItemController itemCtrl = new ItemController();
 
     public GrupoController() {
@@ -37,54 +35,63 @@ public class GrupoController implements VGlobal {
     public boolean save(Grupo grupo) throws GrupoException {
         // O grupo não pode nulo e precisa conter o nome
         if (grupo == null || grupo.getName().isBlank()) {
-            throw new GrupoException("Digite o nome do grupo!!!");
+            throw new GrupoException(GRUP_NAME_REQUIRED);
         }
         // Verificar se existe item adicionado no grupo
-        if (grupo.getListItem().isEmpty()) {
-            throw new GrupoException("Adicione item no grupo para poder salvar!!!");
+        if (grupo.getItems().isEmpty()) {
+            throw new GrupoException(GRUP_ITEM_REQUIRED);
         }
         grupo.setId(ID());
         return grupoDao.save(grupo);
     }
 
+    public Grupo findById(Integer id) {
+        if (id < 1) {
+            throw new GrupoException(GRUP_INVALID);
+        }
+        Grupo grupo = grupoDao.findById(id);
+        if (grupo == null) {
+            throw new GrupoException(GRUP_INVALID);
+        }
+        return grupo;
+    }
+
     public Grupo findByName(@NotNull String name) throws GrupoException {
-        // Buscando o grupo pelo o código
-        try {
-            int codigo = Integer.parseInt(name.replaceAll("[^0-9]", ""));
-            if (codigo < 1) {
-                throw new GrupoException("O código do grupo é invalido!!!");
-            }
-            grupo = GRUPO_MAP_ID.get(codigo);
-        } catch (NumberFormatException e) {
-            grupo = findNameTranslation(name);
+        if(name.isBlank()){
+            throw new GrupoException(GRUP_NAME_REQUIRED);
+        }
+        Grupo grupo = grupoDao.findByName(name);
+        if(grupo == null){
+            throw new GrupoException(GRUP_NOT_EXIST);
         }
         return grupo;
     }
 
     public List<Grupo> findByItemStack(ItemStack itemStack) throws GrupoException {
         listGrupo = new ArrayList<>();
+        Item item;
+        String name = Item.TO_ItemStack(itemStack);
         // O item não pode nulo ou igual ao ar
         if (itemStack == null || itemStack.getType() == Material.AIR) {
-            throw new GrupoException("Segure o item na mão ou digite o nome ou o código do grupo!!!");
+            throw new GrupoException(GRUP_HOLD_HAND);
         }
-        name = Item.ToName(itemStack);// Pegando o nome do item
         try {
             item = itemCtrl.findByItemStack(itemStack);// Busca o item na memoria global
         } catch (ItemException e) {
-            throw new GrupoException(String.format("Não existe grupo para o item %s!!!", name));
+            throw new GrupoException(String.format(GRUP_ITEM_NOT_EXIST, name));
         }
-        listGrupo = item.getListGrupo();// Lista de grupo no item
+        name = item.getName();
         if (listGrupo.isEmpty()) {
-            throw new GrupoException(String.format("Não existe grupo para o item %s!!!", name));
+            throw new GrupoException(String.format(GRUP_ITEM_NOT_EXIST, name));
         }
         return listGrupo;
     }
 
     public Grupo findNameTranslation(String name) {
-        grupo = GRUPO_MAP_NAME.get(name);
+        Grupo grupo = grupoDao.findByName(name);
         if (grupo == null) {
             for (Grupo grup : GRUPO_MAP_NAME.values()) {
-                for (String lang : grup.getTranslation().values()) {
+                for (String lang : grup.getTranslations().values()) {
                     if (lang.equalsIgnoreCase(name)) {
                         return grup;
                     }
@@ -96,11 +103,11 @@ public class GrupoController implements VGlobal {
 
     public boolean update(Grupo grupo) throws GrupoException {
         if (grupo == null || grupo.getId() < 1 || grupo.getName() == null) {
-            throw new GrupoException("Grupo invalido!!!");
+            throw new GrupoException(GRUP_INVALID);
         }
-        this.grupo = GRUPO_MAP_NAME.get(grupo.getName().toLowerCase());
-        if (this.grupo == null) {
-            throw new GrupoException(String.format("O grupo %s não existe!!!", grupo.getName()));
+        grupo = grupoDao.findByName(grupo.getName());
+        if (grupo == null) {
+            throw new GrupoException(String.format(GRUP_NOT_EXIST, grupo.getName()));
         }
         return grupoDao.update(grupo);
     }
@@ -124,13 +131,13 @@ public class GrupoController implements VGlobal {
         }
 
         // Buscando o grupo pelo código
-        id = 0;
+        int id = 0;
         try {
             id = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
             throw new GrupoException(String.format("O código %s não é valido!!!", args[0]));
         }
-        grupo = GRUPO_MAP_ID.get(id);
+        Grupo grupo = grupoDao.findById(id);
         if (grupo == null) {
             throw new GrupoException(String.format("O código %s não está na lista de grupos!!!", args[0]));
         }
@@ -177,17 +184,17 @@ public class GrupoController implements VGlobal {
         GrupoDao dao = new GrupoDao();
         GrupoCreate.NewNome();
         dao.findAll();
-        if(GRUPO_MAP_NAME.size()<1){
+        if (GRUPO_MAP_NAME.isEmpty()) {
             GrupoCreate.NEW();
-        }else {
+        } else {
             ItemController itemCtrl = new ItemController();
             // Percorrendo a lista do grupo e adicionando o grupo no item
             for (Grupo grupo : GRUPO_MAP_NAME.values()) {
                 try {
-                    for (String itemName : grupo.getListNameItem()) {
+                    for (String itemName : grupo.getItems()) {
                         Item item = itemCtrl.findByName(itemName);
                         if (item == null) continue;
-                        item.addListGrupo(grupo);
+                        item.addGrups(grupo.getId());
                         ITEM_MAP_ID.put(item.getId(), item);
                         ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
                     }
@@ -224,18 +231,8 @@ public class GrupoController implements VGlobal {
     }
 
     private int ID() {
-        int id = 0;
-        for (Grupo grupo : GRUPO_MAP_NAME.values()) {
-            if (id < grupo.getId()) {
-                id = grupo.getId();
-            }
-        }
-        id++;
-        return id;
-    }
-
-    public Grupo getGrupo(){
-        return grupo;
+        int id = Collections.max(GRUPO_MAP_ID.keySet());
+        return id+1;
     }
 
     public static void CREATE() {

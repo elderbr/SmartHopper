@@ -77,7 +77,6 @@ public class ItemConfig {
             if (ITEM_ID.get(0) < item.getId()) {
                 ITEM_ID.put(0, item.getId() + 1);
             }
-            Item.SET(item);// Adicionando no atributo global
         }
 
         // Adicionar os novos itens
@@ -85,7 +84,6 @@ public class ItemConfig {
             if (config.get(value) == null) {// Verificando se o item existe no arquivo item.yml
                 item = new Item(ITEM_ID.get(0), value);// Criando um novo item
                 add(item);// Adicionando no arquivo item.yml
-                Item.SET(item);// Adicionando no atributo global
                 ITEM_ID.replace(0, item.getId()+1);// Incrementando ao código do item
             }
         }
@@ -94,8 +92,8 @@ public class ItemConfig {
     private void add(Item item) {
         config.set(item.getName().concat(".item_id"), item.getId());
         config.set(item.getName().concat(".item_name"), item.getName());
-        if (item.getTranslation().size() > 0) {
-            config.set(item.getName().concat(".item_lang"), item.getTranslation());
+        if (!item.getTranslations().isEmpty()) {
+            config.set(item.getName().concat(".item_lang"), item.getTranslations());
         }
         save();
     }
@@ -103,9 +101,8 @@ public class ItemConfig {
     public static boolean ADD_TRADUCAO(Item item) {
         try {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
-            config.set(item.getName().concat(".item_lang"), item.getTranslation());
+            config.set(item.getName().concat(".item_lang"), item.getTranslations());
             config.save(ITEM_FILE);
-            Item.SET(item);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

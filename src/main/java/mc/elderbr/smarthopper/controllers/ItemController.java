@@ -2,7 +2,7 @@ package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.interfaces.IItemMsg;
+import mc.elderbr.smarthopper.interfaces.msg.ItemMsg;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.model.ItemCreate;
 import mc.elderbr.smarthopper.model.LivroEncantado;
@@ -16,8 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -26,12 +26,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
-public class ItemController implements IItemMsg {
+public class ItemController implements ItemMsg {
 
     private int id;
     private String name;
@@ -51,12 +52,8 @@ public class ItemController implements IItemMsg {
         if (item.getName().isBlank()) {
             throw new ItemException(ITEM_NAME_REQUIRED);
         }
-        if (ITEM_MAP_NAME.get(item.getName().toLowerCase()) != null) {
-            throw new ItemException("O item já existe!!!");
-        }
         item.setId(ID());
         itemDao.save(item);
-
         return ITEM_MAP_NAME.get(item.getName().toLowerCase());
     }
 
@@ -77,9 +74,9 @@ public class ItemController implements IItemMsg {
         if (id < 1) {
             throw new ItemException(ITEM_ID_INVALID);
         }
-        Item item = ITEM_MAP_ID.get(id);
+        Item item = itemDao.findById(id);
         if (item == null) {
-            throw new ItemException(ITEM_ID_INVALID);
+            throw new ItemException(ITEM_INVALID);
         }
         return item;
     }
@@ -88,7 +85,7 @@ public class ItemController implements IItemMsg {
         if (name.isBlank()) {
             throw new ItemException(ITEM_NAME_INVALID);
         }
-        Item item = ITEM_MAP_NAME.get(name);
+        Item item = itemDao.findByName(name);
         if (item == null) {
             throw new ItemException(ITEM_INVALID);
         }
@@ -99,7 +96,7 @@ public class ItemController implements IItemMsg {
         if (item == null || item.getName().isBlank()) {
             throw new ItemException(ITEM_INVALID);
         }
-        Item newItem = ITEM_MAP_NAME.get(item.getName().toLowerCase());
+        Item newItem = itemDao.findByName(item.getName());
         if (newItem == null) {
             throw new ItemException(ITEM_INVALID);
         }
@@ -110,7 +107,7 @@ public class ItemController implements IItemMsg {
         if (itemStack == null || itemStack.getType().isAir()) {
             throw new ItemException(ITEM_INVALID);
         }
-        switch (itemStack.getType()){
+        switch (itemStack.getType()) {
             case ENCHANTED_BOOK:
                 return LivroEncantado.getItem(itemStack);
             case POTION:
@@ -118,10 +115,10 @@ public class ItemController implements IItemMsg {
             case LINGERING_POTION:
                 return Pocao.getItem(itemStack);
             default:
-                item = findByName(Item.ToName(itemStack));
+                item = findByName(Item.TO_ItemStack(itemStack));
         }
         if (item == null) {
-            throw new ItemException(String.format(ITEM_NOT_LIST, Item.ToName(itemStack)));
+            throw new ItemException(String.format(ITEM_NOT_LIST, Item.TO_ItemStack(itemStack)));
         }
         return item;
     }
@@ -130,6 +127,7 @@ public class ItemController implements IItemMsg {
         clean();// Remove todos os texto que contenha "item_"
         ItemDao dao = new ItemDao();
         dao.findAll();// Carrega todos os itens na variavel global
+
         for (String name : ItemCreate.Create()) {
             try {
                 if (ITEM_MAP_NAME.get(name) == null) {
@@ -137,7 +135,7 @@ public class ItemController implements IItemMsg {
                     item.setId(ID());
                     item.setName(name);
                     dao.save(item);
-                    Msg.ServidorGreen("$2Criando o item $e"+ name);
+                    Msg.ServidorGreen("$2Criando o item $e" + name);
                 }
             } catch (ItemException e) {
                 Msg.ServidorErro(e, "findAll()", ItemController.class);
@@ -146,17 +144,17 @@ public class ItemController implements IItemMsg {
     }
 
     public ItemStack parseItemStack(Item item) throws ItemException {
-        if(item == null){
+        if (item == null) {
             throw new ItemException(ITEM_HOLD_HAND);
         }
-        if(item.getName().contains("enchanted book")){
+        if (item.getName().contains("enchanted book")) {
             return ENCHANTEMENT_BOOK_MAP.get(item.getName());
         }
-        if(item.getName().contains("potion")){
+        if (item.getName().contains("potion")) {
             return POTION_MAP.get(item.getName());
         }
-        ItemStack itemStack = new ItemStack(item.parseItemStack());
-        if(itemStack == null) {
+        ItemStack itemStack = item.getItemStack();
+        if (itemStack == null) {
             throw new ItemException(ITEM_HOLD_HAND);
         }
         return itemStack;
@@ -231,7 +229,7 @@ public class ItemController implements IItemMsg {
                 case LINGERING_POTION:
                     return Pocao.getItem(itemStack);
                 default:
-                    name = Item.ToName(itemStack);
+                    name = Item.TO_ItemStack(itemStack);
             }
             item = ITEM_MAP_NAME.get(name);
         } else if (obj instanceof String itemName) {
@@ -274,7 +272,8 @@ public class ItemController implements IItemMsg {
 
             if (!potion.isEmpty()) {
                 PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
-                meta.setBasePotionData(new PotionData(PotionType.valueOf(potion.replaceAll("\\s", "_").toUpperCase())));
+                // Definindo o efeito de pulo na poção
+                meta.addCustomEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 3600, 1), true);
                 itemStack.setItemMeta(meta);
             }
             return itemStack;
@@ -340,19 +339,12 @@ public class ItemController implements IItemMsg {
 
     // Pega o último ID adicionando
     private static int ID() {
-        int id = 0;
-        for (Item item : ITEM_MAP_NAME.values()) {
-            if (id < item.getId()) {
-                id = item.getId();
-            }
-        }
-        id++;
-        return id;
+        return Collections.max(ITEM_MAP_ID.keySet())+1;
     }
 
     private Item findByTraducao(String name) {
         for (Item items : ITEM_MAP_NAME.values()) {
-            for (Map.Entry<String, String> langs : items.getTranslation().entrySet()) {
+            for (Map.Entry<String, String> langs : items.getTranslations().entrySet()) {
                 if (name.equalsIgnoreCase(langs.getValue())) {
                     return items;
                 }

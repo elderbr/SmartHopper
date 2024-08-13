@@ -37,11 +37,6 @@ public class InventarioEvent implements Listener, Botao {
             player = (Player) event.getPlayer();
             inventoryCustom = new InventoryCustom(event);
             inventory = event.getInventory();
-            // Se o grupo existir copia
-            if(inventoryCustom.getGrupo()!=null) {
-                grupo = inventoryCustom.getGrupo().clone();
-                listItemStack = new ArrayList<>(grupo.getListItemStack());
-            }
         } catch (Exception e) {
             Msg.PlayerGold(player, e.getMessage());
         }
@@ -86,7 +81,7 @@ public class InventarioEvent implements Listener, Botao {
                 // Adicionando o item no inventário aberto
                 inventory.addItem(newItem);
                 // Adicionando o item na lista de item do grupo
-                grupo.addListItem(newItem);
+                grupo.addItems(newItem);
             }
         }
     }
@@ -107,7 +102,7 @@ public class InventarioEvent implements Listener, Botao {
             }
 
             // Verificando se o item está lista
-            grupo.removeListItem(newItem);
+            grupo.removeItems(newItem);
 
         }
     }
@@ -120,7 +115,7 @@ public class InventarioEvent implements Listener, Botao {
                 // Verifica se o jogador é ADM
                 if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
                 if (grupo.getId() < 1) {
-                    grupo.addTranslation(player);
+                    grupo.toTranslation(player);
                     if (grupoCtrl.save(grupo)) {
                         msg = String.format("$eO jogador $c%s $eadicionou um novo grupo $c%s$e!!!", player.getName(), grupo.getName());
                     }

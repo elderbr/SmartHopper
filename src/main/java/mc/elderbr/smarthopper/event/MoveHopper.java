@@ -93,10 +93,10 @@ public class MoveHopper implements Listener {
                             if (objFunil instanceof Grupo grupoSmart) {
                                 if (grupoSmart.isBlocked()) {
                                     exist = true;
-                                    if (grupoSmart.isContains(item)) {
+                                    if (grupoSmart.containsItem(item)) {
                                         cancelled = true;
                                     }
-                                } else if (grupoSmart.isContains(item)) {
+                                } else if (grupoSmart.containsItem(item)) {
                                     event.setCancelled(false);
                                 }
                             }
@@ -122,12 +122,12 @@ public class MoveHopper implements Listener {
                     // Se o hopper for igual ao grupo
                     if (smartHopper.getType() instanceof Grupo grupoSmart) {
                         if (grupoSmart.isBlocked()) {
-                            if (!grupoSmart.isContains(item)) {
+                            if (!grupoSmart.containsItem(item)) {
                                 event.setCancelled(false);
                             } else {
                                 event.setCancelled(true);
                             }
-                        } else if (grupoSmart.isContains(item)) {
+                        } else if (grupoSmart.containsItem(item)) {
                             event.setCancelled(false);
                         }
                     }

@@ -101,13 +101,13 @@ public class InventoryCustom implements Botao, VGlobal {
     }
 
     private void createPagination() {
-        List<Item> grupList = new ArrayList<>(grupo.getListItem());
-        Iterator<Item> iterator = grupList.iterator();
+        List<String> grupList = new ArrayList<>(grupo.getItems());
+        Iterator<String> iterator = grupList.iterator();
 
         listItem = new ArrayList<>();
         pag = 1;
         while (iterator.hasNext()) {
-            Item item = iterator.next();
+            Item item = itemCtrl.findByName(iterator.next());
             listItem.add(item);
             if (pag == 1) {
                 if (listItem.size() == 53) {
@@ -123,7 +123,7 @@ public class InventoryCustom implements Botao, VGlobal {
                 }
             }
             if (grupList.size() == 1) {
-                if (grupo.getListItem().size() > 53 || grupo.getListItem().size() < 53) {
+                if (grupo.getItems().size() > 53 || grupo.getItems().size() < 53) {
                     pagMap.put(pag, listItem);
                 }
             }
@@ -225,9 +225,9 @@ public class InventoryCustom implements Botao, VGlobal {
             itemStack.setAmount(1);
             // Se for clicado com o botão esquerdo adiciona o item
             if (event.isLeftClick()) {
-                if (!grupo.getListItemStack().contains(itemStack)) {
+                if (!grupo.getItems().contains(Item.TO_ItemStack(itemStack))) {
                     inventoryTop.addItem(itemStack);
-                    grupo.addListItem(itemStack);
+                    grupo.addItems(Item.TO_ItemStack(itemStack));
                 }
             }
         }

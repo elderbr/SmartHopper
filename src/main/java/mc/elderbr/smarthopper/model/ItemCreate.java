@@ -16,22 +16,23 @@ public class ItemCreate implements VGlobal {
     public static List<String> Create() {
         String name = null;
         for (Material material : Material.values()) {
+
             ItemStack itemStack = new ItemStack(material);
-            if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.getType().isItem()) {
 
-                name = Item.ToName(itemStack).toLowerCase();
+            if (!itemStack.getType().isItem() || itemStack.getType().isAir()) continue;
 
-                // Se item não pode está na lista
-                switch (material) {
-                    case POTION:
-                    case SPLASH_POTION:
-                    case LINGERING_POTION:
-                    case ENCHANTED_BOOK:
-                        continue;
-                }
-                if(!ITEM_NAME_LIST_DEFAULT.contains(name)) {
-                    ITEM_NAME_LIST_DEFAULT.add(name);
-                }
+            name = Item.TO_ItemStack(itemStack).toLowerCase();
+
+            // Se item não pode está na lista
+            switch (material) {
+                case POTION:
+                case SPLASH_POTION:
+                case LINGERING_POTION:
+                case ENCHANTED_BOOK:
+                    continue;
+            }
+            if (!ITEM_NAME_LIST_DEFAULT.contains(name)) {
+                ITEM_NAME_LIST_DEFAULT.add(name);
             }
         }
         // Criando livros encantados

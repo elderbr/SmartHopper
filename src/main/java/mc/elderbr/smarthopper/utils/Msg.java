@@ -102,14 +102,14 @@ public class Msg {
         if (!grupo.getName().isBlank()) {
             sb.append("Name: ").append(grupo.getName()).append("\n");
         }
-        if (grupo.getTranslation().size() > 0) {
+        if (grupo.getTranslations().size() > 0) {
             sb.append("lang:\n");
-            sb.append(grupo.getTranslation()).append("\n");
+            sb.append(grupo.getTranslations()).append("\n");
         }
 
         sb.append("======== Lista de item ========");
-        for (Item item : grupo.getListItem()) {
-            sb.append("\n- ").append(item.getName());
+        for (String nameItem : grupo.getItems()) {
+            sb.append("\n- ").append(nameItem);
         }
         Bukkit.getServer().getConsoleSender().sendMessage(sb.toString());
     }
@@ -126,8 +126,8 @@ public class Msg {
         Bukkit.getServer().getConsoleSender().sendMessage(
                 "Grupo ID: " + grupo.getId()
                         + "\nNome: " + grupo.getName()
-                        + "\nTraducao: " + grupo.getTranslation()
-                        + "\nItens: " + grupo.getListItem()
+                        + "\nTraducao: " + grupo.getTranslations()
+                        + "\nItens: " + grupo.getItems()
         );
         PularLinha(classe);
     }

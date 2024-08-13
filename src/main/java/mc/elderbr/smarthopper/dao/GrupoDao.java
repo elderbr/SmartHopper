@@ -3,9 +3,6 @@ package mc.elderbr.smarthopper.dao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.utils.Msg;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
@@ -24,19 +21,14 @@ public class GrupoDao implements VGlobal {
             config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
             config.set(name.concat(".id"), grupo.getId());
             config.set(name.concat(".name"), grupo.getName());
-            if (!grupo.getTranslation().isEmpty()) {
-                config.set(name.concat(".lang"), grupo.getTranslation());
+            if (!grupo.getTranslations().isEmpty()) {
+                config.set(name.concat(".lang"), grupo.getTranslations());
             }
-            config.set(name.concat(".item"), grupo.getListNameItem());
-            for(Item item : grupo.getListItem()){
-                item.addListGrupo(grupo);
-                ITEM_MAP_ID.put(item.getId(), item);
-                ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
-            }
+            config.set(name.concat(".item"), grupo.getItems());
             config.save(GRUPO_FILE);
 
             GRUPO_MAP_ID.put(grupo.getId(), grupo);
-            GRUPO_MAP_NAME.put(grupo.getName().toLowerCase(), grupo);
+            GRUPO_MAP_NAME.put(name, grupo);
             if (!GRUPO_NAME_LIST.contains(grupo.getName())) {
                 GRUPO_NAME_LIST.add(grupo.getName());
             }
@@ -46,27 +38,12 @@ public class GrupoDao implements VGlobal {
         }
     }
 
+    public Grupo findById(Integer id){
+        return GRUPO_MAP_ID.get(id);
+    }
+
     public Grupo findByName(String name) {
-        ConfigurationSection section = config.getConfigurationSection(name);
-
-        if (section == null) return null;
-
-        Grupo grupo = new Grupo();
-        grupo.setId(section.getInt("id"));
-        grupo.setName(section.getString("name"));
-
-        for (Object itemName : section.getList("item")) {
-            Item item = ITEM_MAP_NAME.get(itemName.toString());
-            if (item == null) continue;
-            grupo.addListItem(item);
-        }
-        ConfigurationSection mapLang = section.getConfigurationSection("lang");
-        if (mapLang != null) {
-            for (Map.Entry<String, Object> lang : mapLang.getValues(false).entrySet()) {
-                grupo.addTranslation(lang.getKey(), lang.getValue().toString());
-            }
-        }
-        return grupo;
+        return GRUPO_MAP_NAME.get(name);
     }
 
     public void findAll() {
@@ -87,10 +64,10 @@ public class GrupoDao implements VGlobal {
         String name = grupo.getName().toLowerCase();
         try {
             config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
-            if (!grupo.getTranslation().isEmpty()) {
-                config.set(name.concat(".lang"), grupo.getTranslation());
+            if (!grupo.getTranslations().isEmpty()) {
+                config.set(name.concat(".lang"), grupo.getTranslations());
             }
-            config.set(name.concat(".item"), grupo.getListNameItem());
+            config.set(name.concat(".item"), grupo.getItems());
             config.save(GRUPO_FILE);
 
             GRUPO_MAP_ID.put(grupo.getId(), grupo);

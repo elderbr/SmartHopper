@@ -1,6 +1,6 @@
-package mc.elderbr.smarthopper.interfaces;
+package mc.elderbr.smarthopper.interfaces.msg;
 
-public interface IItemMsg {
+public interface ItemMsg {
     String ITEM_INVALID = "Item invalido ou não existe!!!";
     String ITEM_ID_INVALID = "Código do item invalido ou não existe!!!";
     String ITEM_NAME_REQUIRED = "Digite o nome do item!!!";
