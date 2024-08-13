@@ -80,7 +80,7 @@ public class GrupoCreate implements VGlobal {
                 if (pertence(grupName, itemName)) {
                     if (contains(grupName.replaceAll("bricks","brick"), itemName.replaceAll("bricks","brick"))) {
                         if (!grupo.getItems().contains(ITEM_MAP_NAME.get(itemName))) {
-                            grupo.addItems(ITEM_MAP_NAME.get(itemName).getName());
+                            grupo.addItems(ITEM_MAP_NAME.get(itemName));
                         }
                     }
                 }

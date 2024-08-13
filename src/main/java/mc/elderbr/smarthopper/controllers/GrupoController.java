@@ -67,6 +67,21 @@ public class GrupoController implements GrupMsg, VGlobal {
         return grupo;
     }
 
+    public Grupo findByIdOrName(String value){
+        Grupo grup;
+        String grupName = value.toLowerCase();
+        try{
+            int code = Integer.parseInt(grupName.replaceAll("[^0-9]",""));
+            grup =  grupoDao.findById(code);
+        }catch (NumberFormatException e){
+            grup = grupoDao.findByName(grupName);
+        }
+        if(grup == null){
+            throw new GrupoException(String.format(GRUP_NOT_EXIST, value));
+        }
+        return grup;
+    }
+
     public List<Grupo> findByItemStack(ItemStack itemStack) throws GrupoException {
         listGrupo = new ArrayList<>();
         Item item;
@@ -77,10 +92,14 @@ public class GrupoController implements GrupMsg, VGlobal {
         }
         try {
             item = itemCtrl.findByItemStack(itemStack);// Busca o item na memoria global
+            for(Grupo grup : GRUPO_MAP_NAME.values()){
+                if(grup.containsItem(item)){
+                    listGrupo.add(grup);
+                }
+            }
         } catch (ItemException e) {
             throw new GrupoException(String.format(GRUP_ITEM_NOT_EXIST, name));
         }
-        name = item.getName();
         if (listGrupo.isEmpty()) {
             throw new GrupoException(String.format(GRUP_ITEM_NOT_EXIST, name));
         }
@@ -182,27 +201,28 @@ public class GrupoController implements GrupMsg, VGlobal {
     public static void findAll() {
         clear();
         GrupoDao dao = new GrupoDao();
-        GrupoCreate.NewNome();
+        //GrupoCreate.NewNome();
         dao.findAll();
         if (GRUPO_MAP_NAME.isEmpty()) {
             GrupoCreate.NEW();
-        } else {
-            ItemController itemCtrl = new ItemController();
-            // Percorrendo a lista do grupo e adicionando o grupo no item
-            for (Grupo grupo : GRUPO_MAP_NAME.values()) {
-                try {
-                    for (String itemName : grupo.getItems()) {
-                        Item item = itemCtrl.findByName(itemName);
-                        if (item == null) continue;
-                        item.addGrups(grupo.getId());
-                        ITEM_MAP_ID.put(item.getId(), item);
-                        ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
-                    }
-                } catch (ItemException e) {
-                    Msg.ServidorErro(e, "findAll()", GrupoController.class);
-                }
-            }
         }
+//        else {
+//            ItemController itemCtrl = new ItemController();
+//            // Percorrendo a lista do grupo e adicionando o grupo no item
+//            for (Grupo grupo : GRUPO_MAP_NAME.values()) {
+//                try {
+//                    for (String itemName : grupo.getItems()) {
+//                        Item item = itemCtrl.findByName(itemName);
+//                        if (item == null) continue;
+//                        item.addGrups(grupo.getId());
+//                        ITEM_MAP_ID.put(item.getId(), item);
+//                        ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
+//                    }
+//                } catch (ItemException e) {
+//                    Msg.ServidorErro(e, "findAll()", GrupoController.class);
+//                }
+//            }
+//        }
     }
 
     public static void clear() {

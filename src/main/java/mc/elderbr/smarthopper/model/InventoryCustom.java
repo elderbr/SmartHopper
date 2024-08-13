@@ -101,7 +101,7 @@ public class InventoryCustom implements Botao, VGlobal {
     }
 
     private void createPagination() {
-        List<String> grupList = new ArrayList<>(grupo.getItems());
+        List<String> grupList = grupo.getItemsNames();
         Iterator<String> iterator = grupList.iterator();
 
         listItem = new ArrayList<>();
@@ -227,7 +227,7 @@ public class InventoryCustom implements Botao, VGlobal {
             if (event.isLeftClick()) {
                 if (!grupo.getItems().contains(Item.TO_ItemStack(itemStack))) {
                     inventoryTop.addItem(itemStack);
-                    grupo.addItems(Item.TO_ItemStack(itemStack));
+                    grupo.addItems(itemCtrl.findByItemStack(itemStack));
                 }
             }
         }

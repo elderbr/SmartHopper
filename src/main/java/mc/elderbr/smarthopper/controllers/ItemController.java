@@ -81,7 +81,7 @@ public class ItemController implements ItemMsg {
         return item;
     }
 
-    public Item findByName(String name) throws ItemException {
+    public Item findByName(String name) {
         if (name.isBlank()) {
             throw new ItemException(ITEM_NAME_INVALID);
         }

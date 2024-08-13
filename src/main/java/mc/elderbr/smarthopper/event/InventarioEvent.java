@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -26,6 +27,7 @@ public class InventarioEvent implements Listener, Botao {
     private List<ItemStack> listItemStack = new ArrayList<>();
 
     private ItemStack itemClicked;
+    private ItemController itemController = new ItemController();
     private Grupo grupo;
     private GrupoController grupoCtrl = new GrupoController();
     private InventoryClickEvent event;
@@ -81,7 +83,7 @@ public class InventarioEvent implements Listener, Botao {
                 // Adicionando o item no inventário aberto
                 inventory.addItem(newItem);
                 // Adicionando o item na lista de item do grupo
-                grupo.addItems(newItem);
+                grupo.addItems(itemController.findByItemStack(newItem));
             }
         }
     }

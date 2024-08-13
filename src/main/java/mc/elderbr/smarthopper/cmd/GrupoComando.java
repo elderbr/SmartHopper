@@ -60,7 +60,7 @@ public class GrupoComando implements CommandExecutor {
         try {
             if (cmd.length() > 0) {
                 // Busca o grupo pelo o nome
-                grupo = grupoCtrl.findByName(cmd);
+                grupo = grupoCtrl.findByIdOrName(cmd);
                 // Mostra mensagem se não existir o grupo
                 if(grupo == null){
                     Msg.GrupoNaoExiste(player, cmd);

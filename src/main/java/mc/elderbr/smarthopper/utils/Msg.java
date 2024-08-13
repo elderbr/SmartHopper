@@ -108,7 +108,7 @@ public class Msg {
         }
 
         sb.append("======== Lista de item ========");
-        for (String nameItem : grupo.getItems()) {
+        for (String nameItem : grupo.getItemsNames()) {
             sb.append("\n- ").append(nameItem);
         }
         Bukkit.getServer().getConsoleSender().sendMessage(sb.toString());
