@@ -52,7 +52,6 @@ public class GrupoDao implements VGlobal {
     }
 
     public Grupo findConfigByName(String name) {
-        Msg.ServidorBlue("Nome do grupo: " + name, getClass());
         Grupo grup = new Grupo();
         YamlConfiguration config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
         ConfigurationSection grupSection = config.getConfigurationSection(name);

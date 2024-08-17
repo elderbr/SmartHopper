@@ -33,7 +33,7 @@ public class InventarioEvent implements Listener, Botao {
     private InventoryClickEvent event;
 
     @EventHandler
-    public void openInventory(InventoryOpenEvent event){
+    public void openInventory(InventoryOpenEvent event) {
         try {
             grupo = null;
             player = (Player) event.getPlayer();
@@ -52,7 +52,10 @@ public class InventarioEvent implements Listener, Botao {
 
             itemClicked = event.getCurrentItem();
 
-            if (itemClicked == null || itemClicked.getType().isAir()) return;
+            if (inventoryCustom == null || itemClicked == null || itemClicked.getType().isAir()) return;
+
+            grupo = inventoryCustom.getGrupo();
+
             if (grupo == null) return;
             event.setCancelled(true);// Cancela o movimento do item pelo o player
             // Evento que navega entre os itens do grupo
@@ -131,7 +134,7 @@ public class InventarioEvent implements Listener, Botao {
                 Msg.PlayerTodos(msg);
                 grupo = null;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Msg.PlayerRed(player, e.getMessage());
         }
     }

@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.interfaces;
 
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -46,7 +47,17 @@ public interface IItem {
     }
 
     default ItemStack getItemStack(){
-        return new ItemStack(Material.getMaterial(getName().toLowerCase().replaceAll("\s","_")));
+        return new ItemStack(Material.getMaterial(getName().toUpperCase().replaceAll("\s","_")));
+    }
+
+    default void infor(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n+--------------------------+\n");
+        sb.append("ID: ").append(getId());
+        sb.append("- Name: ").append(getName());
+        sb.append("- translations: ").append(getTranslations()).append("\n");
+        sb.append("+--------------------------+\n");
+        Msg.ServidorBlue(sb.toString());
     }
 
 }

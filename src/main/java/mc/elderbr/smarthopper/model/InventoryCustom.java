@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.model;
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.dao.ConfigDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.Botao;
@@ -30,10 +31,9 @@ public class InventoryCustom implements Botao, VGlobal {
     private final String TITULO_GRUP_NEW = "§lNovo Grupo: §r";
     private final String TITULO_GRUP = "§lGrupo: §r";
     private Player player;
-    private String name, titulo;
+    private String titulo;
     private Inventory inventory;
     private Inventory inventoryTop;
-    private Inventory inventoryBottom;
     private ItemController itemCtrl = new ItemController();
     private ItemStack itemStack;
     private ItemStack itemStackClicked;
@@ -46,6 +46,8 @@ public class InventoryCustom implements Botao, VGlobal {
     private int pag = 1;
     private HashMap<Integer, List<Item>> pagMap = new HashMap<>();
     private List<Item> listItem = new ArrayList<>();
+
+    private ConfigDao configDao = new ConfigDao();
 
     private InventoryCustom() {
     }
@@ -66,7 +68,7 @@ public class InventoryCustom implements Botao, VGlobal {
                     throw new GrupoException("O grupo já existe!!!");
                 }
             } else {
-                grupo = grupoCtrl.findByName(titulo);
+                grupo = grupoCtrl.findByIdOrName(titulo.substring(titulo.lastIndexOf("ID:")));
             }
             createPagination();
         }
@@ -78,7 +80,6 @@ public class InventoryCustom implements Botao, VGlobal {
 
     public InventoryCustom(@NotNull Player player, @NotNull String name) throws GrupoException {
         this.player = player;
-        this.name = name;
 
         // Verifica se o jogador é adm
         if (!player.isOp() && !AdmController.ContainsAdm(player)) {
@@ -101,33 +102,28 @@ public class InventoryCustom implements Botao, VGlobal {
     }
 
     private void createPagination() {
-        List<String> grupList = grupo.getItemsNames();
-        Iterator<String> iterator = grupList.iterator();
-
-        listItem = new ArrayList<>();
+        List<Item> grupList = grupo.getItems();
         pag = 1;
-        while (iterator.hasNext()) {
-            Item item = itemCtrl.findByName(iterator.next());
-            listItem.add(item);
-            if (pag == 1) {
-                if (listItem.size() == 53) {
-                    pagMap.put(pag, listItem);
-                    pag++;
-                    listItem = new ArrayList<>();
-                }
-            } else {
-                if (listItem.size() == 52) {
-                    pagMap.put(pag, listItem);
-                    pag++;
-                    listItem = new ArrayList<>();
-                }
+        int index = 0;
+        listItem = new ArrayList<>();
+
+        if (grupList.size() < 53) {
+            for (int i = 0; i < grupList.size(); i++) {
+                listItem.add(grupList.get(i));
             }
-            if (grupList.size() == 1) {
-                if (grupo.getItems().size() > 53 || grupo.getItems().size() < 53) {
-                    pagMap.put(pag, listItem);
-                }
+            pagMap.put(1, listItem);
+            return;
+        }
+
+        for (int i = 0; i < grupList.size(); i++) {
+            listItem.add(grupList.get(i));
+            if (index == 53) {
+                index = 0;
+                pagMap.put(pag, listItem);
+                listItem = new ArrayList<>();
+                pag++;
             }
-            iterator.remove();
+            index++;
         }
     }
 
@@ -147,51 +143,12 @@ public class InventoryCustom implements Botao, VGlobal {
         // Titulo do grupo
         titulo = Msg.Color(TITULO_GRUP + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
         inventory = Bukkit.createInventory(null, 54, titulo);
-        if (pagMap.get(pag) == null) {
-            pag -= 1;
+        List<Item> list = pagMap.get(pag);
+        for (Item item : list) {
+            inventory.addItem(item.getItemStack());
         }
-        for (Item item : pagMap.get(pag)) {
-            try {
-                itemStack = itemCtrl.parseItemStack(item);
-                inventory.addItem(itemStack);
-            } catch (ItemException e) {
-                throw new RuntimeException("O item com o nome "+ item.getName()+" não está sendo recolhecido!!!");
-            }
-        }
-
-        switch (pag) {
-            case 1:
-                if (pagMap.size() == 1) {
-                    if (player.isOp() || AdmController.ContainsAdm(player)) {
-                        inventory.setItem(53, BtnSalva());
-                    }
-                } else {
-                    inventory.setItem(53, BtnProximoPag2());
-                }
-                break;
-            case 2:
-                if (pagMap.size() == 2) {
-                    if (player.isOp() || AdmController.ContainsAdm(player)) {
-                        inventory.setItem(52, BtnAnteriorPag1());
-                        inventory.setItem(53, BtnSalva());
-                    } else {
-                        inventory.setItem(53, BtnAnteriorPag1());
-                    }
-                } else {
-                    inventory.setItem(52, BtnAnteriorPag1());
-                    inventory.setItem(53, BtnProximoPag3());
-                }
-                break;
-            case 3:
-                if (pagMap.size() == 3) {
-                    if (player.isOp() || AdmController.ContainsAdm(player)) {
-                        inventory.setItem(52, BtnAnteriorPag2());
-                        inventory.setItem(53, BtnSalva());
-                    } else {
-                        inventory.setItem(53, BtnAnteriorPag2());
-                    }
-                }
-                break;
+        if (inventory.getItem(53) == null && player.isOp() || configDao.containsAdm(player)) {
+            inventory.setItem(53, BtnSalva());
         }
         player.openInventory(inventory);
         return this;
@@ -247,7 +204,7 @@ public class InventoryCustom implements Botao, VGlobal {
         } else if (BtnProximoPag3().equals(itemStackClicked)) {
             pag = 3;
             show();
-        }else if(BtnAnteriorPag2().equals(itemStackClicked)){
+        } else if (BtnAnteriorPag2().equals(itemStackClicked)) {
             pag = 2;
             show();
         }
