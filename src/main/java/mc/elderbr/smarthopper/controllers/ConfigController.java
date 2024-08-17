@@ -75,7 +75,7 @@ public class ConfigController implements VGlobal {
         return dao.findByUseTexture();
     }
 
-    public void reset(){
+    public void reset() {
         dao.saveAuthor();
         dao.saveDiscord();
         dao.saveVersion();
@@ -87,10 +87,8 @@ public class ConfigController implements VGlobal {
     public static void RESET() {
         ConfigController ctrl = new ConfigController();
         ConfigDao dao = new ConfigDao();
+        AdmController admCtrl = new AdmController();
         try {
-
-            List<String> list = new AdmController().getAdms();
-
             if (dao.findByVersion() < VERSION_INT) {
                 dao.saveAuthor();
                 dao.saveDiscord();
@@ -98,6 +96,9 @@ public class ConfigController implements VGlobal {
                 dao.saveTutorial();
                 dao.saveTexture();
                 ctrl.getUseTexture();
+                for (String adm : admCtrl.getAdms()) {
+                    admCtrl.addAdm(adm);
+                }
             }
         } catch (ConfigException e) {
             Msg.ServidorGold(e.getMessage());

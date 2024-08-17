@@ -1,15 +1,14 @@
 package mc.elderbr.smarthopper.dao;
 
 import mc.elderbr.smarthopper.enums.EConfig;
+import mc.elderbr.smarthopper.exceptions.ConfigException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class ConfigDao implements VGlobal {
 
@@ -17,8 +16,6 @@ public class ConfigDao implements VGlobal {
     private YamlConfiguration config;
 
     private final String KEY_ADM = EConfig.ADM.getKey();
-    private final String KEY_TEXTURE = EConfig.TEXTURE.getKey();
-    private final String KEY_USE_TEXTURE = EConfig.USE_TEXTURE.getKey();
 
     public ConfigDao() {
         try {
@@ -29,7 +26,6 @@ public class ConfigDao implements VGlobal {
             throw new RuntimeException(e);
         }
         config = YamlConfiguration.loadConfiguration(file);
-        saveVersion();// Salvando a versão atual
     }
 
     public void createFile() {
@@ -52,36 +48,31 @@ public class ConfigDao implements VGlobal {
         }
     }
 
-    public void restart() {
-        config = YamlConfiguration.loadConfiguration(file);
-        findByAll();// Carrega todos os nome do Adm
-        deleteFile();// Deleta o arquivo config.yml
-        createFile();// Cria o arquivo config.yml
-        saveAuthor();// Adiciona o autor no arquivo config.yml
-        saveDiscord();// Adicionando o discord no arquivo config.yml
-        saveVersion();// Adicionando a versão no arquivo config.yml
-        saveTutorial();// Adicionando o link do tutorial no arquivo config.yml
-        if (config.get(KEY_TEXTURE) == null) {
-            saveTexture();// Adicionando o link para o download da textura no arquivo config.yml
-        }
-        if (config.get(KEY_USE_TEXTURE) == null) {
-            useTextureSave();// Adicionando a pergunta do uso da textura
-        }
+    public void saveAdm() {
+        save(EConfig.ADM);
     }
 
-    public void addAdm(String name) {
-        ADM_LIST.add(name);
-        Collections.sort(ADM_LIST);
-        save(ADM_LIST, EConfig.ADM);
+    public boolean addAdm(String name) {
+        List<String> adms = findByAdms();
+        adms.add(name);
+        Collections.sort(adms);
+        save(adms, EConfig.ADM);
+        return true;
     }
 
     public boolean containsAdm(String name) {
         config = YamlConfiguration.loadConfiguration(file);
+        if (config.get(KEY_ADM) == null) {
+            throw new ConfigException("Lista de Adm não existe!");
+        }
         return config.getList(KEY_ADM).contains(name);
     }
 
     public boolean containsAdm(Player player) {
         config = YamlConfiguration.loadConfiguration(file);
+        if (config.get(KEY_ADM) == null) {
+            throw new ConfigException("Lista de Adm não existe!");
+        }
         return config.getList(KEY_ADM).contains(player.getName());
     }
 
@@ -92,15 +83,13 @@ public class ConfigDao implements VGlobal {
         save(ADM_LIST, EConfig.ADM);
     }
 
-    public void findByAll() {
+    public List<String> findByAdms() {
+        Set<String> list = new HashSet<>();
         config = YamlConfiguration.loadConfiguration(file);
-        if (config.getList(KEY_ADM) == null) return;
-        for (Object admName : config.getList(KEY_ADM)) {
-            if (!ADM_LIST.contains(admName.toString())) {
-                ADM_LIST.add(admName.toString());
-            }
+        for (Object name : config.getList(KEY_ADM)) {
+            list.add(name.toString());
         }
-        Collections.sort(ADM_LIST);
+        return list.stream().toList();
     }
 
     public void saveAuthor() {
@@ -108,15 +97,31 @@ public class ConfigDao implements VGlobal {
     }
 
     public void saveDiscord() {
-        save("discord", "ElderBR#5398", "Entre em contato através do Discord");
+        save(EConfig.DISCORD);
     }
 
     public void saveVersion() {
         save(EConfig.VERSION);
     }
 
+    public int findByVersion() {
+        String version = config.getString(EConfig.VERSION.getKey());
+        if (version == null) {
+            throw new ConfigException("Não foi encontrado dados da versão!");
+        }
+        try {
+            return Integer.parseInt(version.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException e) {
+            throw new ConfigException("Não foi encontrado dados da versão:\nErro: " + e.getMessage());
+        }
+    }
+
     public void saveTutorial() {
         save(EConfig.TUTORIAL);
+    }
+
+    public String findByTutorial() {
+        return config.getString(EConfig.TUTORIAL.getKey());
     }
 
     /**********************************************************
@@ -128,22 +133,36 @@ public class ConfigDao implements VGlobal {
         save(EConfig.TEXTURE);
     }
 
+    public String findByTexture() {
+        String key = EConfig.TEXTURE.getKey();
+        if (config.getString(key) == null) {
+            throw new ConfigException("O link da textura não encontrado!");
+        }
+        return config.getString(key);
+    }
+
     public void saveUseTexture(boolean useTexture) {
         save(useTexture, EConfig.USE_TEXTURE);
     }
 
-    public void useTextureSave() {
+    public void saveUseTexture() {
         save(true, EConfig.USE_TEXTURE);
     }
 
-    public static boolean useTexture() {
-        YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
-        return yml.getBoolean(EConfig.USE_TEXTURE.getKey());
+    public boolean findByUseTexture() {
+        String key = EConfig.USE_TEXTURE.getKey();
+        if (config.get(key) == null) {
+            throw new ConfigException("Não foi encontrado o \"useTexture\"!");
+        }
+        return config.getBoolean(key);
     }
+
+    /**********************************************************
+     *                       SAVES
+     **********************************************************/
 
     private void save(String key, Object value, String... comment) {
         try {
-            config = YamlConfiguration.loadConfiguration(file);
             config.set(key, value);
             if (comment.length > 0) {
                 config.setComments(key, Arrays.asList(comment));
@@ -156,7 +175,6 @@ public class ConfigDao implements VGlobal {
 
     private void save(Object obj, EConfig type) {
         try {
-            config = YamlConfiguration.loadConfiguration(file);
             config.set(type.getKey(), (obj == null ? type.getValue() : obj));
             config.setComments(type.getKey(), Arrays.asList(type.getComment()));
             config.save(file);
@@ -167,7 +185,6 @@ public class ConfigDao implements VGlobal {
 
     private void save(EConfig type) {
         try {
-            config = YamlConfiguration.loadConfiguration(file);
             config.set(type.getKey(), type.getValue());
             config.setComments(type.getKey(), Arrays.asList(type.getComment()));
             config.save(file);

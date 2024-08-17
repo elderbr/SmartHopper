@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.dao.ConfigDao;
+import mc.elderbr.smarthopper.exceptions.ConfigException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -14,19 +15,26 @@ public class AdmController implements VGlobal {
     public AdmController() {
     }
 
+    public boolean addAdm(String name){
+        if(name == null || name.isBlank()){
+            throw new ConfigException("Nome do adm é invalido!");
+        }
+        return configDao.addAdm(name);
+    }
+
     public boolean addAdm(Player player, String[] args) throws Exception {
         if (!player.isOp()) {
-            throw new Exception("Ops, você não pode usar esse comando, apenas adm do servidor!!!");
+            throw new RuntimeException("Ops, você não pode usar esse comando, apenas adm do servidor!!!");
         }
         if (args == null || args.length < 1) {
-            throw new Exception("Digite o nome do player!!!");
+            throw new RuntimeException("Digite o nome do player!!!");
         }
         if (args.length > 1) {
-            throw new Exception("Digite apenas um nome!!!");
+            throw new RuntimeException("Digite apenas um nome!!!");
         }
         String name = args[0];
         if (configDao.containsAdm(name)) {
-            throw new Exception(String.format("O jogador %s já está na lista de administradores do Smart Hopper!!!", name));
+            throw new RuntimeException(String.format("O jogador %s já está na lista de administradores do Smart Hopper!!!", name));
         }
         configDao.addAdm(name);
         return configDao.containsAdm(name);

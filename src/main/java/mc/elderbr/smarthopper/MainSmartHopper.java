@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper;
 
 import mc.elderbr.smarthopper.cmd.*;
 import mc.elderbr.smarthopper.controllers.AdmController;
+import mc.elderbr.smarthopper.controllers.ConfigController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.event.ClickHopper;
@@ -14,21 +15,13 @@ import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MainSmartHopper extends JavaPlugin implements Listener {
-
-    // Item
-    private Item item;
-    private ItemConfig itemConfig;
-
-    // Grupo
-    private GrupoConfig grupoConfig;
-    private TraducaoConfig traducaoConfig;
-
 
     @Override
     public void onEnable() {
@@ -42,24 +35,21 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Iniciando o config padrão dos YML
         saveDefaultConfig();
-        //config = new Config();
-
 
         ItemController.findAll();// Busca todos os item e salva na variavel global
         GrupoController.findAll();// Busca todos os grupos e salva na variavel global
 
         // Tradução
-        traducaoConfig = new TraducaoConfig();
+        new TraducaoConfig();
 
-        // Limpando o arquivo cofig.yml e rescrevendo
-        AdmController.Reset();
+        // Verifica se os dados das configurações estão atualizados
+        ConfigController.RESET();
 
         // Comandos
         commands();
 
         // Eventos
         events();
-
     }
 
     @Override
