@@ -43,14 +43,11 @@ public class GrupoComando implements CommandExecutor {
 
             switch (command.getName().toLowerCase()) {
                 case "grupo":// Buscar grupo
-                    show();
-                    break;
+                    return show();
                 case "addgrupo":// ADICIONAR NOVO GRUPO
-                    add();
-                    break;
+                    return add();
                 case "removegrupo":// REMOVER GRUPO
-                    delete();
-                    break;
+                    return delete();
             }
         }
         return false;
