@@ -46,13 +46,6 @@ public interface VGlobal {
     }
 
     List<String> ITEM_NAME_LIST_DEFAULT = new ArrayList<>();
-    default void ADD_ITEM_NAME_LIST_DEFAULT(String name) {
-        if (name.isBlank()) return;
-        if (!ITEM_NAME_LIST_DEFAULT.contains(name)) {
-            ITEM_NAME_LIST_DEFAULT.add(name);
-        }
-    }
-
     List<String> ITEM_NAME_LIST_UPDATE = new ArrayList<>();
 
     /*********************************************************
