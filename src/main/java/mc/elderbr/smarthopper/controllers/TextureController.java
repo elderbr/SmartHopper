@@ -1,15 +1,17 @@
 package mc.elderbr.smarthopper.controllers;
 
-import mc.elderbr.smarthopper.dao.ConfigDao;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 
 public class TextureController {
-    private final String url = "http://elderbr.com/minecraft/textures/SmartHopper.zip";
-    private ConfigDao configDao;
+
+    private final String url;
+    private ConfigController configCtrl;
 
     public TextureController() {
+        configCtrl = new ConfigController();
+        url = configCtrl.getTexture();
     }
 
     public String getResourcePack() {
@@ -17,13 +19,13 @@ public class TextureController {
     }
 
     public void carrega(Player player) {
-        if (ConfigDao.useTexture()) {
+        if (configCtrl.getUseTexture()) {
             player.setResourcePack(url);
         }
     }
 
     public void aceitaTexture(PlayerResourcePackStatusEvent event) {
-        if (ConfigDao.useTexture()) {
+        if (configCtrl.getUseTexture()) {
             if (event.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED) {
                 event.getPlayer().kickPlayer("§lPara entrar no nosso servidor precisa aceitar nossa textura!");
             }
@@ -34,17 +36,14 @@ public class TextureController {
     }
 
     public boolean setUseTexture(Player player, boolean useTexture) {
-        configDao = new ConfigDao();
 
         if(player == null){
-            configDao.saveUseTexture(useTexture);
-            Msg.ServidorRed("Textura foi alterado para ser obrigatorio como "+ useTexture);
-            return true;
+            return false;
         }
 
-        if(player.isOp() || configDao.containsAdm(player)){
-            configDao.saveUseTexture(useTexture);
-            Msg.PlayerGold(player, "Textura foi alterado para ser obrigatorio como "+ useTexture);
+        if(player.isOp() || configCtrl.isAdm(player)){
+            configCtrl.saveUseTexture(useTexture);
+            Msg.PlayerTodos("Textura foi alterado para ser obrigatório como "+ useTexture);
             return true;
         }else {
             Msg.PlayerGold(player, "Você não tem permissão!");
