@@ -53,10 +53,10 @@ public class ConfigDao implements VGlobal {
     }
 
     public boolean addAdm(String name) {
-        List<String> adms = findByAdms();
+        List<String> adms = findFileByAdms();// Pegando a lista de administradores
         adms.add(name);
-        Collections.sort(adms);
         save(adms, EConfig.ADM);
+        ADM_LIST.add(name);// Adicionando na lista de adm na variavel global
         return true;
     }
 
@@ -77,19 +77,25 @@ public class ConfigDao implements VGlobal {
     }
 
     public void removeAdm(String name) {
-        ADM_LIST.remove(name);
-        Collections.sort(ADM_LIST);
+        List<String> adms = findFileByAdms();
+        Collections.sort(adms);
         config = YamlConfiguration.loadConfiguration(file);
-        save(ADM_LIST, EConfig.ADM);
+        save(adms, EConfig.ADM);
     }
 
-    public List<String> findByAdms() {
+    public List<String> findByAdms(){
+        return ADM_LIST;
+    }
+
+    public List<String> findFileByAdms() {
         Set<String> list = new HashSet<>();
         config = YamlConfiguration.loadConfiguration(file);
+        ADM_LIST.clear();
         for (Object name : config.getList(KEY_ADM)) {
             list.add(name.toString());
+            ADM_LIST.add(name.toString());
         }
-        return list.stream().toList();
+        return new ArrayList<>(list);
     }
 
     public void saveAuthor() {

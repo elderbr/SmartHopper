@@ -27,7 +27,7 @@ public class AdministradorComando implements CommandExecutor {
                         Msg.PlayerTodos(String.format("$lO jogador $e%s $r$lé o novo administrador do $2Smart Hopper!!!", args[0]));
                         return true;
                     } catch (Exception e) {
-                        Msg.PlayerRed(player, e.getMessage());
+                        Msg.PlayerRed(player, "Erro: "+e.getMessage());
                     }
                     break;
                 case "removeradm":

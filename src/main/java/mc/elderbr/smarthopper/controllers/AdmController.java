@@ -41,10 +41,10 @@ public class AdmController implements VGlobal {
     }
 
     public List<String> getAdms() {
-        List<String> adms = configDao.findByAdms();
+        List<String> adms = configDao.findFileByAdms();
         if(adms == null || adms.isEmpty()){
             configDao.saveAdm();
-            return configDao.findByAdms();
+            return configDao.findFileByAdms();
         }
         return adms;
     }
