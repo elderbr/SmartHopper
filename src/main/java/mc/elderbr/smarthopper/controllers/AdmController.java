@@ -49,22 +49,22 @@ public class AdmController implements VGlobal {
         return adms;
     }
 
-    public boolean removeAdm(Player player, String[] args) throws Exception {
+    public boolean removeAdm(Player player, String[] args) {
         if (!player.isOp()) {
-            throw new Exception("$r$lOps, você não pode usar esse comando, apenas adm do servidor!!!");
+            throw new ConfigException("$r$lOps, você não pode usar esse comando, apenas adm do servidor!!!");
         }
         if (args == null || args.length < 1) {
-            throw new Exception("$lDigite o nome do player!!!");
+            throw new ConfigException("$lDigite o nome do player!!!");
         }
         if (args.length > 1) {
-            throw new Exception("$lDigite apenas um nome!!!");
+            throw new ConfigException("$lDigite apenas um nome!!!");
         }
         String name = args[0];
         if (name.length() < 5) {
-            throw new Exception("$lNome do player invalido!!!");
+            throw new ConfigException("$lNome do player invalido!!!");
         }
         if (!configDao.containsAdm(name)) {
-            throw new Exception(String.format("$r$lO jogador $e%s $r$lnão está na lista de administradores do $eSmart Hopper$r$l!!!", name));
+            throw new ConfigException(String.format("$r$lO jogador $e%s $r$lnão está na lista de administradores do $eSmart Hopper$r$l!!!", name));
         }
         configDao.removeAdm(name);
         return true;

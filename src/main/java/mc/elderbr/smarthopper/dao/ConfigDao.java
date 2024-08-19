@@ -55,6 +55,7 @@ public class ConfigDao implements VGlobal {
     public boolean addAdm(String name) {
         List<String> adms = findFileByAdms();// Pegando a lista de administradores
         adms.add(name);
+        Collections.sort(adms);
         save(adms, EConfig.ADM);
         ADM_LIST.add(name);// Adicionando na lista de adm na variavel global
         return true;
@@ -77,10 +78,11 @@ public class ConfigDao implements VGlobal {
     }
 
     public void removeAdm(String name) {
-        List<String> adms = findFileByAdms();
-        Collections.sort(adms);
-        config = YamlConfiguration.loadConfiguration(file);
-        save(adms, EConfig.ADM);
+        List<String> adms = findFileByAdms();// Busca os adm no arquivo config.yml
+        adms.remove(name);// Remove da lista
+        Collections.sort(adms);// Organiza em ordem alfabética
+        save(adms, EConfig.ADM);// Salvando a lista de adms
+        ADM_LIST.remove(name);// Removendo adm da lista global
     }
 
     public List<String> findByAdms(){
@@ -89,11 +91,11 @@ public class ConfigDao implements VGlobal {
 
     public List<String> findFileByAdms() {
         Set<String> list = new HashSet<>();
-        config = YamlConfiguration.loadConfiguration(file);
-        ADM_LIST.clear();
+        config = YamlConfiguration.loadConfiguration(file);// Acessando o arquivo config.yml
+        ADM_LIST.clear();// Limpando a lista de adm global
         for (Object name : config.getList(KEY_ADM)) {
-            list.add(name.toString());
-            ADM_LIST.add(name.toString());
+            list.add(name.toString());// Adicionando adm na lista
+            ADM_LIST.add(name.toString());// Adicionando adm na lista global
         }
         return new ArrayList<>(list);
     }
