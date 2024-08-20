@@ -20,6 +20,13 @@ public class GrupoDao implements VGlobal {
     public GrupoDao() {
     }
 
+    public static int getMaxId(){
+        if(GRUPO_MAP_ID.isEmpty()){
+            return 1;
+        }
+        return Collections.max(GRUPO_MAP_ID.keySet())+1;
+    }
+
     public boolean save(Grupo grupo) throws GrupoException {
         String name = grupo.getName().toLowerCase();
         try {
