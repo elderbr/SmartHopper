@@ -4,11 +4,11 @@ import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +70,7 @@ public class GrupoDao implements VGlobal {
 
         // Lista de itens
         List<String> items = (List<String>) grupSection.getList("item");
-        if (items.isEmpty()){
+        if (items.isEmpty()) {
             throw new GrupoException("Item para o Grupo não existe");
         }
 
@@ -82,14 +82,32 @@ public class GrupoDao implements VGlobal {
 
     public void findAll() {
         config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
+        // Percorrendo o arquivo grupo.yml
         for (Map.Entry<String, Object> obj : config.getValues(false).entrySet()) {
-            Grupo grupo = findConfigByName(obj.getKey());
-            if (grupo == null) continue;
+            try {
+                ConfigurationSection section = config.getConfigurationSection(obj.getKey());
+                if (section == null) continue;
 
-            GRUPO_MAP_ID.put(grupo.getId(), grupo);
-            GRUPO_MAP_NAME.put(grupo.getName().toLowerCase(), grupo);
-            if (!GRUPO_NAME_LIST.contains(grupo.getName())) {
-                GRUPO_NAME_LIST.add(grupo.getName());
+                // Criando grupo
+                Grupo grupo = new Grupo();
+                grupo.setId(section.getInt("id"));
+                grupo.setName(section.getString("name"));
+
+                for (Object item : section.getList("item")) {
+                    grupo.addItems(itemCtrl.findByName(item.toString()));
+                }
+                // Verificando se existe tradução
+                ConfigurationSection mapLang = section.getConfigurationSection("lang");
+                if (mapLang != null) {
+                    for (Map.Entry<String, Object> lang : mapLang.getValues(false).entrySet()) {
+                        grupo.addTranslation(lang.getKey(), lang.getValue().toString());
+                    }
+                }
+
+                GRUPO_MAP_ID.put(grupo.getId(), grupo);
+                GRUPO_MAP_NAME.put(grupo.getName().toLowerCase(), grupo);
+            } catch (Exception e) {
+                throw new GrupoException("Erro ao buscar grupo no arquivo grupo.yml");
             }
         }
     }
