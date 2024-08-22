@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Msg;
 
 import java.util.*;
 
@@ -13,28 +14,22 @@ public class GrupoCreate implements VGlobal {
 
     public static void NewNome() {
 
-        StringBuilder nameGrup = new StringBuilder();
         listNameGrup = new HashSet<>();
 
         for (String itemName : ITEM_MAP_NAME.keySet()) {
             String name = itemName.toLowerCase().replaceAll("bricks", "brick");
             if (name.contains(" ")) {
-                String[] names = name.split("\s");
+                String[] names = name.split(" ");
                 for (String value : names) {
-
-                    if (value.replaceAll("[^0-9]", "").length() < 2) continue;
-
+                    if(value.replaceAll("\\d","").isEmpty()) continue;
                     if (NotGrupo().contains(value)) continue;// Se conter o nome pula
                     listNameGrup.add(value.trim());
                 }
-                for (String value : names) {
-                    nameGrup.append(value).append(" ");
-                    String nameReplace = name.replaceAll(nameGrup.toString(), "").trim();
-
-                    if (nameReplace.replaceAll("[^0-9]", "").length() < 2) continue;
-
-                    if (NotGrupo().contains(nameReplace)) continue;// Se conter o nome pula
-                    listNameGrup.add(nameReplace);
+                for(int i = 0; i< names.length; i++){
+                    String value = String.join(" ", Arrays.copyOfRange(names, i, names.length));
+                    if(value.replaceAll("\\d","").isEmpty()) continue;
+                    if (NotGrupo().contains(value)) continue;// Se conter o nome pula
+                    listNameGrup.add(value);
                 }
             } else {
                 listNameGrup.add(name);

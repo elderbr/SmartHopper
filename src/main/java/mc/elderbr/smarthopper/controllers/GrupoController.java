@@ -30,7 +30,8 @@ public class GrupoController implements GrupMsg, VGlobal {
     private List<Grupo> listGrupo;
     private ItemController itemCtrl = new ItemController();
 
-    public GrupoController() {}
+    public GrupoController() {
+    }
 
     public boolean save(Grupo grupo) throws GrupoException {
         // O grupo não pode nulo e precisa conter o nome
@@ -57,26 +58,26 @@ public class GrupoController implements GrupMsg, VGlobal {
     }
 
     public Grupo findByName(@NotNull String name) throws GrupoException {
-        if(name.isBlank()){
+        if (name.isBlank()) {
             throw new GrupoException(GRUP_NAME_REQUIRED);
         }
         Grupo grupo = grupoDao.findByName(name);
-        if(grupo == null){
+        if (grupo == null) {
             throw new GrupoException(GRUP_NOT_EXIST);
         }
         return grupo;
     }
 
-    public Grupo findByIdOrName(String value){
+    public Grupo findByIdOrName(String value) {
         Grupo grup;
         String grupName = value.toLowerCase();
-        try{
-            int code = Integer.parseInt(grupName.replaceAll("[^0-9]",""));
-            grup =  grupoDao.findById(code);
-        }catch (NumberFormatException e){
+        try {
+            int code = Integer.parseInt(grupName.replaceAll("[^0-9]", ""));
+            grup = grupoDao.findById(code);
+        } catch (NumberFormatException e) {
             grup = grupoDao.findByName(grupName);
         }
-        if(grup == null){
+        if (grup == null) {
             throw new GrupoException(String.format(GRUP_NOT_EXIST, value));
         }
         return grup;
@@ -92,8 +93,8 @@ public class GrupoController implements GrupMsg, VGlobal {
         }
         try {
             item = itemCtrl.findByItemStack(itemStack);// Busca o item na memoria global
-            for(Grupo grup : GRUPO_MAP_NAME.values()){
-                if(grup.containsItem(item)){
+            for (Grupo grup : GRUPO_MAP_NAME.values()) {
+                if (grup.containsItem(item)) {
                     listGrupo.add(grup);
                 }
             }
@@ -230,24 +231,29 @@ public class GrupoController implements GrupMsg, VGlobal {
 
     private int ID() {
         int id = Collections.max(GRUPO_MAP_ID.keySet());
-        return id+1;
+        return id + 1;
     }
 
     public static void CREATE() {
         GrupoDao grupDao = new GrupoDao();
         ItemDao itemDao = new ItemDao();
-        int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet()));
-        for(String nameGrup : GrupoCreate.NEW()){
-            Grupo grup = new Grupo();
-            grup.setId(id);
-            grup.setName(nameGrup);
-            for(String nameItem : ITEM_MAP_NAME.keySet()){
-                if(GrupoCreate.containsItem(nameGrup, nameItem)){
+        int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet())+1);
+        for (String nameGrup : GrupoCreate.NEW()) {
+            Grupo grup = grupDao.findByName(nameGrup);// Busca o grupo na variavel global
+            if (grup == null) {// Criando novo grupo
+                grup = new Grupo();
+                grup.setId(id);
+                grup.setName(nameGrup);
+                id++;
+            }
+            for (String nameItem : ITEM_MAP_NAME.keySet()) {
+                if (GrupoCreate.containsItem(nameGrup, nameItem)) {
+                    // Adiciona o item ao grupo se não existir na lista
+                    if(grup.getItemsNames().contains(nameItem)) continue;
                     grup.addItems(itemDao.findByName(nameItem));
                 }
             }
             grupDao.save(grup);
-            id++;
         }
     }
 

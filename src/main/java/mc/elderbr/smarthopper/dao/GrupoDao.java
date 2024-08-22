@@ -5,6 +5,7 @@ import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GrupoDao implements VGlobal {
 
@@ -38,7 +40,9 @@ public class GrupoDao implements VGlobal {
             if (!grupo.getTranslations().isEmpty()) {
                 config.set(name.concat(".lang"), grupo.getTranslations());
             }
-            config.set(name.concat(".item"), grupo.getItems().stream().map(Item::getName).toList());
+            List<String> nameItem = grupo.getItemsNames();
+            Collections.sort(nameItem);
+            config.set(name.concat(".item"), nameItem);
             config.save(GRUPO_FILE);
 
             GRUPO_MAP_ID.put(grupo.getId(), grupo);
@@ -46,6 +50,7 @@ public class GrupoDao implements VGlobal {
             if (!GRUPO_NAME_LIST.contains(grupo.getName())) {
                 GRUPO_NAME_LIST.add(grupo.getName());
             }
+            Msg.ServidorBlue("Criando o Grupo "+ name);
             return true;
         } catch (IOException e) {
             throw new GrupoException(e.getMessage());
