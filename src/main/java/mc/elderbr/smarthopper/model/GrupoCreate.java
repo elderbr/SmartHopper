@@ -1,15 +1,12 @@
 package mc.elderbr.smarthopper.model;
 
-import mc.elderbr.smarthopper.dao.GrupoDao;
-import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Msg;
 
 import java.util.*;
 
 public class GrupoCreate implements VGlobal {
 
-    private static List<String> listNameGrup = new ArrayList<>();
+    private static Set<String> listNameGrup = new HashSet<>();
 
     private GrupoCreate() {
     }
@@ -17,116 +14,66 @@ public class GrupoCreate implements VGlobal {
     public static void NewNome() {
 
         StringBuilder nameGrup = new StringBuilder();
-        String name;
+        listNameGrup = new HashSet<>();
 
-        for (String itemName : ITEM_NAME_LIST_DEFAULT) {
-            if (itemName.contains(" ")) {
-                List<String> listName = Arrays.asList(itemName.split("\s"));
-                for (String value : listName) {
-                    name = value.trim();
-                    if (name.length() < 2) continue;
-                    if (NotGrupo().contains(name)) continue;
-                    if (!listNameGrup.contains(name.replaceAll("bricks","brick"))) {
-                        listNameGrup.add(name.replaceAll("bricks","brick"));
-                    }
+        for (String itemName : ITEM_MAP_NAME.keySet()) {
+            String name = itemName.toLowerCase().replaceAll("bricks", "brick");
+            if (name.contains(" ")) {
+                String[] names = name.split("\s");
+                for (String value : names) {
+
+                    if (value.replaceAll("[^0-9]", "").length() < 2) continue;
+
+                    if (NotGrupo().contains(value)) continue;// Se conter o nome pula
+                    listNameGrup.add(value.trim());
                 }
-
-                nameGrup = new StringBuilder();
-                for (String value : listName) {
+                for (String value : names) {
                     nameGrup.append(value).append(" ");
-                    name = nameGrup.toString().trim().replaceAll("bricks","brick");
-                    if (name.length() < 2) continue;
-                    if (NotGrupo().contains(name)) continue;
-                    if (!listNameGrup.contains(name)) {
-                        listNameGrup.add(name);
-                    }
-                }
+                    String nameReplace = name.replaceAll(nameGrup.toString(), "").trim();
 
-                listName = new ArrayList<>(Arrays.asList(itemName.split("\s")));
-                while (!listName.isEmpty()) {
-                    listName.remove(0);
-                    if (!listName.isEmpty()) {
-                        nameGrup = new StringBuilder();
-                        for (String value : listName) {
-                            nameGrup.append(value).append(" ");
-                            name = nameGrup.toString().trim().replaceAll("bricks","brick");
-                            if (name.length() < 2) continue;
-                            if (NotGrupo().contains(name)) continue;
-                            if (!listNameGrup.contains(name)) {
-                                listNameGrup.add(name);
-                            }
-                        }
-                    }
+                    if (nameReplace.replaceAll("[^0-9]", "").length() < 2) continue;
+
+                    if (NotGrupo().contains(nameReplace)) continue;// Se conter o nome pula
+                    listNameGrup.add(nameReplace);
                 }
             } else {
-                if (!listNameGrup.contains(itemName.replaceAll("bricks","brick"))) {
-                    listNameGrup.add(itemName.replaceAll("bricks","brick"));
-                }
+                listNameGrup.add(name);
             }
         }
-        Collections.sort(listNameGrup);
     }
 
-    public static void NEW() {
-        int id = 1;
+    public static List<String> NEW() {
+        NewNome();
         Iterator<String> iterator = listNameGrup.iterator();
         while (iterator.hasNext()) {
-            String grupName = iterator.next();
-
-            Grupo grupo = new Grupo();
-            grupo.setName(grupName);
-
-            for (String itemName : ITEM_NAME_LIST_DEFAULT) {
-                if (pertence(grupName, itemName)) {
-                    if (contains(grupName.replaceAll("bricks","brick"), itemName.replaceAll("bricks","brick"))) {
-                        if (!grupo.getItems().contains(ITEM_MAP_NAME.get(itemName))) {
-                            grupo.addItems(ITEM_MAP_NAME.get(itemName));
-                        }
-                    }
+            String nameGrupo = iterator.next();
+            int count = 0;
+            for (String nameItem : ITEM_MAP_NAME.keySet()) {
+                if (containsItem(nameGrupo, nameItem)) {
+                    count++;
                 }
             }
-
-            if (grupo.getItems().size() > 1) {
-                grupo.setId(id);
-                try {
-                    GrupoDao dao = new GrupoDao();
-                    dao.save(grupo);
-                    Msg.ServidorBlue("Criando o grupo: "+ grupo.getName());
-                    id++;
-                } catch (GrupoException e) {
-                    Msg.ServidorErro(e, "NEW()", GrupoCreate.class);
-                }
-            } else {
+            if (count < 2) {
                 iterator.remove();
             }
         }
+        List<String> list = new ArrayList<>(listNameGrup);
+        Collections.sort(list);
+        return list;
     }
 
-    private static boolean contains(String grupoName, String itemName) {
-        String[] grups, itens;
+    public static boolean containsItem(String grupoName, String itemName) {
+        int count = 0;
         if (itemName.contains(" ")) {
-            itens = itemName.split("\s");
-
-            if (grupoName.contains(" ")) {
-                grups = grupoName.split("\s");
-                int size = grups.length;
-                for (String grupValue : grups) {
-                    for (String itemValue : itens) {
-                        if (grupValue.equals(itemValue)) {
-                            size--;
-                        }
-                    }
-                }
-                return (size == 0);
-            } else {// Se o nome do grupo não conter mais do 2 palavras
-                for (String itemValue : itens) {
-                    if (itemValue.equals(grupoName)) {
-                        return true;
-                    }
+            for (String name : itemName.split(" ")) {
+                if (grupoName.equals(name)) {
+                    return true;
                 }
             }
+            return false;
+        } else {
+            return grupoName.equals(itemName);
         }
-        return itemName.equals(grupoName);
     }
 
     private static List<String> NotGrupo() {

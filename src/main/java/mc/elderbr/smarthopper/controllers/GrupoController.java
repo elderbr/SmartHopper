@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.dao.GrupoDao;
+import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
@@ -29,8 +30,7 @@ public class GrupoController implements GrupMsg, VGlobal {
     private List<Grupo> listGrupo;
     private ItemController itemCtrl = new ItemController();
 
-    public GrupoController() {
-    }
+    public GrupoController() {}
 
     public boolean save(Grupo grupo) throws GrupoException {
         // O grupo não pode nulo e precisa conter o nome
@@ -200,29 +200,7 @@ public class GrupoController implements GrupMsg, VGlobal {
 
     public static void findAll() {
         clear();
-        GrupoDao dao = new GrupoDao();
-        //GrupoCreate.NewNome();
-        dao.findAll();
-        if (GRUPO_MAP_NAME.isEmpty()) {
-            GrupoCreate.NEW();
-        }
-//        else {
-//            ItemController itemCtrl = new ItemController();
-//            // Percorrendo a lista do grupo e adicionando o grupo no item
-//            for (Grupo grupo : GRUPO_MAP_NAME.values()) {
-//                try {
-//                    for (String itemName : grupo.getItems()) {
-//                        Item item = itemCtrl.findByName(itemName);
-//                        if (item == null) continue;
-//                        item.addGrups(grupo.getId());
-//                        ITEM_MAP_ID.put(item.getId(), item);
-//                        ITEM_MAP_NAME.put(item.getName().toLowerCase(), item);
-//                    }
-//                } catch (ItemException e) {
-//                    Msg.ServidorErro(e, "findAll()", GrupoController.class);
-//                }
-//            }
-//        }
+        new GrupoDao().findAll();
     }
 
     public static void clear() {
@@ -256,10 +234,20 @@ public class GrupoController implements GrupMsg, VGlobal {
     }
 
     public static void CREATE() {
-        GrupoDao dao = new GrupoDao();
-        GrupoCreate.NewNome();
-        if (dao.findByName("acacia") == null) {
-            GrupoCreate.NEW();
+        GrupoDao grupDao = new GrupoDao();
+        ItemDao itemDao = new ItemDao();
+        int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet()));
+        for(String nameGrup : GrupoCreate.NEW()){
+            Grupo grup = new Grupo();
+            grup.setId(id);
+            grup.setName(nameGrup);
+            for(String nameItem : ITEM_MAP_NAME.keySet()){
+                if(GrupoCreate.containsItem(nameGrup, nameItem)){
+                    grup.addItems(itemDao.findByName(nameItem));
+                }
+            }
+            grupDao.save(grup);
+            id++;
         }
     }
 
