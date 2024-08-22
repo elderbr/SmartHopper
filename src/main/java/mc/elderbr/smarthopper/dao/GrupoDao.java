@@ -50,7 +50,7 @@ public class GrupoDao implements VGlobal {
             if (!GRUPO_NAME_LIST.contains(grupo.getName())) {
                 GRUPO_NAME_LIST.add(grupo.getName());
             }
-            Msg.ServidorBlue("Criando o Grupo "+ name);
+            Msg.ServidorBlue("Criando o Grupo " + name);
             return true;
         } catch (IOException e) {
             throw new GrupoException(e.getMessage());
@@ -104,11 +104,29 @@ public class GrupoDao implements VGlobal {
 
                 // Criando grupo
                 Grupo grupo = new Grupo();
+                if (section.get("id") == null) {
+                    Msg.ServidorRed("Não existe ID associado para o grupo " + grupo.getName());
+                    continue;
+                }
                 grupo.setId(section.getInt("id"));
+
+                if (section.get("name") == null) {
+                    Msg.ServidorRed("Não existe nome associado para o grupo " + grupo.getId());
+                    continue;
+                }
                 grupo.setName(section.getString("name"));
 
-                for (Object item : section.getList("item")) {
-                    grupo.addItems(itemCtrl.findByName(item.toString()));
+                if (section.get("item") == null || section.getList("item").isEmpty()) {
+                    Msg.ServidorRed("Não existe item para o grupo " + grupo.getName());
+                    continue;
+                }
+
+                for (Object itemName : section.getList("item")) {
+                    Item item = itemCtrl.findByName(itemName.toString());
+                    if (item == null) {
+                        continue;
+                    }
+                    grupo.addItems(item);
                 }
                 // Verificando se existe tradução
                 ConfigurationSection mapLang = section.getConfigurationSection("lang");
@@ -121,7 +139,7 @@ public class GrupoDao implements VGlobal {
                 GRUPO_MAP_ID.put(grupo.getId(), grupo);
                 GRUPO_MAP_NAME.put(grupo.getName().toLowerCase(), grupo);
             } catch (Exception e) {
-                throw new GrupoException("Erro ao buscar grupo no arquivo grupo.yml");
+                throw new GrupoException("Erro ao buscar grupo no arquivo grupo.yml: " + e.getMessage());
             }
         }
     }
