@@ -339,7 +339,7 @@ public class ItemController implements ItemMsg {
 
     // Pega o último ID adicionando
     private static int ID() {
-        return Collections.max(ITEM_MAP_ID.keySet())+1;
+        return (ITEM_MAP_ID.isEmpty() ? 1 : Collections.max(ITEM_MAP_ID.keySet())+1);
     }
 
     private Item findByTraducao(String name) {
