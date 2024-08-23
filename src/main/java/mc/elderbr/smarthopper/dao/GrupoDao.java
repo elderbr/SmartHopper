@@ -151,14 +151,13 @@ public class GrupoDao implements VGlobal {
             if (!grupo.getTranslations().isEmpty()) {
                 config.set(name.concat(".lang"), grupo.getTranslations());
             }
-            config.set(name.concat(".item"), grupo.getItems());
+            Collections.sort(grupo.getItemsNames());
+            config.set(name.concat(".item"), grupo.getItemsNames());
             config.save(GRUPO_FILE);
 
             GRUPO_MAP_ID.put(grupo.getId(), grupo);
             GRUPO_MAP_NAME.put(grupo.getName().toLowerCase(), grupo);
-            if (!GRUPO_NAME_LIST.contains(grupo.getName())) {
-                GRUPO_NAME_LIST.add(grupo.getName());
-            }
+            GRUPO_NAME_LIST.add(grupo.getName());
             return true;
         } catch (IOException e) {
             throw new GrupoException(e.getMessage());

@@ -49,7 +49,6 @@ public class TraducaoConfig {
             if (!filePT.exists()) {
                 createTP();
             }
-            createGrupoBR();
         }
         reload();// Lendo todas as traduções
     }
@@ -115,41 +114,16 @@ public class TraducaoConfig {
         }
     }
 
-    private void createGrupoBR() {
-        try {
-
-            input = getClass().getResourceAsStream("/grupo.yml");
-            reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
-
-            escrever = Files.newBufferedWriter(fileGrupoBR.toPath(), StandardCharsets.UTF_8);
-
-            while ((txtReader = reader.readLine()) != null) {
-                escrever.write(txtReader);
-                escrever.newLine();
-                escrever.flush();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (reader != null)
-                    reader.close();
-            } catch (IOException er) {
-                er.printStackTrace();
-            }
-        }
-    }
-
     public void reload() {
         String lang = null;
-        for (File files : directoryFile.listFiles()) {
+        for (File file : directoryFile.listFiles()) {
             // Lendo o arquivo de tradução
-            yml = YamlConfiguration.loadConfiguration(files);
+            yml = YamlConfiguration.loadConfiguration(file);
             // Nome do linguagem
             lang = yml.getString("lang");
 
-            if (lang == null) {
-                Msg.ServidorRed(String.format("No arquivo %s não está definido o lang!!!", files.getName()));
+            if (lang == null || lang.isBlank()) {
+                Msg.ServidorRed(String.format("No arquivo %s não está definido o lang!!!", file.getName()));
                 continue;
             }
 
@@ -162,7 +136,7 @@ public class TraducaoConfig {
                     itemCtrl.update(item);
                     Msg.ServidorGreen("$2Adicionando tradução para o item $6" + item.getName());
                 } catch (ItemException e) {
-
+                    continue;
                 }
 
                 // Procurando e salvando a tradução para o grupo
@@ -176,7 +150,7 @@ public class TraducaoConfig {
 
                 }
             }
-            files.delete();
+            file.delete();
         }
     }
 

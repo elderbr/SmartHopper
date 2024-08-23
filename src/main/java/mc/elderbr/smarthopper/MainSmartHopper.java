@@ -41,7 +41,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         GrupoController.CREATE();// Criando grupos
 
         // Tradução
-        //new TraducaoConfig();
+        new TraducaoConfig();
 
         // Verifica se os dados das configurações estão atualizados
         ConfigController.RESET();
