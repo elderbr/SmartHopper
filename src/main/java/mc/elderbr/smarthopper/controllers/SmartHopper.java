@@ -1,269 +1,113 @@
 package mc.elderbr.smarthopper.controllers;
 
 
-import mc.elderbr.smarthopper.exceptions.ItemException;
-import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.factories.ItemFactory;
+import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_ID;
-import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_ID;
+import java.util.Objects;
 
 public class SmartHopper {
 
 
-    private int codigo;
+    private int code;
     private String name;
-    private Object type = null;
-    private List<Object> listType = null;
+    private List<IItem> listType = new ArrayList<>();
     private Hopper myHopper = null;
-    private Block block;
 
     // ITEM
     private Item item;
+    private ItemController itemCtrl = new ItemController();
 
     private Grupo grupo;
+    private GrupoController grupCtrl = new GrupoController();
 
     public SmartHopper() {
-
     }
 
-
-    public SmartHopper(@NotNull Object hopper) throws Exception {
-        myHopper = null;
-        if (hopper instanceof Hopper funil) {
-            myHopper = funil;
-        }else
-        if (hopper instanceof Inventory inventory) {
-            if (inventory.getType() == InventoryType.HOPPER) {
-                myHopper = (Hopper) inventory.getLocation().getBlock().getState();
-            }
-        }else
-        if (hopper instanceof Block block) {
-            if (block.getType() == Material.HOPPER) {
-                myHopper = (Hopper) block.getState();
-            }
-        }else
-        if (myHopper == null) {// Se não existir o hopper
+    public SmartHopper(@NotNull Hopper hopper) {
+        listType = new ArrayList<>();
+        if (hopper.getCustomName() == null) {
             return;
         }
-
-        // Verifica se existe nome personalizado para o hopper
-        if (myHopper.getCustomName() == null) {
-            return;
-        }
-
-        // Pegando o bloco hopper
-        block = myHopper.getBlock();
-
-        // Pegando o nome do hopper
-        name = myHopper.getCustomName().toLowerCase();
-
+        name = hopper.getCustomName();
         if (name.contains(";")) {
-            listType = new ArrayList<>();
-            for (String names : name.split(";")) {
-
-                if (names.substring(0, 2).contains("i")) {// Se o nome do hopper conter a letra i se trata de item
-                    // Pegando o código do item
-                    try {
-                        codigo = Integer.parseInt(names.replaceAll("[#i]", ""));
-                    } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
-                    }
-                    // Pegando o item na memória
-                    item = ITEM_MAP_ID.get(codigo);
-                    if (item == null) {
-                        throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
-                    }
-                    // Se conter cerquilha o item é negado
-                    item.setBlocked(name.contains("#"));
-                    listType.add(item);
-                }
-
-                // Se o nome do hopper conter a letra G se trata de grupo
-                if (names.substring(0, 2).contains("g")) {
-                    // Pegando o código do grupo
-                    try {
-                        codigo = Integer.parseInt(names.replaceAll("[#g]", ""));
-                    } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
-                    }
-                    // Buscando o grupo em memória
-                    grupo = GRUPO_MAP_ID.get(codigo);
-                    if (grupo == null) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
-                    }
-                    // Se conter cerquilha o grupo é negado
-                    grupo.setBlocked(name.contains("#"));
-                    listType.add(grupo);
-                }
+            for (String nameHopper : name.split(";")) {
+                listType.add(getType(nameHopper));
             }
-            type = listType;
-            return;
-        }
-
-        // Se o nome do hopper conter a letra i se trata de item
-        if (name.substring(0, 2).contains("i")) {
-            // Pegando o código do item
-            try {
-                codigo = Integer.parseInt(name.replaceAll("[#i]", ""));
-            } catch (NumberFormatException e) {
-                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
-            }
-            // Pegando o item na memória
-            item = ITEM_MAP_ID.get(codigo);
-            if (item == null) {
-                throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
-            }
-            // Se conter cerquilha o item é negado
-            item.setBlocked(name.contains("#"));
-            type = item;
-            return;
-        }
-
-        // Se o nome do hopper conter a letra G se trata de grupo
-        if (name.substring(0, 2).contains("g")) {
-            // Pegando o código do grupo
-            try {
-                codigo = Integer.parseInt(name.replaceAll("[#g]", ""));
-            } catch (NumberFormatException e) {
-                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
-            }
-            // Buscando o grupo em memória
-            grupo = GRUPO_MAP_ID.get(codigo);
-            if (grupo == null) {
-                throw new ItemException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
-            }
-            // Se conter cerquilha o grupo é negado
-            grupo.setBlocked(name.contains("#"));
-            type = grupo;
+        } else {
+            listType.add(getType(name));
         }
     }
 
+    public SmartHopper(Block block) {
+        if (block.getType() == Material.HOPPER) {
+            myHopper = (Hopper) block.getState();
+            name = myHopper.getCustomName();
+            if (name.contains(";")) {
+                for (String nameHopper : name.split(";")) {
+                    listType.add(getType(nameHopper));
+                }
+            } else {
+                listType.add(getType(name));
+            }
+        }
+    }
+
+    public IItem getType(String name) {
+        try {
+            code = Integer.parseInt(name.replaceAll("[^0-9]", ""));
+            String nameCustom = name.toLowerCase().replaceAll("#", "");
+            if (nameCustom.charAt(0) == 'i') {
+                item = itemCtrl.findByID(code);
+                if (name.contains("#")) {
+                    item.setBlocked(true);
+                }
+                return item;
+            }
+            if (nameCustom.charAt(0) == 'g') {
+                grupo = grupCtrl.findById(code);
+                if (name.contains("#")) {
+                    grupo.setBlocked(true);
+                }
+                return grupo;
+            }
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        return null;
+    }
 
     public Object getType() {
-        return type;
+        if (listType.isEmpty()) {
+            return null;
+        }
+        if (listType.size() > 1) {
+            return listType;
+        }
+        return listType.get(0);
     }
 
-    public Object getType(Inventory inventory) throws Exception {
-        myHopper = null;
-        if (inventory instanceof Hopper funil) {
-            myHopper = funil;
+    public boolean isEqualsItem(Item item) {
+        if (listType.isEmpty()) {
+            return false;
         }
-
-        if (inventory.getType() == InventoryType.HOPPER) {
-            myHopper = (Hopper) inventory.getLocation().getBlock().getState();
-        }
-
-        if (inventory instanceof Block block) {
-            if (block.getType() == Material.HOPPER) {
-                myHopper = (Hopper) block.getState();
+        for (IItem type : listType) {
+            if (type instanceof Item itemSmart) {
+                return itemSmart.equals(item);
+            }
+            if (type instanceof Grupo grupSmart) {
+                return grupSmart.containsItem(item);
             }
         }
-        if (myHopper == null) {// Se não existir o hopper
-            return null;
-        }
-
-        // Verifica se existe nome personalizado para o hopper
-        if (myHopper.getCustomName() == null) {
-            return null;
-        }
-
-        // Pegando o bloco hopper
-        block = myHopper.getBlock();
-
-        // Pegando o nome do hopper
-        name = myHopper.getCustomName().toLowerCase();
-
-        if (name.contains(";")) {
-            listType = new ArrayList<>();
-            for (String names : name.split(";")) {
-
-                if (names.substring(0, 2).contains("i")) {// Se o nome do hopper conter a letra i se trata de item
-                    // Pegando o código do item
-                    try {
-                        codigo = Integer.parseInt(names.replaceAll("[#i]", ""));
-                    } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
-                    }
-                    // Pegando o item na memória
-                    item = ITEM_MAP_ID.get(codigo);
-                    if (item == null) {
-                        throw new ItemException("O funil configurado como " + names + " não está na lista de itens!", block);
-                    }
-                    // Se conter cerquilha o item é negado
-                    item.setBlocked(name.contains("#"));
-                    listType.add(item);
-                }else
-                // Se o nome do hopper conter a letra G se trata de grupo
-                if (names.substring(0, 2).contains("g")) {
-                    // Pegando o código do grupo
-                    try {
-                        codigo = Integer.parseInt(names.replaceAll("[#g]", ""));
-                    } catch (NumberFormatException e) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não é valido!", block);
-                    }
-                    // Buscando o grupo em memória
-                    grupo = GRUPO_MAP_ID.get(codigo);
-                    if (grupo == null) {
-                        throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
-                    }
-                    // Se conter cerquilha o grupo é negado
-                    grupo.setBlocked(name.contains("#"));
-                    listType.add(grupo);
-                }else{
-                    throw new ItemException("O funil configurado com o nome " + names + " não está na lista de grupos!", block);
-                }
-            }
-            type = listType;
-            return type;
-        }
-
-        // Se o nome do hopper conter a letra i se trata de item
-        if (name.substring(0, 2).contains("i")) {
-            // Pegando o código do item
-            try {
-                codigo = Integer.parseInt(name.replaceAll("[#i]", ""));
-            } catch (NumberFormatException e) {
-                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
-            }
-            // Pegando o item na memória
-            item = ITEM_MAP_ID.get(codigo);
-            if (item == null) {
-                throw new ItemException("O funil configurado como " + name + " não está na lista de itens!", block);
-            }
-            // Se conter cerquilha o item é negado
-            item.setBlocked(name.contains("#"));
-            type = item;
-            return type;
-        }
-
-        // Se o nome do hopper conter a letra G se trata de grupo
-        if (name.substring(0, 2).contains("g")) {
-            // Pegando o código do grupo
-            try {
-                codigo = Integer.parseInt(name.replaceAll("[#g]", ""));
-            } catch (NumberFormatException e) {
-                throw new ItemException("O funil configurado com o nome " + name + " não é valido!", block);
-            }
-            // Buscando o grupo em memória
-            grupo = GRUPO_MAP_ID.get(codigo);
-            if (grupo == null) {
-                throw new ItemException("O funil configurado com o nome " + name + " não está na lista de grupos!", block);
-            }
-            // Se conter cerquilha o grupo é negado
-            grupo.setBlocked(name.contains("#"));
-            type = grupo;
-        }
-        return type;
+        return false;
     }
 }

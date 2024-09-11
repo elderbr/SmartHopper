@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.event;
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.controllers.SmartHopper;
 import mc.elderbr.smarthopper.exceptions.ItemException;
+import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -19,13 +20,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class MoveHopper implements Listener {
 
     private ItemStack itemStack;
 
     private Item item;
+    private IItem itemSmart;
 
     private Inventory inventoryInicial;
     private Inventory inventory;
@@ -34,10 +38,9 @@ public class MoveHopper implements Listener {
     private Block blockDown;
 
     private SmartHopper smartHopper;
-    private List<Hopper> hopperList;
+    private Hopper hopper;
 
-    private SmartHopper smartHopperDestino;
-    private ItemController itemController;
+    private ItemController itemController = new ItemController();
 
     public MoveHopper() {
 
@@ -50,7 +53,6 @@ public class MoveHopper implements Listener {
 
             // Item que está sendo transferido
             itemStack = event.getItem();
-            itemController = new ItemController();
             item = itemController.getItem(itemStack);
 
             // Pegando o inventorio onde está o item
@@ -61,87 +63,49 @@ public class MoveHopper implements Listener {
 
             // Destino do item
             destination = event.getDestination();// Inventorio de destino
-            smartHopperDestino = new SmartHopper(destination);
 
             // Pega o bloco de baixo de onde o item está
-            blockDown = destination.getLocation().getBlock();
+            blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
             if (destination.getType() == InventoryType.HOPPER) {
-
                 event.setCancelled(true);// Cancela o movimento do item
-                isBlockDownHopper();// Verifica se existe mais funis em baixo
-                for (Hopper hoppers : hopperList) {
-                    smartHopper = new SmartHopper(hoppers);
 
-                    // LISTA DE DE ITEM OU GRUPO
-                    if (smartHopper.getType() instanceof List listaFunil) {
-                        boolean cancelled = false;
-                        boolean exist = false;
-                        for (Object objFunil : listaFunil) {
-                            // Se o hopper for igual ao item
-                            if (objFunil instanceof Item itemSmart) {
-                                if (itemSmart.isBlocked()) {
-                                    exist = true;
-                                    if (itemSmart.getId() == item.getId()) {
-                                        cancelled = true;
-                                    }
-                                } else if (itemSmart.getId() == item.getId()) {
-                                    event.setCancelled(false);
-                                }
-                            }
-                            // Se o hopper for igual ao grupo
-                            if (objFunil instanceof Grupo grupoSmart) {
-                                if (grupoSmart.isBlocked()) {
-                                    exist = true;
-                                    if (grupoSmart.containsItem(item)) {
-                                        cancelled = true;
-                                    }
-                                } else if (grupoSmart.containsItem(item)) {
-                                    event.setCancelled(false);
-                                }
-                            }
-                        }
-                        if (exist && !cancelled) {
-                            event.setCancelled(false);
-                        }
+                hopper = (Hopper) destination.getLocation().getBlock().getState();
+                smartHopper = new SmartHopper(hopper);
+                Object hopperObj = smartHopper.getType();
+
+                if(hopperObj == null){
+                    event.setCancelled(false);
+                    return;
+                }
+                List<Hopper> hoppers = getBlockDownHoppers();
+                if (!hoppers.isEmpty()) {
+                    for (Hopper downHopper : hoppers) {
+                        event.setCancelled(hopperEqualsItem(downHopper));
                     }
-
-                    // Se o hopper for igual ao item
-                    if (smartHopper.getType() instanceof Item itemSmart) {
-                        if (itemSmart.isBlocked()) {
-                            if (!itemSmart.equals(item)) {
-                                event.setCancelled(false);
-                            } else {
-                                event.setCancelled(true);
-                            }
-                        } else if (itemSmart.equals(item)) {
-                            event.setCancelled(false);
-                        }
-                    }
-
-                    // Se o hopper for igual ao grupo
-                    if (smartHopper.getType() instanceof Grupo grupoSmart) {
-                        if (grupoSmart.isBlocked()) {
-                            if (!grupoSmart.containsItem(item)) {
-                                event.setCancelled(false);
-                            } else {
-                                event.setCancelled(true);
-                            }
-                        } else if (grupoSmart.containsItem(item)) {
-                            event.setCancelled(false);
-                        }
-                    }
-
-                    if (smartHopper.getType() == null) {
+                } else if (hopperObj instanceof Item itemSM) {
+                    if (Objects.equals(itemSM, item)) {
                         event.setCancelled(false);
+                    } else {
+                        event.setCancelled(true);
+                    }
+                } else if (hopperObj instanceof Grupo grup) {
+                    if (grup.containsItem(item)) {
+                        event.setCancelled(false);
+                    } else {
+                        event.setCancelled(true);
+                    }
+                } else if (hopperObj instanceof List<?> list) {
+                    List<IItem> itemList = (List<IItem>) list;
+                    for (IItem listItem : itemList) {
+                        if (Objects.equals(listItem.getId(), item.getId())) {
+                            event.setCancelled(false);
+                        }
                     }
                 }
+            } else {
+                event.setCancelled(false);// Cancela o movimento do item
             }
-
-            if (destination.getType() != InventoryType.HOPPER) {
-                event.setCancelled(false);
-            }
-
         } catch (Exception e) {
             event.setCancelled(false);
             if (e.getClass() == ItemException.class) {
@@ -151,12 +115,41 @@ public class MoveHopper implements Listener {
 
     }
 
+    private boolean hopperEqualsItem(Hopper hopper) {
+        try {
+            smartHopper = new SmartHopper(hopper);
+            Object hopperObj = smartHopper.getType();
+            if (hopperObj instanceof Item itemSM) {
+                Msg.ServidorGreen("Item SM: " + itemSM.getName()+" - item: "+ item.getName(), getClass());
+                if (Objects.equals(itemSM.getId(), item.getId())) {
+                    return false;
+                }
+            } else if (hopperObj instanceof Grupo grup) {
+                if (grup.containsItem(item)) {
+                    return false;
+                }
+            } else if (hopperObj instanceof List<?> list) {
+                List<IItem> itemList = (List<IItem>) list; // Cast seguro, pois todos são IItem
+                // Agora você pode trabalhar com itemList como List<IItem>
+                for (IItem listItem : itemList) {
+                    if (Objects.equals(listItem, item)) {
+                        return false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Msg.ServidorRed(e.getMessage());
+        }
+        return true;
+    }
 
-    private void isBlockDownHopper() {
-        hopperList = new ArrayList<>();
+
+    private List<Hopper> getBlockDownHoppers() {
+        List<Hopper> list = new ArrayList<>();
         while (blockDown.getType() == Material.HOPPER) {
-            hopperList.add((Hopper) blockDown.getState());
+            list.add((Hopper) blockDown.getState());
             blockDown = blockDown.getRelative(BlockFace.DOWN);
         }
+        return list;
     }
 }
