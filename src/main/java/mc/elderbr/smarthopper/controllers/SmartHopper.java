@@ -49,9 +49,13 @@ public class SmartHopper {
     }
 
     public SmartHopper(Block block) {
+        listType = new ArrayList<>();
         if (block.getType() == Material.HOPPER) {
             myHopper = (Hopper) block.getState();
             name = myHopper.getCustomName();
+            if(name == null){
+                return;
+            }
             if (name.contains(";")) {
                 for (String nameHopper : name.split(";")) {
                     listType.add(getType(nameHopper));
