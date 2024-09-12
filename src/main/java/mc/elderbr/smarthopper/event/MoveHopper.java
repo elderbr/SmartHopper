@@ -69,36 +69,58 @@ public class MoveHopper implements Listener {
 
             if (destination.getType() == InventoryType.HOPPER) {
                 event.setCancelled(true);// Cancela o movimento do item
-
                 hopper = (Hopper) destination.getLocation().getBlock().getState();
                 smartHopper = new SmartHopper(hopper);
-                Object hopperObj = smartHopper.getType();
-
-                if(hopperObj == null){
+                if (smartHopper.getType() == null) {
                     event.setCancelled(false);
                     return;
                 }
                 List<Hopper> hoppers = getBlockDownHoppers();
                 if (!hoppers.isEmpty()) {
+                    boolean cancelled = true;
                     for (Hopper downHopper : hoppers) {
-                        event.setCancelled(hopperEqualsItem(downHopper));
+                        smartHopper = new SmartHopper(downHopper);
+                        Object hopperObj = smartHopper.getType();
+                        if (hopperObj instanceof Item itemSM) {
+                            if (Objects.equals(itemSM.getId(), item.getId())) {
+                                cancelled = false;
+                                break;
+                            }
+                        } else if (hopperObj instanceof Grupo grup) {
+                            if (grup.containsItem(item)) {
+                                cancelled = false;
+                                break;
+                            }
+                        }else if (hopperObj instanceof List<?> list) {
+                            List<IItem> itemList = (List<IItem>) list; // Cast seguro, pois todos são IItem
+                            for (IItem listItem : itemList) {
+                                if (listItem instanceof Item itemSM) {
+                                    if (Objects.equals(itemSM.getId(), item.getId())) {
+                                        cancelled = false;
+                                        break;
+                                    }
+                                }
+                                if (listItem instanceof Grupo grup) {
+                                    if (grup.containsItem(item)) {
+                                        cancelled = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(cancelled == false){
+                                break;
+                            }
+                        }
                     }
-                } else if (hopperObj instanceof Item itemSM) {
-                    if (Objects.equals(itemSM, item)) {
-                        event.setCancelled(false);
-                    } else {
-                        event.setCancelled(true);
-                    }
-                } else if (hopperObj instanceof Grupo grup) {
-                    if (grup.containsItem(item)) {
-                        event.setCancelled(false);
-                    } else {
-                        event.setCancelled(true);
-                    }
-                } else if (hopperObj instanceof List<?> list) {
-                    List<IItem> itemList = (List<IItem>) list;
-                    for (IItem listItem : itemList) {
-                        if (Objects.equals(listItem.getId(), item.getId())) {
+                    event.setCancelled(cancelled);
+                }else{
+                    Object hopperObj = smartHopper.getType();
+                    if (hopperObj instanceof Item itemSM) {
+                        if (Objects.equals(itemSM.getId(), item.getId())) {
+                            event.setCancelled(false);
+                        }
+                    } else if (hopperObj instanceof Grupo grup) {
+                        if (grup.containsItem(item)) {
                             event.setCancelled(false);
                         }
                     }
@@ -112,7 +134,6 @@ public class MoveHopper implements Listener {
                 Msg.ServidorRed(e.getMessage());
             }
         }
-
     }
 
     private boolean hopperEqualsItem(Hopper hopper) {
@@ -120,7 +141,6 @@ public class MoveHopper implements Listener {
             smartHopper = new SmartHopper(hopper);
             Object hopperObj = smartHopper.getType();
             if (hopperObj instanceof Item itemSM) {
-                Msg.ServidorGreen("Item SM: " + itemSM.getName()+" - item: "+ item.getName(), getClass());
                 if (Objects.equals(itemSM.getId(), item.getId())) {
                     return false;
                 }
@@ -130,10 +150,16 @@ public class MoveHopper implements Listener {
                 }
             } else if (hopperObj instanceof List<?> list) {
                 List<IItem> itemList = (List<IItem>) list; // Cast seguro, pois todos são IItem
-                // Agora você pode trabalhar com itemList como List<IItem>
                 for (IItem listItem : itemList) {
-                    if (Objects.equals(listItem, item)) {
-                        return false;
+                    if (listItem instanceof Item itemSM) {
+                        if (Objects.equals(itemSM.getId(), item.getId())) {
+                            return false;
+                        }
+                    }
+                    if (listItem instanceof Grupo grup) {
+                        if (grup.containsItem(item)) {
+                            return false;
+                        }
                     }
                 }
             }
