@@ -45,7 +45,7 @@ public class ClickHopper implements Listener {
                 InventoryCustom inventoryCustom = new InventoryCustom(player, grupo);
                 inventoryCustom.show();
             }
-            Msg.getType(player, smartHopper.getTypes());
+            Msg.getTypes(player, smartHopper.getTypes());
         } catch (Exception e) {
             Msg.PlayerGold(player, e.getMessage());
             Msg.ServidorRed(e.getMessage());

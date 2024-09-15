@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.utils;
 
+import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Msg {
 
@@ -140,26 +142,10 @@ public class Msg {
         player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTranslation(player) + "$e ID: " + grupo.getId()));
     }
 
-    public static void getType(Player player, Object value) {
-        if (value instanceof Item item) {
-            if (item.isBlocked()) {
-                player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTranslation(player) + "$e ID: " + item.getId()));
-            } else {
-                player.sendMessage(Color("$2Item: $6" + item.toTranslation(player) + "$e ID: " + item.getId()));
-            }
-            return;
-        }
-        if (value instanceof Grupo grupo) {
-            if (grupo.isBlocked()) {
-                player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTranslation(player) + "$e ID: " + grupo.getId()));
-            } else {
-                player.sendMessage(Color("$9Grupo: $e" + grupo.toTranslation(player) + " $6ID: " + grupo.getId()));
-            }
-            return;
-        }
-        if (value instanceof ArrayList listaType) {
+    public static void getTypes(Player player, List<IItem> list) {
+        if (!list.isEmpty()) {
             PulaPlayer(player);
-            for (Object obj : listaType) {
+            for (IItem obj : list) {
                 if (obj instanceof Item item) {
                     if (item.isBlocked()) {
                         player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTranslation(player) + "$e ID: " + item.getId()));
@@ -173,6 +159,21 @@ public class Msg {
                     } else {
                         player.sendMessage(Color("$9Grupo: $e" + grupo.toTranslation(player) + " $6ID: " + grupo.getId()));
                     }
+                }
+            }
+            return;
+        }
+        player.sendMessage(Color("$6Funil $cNÃO $6configurado!!!"));
+    }
+
+    public static void getType(Player player, List<Grupo> list) {
+        if (!list.isEmpty()) {
+            PulaPlayer(player);
+            for (Grupo grup : list) {
+                if (grup.isBlocked()) {
+                    player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grup.toTranslation(player) + "$e ID: " + grup.getId()));
+                } else {
+                    player.sendMessage(Color("$9Grupo: $e" + grup.toTranslation(player) + " $6ID: " + grup.getId()));
                 }
             }
             return;
