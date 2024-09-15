@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
+import mc.elderbr.smarthopper.factories.GrupFactory;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.interfaces.msg.GrupMsg;
 import mc.elderbr.smarthopper.model.Grupo;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -237,7 +239,7 @@ public class GrupoController implements GrupMsg, VGlobal {
     public static void CREATE() {
         GrupoDao grupDao = GrupoDao.getInstance();
         ItemDao itemDao = ItemDao.getInstance();
-        int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet())+1);
+        int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet()) + 1);
         for (String nameGrup : GrupoCreate.NEW()) {
             Grupo grup = grupDao.findByName(nameGrup);// Busca o grupo na variavel global
             if (grup == null) {// Criando novo grupo
@@ -249,11 +251,28 @@ public class GrupoController implements GrupMsg, VGlobal {
             for (String nameItem : ITEM_MAP_NAME.keySet()) {
                 if (GrupoCreate.containsItem(nameGrup, nameItem)) {
                     // Adiciona o item ao grupo se não existir na lista
-                    if(grup.getItemsNames().contains(nameItem)) continue;
+                    if (grup.getItemsNames().contains(nameItem)) continue;
                     grup.addItems(itemDao.findByName(nameItem));
                 }
             }
             grupDao.save(grup);
+        }
+
+        // Percorrendo os grupos personalizados
+        for (String name : GrupFactory.nameMethods()) {
+            try {
+                // Obtém o método da classe GrupFactory pelo nome
+                Method method = GrupFactory.class.getMethod(name);
+
+                // Verifica se o tipo de retorno do método é Grupo
+                if (method.getReturnType().equals(Grupo.class)) {
+                    // Invoca o método para obter o objeto Grupo retornado
+                    Grupo grup = (Grupo) method.invoke(null); // null porque o método é estático
+                    grupDao.update(grup);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

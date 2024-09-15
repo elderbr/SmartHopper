@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.factories.GrupFactory;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 
 import java.util.*;
@@ -51,6 +52,12 @@ public class GrupoCreate implements VGlobal {
                 iterator.remove();
             }
         }
+
+        // Grupos personalizados
+        for (String name : GrupFactory.names()) {
+            listNameGrup.add(name);
+        }
+
         List<String> list = new ArrayList<>(listNameGrup);
         Collections.sort(list);
         return list;

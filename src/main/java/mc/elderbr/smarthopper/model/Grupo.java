@@ -1,13 +1,11 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.IItem;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_NAME;
 
 public class Grupo implements IItem, Cloneable {
 
@@ -62,39 +60,44 @@ public class Grupo implements IItem, Cloneable {
         return items;
     }
 
-    public List<String> getItemsNames(){
+    public List<String> getItemsNames() {
         List<String> list = items.stream().map(Item::getName).collect(Collectors.toList());
         Collections.sort(list);
         return list;
     }
 
-    public Grupo addItems(Item item){
+    public Grupo addItems(Item item) {
         items.add(item);
         return this;
     }
 
-    public Grupo removeItems(String name){
+    public Grupo addItems(Material material) {
+        items.add(new Item(new ItemStack(material)));
+        return this;
+    }
+
+    public Grupo removeItems(String name) {
         items.remove(name);
         return this;
     }
 
-    public Grupo removeItems(ItemStack itemStack){
+    public Grupo removeItems(ItemStack itemStack) {
         items.remove(Item.TO_ItemStack(itemStack));
         return this;
     }
 
-    public boolean containsItem(Item item){
-        for(Item value : items){
-            if(value.equals(item)){
+    public boolean containsItem(Item item) {
+        for (Item value : items) {
+            if (value.equals(item)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean containsItem(ItemStack itemStack){
-        for(Item item : items){
-            if(Item.TO_ItemStack(itemStack).equalsIgnoreCase(item.getName())){
+    public boolean containsItem(ItemStack itemStack) {
+        for (Item item : items) {
+            if (Item.TO_ItemStack(itemStack).equalsIgnoreCase(item.getName())) {
                 return true;
             }
         }

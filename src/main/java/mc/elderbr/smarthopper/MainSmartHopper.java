@@ -2,7 +2,6 @@ package mc.elderbr.smarthopper;
 
 
 import mc.elderbr.smarthopper.cmd.*;
-import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.ConfigController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
@@ -10,12 +9,8 @@ import mc.elderbr.smarthopper.event.ClickHopper;
 import mc.elderbr.smarthopper.event.InventarioEvent;
 import mc.elderbr.smarthopper.event.MoveHopper;
 import mc.elderbr.smarthopper.event.TextureEvent;
-import mc.elderbr.smarthopper.file.GrupoConfig;
-import mc.elderbr.smarthopper.file.ItemConfig;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
@@ -38,7 +33,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         ItemController.findAll();// Busca todos os item e salva na variavel global
         GrupoController.findAll();// Busca todos os grupos e salva na variavel global
-        //GrupoController.CREATE();// Criando grupos
 
         // Tradução
         new TraducaoConfig();
