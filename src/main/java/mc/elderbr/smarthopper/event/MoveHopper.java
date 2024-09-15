@@ -77,20 +77,34 @@ public class MoveHopper implements Listener {
                     for (Hopper downHopper : hoppers) {
                         smartHopper = new SmartHopper(downHopper);
                         List<IItem> smartHopperListTypes = smartHopper.getTypes();
-                        if(smartHopperListTypes.isEmpty()){
+                        if (smartHopperListTypes.isEmpty()) {
                             cancelled = false;
                             break;
-                        }else {
+                        } else {
                             for (IItem itemDown : smartHopperListTypes) {
                                 if (itemDown instanceof Item itemSM) {
                                     boolean itemContains = Objects.equals(itemSM.getId(), item.getId());
-                                    if (itemContains) {
+                                    if (itemSM.isBlocked()) {
+                                        if (!itemContains) {
+                                            cancelled = false;
+                                        }else{
+                                            cancelled = true;
+                                            break;
+                                        }
+                                    } else if (itemContains) {
                                         cancelled = false;
                                         break;
                                     }
                                 } else if (itemDown instanceof Grupo grup) {
                                     boolean grupContains = grup.containsItem(item);
-                                    if (grupContains) {
+                                    if (grup.isBlocked()) {
+                                        if (!grupContains) {
+                                            cancelled = false;
+                                        }else{
+                                            cancelled = true;
+                                            break;
+                                        }
+                                    } else if (grupContains) {
                                         cancelled = false;
                                         break;
                                     }
