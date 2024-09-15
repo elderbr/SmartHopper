@@ -46,7 +46,6 @@ public class AdministradorComando implements CommandExecutor {
                     }
                     Msg.PlayerTodos("Smart Hopper foi reiniciado...");
                     ItemController.findAll();
-                    GrupoController.findAll();
                     GrupoController.CREATE();
                     new TraducaoConfig();
                     Msg.PlayerTodos("Dados do Smart Hopper carregados...");
