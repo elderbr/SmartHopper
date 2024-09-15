@@ -1,7 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.interfaces.VGlobal;
-import mc.elderbr.smarthopper.utils.Msg;
 
 import java.util.*;
 
@@ -21,13 +20,13 @@ public class GrupoCreate implements VGlobal {
             if (name.contains(" ")) {
                 String[] names = name.split(" ");
                 for (String value : names) {
-                    if(value.replaceAll("\\d","").isEmpty()) continue;
+                    if (value.replaceAll("\\d", "").isEmpty()) continue;
                     if (NotGrupo().contains(value)) continue;// Se conter o nome pula
                     listNameGrup.add(value.trim());
                 }
-                for(int i = 0; i< names.length; i++){
+                for (int i = 0; i < names.length; i++) {
                     String value = String.join(" ", Arrays.copyOfRange(names, i, names.length));
-                    if(value.replaceAll("\\d","").isEmpty()) continue;
+                    if (value.replaceAll("\\d", "").isEmpty()) continue;
                     if (NotGrupo().contains(value)) continue;// Se conter o nome pula
                     listNameGrup.add(value);
                 }
@@ -58,16 +57,15 @@ public class GrupoCreate implements VGlobal {
     }
 
     public static boolean containsItem(String grupoName, String itemName) {
-        int count = 0;
         if (itemName.contains(" ")) {
             for (String name : itemName.split(" ")) {
-                if (grupoName.equals(name)) {
+                if (grupoName.equals(name) && pertence(grupoName, itemName)) {
                     return true;
                 }
             }
             return false;
         } else {
-            return grupoName.equals(itemName);
+            return (grupoName.equals(itemName) && pertence(grupoName, itemName));
         }
     }
 
@@ -109,16 +107,20 @@ public class GrupoCreate implements VGlobal {
                         return false;
                     }
                 }
+                break;
             case "oak":
                 if (item.contains("dark oak")) {
                     return false;
                 }
+                break;
             case "sandstone":
                 if (item.contains("red sandstone")) {
                     return false;
                 }
+                break;
             default:
                 return true;
         }
+        return true;
     }
 }
