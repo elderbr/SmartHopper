@@ -13,14 +13,16 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class GrupoDao implements VGlobal {
 
+    private static GrupoDao instance;
     private YamlConfiguration config;
     private ItemController itemCtrl = new ItemController();
 
-    public GrupoDao() {
+    private GrupoDao() {
         if (!GRUPO_FILE.exists()) {
             try {
                 GRUPO_FILE.createNewFile();
@@ -29,6 +31,15 @@ public class GrupoDao implements VGlobal {
             }
         }
         config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
+    }
+
+    public static GrupoDao getInstance(){
+        synchronized (GrupoDao.class){
+            if(Objects.isNull(instance)){
+                instance = new GrupoDao();
+            }
+            return instance;
+        }
     }
 
     public boolean save(Grupo grupo) throws GrupoException {

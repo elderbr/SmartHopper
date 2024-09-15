@@ -26,7 +26,7 @@ import java.util.List;
 
 public class GrupoController implements GrupMsg, VGlobal {
 
-    private GrupoDao grupoDao = new GrupoDao();
+    private static GrupoDao grupoDao = GrupoDao.getInstance();
     private List<Grupo> listGrupo;
     private ItemController itemCtrl = new ItemController();
 
@@ -201,7 +201,7 @@ public class GrupoController implements GrupMsg, VGlobal {
 
     public static void findAll() {
         clear();
-        new GrupoDao().findAll();
+        grupoDao.findAll();
     }
 
     public static void clear() {
@@ -235,7 +235,7 @@ public class GrupoController implements GrupMsg, VGlobal {
     }
 
     public static void CREATE() {
-        GrupoDao grupDao = new GrupoDao();
+        GrupoDao grupDao = GrupoDao.getInstance();
         ItemDao itemDao = new ItemDao();
         int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet())+1);
         for (String nameGrup : GrupoCreate.NEW()) {
