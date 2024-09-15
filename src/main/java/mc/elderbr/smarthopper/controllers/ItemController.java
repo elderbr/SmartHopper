@@ -3,10 +3,7 @@ package mc.elderbr.smarthopper.controllers;
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.msg.ItemMsg;
-import mc.elderbr.smarthopper.model.Item;
-import mc.elderbr.smarthopper.model.ItemCreate;
-import mc.elderbr.smarthopper.model.LivroEncantado;
-import mc.elderbr.smarthopper.model.Pocao;
+import mc.elderbr.smarthopper.model.*;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -68,6 +65,13 @@ public class ItemController implements ItemMsg {
         item.setId(ID());
         itemDao.save(item);
         return item;
+    }
+
+    public static Item addGrup(Item item, Grupo grup){
+        item.addGrups(grup.getId());
+        ITEM_MAP_ID.put(item.getId(), item);
+        ITEM_MAP_NAME.put(item.getName(), item);
+        return ITEM_MAP_ID.get(item.getId());
     }
 
     public Item findByID(int id) throws ItemException {

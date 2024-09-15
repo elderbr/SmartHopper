@@ -138,6 +138,7 @@ public class GrupoDao implements VGlobal {
                         continue;
                     }
                     grupo.addItems(item);
+                    ItemController.addGrup(item, grupo);// Adicionando o grupo na lista de item
                 }
                 // Verificando se existe tradução
                 ConfigurationSection mapLang = section.getConfigurationSection("lang");

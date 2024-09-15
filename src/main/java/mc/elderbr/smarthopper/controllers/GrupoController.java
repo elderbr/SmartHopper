@@ -86,27 +86,12 @@ public class GrupoController implements GrupMsg, VGlobal {
     }
 
     public List<Grupo> findByItemStack(ItemStack itemStack) throws GrupoException {
-        listGrupo = new ArrayList<>();
-        Item item;
-        String name = Item.TO_ItemStack(itemStack);
-        // O item não pode nulo ou igual ao ar
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
-            throw new GrupoException(GRUP_HOLD_HAND);
+        Item item = itemCtrl.findByItemStack(itemStack);
+        List<Grupo> grups = new ArrayList<>();
+        for(Integer code : item.getGrups()){
+            grups.add(grupoDao.findById(code));
         }
-        try {
-            item = itemCtrl.findByItemStack(itemStack);// Busca o item na memoria global
-            for (Grupo grup : GRUPO_MAP_NAME.values()) {
-                if (grup.containsItem(item)) {
-                    listGrupo.add(grup);
-                }
-            }
-        } catch (ItemException e) {
-            throw new GrupoException(String.format(GRUP_ITEM_NOT_EXIST, name));
-        }
-        if (listGrupo.isEmpty()) {
-            throw new GrupoException(String.format(GRUP_ITEM_NOT_EXIST, name));
-        }
-        return listGrupo;
+        return grups;
     }
 
     public Grupo findNameTranslation(String name) {
