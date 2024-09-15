@@ -42,11 +42,12 @@ public class AdministradorComando implements CommandExecutor {
                 case "reload":
                     if(!player.isOp() && !admCtrl.containsAdm(player)){
                         Msg.PlayerGold(player, "Você não tem permissão!!!");
-                        return false;
+                        return true;
                     }
                     Msg.PlayerTodos("Smart Hopper foi reiniciado...");
                     ItemController.findAll();
                     GrupoController.findAll();
+                    GrupoController.CREATE();
                     new TraducaoConfig();
                     Msg.PlayerTodos("Dados do Smart Hopper carregados...");
                     return true;
