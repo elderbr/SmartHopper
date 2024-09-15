@@ -1,14 +1,14 @@
 package mc.elderbr.smarthopper.utils;
 
-import mc.elderbr.smarthopper.model.Item;
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class Utils {
 
@@ -34,7 +34,7 @@ public class Utils {
         return dateFormat.format(data.getTime());
     }
 
-    public static String adicionarEspacoAntesMaiusculas(String name){
+    public static String adicionarEspacoAntesMaiusculas(String name) {
         StringBuilder novoNome = new StringBuilder();
         for (int i = 0; i < name.length(); i++) {
             char letra = name.charAt(i);
@@ -45,5 +45,22 @@ public class Utils {
             novoNome.append(letra);
         }
         return novoNome.toString().toLowerCase();
+    }
+
+    public static boolean isValidURL(String link) {
+        try {
+            URL url = new URL(link);
+            HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+            huc.setRequestMethod("HEAD");
+            huc.setConnectTimeout(3000); // Tempo limite de conexão (3 segundos)
+            huc.connect();
+
+            int responseCode = huc.getResponseCode();
+            return (responseCode >= 200 && responseCode < 400); // Respostas 2xx e 3xx são válidas
+        } catch (MalformedURLException e) {
+            return false; // A URL não é válida
+        } catch (IOException e) {
+            return false; // A URL não pôde ser acessada
+        }
     }
 }

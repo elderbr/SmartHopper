@@ -142,6 +142,7 @@ public class ConfigDao implements VGlobal {
     }
 
     public String findByTexture() {
+        config = YamlConfiguration.loadConfiguration(file);// Acessando o arquivo config.yml
         String key = EConfig.TEXTURE.getKey();
         if (config.getString(key) == null) {
             throw new ConfigException("O link da textura não encontrado!");
@@ -158,6 +159,7 @@ public class ConfigDao implements VGlobal {
     }
 
     public boolean findByUseTexture() {
+        config = YamlConfiguration.loadConfiguration(file);// Acessando o arquivo config.yml
         String key = EConfig.USE_TEXTURE.getKey();
         if (config.get(key) == null) {
             throw new ConfigException("Não foi encontrado o \"useTexture\"!");

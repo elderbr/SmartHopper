@@ -10,13 +10,21 @@ import java.util.List;
 
 public class ConfigController implements VGlobal {
 
-    private ConfigDao dao = new ConfigDao();
+    private static ConfigDao dao = new ConfigDao();
 
     public ConfigController() {
     }
 
     public boolean isAdm(Player player) {
         if (player == null) {
+            throw new ConfigException("Não existe um player para comparar!");
+        }
+        return dao.containsAdm(player);
+    }
+
+    public static boolean IsAdm(Player player){
+        dao = new ConfigDao();
+        if(player == null){
             throw new ConfigException("Não existe um player para comparar!");
         }
         return dao.containsAdm(player);

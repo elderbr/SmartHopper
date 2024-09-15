@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.utils;
 
+import mc.elderbr.smarthopper.controllers.ConfigController;
 import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
@@ -8,7 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Msg {
@@ -79,6 +79,15 @@ public class Msg {
 
     public static void PlayerTodos(String msg) {
         Bukkit.getServer().broadcastMessage(Color(msg));
+    }
+
+    public static void PlayerAdms(String msg) {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            if (player.isOp() || ConfigController.IsAdm(player)) {
+                player.sendMessage("§c§l" + msg);
+            }
+        }
+        Bukkit.getServer().broadcastMessage("§c§l" + msg);
     }
 
     //========================== ITEM =================================================//

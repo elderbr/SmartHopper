@@ -1,12 +1,13 @@
 package mc.elderbr.smarthopper.controllers;
 
 import mc.elderbr.smarthopper.utils.Msg;
+import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 
 public class TextureController {
 
-    private final String url;
+    private String url;
     private ConfigController configCtrl;
 
     public TextureController() {
@@ -14,13 +15,15 @@ public class TextureController {
         url = configCtrl.getTexture();
     }
 
-    public String getResourcePack() {
-        return url;
-    }
-
     public void carrega(Player player) {
+        url = configCtrl.getTexture();
         if (configCtrl.getUseTexture()) {
-            player.setResourcePack(url);
+            if(Utils.isValidURL(url)) {
+                player.setResourcePack(url);
+            }else{
+                Msg.PlayerAdms("O link da textura está incorreto!");
+                configCtrl.saveUseTexture(false);
+            }
         }
     }
 
