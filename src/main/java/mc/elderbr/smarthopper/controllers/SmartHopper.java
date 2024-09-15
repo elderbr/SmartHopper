@@ -1,19 +1,16 @@
 package mc.elderbr.smarthopper.controllers;
 
 
-import mc.elderbr.smarthopper.factories.ItemFactory;
 import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class SmartHopper {
 
@@ -35,16 +32,16 @@ public class SmartHopper {
 
     public SmartHopper(@NotNull Hopper hopper) {
         listType = new ArrayList<>();
-        if (hopper.getCustomName() == null) {
+        name = hopper.getCustomName();
+        if (name == null) {
             return;
         }
-        name = hopper.getCustomName();
         if (name.contains(";")) {
             for (String nameHopper : name.split(";")) {
-                listType.add(getType(nameHopper));
+                listType.add(getTypes(nameHopper));
             }
         } else {
-            listType.add(getType(name));
+            listType.add(getTypes(name));
         }
     }
 
@@ -58,15 +55,15 @@ public class SmartHopper {
             }
             if (name.contains(";")) {
                 for (String nameHopper : name.split(";")) {
-                    listType.add(getType(nameHopper));
+                    listType.add(getTypes(nameHopper));
                 }
             } else {
-                listType.add(getType(name));
+                listType.add(getTypes(name));
             }
         }
     }
 
-    public IItem getType(String name) {
+    public IItem getTypes(String name) {
         try {
             code = Integer.parseInt(name.replaceAll("[^0-9]", ""));
             String nameCustom = name.toLowerCase().replaceAll("#", "");
@@ -90,14 +87,8 @@ public class SmartHopper {
         return null;
     }
 
-    public Object getType() {
-        if (listType.isEmpty()) {
-            return null;
-        }
-        if (listType.size() > 1) {
-            return listType;
-        }
-        return listType.get(0);
+    public List<IItem> getTypes() {
+        return listType;
     }
 
     public boolean isEqualsItem(Item item) {

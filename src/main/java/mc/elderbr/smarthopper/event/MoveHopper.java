@@ -20,7 +20,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,9 +57,6 @@ public class MoveHopper implements Listener {
             // Pegando o inventorio onde está o item
             inventory = event.getSource();
 
-            // Primeiro inventario que o item vai
-            inventoryInicial = event.getInitiator();
-
             // Destino do item
             destination = event.getDestination();// Inventorio de destino
 
@@ -71,7 +67,7 @@ public class MoveHopper implements Listener {
                 event.setCancelled(true);// Cancela o movimento do item
                 hopper = (Hopper) destination.getLocation().getBlock().getState();
                 smartHopper = new SmartHopper(hopper);
-                if (smartHopper.getType() == null) {
+                if (smartHopper.getTypes().isEmpty()) {
                     event.setCancelled(false);
                     return;
                 }
@@ -80,50 +76,31 @@ public class MoveHopper implements Listener {
                     boolean cancelled = true;
                     for (Hopper downHopper : hoppers) {
                         smartHopper = new SmartHopper(downHopper);
-                        Object hopperObj = smartHopper.getType();
-                        if (hopperObj instanceof Item itemSM) {
-                            if (Objects.equals(itemSM.getId(), item.getId())) {
-                                cancelled = false;
-                                break;
-                            }
-                        } else if (hopperObj instanceof Grupo grup) {
-                            if (grup.containsItem(item)) {
-                                cancelled = false;
-                                break;
-                            }
-                        }else if (hopperObj instanceof List<?> list) {
-                            List<IItem> itemList = (List<IItem>) list; // Cast seguro, pois todos são IItem
-                            for (IItem listItem : itemList) {
-                                if (listItem instanceof Item itemSM) {
-                                    if (Objects.equals(itemSM.getId(), item.getId())) {
+                        List<IItem> smartHopperListTypes = smartHopper.getTypes();
+                        if(smartHopperListTypes.isEmpty()){
+                            cancelled = false;
+                            break;
+                        }else {
+                            for (IItem itemDown : smartHopperListTypes) {
+                                if (itemDown instanceof Item itemSM) {
+                                    boolean itemContains = Objects.equals(itemSM.getId(), item.getId());
+                                    if (itemContains) {
+                                        cancelled = false;
+                                        break;
+                                    }
+                                } else if (itemDown instanceof Grupo grup) {
+                                    boolean grupContains = grup.containsItem(item);
+                                    if (grupContains) {
                                         cancelled = false;
                                         break;
                                     }
                                 }
-                                if (listItem instanceof Grupo grup) {
-                                    if (grup.containsItem(item)) {
-                                        cancelled = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(cancelled == false){
-                                break;
                             }
                         }
                     }
                     event.setCancelled(cancelled);
-                }else{
-                    Object hopperObj = smartHopper.getType();
-                    if (hopperObj instanceof Item itemSM) {
-                        if (Objects.equals(itemSM.getId(), item.getId())) {
-                            event.setCancelled(false);
-                        }
-                    } else if (hopperObj instanceof Grupo grup) {
-                        if (grup.containsItem(item)) {
-                            event.setCancelled(false);
-                        }
-                    }
+                } else {
+                    event.setCancelled(false);
                 }
             } else {
                 event.setCancelled(false);// Cancela o movimento do item
@@ -139,7 +116,7 @@ public class MoveHopper implements Listener {
     private boolean hopperEqualsItem(Hopper hopper) {
         try {
             smartHopper = new SmartHopper(hopper);
-            Object hopperObj = smartHopper.getType();
+            Object hopperObj = smartHopper.getTypes();
             if (hopperObj instanceof Item itemSM) {
                 if (Objects.equals(itemSM.getId(), item.getId())) {
                     return false;
