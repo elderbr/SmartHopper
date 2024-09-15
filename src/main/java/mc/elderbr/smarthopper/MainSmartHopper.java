@@ -32,7 +32,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         saveDefaultConfig();
 
         ItemController.findAll();// Busca todos os item e salva na variavel global
-        GrupoController.findAll();// Busca todos os grupos e salva na variavel global
+        GrupoController.CREATE();// Busca todos os grupos e salva na variavel global
 
         // Tradução
         new TraducaoConfig();

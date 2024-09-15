@@ -238,40 +238,43 @@ public class GrupoController implements GrupMsg, VGlobal {
 
     public static void CREATE() {
         GrupoDao grupDao = GrupoDao.getInstance();
+        grupDao.findAll();// Busca todos os grupos e adiciona na váriavel global
         ItemDao itemDao = ItemDao.getInstance();
-        int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet()) + 1);
-        for (String nameGrup : GrupoCreate.NEW()) {
-            Grupo grup = grupDao.findByName(nameGrup);// Busca o grupo na variavel global
-            if (grup == null) {// Criando novo grupo
-                grup = new Grupo();
-                grup.setId(id);
-                grup.setName(nameGrup);
-                id++;
-            }
-            for (String nameItem : ITEM_MAP_NAME.keySet()) {
-                if (GrupoCreate.containsItem(nameGrup, nameItem)) {
-                    // Adiciona o item ao grupo se não existir na lista
-                    if (grup.getItemsNames().contains(nameItem)) continue;
-                    grup.addItems(itemDao.findByName(nameItem));
+        if(GRUPO_MAP_ID.isEmpty()) {
+            int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet()) + 1);
+            for (String nameGrup : GrupoCreate.NEW()) {
+                Grupo grup = grupDao.findByName(nameGrup);// Busca o grupo na variavel global
+                if (grup == null) {// Criando novo grupo
+                    grup = new Grupo();
+                    grup.setId(id);
+                    grup.setName(nameGrup);
+                    id++;
                 }
-            }
-            grupDao.save(grup);
-        }
-
-        // Percorrendo os grupos personalizados
-        for (String name : GrupFactory.nameMethods()) {
-            try {
-                // Obtém o método da classe GrupFactory pelo nome
-                Method method = GrupFactory.class.getMethod(name);
-
-                // Verifica se o tipo de retorno do método é Grupo
-                if (method.getReturnType().equals(Grupo.class)) {
-                    // Invoca o método para obter o objeto Grupo retornado
-                    Grupo grup = (Grupo) method.invoke(null); // null porque o método é estático
-                    grupDao.update(grup);
+                for (String nameItem : ITEM_MAP_NAME.keySet()) {
+                    if (GrupoCreate.containsItem(nameGrup, nameItem)) {
+                        // Adiciona o item ao grupo se não existir na lista
+                        if (grup.getItemsNames().contains(nameItem)) continue;
+                        grup.addItems(itemDao.findByName(nameItem));
+                    }
                 }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+                grupDao.save(grup);
+            }
+
+            // Percorrendo os grupos personalizados
+            for (String name : GrupFactory.nameMethods()) {
+                try {
+                    // Obtém o método da classe GrupFactory pelo nome
+                    Method method = GrupFactory.class.getMethod(name);
+
+                    // Verifica se o tipo de retorno do método é Grupo
+                    if (method.getReturnType().equals(Grupo.class)) {
+                        // Invoca o método para obter o objeto Grupo retornado
+                        Grupo grup = (Grupo) method.invoke(null); // null porque o método é estático
+                        grupDao.update(grup);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
