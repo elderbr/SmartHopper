@@ -46,6 +46,7 @@ public class TraducaoComando implements CommandExecutor {
                     break;
                 case "traducaogrupo":
                     try {
+                        grupo = grupoController.findByIdOrName(args);
                         if (grupoController.addTraducao(player, args)) {
                             Msg.PlayerTodos("Tradução adicionada para o grupo $9" + grupo.getName() + "$r em $8$l" + player.getLocale() + " $rcomo $8$l" + grupo.toTranslation(player) + "!");
                             return true;

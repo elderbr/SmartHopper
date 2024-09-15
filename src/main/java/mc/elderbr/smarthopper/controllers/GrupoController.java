@@ -11,6 +11,7 @@ import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.GrupoCreate;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
+import mc.elderbr.smarthopper.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -81,6 +82,21 @@ public class GrupoController implements GrupMsg, VGlobal {
         }
         if (grup == null) {
             throw new GrupoException(String.format(GRUP_NOT_EXIST, value));
+        }
+        return grup;
+    }
+
+    public Grupo findByIdOrName(String[] args) {
+        Grupo grup;
+        String grupName = Utils.NAME_ARRAY(args);
+        try {
+            int code = Integer.parseInt(grupName.replaceAll("[^0-9]", ""));
+            grup = grupoDao.findById(code);
+        } catch (NumberFormatException e) {
+            grup = grupoDao.findByName(grupName);
+        }
+        if (grup == null) {
+            throw new GrupoException(String.format(GRUP_NOT_EXIST, grupName));
         }
         return grup;
     }
