@@ -66,15 +66,21 @@ public class ConfigDao implements VGlobal {
         if (config.get(KEY_ADM) == null) {
             throw new ConfigException("Lista de Adm não existe!");
         }
-        return config.getList(KEY_ADM).contains(name);
+        boolean contains = false;
+        for (Object obj : config.getList(KEY_ADM)) {
+            if (Objects.equals(obj.toString(), name)){
+                contains = true;
+                break;
+            }
+        }
+        return contains;
     }
 
     public boolean containsAdm(Player player) {
-        config = YamlConfiguration.loadConfiguration(file);
-        if (config.get(KEY_ADM) == null) {
-            throw new ConfigException("Lista de Adm não existe!");
+        if(player == null){
+            throw new ConfigException("Não existe jogador para verificar se é adm!");
         }
-        return config.getList(KEY_ADM).contains(player.getName());
+        return containsAdm(player.getName());
     }
 
     public void removeAdm(String name) {
@@ -85,7 +91,7 @@ public class ConfigDao implements VGlobal {
         ADM_LIST.remove(name);// Removendo adm da lista global
     }
 
-    public List<String> findByAdms(){
+    public List<String> findByAdms() {
         return ADM_LIST;
     }
 

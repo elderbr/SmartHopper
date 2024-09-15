@@ -137,7 +137,7 @@ public class GrupoController implements GrupMsg, VGlobal {
 
     public boolean addTraducao(@NotNull Player player, @NotNull String[] args) throws GrupoException {
         // Verifica se o jogador é o administrador do SmartHopper
-        if (player.isOp() && !AdmController.ContainsAdm(player)) {
+        if (!player.isOp() && !AdmController.ContainsAdm(player)) {
             throw new GrupoException("Ops, você não é adm do Smart Hopper!!!");
         }
 

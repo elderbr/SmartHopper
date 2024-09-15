@@ -15,8 +15,8 @@ public class AdmController implements VGlobal {
     public AdmController() {
     }
 
-    public boolean addAdm(String name){
-        if(name == null || name.isBlank()){
+    public boolean addAdm(String name) {
+        if (name == null || name.isBlank()) {
             throw new ConfigException("Nome do adm é invalido!");
         }
         return configDao.addAdm(name);
@@ -42,7 +42,7 @@ public class AdmController implements VGlobal {
 
     public List<String> getAdms() {
         List<String> adms = configDao.findFileByAdms();
-        if(adms == null || adms.isEmpty()){
+        if (adms == null || adms.isEmpty()) {
             configDao.saveAdm();
             return configDao.findFileByAdms();
         }
@@ -75,6 +75,9 @@ public class AdmController implements VGlobal {
     }
 
     public static boolean ContainsAdm(Player player) {
-        return new ConfigDao().containsAdm(player.getName());
+        if (player == null) {
+            throw new ConfigException("$c$lVocê não é um administrador do $eSmart Hopper$r$l!!!");
+        }
+        return new ConfigDao().containsAdm(player);
     }
 }
