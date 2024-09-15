@@ -37,7 +37,7 @@ public class ItemController implements ItemMsg {
     private int id;
     private String name;
     private Item item;
-    private ItemDao itemDao = new ItemDao();
+    private ItemDao itemDao = ItemDao.getInstance();
     private Pocao pocao;
     private LivroEncantado livro;
 
@@ -125,7 +125,7 @@ public class ItemController implements ItemMsg {
 
     public static void findAll() {
         clean();// Remove todos os texto que contenha "item_"
-        ItemDao dao = new ItemDao();
+        ItemDao dao = ItemDao.getInstance();
         dao.findAll();// Carrega todos os itens na variavel global
 
         for (String name : ItemCreate.Create()) {
@@ -192,7 +192,7 @@ public class ItemController implements ItemMsg {
     }
 
     public static void Create() {
-        ItemDao dao = new ItemDao();
+        ItemDao dao = ItemDao.getInstance();
         ItemCreate.Create();
         int id = 1;
         for (String name : ITEM_NAME_LIST_DEFAULT) {

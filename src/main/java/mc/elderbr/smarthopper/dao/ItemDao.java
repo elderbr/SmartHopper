@@ -10,19 +10,30 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 public class ItemDao implements VGlobal, ItemMsg {
 
+    private static ItemDao instance;
     private final YamlConfiguration config = YamlConfiguration.loadConfiguration(ITEM_FILE);
     private String name;
 
-    public ItemDao() {
+    private ItemDao() {
         if (!ITEM_FILE.exists()) {
             try {
                 ITEM_FILE.createNewFile();
             } catch (IOException e) {
                 Msg.ServidorErro(e, ITEM_FILE_ERROR, getClass());
             }
+        }
+    }
+
+    public static ItemDao getInstance(){
+        synchronized (ItemDao.class){
+            if(Objects.isNull(instance)){
+                instance = new ItemDao();
+            }
+            return instance;
         }
     }
 

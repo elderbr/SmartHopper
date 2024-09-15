@@ -236,7 +236,7 @@ public class GrupoController implements GrupMsg, VGlobal {
 
     public static void CREATE() {
         GrupoDao grupDao = GrupoDao.getInstance();
-        ItemDao itemDao = new ItemDao();
+        ItemDao itemDao = ItemDao.getInstance();
         int id = (GRUPO_MAP_ID.isEmpty() ? 1 : Collections.max(GRUPO_MAP_ID.keySet())+1);
         for (String nameGrup : GrupoCreate.NEW()) {
             Grupo grup = grupDao.findByName(nameGrup);// Busca o grupo na variavel global
