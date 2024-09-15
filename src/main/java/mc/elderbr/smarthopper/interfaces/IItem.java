@@ -1,9 +1,15 @@
 package mc.elderbr.smarthopper.interfaces;
 
+import mc.elderbr.smarthopper.exceptions.ItemException;
+import mc.elderbr.smarthopper.interfaces.msg.ItemMsg;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionType;
 
 import java.util.Map;
 
@@ -18,6 +24,7 @@ public interface IItem {
     IItem setName(String name);
 
     boolean isBlocked();
+
     IItem setBlocked(boolean blocked);
 
     Map<String, String> getTranslations();
@@ -46,11 +53,92 @@ public interface IItem {
         return name;
     }
 
-    default ItemStack getItemStack(){
-        return new ItemStack(Material.getMaterial(getName().toUpperCase().replaceAll("\s","_")));
+    default ItemStack getItemStack() {
+
+        String name = getName();
+
+        // Se o item for livro encantado
+        String book = "enchanted book";
+        if (name.contains(book)) {
+            ItemStack itemStack = new ItemStack(Material.ENCHANTED_BOOK);
+
+            // Obtendo o nome do encantamento
+            String nameEnchantment = name.replaceAll(book, "").trim();
+            nameEnchantment = nameEnchantment.substring(0, nameEnchantment.length() - 1).trim().replaceAll(" ", "_");
+
+            // Obtendo o nível do encantamento
+            int nivel;
+            try {
+                nivel = Integer.parseInt(name.substring(name.length() - 1, name.length()));
+            } catch (NumberFormatException e) {
+                nivel = 0;
+            }
+
+            ItemMeta meta = itemStack.getItemMeta();
+            for (Enchantment enchantment : Enchantment.values()) {
+                String enchantementKey = enchantment.getKey().getKey();
+                if (nameEnchantment.equals(enchantementKey)) {
+                    meta.addEnchant(enchantment, nivel, true);
+                    break;
+                }
+            }
+            itemStack.setItemMeta(meta);
+            return itemStack;
+        }
+
+        // Se o item for uma poção
+        String potion = "potion";
+        String splash = "splash " + potion;
+        String lingering = "lingering " + potion;
+        ItemStack itemStack;
+
+        // Se a poção for do tipo splash
+        if (name.contains(splash)) {
+            String namePotion = name.replaceAll(splash, "").trim().replaceAll(" ", "_");
+            itemStack = new ItemStack(Material.SPLASH_POTION);
+            PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+            for (PotionType type : PotionType.values()) {
+                String nameType = type.getKey().getKey();
+                if (namePotion.equals(nameType)) {
+                    meta.setBasePotionType(type);
+                }
+            }
+            itemStack.setItemMeta(meta);
+            return itemStack;
+        } else if (name.contains(lingering)) {// Se a poção for do tipo lingering
+            String namePotion = name.replaceAll(lingering, "").trim().replaceAll(" ", "_");
+            itemStack = new ItemStack(Material.LINGERING_POTION);
+            PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+            for (PotionType type : PotionType.values()) {
+                String nameType = type.getKey().getKey();
+                if (namePotion.equals(nameType)) {
+                    meta.setBasePotionType(type);
+                }
+            }
+            itemStack.setItemMeta(meta);
+            return itemStack;
+        } else if (name.contains(potion)) {// Se a poção for do tipo comum
+            String namePotion = name.replaceAll(potion, "").trim().replaceAll(" ", "_");
+            itemStack = new ItemStack(Material.POTION);
+            PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+            for (PotionType type : PotionType.values()) {
+                String nameType = type.getKey().getKey();
+                if (namePotion.equals(nameType)) {
+                    meta.setBasePotionType(type);
+                }
+            }
+            itemStack.setItemMeta(meta);
+            return itemStack;
+        }
+        try {
+            itemStack = new ItemStack(Material.getMaterial(getName().toUpperCase().replaceAll("\s", "_")));
+        } catch (Exception e) {
+            throw new ItemException(ItemMsg.ITEM_INVALID);
+        }
+        return itemStack;
     }
 
-    default void infor(){
+    default void infor() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n+--------------------------+\n");
         sb.append("ID: ").append(getId());
