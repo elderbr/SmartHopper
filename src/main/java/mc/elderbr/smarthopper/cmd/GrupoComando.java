@@ -3,6 +3,7 @@ package mc.elderbr.smarthopper.cmd;
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
+import mc.elderbr.smarthopper.interfaces.msg.GrupMsg;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -71,7 +72,13 @@ public class GrupoComando implements CommandExecutor {
             } else {
                 // Busca todos os grupos que contém o item no grupo
                 listGrupo = grupoCtrl.findByItemStack(itemStack);
-                // Se a lista de item que possuir o grupo for igual a 1
+
+                // Se não existir grupo com o item
+                if(listGrupo.isEmpty()){
+                    Msg.PlayerGold(player, GrupMsg.GRUP_NOT_EXIST);
+                    return true;
+                }
+                // Se existir apenas um grupo para item, mostra o inventário com os itens do grupo
                 if(listGrupo.size()==1){
                     // Criando o inventário do grupo
                     inventory = new InventoryCustom(player, listGrupo.get(0));
