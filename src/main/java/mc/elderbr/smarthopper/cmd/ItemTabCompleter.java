@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_MAP_NAME;
 import static mc.elderbr.smarthopper.interfaces.VGlobal.TRADUCAO_ITEM;
 
 public class ItemTabCompleter implements TabCompleter {
@@ -35,10 +36,8 @@ public class ItemTabCompleter implements TabCompleter {
                 cmd = Utils.NAME_ARRAY(args);// PEGA O NOME DO ITEM DIGITADO
                 if (cmd.length() > 0) {
                     itemList = new ArrayList<>();
-                    for(Item item : TRADUCAO_ITEM.values()){
-                        if(item.getName().toLowerCase().contains(cmd.toLowerCase())
-                                || item.toTranslation(player).toLowerCase().contains(cmd.toLowerCase())){
-                            itemList.add(item.getName());
+                    for(Item item : ITEM_MAP_NAME.values()){
+                        if(item.toTranslation(player).toLowerCase().contains(cmd.toLowerCase())){
                             itemList.add(item.toTranslation(player));
                         }
                     }
