@@ -29,7 +29,7 @@ public class GrupoTabCompleter implements TabCompleter {
                 case "addgrupo":
                 case "removegrupo":
                     cmd = Utils.NAME_ARRAY(args);
-                    return grupoCtrl.findNameContains(cmd);
+                    return grupoCtrl.findNameContains(player, cmd);
             }
         }
         return null;

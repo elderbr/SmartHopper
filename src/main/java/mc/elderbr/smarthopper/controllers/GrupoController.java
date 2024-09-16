@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class GrupoController implements GrupMsg, VGlobal {
 
@@ -71,6 +72,18 @@ public class GrupoController implements GrupMsg, VGlobal {
         return grupo;
     }
 
+    public Grupo findByName(@NotNull Player player, @NotNull String name) throws GrupoException {
+        if (name.isBlank()) {
+            throw new GrupoException(GRUP_NAME_REQUIRED);
+        }
+        for (Grupo grup : GRUPO_MAP_NAME.values()) {
+            if (grup.toTranslation(player).equalsIgnoreCase(name)) {
+                return grup;
+            }
+        }
+        throw new GrupoException(GRUP_NOT_EXIST);
+    }
+
     public Grupo findByIdOrName(String value) {
         Grupo grup;
         String grupName = value.toLowerCase();
@@ -82,6 +95,21 @@ public class GrupoController implements GrupMsg, VGlobal {
         }
         if (grup == null) {
             throw new GrupoException(String.format(GRUP_NOT_EXIST, value));
+        }
+        return grup;
+    }
+
+    public Grupo findByIdOrName(Player player, String name) {
+        Grupo grup;
+        String grupName = name.toLowerCase();
+        try {
+            int code = Integer.parseInt(grupName.replaceAll("[^0-9]", ""));
+            grup = grupoDao.findById(code);
+        } catch (NumberFormatException e) {
+            grup = findByName(player, name);
+        }
+        if (grup == null) {
+            throw new GrupoException(String.format(GRUP_NOT_EXIST, name));
         }
         return grup;
     }
@@ -190,13 +218,11 @@ public class GrupoController implements GrupMsg, VGlobal {
     }
 
 
-    public List<String> findNameContains(String name) {
+    public List<String> findNameContains(Player player, String name) {
         List<String> list = new ArrayList<>();
-        for (String grup : GRUPO_NAME_LIST) {
-            if (grup.toLowerCase().contains(name.toLowerCase()) || grup.equalsIgnoreCase(name)) {
-                if (!list.contains(grup)) {
-                    list.add(grup);
-                }
+        for (Grupo grup : GRUPO_MAP_NAME.values()) {
+            if (grup.toTranslation(player).toLowerCase().contains(name.toLowerCase())) {
+                list.add(grup.toTranslation(player));
             }
         }
         return list;
@@ -205,7 +231,7 @@ public class GrupoController implements GrupMsg, VGlobal {
     public static void findAll() {
         clear();
         grupoDao.findAll();
-        if(GRUPO_MAP_ID.isEmpty()){
+        if (GRUPO_MAP_ID.isEmpty()) {
             CREATE();
         }
     }
