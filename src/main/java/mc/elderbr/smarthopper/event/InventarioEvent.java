@@ -50,10 +50,9 @@ public class InventarioEvent implements Listener, Botao {
         this.event = event;
         try {
 
+            if (inventoryCustom == null || event.getCurrentItem() == null) return;
             itemClicked = event.getCurrentItem();
-
-            if (inventoryCustom == null || itemClicked == null || itemClicked.getType().isAir()) return;
-
+            if (itemClicked.getType().isAir()) return;
             grupo = inventoryCustom.getGrupo();
 
             if (grupo == null) return;

@@ -156,7 +156,7 @@ public class GrupoController implements GrupMsg, VGlobal {
         if (grupo == null || grupo.getId() < 1 || grupo.getName() == null) {
             throw new GrupoException(GRUP_INVALID);
         }
-        grupo = grupoDao.findByName(grupo.getName());
+        grupo = grupoDao.findById(grupo.getId());
         if (grupo == null) {
             throw new GrupoException(String.format(GRUP_NOT_EXIST, grupo.getName()));
         }

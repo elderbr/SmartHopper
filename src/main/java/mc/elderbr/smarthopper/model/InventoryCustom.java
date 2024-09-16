@@ -5,7 +5,6 @@ import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.dao.ConfigDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
-import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -21,12 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class InventoryCustom implements Botao, VGlobal {
-
-    private final Class CLAZZ = getClass();
 
     private final String TITULO_GRUP_NEW = "§lNovo Grupo: §r";
     private final String TITULO_GRUP = "§lGrupo: §r";
@@ -63,7 +59,7 @@ public class InventoryCustom implements Botao, VGlobal {
             if (titulo.contains(TITULO_GRUP_NEW)) {
                 grupo = new Grupo();
                 grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW, ""));
-                if (grupoCtrl.findByName(grupo.getName()) != null) {
+                if (GRUPO_MAP_NAME.get(grupo.getName()) != null) {
                     grupo = grupoCtrl.findByName(grupo.getName());
                     throw new GrupoException("O grupo já existe!!!");
                 }
@@ -72,10 +68,6 @@ public class InventoryCustom implements Botao, VGlobal {
             }
             createPagination();
         }
-    }
-
-    public InventoryCustom(@NotNull Player player) {
-        this.player = player;
     }
 
     public InventoryCustom(@NotNull Player player, @NotNull String name) throws GrupoException {
@@ -128,10 +120,6 @@ public class InventoryCustom implements Botao, VGlobal {
     }
 
     public InventoryCustom create() throws GrupoException {
-        if (GRUPO_MAP_NAME.get(grupo.getName().toLowerCase()) != null) {
-            throw new GrupoException("O grupo " + grupo.getName() + " já existe!!!");
-        }
-        // Nome do grupo
         titulo = Msg.Color(TITULO_GRUP_NEW.concat(grupo.getName()));
         inventory = Bukkit.createInventory(null, 54, titulo);// Quantidade de espaço do baú
         inventory.setItem(53, BtnSalva());

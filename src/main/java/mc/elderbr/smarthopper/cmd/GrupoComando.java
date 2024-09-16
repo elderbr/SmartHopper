@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_NAME;
+
 public class GrupoComando implements CommandExecutor {
 
     private Player player;
@@ -60,7 +62,7 @@ public class GrupoComando implements CommandExecutor {
                 // Busca o grupo pelo o nome
                 grupo = grupoCtrl.findByIdOrName(player, cmd);
                 // Mostra mensagem se não existir o grupo
-                if(grupo == null){
+                if (grupo == null) {
                     Msg.GrupoNaoExiste(player, cmd);
                     return false;
                 }
@@ -74,12 +76,12 @@ public class GrupoComando implements CommandExecutor {
                 listGrupo = grupoCtrl.findByItemStack(itemStack);
 
                 // Se não existir grupo com o item
-                if(listGrupo.isEmpty()){
+                if (listGrupo.isEmpty()) {
                     Msg.PlayerGold(player, GrupMsg.GRUP_NOT_EXIST);
                     return true;
                 }
                 // Se existir apenas um grupo para item, mostra o inventário com os itens do grupo
-                if(listGrupo.size()==1){
+                if (listGrupo.size() == 1) {
                     // Criando o inventário do grupo
                     inventory = new InventoryCustom(player, listGrupo.get(0));
                     inventory.show();// Mostra o inventário com os itens do grupo
@@ -100,19 +102,21 @@ public class GrupoComando implements CommandExecutor {
         // Verifica se o jogador é adm do Smart hopper
         if (!player.isOp() && !AdmController.ContainsAdm(player)) {
             Msg.PlayerRed(player, "Ops, você não é adm do Smart Hopper!!!");
-            return false;
+            return true;
         }
 
         try {
             // Verifica se o grupo já existe
-            if (grupoCtrl.findByName(cmd) != null) {
+            if (GRUPO_MAP_NAME.get(cmd) != null) {
                 Msg.PlayerGold(player, "O grupo já existe!!!");
                 show();// Mostra o grupo
-                return false;
+                return true;
+            } else {
+                // Criando o inventário
+                inventory = new InventoryCustom(player, cmd);
+                inventory.create();
+                return true;
             }
-            // Criando o inventário
-            inventory = new InventoryCustom(player, cmd);
-            inventory.create();
         } catch (GrupoException e) {
             Msg.PlayerGold(player, e.getMessage());
         }
@@ -122,11 +126,11 @@ public class GrupoComando implements CommandExecutor {
     private boolean delete() {
         try {
             grupo = grupoCtrl.findByName(cmd);
-            if(grupo == null){
+            if (grupo == null) {
                 Msg.GrupoNaoExiste(player, cmd);
                 return false;
             }
-            if(grupoCtrl.delete(player, grupo)){
+            if (grupoCtrl.delete(player, grupo)) {
                 Msg.PlayerTodos(String.format("$eO jogador $c%s $eapagou o grupo $c%s$e!!!", player.getName(), grupo.getName()));
                 return true;
             }
