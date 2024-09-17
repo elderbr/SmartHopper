@@ -2,6 +2,9 @@ package mc.elderbr.smarthopper.model;
 
 import mc.elderbr.smarthopper.factories.GrupFactory;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -20,13 +23,19 @@ public class GrupoCreate implements VGlobal {
             String name = itemName.toLowerCase().replaceAll("bricks", "brick");
             if (name.contains(" ")) {
                 String[] names = name.split(" ");
-                for (String value : names) {
-                    if (value.replaceAll("\\d", "").isEmpty()) continue;
-                    if (NotGrupo().contains(value)) continue;// Se conter o nome pula
-                    listNameGrup.add(value.trim());
-                }
                 for (int i = 0; i < names.length; i++) {
                     String value = String.join(" ", Arrays.copyOfRange(names, i, names.length));
+                    if (value.replaceAll("\\d", "").isEmpty()) continue;
+                    if (NotGrupo().contains(value)) continue;// Se conter o nome pula
+                    listNameGrup.add(value);
+
+                    value = names[i];
+                    if (value.replaceAll("\\d", "").isEmpty()) continue;
+                    if (NotGrupo().contains(value)) continue;// Se conter o nome pula
+                    listNameGrup.add(value);
+                }
+                for (int i = names.length; i > 0; i--) {
+                    String value = String.join(" ", Arrays.copyOfRange(names, 0, i));
                     if (value.replaceAll("\\d", "").isEmpty()) continue;
                     if (NotGrupo().contains(value)) continue;// Se conter o nome pula
                     listNameGrup.add(value);
@@ -65,7 +74,18 @@ public class GrupoCreate implements VGlobal {
 
     public static boolean containsItem(String grupoName, String itemName) {
         if (itemName.contains(" ")) {
-            for (String name : itemName.split(" ")) {
+            String[] names = itemName.split("\\s");
+            for (int i = 0; i < names.length;i++) {
+                String name = String.join(" ", Arrays.copyOfRange(names, i, names.length));
+                if (grupoName.equals(name) && pertence(grupoName, itemName)) {
+                    return true;
+                }
+                if(grupoName.equals(names[i]) && pertence(grupoName, itemName)){
+                    return true;
+                }
+            }
+            for (int i = names.length; i > 0;i--) {
+                String name = String.join(" ", Arrays.copyOfRange(names, 0, i));
                 if (grupoName.equals(name) && pertence(grupoName, itemName)) {
                     return true;
                 }

@@ -13,9 +13,9 @@ public class GrupFactory {
     public GrupFactory() {
     }
 
-    public static Grupo stoneTool() {
+    public static Grupo stoneTools() {
         Grupo grup = new Grupo();
-        grup.setName("Stone Tool");
+        grup.setName("Stone Tools");
         grup.addTranslation("pt-br", "Ferramentas de pedra");
         grup.addItems(Material.STONE_AXE);
         grup.addItems(Material.STONE_SHOVEL);
@@ -24,9 +24,9 @@ public class GrupFactory {
         return grup;
     }
 
-    public static Grupo ironTool() {
+    public static Grupo ironTools() {
         Grupo grup = new Grupo();
-        grup.setName("Iron Tool");
+        grup.setName("Iron Tools");
         grup.addTranslation("pt-br", "Ferramentas de ferro");
         grup.addItems(Material.IRON_AXE);
         grup.addItems(Material.IRON_SHOVEL);
@@ -47,9 +47,9 @@ public class GrupFactory {
         return grup;
     }
 
-    public static Grupo goldenTool() {
+    public static Grupo goldenTools() {
         Grupo grup = new Grupo();
-        grup.setName("Golden Tool");
+        grup.setName("Golden Tools");
         grup.addTranslation("pt-br", "Ferramentas de ouro");
         grup.addItems(Material.GOLDEN_AXE);
         grup.addItems(Material.GOLDEN_SHOVEL);
@@ -70,9 +70,9 @@ public class GrupFactory {
         return grup;
     }
 
-    public static Grupo diamondTool() {
+    public static Grupo diamondTools() {
         Grupo grup = new Grupo();
-        grup.setName("Diamond Tool");
+        grup.setName("Diamond Tools");
         grup.addTranslation("pt-br", "Ferramentas de diamante");
         grup.addItems(Material.DIAMOND_AXE);
         grup.addItems(Material.DIAMOND_SHOVEL);
