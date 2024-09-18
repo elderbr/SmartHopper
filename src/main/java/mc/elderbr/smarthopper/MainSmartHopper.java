@@ -5,10 +5,7 @@ import mc.elderbr.smarthopper.cmd.*;
 import mc.elderbr.smarthopper.controllers.ConfigController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
-import mc.elderbr.smarthopper.event.ClickHopper;
-import mc.elderbr.smarthopper.event.InventarioEvent;
-import mc.elderbr.smarthopper.event.MoveHopper;
-import mc.elderbr.smarthopper.event.TextureEvent;
+import mc.elderbr.smarthopper.event.*;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import org.bukkit.Bukkit;
@@ -91,6 +88,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new InventarioEvent(), this);
         getServer().getPluginManager().registerEvents(new ClickHopper(), this);
         getServer().getPluginManager().registerEvents(new MoveHopper(), this);
+        getServer().getPluginManager().registerEvents(new PickupItemEvent(), this);
         getServer().getPluginManager().registerEvents(new TextureEvent(), this);
     }
 
