@@ -23,27 +23,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MoveHopper implements Listener {
+public class MoveHopperEvent implements Listener {
 
     private ItemStack itemStack;
-
     private Item item;
-    private IItem itemSmart;
-
-    private Inventory inventoryInicial;
     private Inventory inventory;
     private Inventory destination;
-
     private Block blockDown;
-
     private SmartHopper smartHopper;
     private Hopper hopper;
 
     private ItemController itemController = new ItemController();
 
-    public MoveHopper() {
-
-    }
+    public MoveHopperEvent() {}
 
     @EventHandler(priority = EventPriority.HIGH)
     public void moveItemHopper(InventoryMoveItemEvent event) {
@@ -87,7 +79,7 @@ public class MoveHopper implements Listener {
                                     if (itemSM.isBlocked()) {
                                         if (!itemContains) {
                                             cancelled = false;
-                                        }else{
+                                        } else {
                                             cancelled = true;
                                             break;
                                         }
@@ -100,7 +92,7 @@ public class MoveHopper implements Listener {
                                     if (grup.isBlocked()) {
                                         if (!grupContains) {
                                             cancelled = false;
-                                        }else{
+                                        } else {
                                             cancelled = true;
                                             break;
                                         }
