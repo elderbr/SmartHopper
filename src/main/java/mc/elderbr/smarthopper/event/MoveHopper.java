@@ -127,40 +127,6 @@ public class MoveHopper implements Listener {
         }
     }
 
-    private boolean hopperEqualsItem(Hopper hopper) {
-        try {
-            smartHopper = new SmartHopper(hopper);
-            Object hopperObj = smartHopper.getTypes();
-            if (hopperObj instanceof Item itemSM) {
-                if (Objects.equals(itemSM.getId(), item.getId())) {
-                    return false;
-                }
-            } else if (hopperObj instanceof Grupo grup) {
-                if (grup.containsItem(item)) {
-                    return false;
-                }
-            } else if (hopperObj instanceof List<?> list) {
-                List<IItem> itemList = (List<IItem>) list; // Cast seguro, pois todos são IItem
-                for (IItem listItem : itemList) {
-                    if (listItem instanceof Item itemSM) {
-                        if (Objects.equals(itemSM.getId(), item.getId())) {
-                            return false;
-                        }
-                    }
-                    if (listItem instanceof Grupo grup) {
-                        if (grup.containsItem(item)) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Msg.ServidorRed(e.getMessage());
-        }
-        return true;
-    }
-
-
     private List<Hopper> getBlockDownHoppers() {
         List<Hopper> list = new ArrayList<>();
         while (blockDown.getType() == Material.HOPPER) {
