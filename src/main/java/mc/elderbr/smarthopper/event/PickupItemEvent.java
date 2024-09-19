@@ -6,7 +6,9 @@ import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.Material;
 import org.bukkit.block.Hopper;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
@@ -19,8 +21,6 @@ import java.util.Objects;
 public class PickupItemEvent implements Listener {
 
     private Inventory inventory;
-    private Hopper hopper;
-
     private ItemStack itemStack;
     private Item item;
     private ItemController itemController = new ItemController();
@@ -34,8 +34,16 @@ public class PickupItemEvent implements Listener {
             inventory = event.getInventory();
             if (inventory.getType() == InventoryType.HOPPER) {
                 event.setCancelled(true);
-                hopper = (Hopper) inventory.getLocation().getBlock().getState();
-                smartHopper = new SmartHopper(hopper);
+                // Verifica se o holder é um carrinho com funil (HopperMinecart)
+                if (inventory.getHolder() instanceof HopperMinecart minecart) {
+                    smartHopper = new SmartHopper(minecart);
+                }else if(inventory.getHolder() instanceof Hopper hopper) {
+                    smartHopper = new SmartHopper(hopper);
+                }else{
+                    event.setCancelled(false);
+                    return;
+                }
+
                 if (smartHopper.getTypes().isEmpty()) {
                     event.setCancelled(false);
                     return;
@@ -66,8 +74,9 @@ public class PickupItemEvent implements Listener {
                 }
                 event.setCancelled(canceled);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Msg.ServidorErro(e, e.getMessage(), getClass());
+            Msg.ServidorRed("Local do erro: " + inventory.getLocation().getBlock());
             event.setCancelled(false);
         }
     }

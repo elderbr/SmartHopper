@@ -7,6 +7,7 @@ import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -33,6 +34,21 @@ public class SmartHopper {
     public SmartHopper(@NotNull Hopper hopper) {
         listType = new ArrayList<>();
         name = hopper.getCustomName();
+        if (name == null) {
+            return;
+        }
+        if (name.contains(";")) {
+            for (String nameHopper : name.split(";")) {
+                listType.add(getTypes(nameHopper));
+            }
+        } else {
+            listType.add(getTypes(name));
+        }
+    }
+
+    public SmartHopper(@NotNull HopperMinecart hopperMinecart) {
+        listType = new ArrayList<>();
+        name = hopperMinecart.getCustomName();
         if (name == null) {
             return;
         }
