@@ -30,7 +30,7 @@ public class ClickHopper implements Listener {
         itemStack = player.getInventory().getItemInMainHand();
         item = new Item(itemStack);
 
-        // VERIFICA SE O JOGADOR ESTÁ SEGURANDO GRAVETO E SE BATEU NO FUNIL
+        // VERIFICA SE O JOGADOR ESTA SEGURANDO GRAVETO E SE BATEU NO FUNIL
         if (event.getClickedBlock() == null
                 || itemStack.getType() != Material.STICK
                 || event.getAction() != Action.LEFT_CLICK_BLOCK
