@@ -3,7 +3,6 @@ package mc.elderbr.smarthopper.controllers;
 import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.dao.ItemDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
-import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.factories.GrupFactory;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.interfaces.msg.GrupMsg;
@@ -12,7 +11,6 @@ import mc.elderbr.smarthopper.model.GrupoCreate;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import mc.elderbr.smarthopper.utils.Utils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +24,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class GrupoController implements GrupMsg, VGlobal {
 
