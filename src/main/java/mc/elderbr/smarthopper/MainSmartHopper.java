@@ -91,6 +91,4 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new PickupItemEvent(), this);
         getServer().getPluginManager().registerEvents(new TextureEvent(), this);
     }
-
-
 }

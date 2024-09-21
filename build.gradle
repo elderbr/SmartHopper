@@ -1,21 +1,31 @@
 plugins {
     id 'java'
 }
+
 group = 'mc.elderbr'
 version = '4.1.0'
+
 repositories {
     mavenCentral()
-    maven {url='https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
 }
 
 dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'org.apache.commons:commons-text:1.10.0'
-    compileOnly('org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT')
+    compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+
     // Dependência do JUnit 5 para testes
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.0'
+
+    // Certifique-se de que o Spigot API também esteja disponível para os testes
+    testImplementation 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT'
+
+    // Mockito para criar mocks
+    testImplementation 'org.mockito:mockito-core:4.11.0'
 }
+
 test {
     // Configura o Gradle para usar o JUnit 5
     useJUnitPlatform()
