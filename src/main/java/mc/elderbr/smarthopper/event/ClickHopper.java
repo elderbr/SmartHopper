@@ -1,6 +1,7 @@
 package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.SmartHopper;
+import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.model.Item;
@@ -13,6 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 public class ClickHopper implements Listener {
 
@@ -41,11 +44,10 @@ public class ClickHopper implements Listener {
         block = event.getClickedBlock();
         try {
             smartHopper = new SmartHopper(block);
-            if(smartHopper.getTypes() instanceof Grupo grupo){
-                InventoryCustom inventoryCustom = new InventoryCustom(player, grupo);
-                inventoryCustom.show();
-            }
-            Msg.getTypes(player, smartHopper.getTypes());
+            List<IItem> itemType = smartHopper.getTypes();
+            InventoryCustom inventoryCustom = new InventoryCustom(player, itemType);
+            inventoryCustom.show();
+            Msg.getTypes(player, itemType);
         } catch (Exception e) {
             Msg.PlayerGold(player, e.getMessage());
             Msg.ServidorRed(e.getMessage());

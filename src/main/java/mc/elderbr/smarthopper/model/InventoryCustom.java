@@ -6,6 +6,7 @@ import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.dao.ConfigDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.interfaces.Botao;
+import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class InventoryCustom implements Botao, VGlobal {
 
@@ -65,6 +67,7 @@ public class InventoryCustom implements Botao, VGlobal {
                 }
             } else {
                 grupo = grupoCtrl.findByIdOrName(titulo.substring(titulo.lastIndexOf("ID:")));
+                listItem = grupo.getItems();
             }
             createPagination();
         }
@@ -89,26 +92,42 @@ public class InventoryCustom implements Botao, VGlobal {
     public InventoryCustom(@NotNull Player player, @NotNull Grupo grupo) {
         this.player = player;
         this.grupo = grupo;
+        this.listItem = grupo.getItems();
         createPagination();
         pag = 1;
     }
 
+    public InventoryCustom(@NotNull Player player, @NotNull List<IItem> list) {
+        this.player = player;
+        if (list.size() == 1 && list.get(0) instanceof Grupo grup) {
+            grupo = grup;
+            listItem = grup.getItems();
+        } else {
+            for (IItem type : list) {
+                if (type instanceof Item item) {
+                    listItem.add(item);
+                    continue;
+                }
+                if (type instanceof Grupo grup) {
+                    for (Item item : grup.getItems()) {
+                        listItem.add(item);
+                    }
+                }
+            }
+        }
+        createPagination();
+    }
+
     private void createPagination() {
-        List<Item> grupList = grupo.getItems();
         pag = 1;
         int index = 0;
-        listItem = new ArrayList<>();
-
-        if (grupList.size() < 53) {
-            for (int i = 0; i < grupList.size(); i++) {
-                listItem.add(grupList.get(i));
-            }
+        if (listItem.size() < 53) {
             pagMap.put(1, listItem);
             return;
         }
 
-        for (int i = 0; i < grupList.size(); i++) {
-            listItem.add(grupList.get(i));
+        for (int i = 0; i < listItem.size(); i++) {
+            listItem.add(listItem.get(i));
             if (index == 53) {
                 index = 0;
                 pagMap.put(pag, listItem);
@@ -128,8 +147,16 @@ public class InventoryCustom implements Botao, VGlobal {
     }
 
     public InventoryCustom show() throws GrupoException {
-        // Titulo do grupo
-        titulo = Msg.Color(TITULO_GRUP + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
+
+        // Se a lista estiver vazia ou se conter apenas um Item
+        if(listItem.isEmpty() || listItem.size() == 1 && listItem.get(0) instanceof Item){
+            return this;
+        }
+        if (Objects.isNull(grupo)) {// Se não existir grupo renomea o inventário para Smart Hopper
+            titulo = "§8§lSmart Hopper";
+        } else {// Titulo do grupo
+            titulo = Msg.Color(TITULO_GRUP + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
+        }
         inventory = Bukkit.createInventory(null, 54, titulo);
         List<Item> list = pagMap.get(pag);
         for (Item item : list) {
@@ -140,42 +167,6 @@ public class InventoryCustom implements Botao, VGlobal {
         }
         player.openInventory(inventory);
         return this;
-    }
-
-    public void addItem(@NotNull Item item) {
-        inventory.addItem(ItemController.ParseItemStack(item));
-    }
-
-    public void addItem(InventoryClickEvent event) {
-
-        // Inventario do superior
-        inventoryTop = player.getOpenInventory().getTopInventory();
-        if (inventoryTop.getType() != InventoryType.CHEST) {
-            return;
-        }
-
-        // Verifica se existe grupo
-        if (grupo != null) {
-
-            // Se não for adm do servidor ou do SmartHopper retorna
-            if (!player.isOp() && !AdmController.ContainsAdm(player)) {
-                return;
-            }
-            // Pegando o item que foi clicado
-            itemStackClicked = event.getCurrentItem();
-            if (itemStackClicked == null || itemStackClicked.getType().isAir()) return;
-
-            // Copiando o tipo do item clicado
-            itemStack = new ItemStack(itemStackClicked.getType());
-            itemStack.setAmount(1);
-            // Se for clicado com o botão esquerdo adiciona o item
-            if (event.isLeftClick()) {
-                if (!grupo.getItems().contains(Item.TO_ItemStack(itemStack))) {
-                    inventoryTop.addItem(itemStack);
-                    grupo.addItems(itemCtrl.findByItemStack(itemStack));
-                }
-            }
-        }
     }
 
     public void btnNavegation(InventoryClickEvent event) throws GrupoException {
