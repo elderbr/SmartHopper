@@ -254,7 +254,7 @@ public class InventoryCustom implements Botao, VGlobal {
             inventory.addItem(item.getItemStack());
         }
         if (pagMap.size() == 1) {
-            if (player.isOp() || configDao.containsAdm(player) && Objects.nonNull(grupo)) {
+            if (grupo != null && AdmController.ContainsAdm(player)) {
                 inventory.setItem(53, BtnSalva());
             }
         }

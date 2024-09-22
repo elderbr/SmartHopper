@@ -77,9 +77,6 @@ public class ConfigDao implements VGlobal {
     }
 
     public boolean containsAdm(Player player) {
-        if(player == null){
-            throw new ConfigException("Não existe jogador para verificar se é adm!");
-        }
         return containsAdm(player.getName());
     }
 
