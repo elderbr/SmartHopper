@@ -157,15 +157,18 @@ public class InventoryCustom implements Botao, VGlobal {
         } else {// Titulo do grupo
             titulo = Msg.Color(TITULO_GRUP + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
         }
+        // Criando um inventário personalizado
         inventory = Bukkit.createInventory(null, 54, titulo);
-        List<Item> list = pagMap.get(pag);
-        for (Item item : list) {
+        List<Item> list = pagMap.get(pag);// Acessando a página
+        for (Item item : list) {// Carregando os itens na página
             inventory.addItem(item.getItemStack());
         }
         if (inventory.getItem(53) == null && player.isOp() || configDao.containsAdm(player)) {
-            inventory.setItem(53, BtnSalva());
+            if(!titulo.contains("Smart Hopper")) {// Se o inventário não for igual ao grupo
+                inventory.setItem(53, BtnSalva());// Adiciona o botão para adicionar ou atualizar os itens do grupo
+            }
         }
-        player.openInventory(inventory);
+        player.openInventory(inventory);// Abrindo o inventário
         return this;
     }
 
@@ -187,6 +190,10 @@ public class InventoryCustom implements Botao, VGlobal {
             pag = 2;
             show();
         }
+    }
+
+    public String getTitle(){
+        return titulo;
     }
 
     public Grupo getGrupo() {

@@ -55,6 +55,11 @@ public class InventarioEvent implements Listener, Botao {
             if (itemClicked.getType().isAir()) return;
             grupo = inventoryCustom.getGrupo();
 
+            if(inventoryCustom.getTitle().contains("Smart Hopper")){
+                event.setCancelled(true);
+                return;
+            }
+
             if (grupo == null) return;
             event.setCancelled(true);// Cancela o movimento do item pelo o player
             // Evento que navega entre os itens do grupo
