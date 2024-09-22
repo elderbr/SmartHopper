@@ -45,7 +45,7 @@ public class ClickHopper implements Listener {
         try {
             smartHopper = new SmartHopper(block);
             List<IItem> itemType = smartHopper.getTypes();
-            InventoryCustom inventoryCustom = new InventoryCustom(player, itemType);
+            InventoryCustom inventoryCustom = new InventoryCustom(player, smartHopper);
             inventoryCustom.show();
             Msg.getTypes(player, itemType);
         } catch (Exception e) {

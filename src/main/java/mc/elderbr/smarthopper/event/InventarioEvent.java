@@ -17,14 +17,13 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class InventarioEvent implements Listener, Botao {
 
-    private final Class CLAZZ = getClass();
     private Player player;
     private InventoryCustom inventoryCustom;
     private Inventory inventory;
-    private List<ItemStack> listItemStack = new ArrayList<>();
 
     private ItemStack itemClicked;
     private ItemController itemController = new ItemController();
@@ -55,21 +54,24 @@ public class InventarioEvent implements Listener, Botao {
             if (itemClicked.getType().isAir()) return;
             grupo = inventoryCustom.getGrupo();
 
-            if(inventoryCustom.getTitle().contains("Smart Hopper")){
-                event.setCancelled(true);
+            if (inventoryCustom.getTitle().contains("Smart Hopper")) {
+                event.setCancelled(true);// Cancela o movimento do item
+                inventoryCustom.btnNavegation(event);// Evento que navega entre os itens do grupo
+                grupo = null;
                 return;
             }
 
-            if (grupo == null) return;
-            event.setCancelled(true);// Cancela o movimento do item pelo o player
-            // Evento que navega entre os itens do grupo
-            inventoryCustom.btnNavegation(event);
+            if (Objects.nonNull(grupo)) {
+                event.setCancelled(true);// Cancela o movimento do item pelo o player
+                // Evento que navega entre os itens do grupo
+                inventoryCustom.btnNavegation(event);
 
-            // Verifica se o player é Adm do servidor ou do Smart Hopper
-            if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
-            add();// Adicionando item ao grupo
-            remove();// Removendo item do grupo
-            save();// Salvando o grupo
+                // Verifica se o player é Adm do servidor ou do Smart Hopper
+                if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
+                add();// Adicionando item ao grupo
+                remove();// Removendo item do grupo
+                save();// Salvando o grupo
+            }
 
         } catch (Exception e) {
             Msg.PlayerRed(player, e.getMessage());

@@ -31,6 +31,20 @@ public class SmartHopper {
     public SmartHopper() {
     }
 
+    public SmartHopper(@NotNull String title) {
+        listType = new ArrayList<>();
+        if (title.isBlank()) {
+            return;
+        }
+        if (title.contains(";")) {
+            for (String nameHopper : title.split(";")) {
+                listType.add(getTypes(nameHopper));
+            }
+        } else {
+            listType.add(getTypes(title));
+        }
+    }
+
     public SmartHopper(@NotNull Hopper hopper) {
         listType = new ArrayList<>();
         name = hopper.getCustomName();
@@ -66,7 +80,7 @@ public class SmartHopper {
         if (block.getType() == Material.HOPPER) {
             myHopper = (Hopper) block.getState();
             name = myHopper.getCustomName();
-            if(name == null){
+            if (name == null) {
                 return;
             }
             if (name.contains(";")) {

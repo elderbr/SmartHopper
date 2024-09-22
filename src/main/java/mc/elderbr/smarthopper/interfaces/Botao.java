@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.interfaces;
 
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -64,6 +65,30 @@ public interface Botao {
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName(Msg.Color("$9$lRetorna para página 2"));
         meta.setLore(Arrays.asList(Msg.Color("$fRetorna a lista anteior")));
+        meta.setCustomModelData(12);
+        btn.setItemMeta(meta);
+        return btn;
+    }
+
+    default Item BtnNavegation(){
+        return new Item(new ItemStack(Material.BARRIER, 1));
+    }
+
+    default ItemStack BtnNextPage(int page){
+        ItemStack btn = new ItemStack(Material.BARRIER, 1);
+        ItemMeta meta = btn.getItemMeta();
+        meta.setDisplayName("§9§lPágina "+ (page));
+        meta.setLore(Arrays.asList("§fIr para a página "+(page)));
+        meta.setCustomModelData(11);
+        btn.setItemMeta(meta);
+        return btn;
+    }
+
+    default ItemStack BtnPreviewPage(int page){
+        ItemStack btn = new ItemStack(Material.BARRIER, 1);
+        ItemMeta meta = btn.getItemMeta();
+        meta.setDisplayName("§9§lRetorna página "+ (page));
+        meta.setLore(Arrays.asList("§fRetorna para página "+ (page)));
         meta.setCustomModelData(12);
         btn.setItemMeta(meta);
         return btn;
