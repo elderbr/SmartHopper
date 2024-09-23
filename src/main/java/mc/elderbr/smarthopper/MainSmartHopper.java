@@ -76,8 +76,6 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getCommand("removeradm").setExecutor(new AdministradorComando());
         getCommand("removeradm").setTabCompleter(new AdministradorTabCompleter());
 
-        getCommand("livro").setExecutor(new LivroComando());
-        getCommand("informacao").setExecutor(new LivroComando());
         getCommand("tutorial").setExecutor(new InformacaoComando());
 
         // Comando para deixa a textura obrigatoria
