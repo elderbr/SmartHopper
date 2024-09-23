@@ -5,6 +5,21 @@ plugins {
 group = 'mc.elderbr'
 version = '4.1.0'
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'mc.elderbr.smarthopper.MainSmartHopper'  // Ajuste o caminho do pacote da sua classe principal
+        )
+    }
+    archiveBaseName.set('SmartHopper v')  // Nome do arquivo .jar
+    archiveVersion.set(version)  // Deixe vazio se não quiser incluir a versão no nome do arquivo
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
 repositories {
     mavenCentral()
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
