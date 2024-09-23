@@ -25,9 +25,6 @@ commands:
       description: Adiciona Administrador para o SmartHopper
   removeradm:
     description: Remove o jogador do Adm do SmartHopper
-  informacao:
-    aliases: [infor, config]
-    description: Receberá um livro com os comandos basicos do Smart Hopper
   tutorial:
     description: Vídeo que mostra como usar o SmartHopper
   reload:
