@@ -116,6 +116,7 @@ public class InventarioEvent implements Listener, Botao {
                     }
                 }
                 if (grupo.getId() < 1) {
+                    grupo.addTranslation(player, grupo.getName());
                     grupo.toTranslation(player);
                     if (grupoCtrl.save(grupo)) {
                         msg = String.format("$eO jogador $c%s $eadicionou um novo grupo $c%s$e!!!", player.getName(), grupo.getName());

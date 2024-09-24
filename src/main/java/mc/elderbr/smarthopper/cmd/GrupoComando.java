@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_NAME;
 
@@ -106,9 +107,9 @@ public class GrupoComando implements CommandExecutor {
         }
 
         try {
-            // Verifica se o grupo já existe
-            if (GRUPO_MAP_NAME.get(cmd) != null) {
-                Msg.PlayerGold(player, "O grupo já existe!!!");
+            grupo = grupoCtrl.sourchByName(cmd);// Verifica se o grupo já existe
+            if (grupo != null) {
+                Msg.PlayerGold(player, "O grupo " + cmd + " já existe!!!");
                 show();// Mostra o grupo
                 return true;
             } else {
@@ -125,7 +126,7 @@ public class GrupoComando implements CommandExecutor {
 
     private boolean delete() {
         try {
-            grupo = grupoCtrl.findByName(cmd);
+            grupo = grupoCtrl.findByIdOrName(cmd);
             if (grupo == null) {
                 Msg.GrupoNaoExiste(player, cmd);
                 return false;

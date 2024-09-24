@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class GrupoController implements GrupMsg, VGlobal {
 
@@ -38,6 +39,10 @@ public class GrupoController implements GrupMsg, VGlobal {
         // O grupo não pode nulo e precisa conter o nome
         if (grupo == null || grupo.getName().isBlank()) {
             throw new GrupoException(GRUP_NAME_REQUIRED);
+        }
+        // Verifica se o grupo já existi
+        if(Objects.nonNull(grupoDao.findByName(grupo.getName().toLowerCase()))){
+            throw new GrupoException(GRUP_EXIST, grupo);
         }
         // Verificar se existe item adicionado no grupo
         if (grupo.getItems().isEmpty()) {
@@ -58,11 +63,15 @@ public class GrupoController implements GrupMsg, VGlobal {
         return grupo;
     }
 
+    public Grupo sourchByName(String name){
+        return grupoDao.findByName(name.toLowerCase());
+    }
+
     public Grupo findByName(@NotNull String name) throws GrupoException {
         if (name.isBlank()) {
             throw new GrupoException(GRUP_NAME_REQUIRED);
         }
-        Grupo grupo = grupoDao.findByName(name);
+        Grupo grupo = grupoDao.findByName(name.toLowerCase());
         if (grupo == null) {
             throw new GrupoException(GRUP_NOT_EXIST);
         }
