@@ -32,26 +32,15 @@ public class InventarioEvent implements Listener, Botao {
     private InventoryClickEvent event;
 
     @EventHandler
-    public void openInventory(InventoryOpenEvent event) {
-        try {
-            grupo = null;
-            player = (Player) event.getPlayer();
-            inventoryCustom = new InventoryCustom(event);
-            inventory = event.getInventory();
-        } catch (Exception e) {
-            Msg.PlayerGold(player, e.getMessage());
-        }
-    }
-
-    @EventHandler
     public void InventoryClick(InventoryClickEvent event) {
         player = (Player) event.getWhoClicked();
         this.event = event;
+        inventory = event.getView().getTopInventory();
         try {
-
-            if (inventoryCustom == null || event.getCurrentItem() == null) return;
+            if (event.getCurrentItem() == null) return;
             itemClicked = event.getCurrentItem();
             if (itemClicked.getType().isAir()) return;
+            inventoryCustom = new InventoryCustom(event);
             grupo = inventoryCustom.getGrupo();
 
             if (inventoryCustom.getTitle().contains("Smart Hopper")) {

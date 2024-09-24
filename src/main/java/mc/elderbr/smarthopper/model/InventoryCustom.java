@@ -53,8 +53,8 @@ public class InventoryCustom implements Botao, VGlobal {
     private InventoryCustom() {
     }
 
-    public InventoryCustom(InventoryOpenEvent event) throws GrupoException {
-        player = (Player) event.getPlayer();
+    public InventoryCustom(InventoryClickEvent event) throws GrupoException {
+        player = (Player) event.getWhoClicked();
         inventoryTop = event.getView().getTopInventory();
         titulo = event.getView().getTitle();
         grupo = null;
@@ -77,7 +77,6 @@ public class InventoryCustom implements Botao, VGlobal {
         }
 
         if (titulo.contains("Grupo")) {
-
             if (titulo.contains(TITULO_GRUP_NEW)) {
                 grupo = new Grupo();
                 grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW, ""));
