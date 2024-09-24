@@ -30,7 +30,7 @@ public class Item implements IItem, ItemMsg, Comparable<Item> {
     }
 
     public Item(ItemStack itemStack) {
-        name = toItemStack(itemStack);
+        name = toItem(itemStack);
     }
 
     @Override
@@ -121,6 +121,6 @@ public class Item implements IItem, ItemMsg, Comparable<Item> {
     }
 
     public static String TO_ItemStack(ItemStack itemStack){
-        return new Item().toItemStack(itemStack);
+        return new Item().toItem(itemStack);
     }
 }
