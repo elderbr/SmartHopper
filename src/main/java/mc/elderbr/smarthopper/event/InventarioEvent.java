@@ -7,16 +7,14 @@ import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
 import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class InventarioEvent implements Listener, Botao {
@@ -77,11 +75,9 @@ public class InventarioEvent implements Listener, Botao {
             ItemStack newItem = new ItemStack(itemClicked.getType());
             newItem.setAmount(1);
             // Verifica se o item está na lista do inventário
-            if (!grupo.containsItem(newItem)) {
+            if (!inventory.contains(newItem)) {
                 // Adicionando o item no inventário aberto
                 inventory.addItem(newItem);
-                // Adicionando o item na lista de item do grupo
-                grupo.addItems(itemController.findByItemStack(newItem));
             }
         }
     }
@@ -100,10 +96,6 @@ public class InventarioEvent implements Listener, Botao {
             if (inventory.contains(newItem)) {
                 inventory.removeItem(newItem);
             }
-
-            // Verificando se o item está lista
-            grupo.removeItems(newItem);
-
         }
     }
 
@@ -114,6 +106,15 @@ public class InventarioEvent implements Listener, Botao {
                 String msg = "Ops, algo deu errado!!!";
                 // Verifica se o jogador é ADM
                 if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
+
+                grupo.getItems().clear();
+                // Percorre o inventário do topo
+                for (ItemStack itemStack : inventory.getContents()) {
+                    if (itemStack == null || itemStack.getType() == Material.AIR) continue;
+                    if (!equalButton(itemStack)) {
+                        grupo.addItems(itemStack);
+                    }
+                }
                 if (grupo.getId() < 1) {
                     grupo.toTranslation(player);
                     if (grupoCtrl.save(grupo)) {

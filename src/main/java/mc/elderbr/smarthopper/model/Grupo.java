@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.interfaces.IItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -71,8 +72,13 @@ public class Grupo implements IItem, Cloneable {
         return this;
     }
 
+    public Grupo addItems(ItemStack itemStack) {
+        items.add(new ItemController().findByItemStack(itemStack));
+        return this;
+    }
+
     public Grupo addItems(Material material) {
-        items.add(new Item(new ItemStack(material)));
+        items.add(new ItemController().findByItemStack(new ItemStack(material)));
         return this;
     }
 
