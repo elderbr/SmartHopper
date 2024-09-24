@@ -47,10 +47,14 @@ public interface IItem {
         return getName();
     }
 
-    default String toItemStack(ItemStack itemStack) {
+    default String toItem(ItemStack itemStack) {
         String name = itemStack.getType().getKey().getKey().toLowerCase().replaceAll("_", " ");
         setName(name);
         return name;
+    }
+
+    default ItemStack parseItemStack(String name) {
+        return new ItemStack(Material.getMaterial(name.toUpperCase().replaceAll("\\s","_")));
     }
 
     default ItemStack getItemStack() {
