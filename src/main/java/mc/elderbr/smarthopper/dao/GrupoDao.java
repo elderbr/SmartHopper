@@ -75,6 +75,10 @@ public class GrupoDao implements VGlobal {
         return GRUPO_MAP_NAME.get(name);
     }
 
+    public static Grupo FindByName(String name) {
+        return GRUPO_MAP_NAME.get(name);
+    }
+
     public Grupo findConfigByName(String name) {
         Grupo grup = new Grupo();
         YamlConfiguration config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
