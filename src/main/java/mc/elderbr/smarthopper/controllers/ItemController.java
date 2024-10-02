@@ -96,6 +96,17 @@ public class ItemController implements ItemMsg {
         return item;
     }
 
+    public static Item FindByName(String name) {
+        if (name.isBlank()) {
+            throw new ItemException(ITEM_NAME_INVALID);
+        }
+        Item item = ItemDao.getInstance().findByName(name);
+        if (item == null) {
+            throw new ItemException(ITEM_INVALID);
+        }
+        return item;
+    }
+
     public static Item FindByName(ItemStack itemStack) {
         String name = Item.TO_ItemStack(itemStack);
         if (name.isBlank()) {
