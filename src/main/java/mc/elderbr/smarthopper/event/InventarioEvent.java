@@ -13,6 +13,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class InventarioEvent implements Listener, Botao {
@@ -25,6 +27,7 @@ public class InventarioEvent implements Listener, Botao {
     private Grupo grupo;
     private GrupoController grupoCtrl = new GrupoController();
     private InventoryClickEvent event;
+    private List<ItemStack> listItem = new ArrayList<>();
 
     @EventHandler
     public void InventoryClick(InventoryClickEvent event) {
@@ -75,6 +78,7 @@ public class InventarioEvent implements Listener, Botao {
             // Adiciona item no grupo
             if (!grupo.containsItem(newItem)) {
                 grupo.addItems(newItem);
+                listItem.add(newItem);
                 // Verifica se o item está na lista do inventário
                 inventory.addItem(newItem);// Adicionando o item no inventário aberto
             }
@@ -109,9 +113,13 @@ public class InventarioEvent implements Listener, Botao {
                 if (grupo.getId() < 1) {
                     grupo.addTranslation(player, grupo.getName());
                     grupo.toTranslation(player);
+                    for (ItemStack itemStack : listItem) {
+                        grupo.addItems(itemStack);
+                    }
                     if (grupoCtrl.save(grupo)) {
                         msg = String.format("$eO jogador $c%s $eadicionou um novo grupo $c%s$e!!!", player.getName(), grupo.getName());
                     }
+                    listItem.clear();
                 } else {
                     grupoCtrl.update(grupo);// Atualizando o grupo
                     msg = String.format("$eO jogador $c%s $ealterou o grupo $c%s$e!!!", player.getName(), grupo.getName());

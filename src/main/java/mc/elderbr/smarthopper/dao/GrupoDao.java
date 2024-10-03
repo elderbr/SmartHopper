@@ -46,7 +46,7 @@ public class GrupoDao implements VGlobal {
         try {
             config = YamlConfiguration.loadConfiguration(GRUPO_FILE);
             config.set(name.concat(".id"), grupo.getId());
-            config.set(name.concat(".name"), grupo.getName());
+            config.set(name.concat(".name"), grupo.getName().toLowerCase());
             if (!grupo.getTranslations().isEmpty()) {
                 config.set(name.concat(".lang"), grupo.getTranslations());
             }
