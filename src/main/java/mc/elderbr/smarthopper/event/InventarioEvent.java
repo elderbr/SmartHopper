@@ -119,7 +119,6 @@ public class InventarioEvent implements Listener, Botao {
                     if (grupoCtrl.save(grupo)) {
                         msg = String.format("$eO jogador $c%s $eadicionou um novo grupo $c%s$e!!!", player.getName(), grupo.getName());
                     }
-                    listItem.clear();
                 } else {
                     grupoCtrl.update(grupo);// Atualizando o grupo
                     msg = String.format("$eO jogador $c%s $ealterou o grupo $c%s$e!!!", player.getName(), grupo.getName());
@@ -129,6 +128,7 @@ public class InventarioEvent implements Listener, Botao {
                 // Envia mensagem para todos os jogadores online
                 Msg.PlayerTodos(msg);
                 grupo = null;
+                listItem.clear();
             }
         } catch (Exception e) {
             Msg.PlayerRed(player, e.getMessage());
