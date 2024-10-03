@@ -208,25 +208,10 @@ public class InventoryCustom implements Botao, VGlobal {
             return;
         }
 
+        // Divide o tamanho da lista e se houver sobre a divisão sempre pra mais
         int pageSize = (int) Math.ceil((double) listItem.size() / 54);
 
-        // Adicionando botões na lista
-        int position = 53;
-        for (int i = 1; i <= pageSize; i++) {
-            if (i == 1) {
-                listItem.add(position, BtnNavegation());
-                position = ((position + 53) > listItem.size()) ? listItem.size() : position + 53;
-                continue;
-            }
-            if (i > 1 && i != pageSize) {
-                listItem.add(position, BtnNavegation());
-                listItem.add(position + 1, BtnNavegation());
-                position = ((position + 54) > listItem.size()) ? listItem.size() : position + 54;
-            }
-        }
-
         // Criando páginação
-        pageSize = (int) Math.ceil((double) listItem.size() / 54);
         int initialPosition = 0;
         int lastPosition = 54;
         for (int page = 1; page <= pageSize; page++) {
