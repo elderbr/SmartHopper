@@ -111,6 +111,13 @@ public class SmartHopper {
                 }
                 return grupo;
             }
+            if(nameCustom.contains("grupo")){
+                grupo = grupCtrl.findById(code);
+                if (name.contains("#")) {
+                    grupo.setBlocked(true);
+                }
+                return grupo;
+            }
         } catch (NumberFormatException e) {
             return null;
         }

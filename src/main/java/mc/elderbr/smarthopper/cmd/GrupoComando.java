@@ -16,9 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
-
-import static mc.elderbr.smarthopper.interfaces.VGlobal.GRUPO_MAP_NAME;
 
 public class GrupoComando implements CommandExecutor {
 

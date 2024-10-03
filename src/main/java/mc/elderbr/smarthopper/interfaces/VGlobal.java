@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.interfaces;
 
+
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import org.bukkit.Bukkit;
@@ -25,7 +26,6 @@ public interface VGlobal {
 
     // TODOS OS NOMES DO GRUPO
     List<String> GRUPO_NAME_LIST = new ArrayList<>();
-
     /*********************************************************
      *
      *                      ITEM

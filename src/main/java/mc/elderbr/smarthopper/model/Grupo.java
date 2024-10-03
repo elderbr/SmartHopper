@@ -83,12 +83,12 @@ public class Grupo implements IItem, Cloneable {
     }
 
     public Grupo removeItems(String name) {
-        items.remove(name);
+        items.remove(ItemController.FindByName(name));
         return this;
     }
 
     public Grupo removeItems(ItemStack itemStack) {
-        items.remove(Item.TO_ItemStack(itemStack));
+        items.remove(ItemController.FindByName(itemStack));
         return this;
     }
 
@@ -115,5 +115,22 @@ public class Grupo implements IItem, Cloneable {
         Grupo clone = (Grupo) super.clone();
         clone.items = new ArrayList<>(items);
         return clone;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("id: ").append(id).append("\n");
+        sb.append("name: ").append(name).append("\n");
+        sb.append("blocked: ").append(blocked).append("\n");
+        sb.append("translation: ").append("\n");
+        for( Map.Entry<String, String> lang : translation.entrySet()){
+            sb.append(lang.getKey()+": ").append(lang.getValue()).append("\n");
+        }
+        sb.append("Item: ").append("\n");
+        for(Item item : items){
+            sb.append(item.getName()).append("\n");
+        }
+        return sb.toString();
     }
 }

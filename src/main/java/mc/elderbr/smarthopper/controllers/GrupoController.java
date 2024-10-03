@@ -162,8 +162,7 @@ public class GrupoController implements GrupMsg, VGlobal {
         if (grupo == null || grupo.getId() < 1 || grupo.getName() == null) {
             throw new GrupoException(GRUP_INVALID);
         }
-        grupo = grupoDao.findById(grupo.getId());
-        if (grupo == null) {
+        if (grupoDao.findById(grupo.getId()) == null) {
             throw new GrupoException(String.format(GRUP_NOT_EXIST, grupo.getName()));
         }
         return grupoDao.update(grupo);

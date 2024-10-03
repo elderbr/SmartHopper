@@ -5,6 +5,7 @@ import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.controllers.SmartHopper;
 import mc.elderbr.smarthopper.dao.ConfigDao;
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.interfaces.Botao;
 import mc.elderbr.smarthopper.interfaces.IItem;
@@ -53,6 +54,27 @@ public class InventoryCustom implements Botao, VGlobal {
     private InventoryCustom() {
     }
 
+    public InventoryCustom(InventoryOpenEvent event){
+        inventoryTop = event.getView().getTopInventory();
+        titulo = event.getView().getTitle();
+        if(titulo.contains("Smart Hopper") || titulo.contains("Grupo")) {
+            listItem = new ArrayList<>();
+            smarthopper = new SmartHopper(titulo);
+            for (IItem type : smarthopper.getTypes()) {
+                if (type instanceof Item item) {
+                    listItem.add(item);
+                    continue;
+                }
+                if (type instanceof Grupo grup) {
+                    for (Item item : grup.getItems()) {
+                        listItem.add(item);
+                    }
+                }
+            }
+        }
+    }
+
+
     public InventoryCustom(InventoryClickEvent event) throws GrupoException {
         player = (Player) event.getWhoClicked();
         inventoryTop = event.getView().getTopInventory();
@@ -80,7 +102,7 @@ public class InventoryCustom implements Botao, VGlobal {
             if (titulo.contains(TITULO_GRUP_NEW)) {
                 grupo = new Grupo();
                 grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW, ""));
-                if (GRUPO_MAP_NAME.get(grupo.getName()) != null) {
+                if (GrupoDao.FindByName(grupo.getName()) != null) {
                     grupo = grupoCtrl.findByName(grupo.getName());
                     throw new GrupoException("O grupo já existe!!!");
                 }
@@ -261,10 +283,10 @@ public class InventoryCustom implements Botao, VGlobal {
         return this;
     }
 
-    public void btnNavegation(InventoryClickEvent event) throws GrupoException {
+    public boolean btnNavegation(InventoryClickEvent event) throws GrupoException {
 
         itemStackClicked = event.getCurrentItem();
-        if (itemStackClicked == null || itemStackClicked.getType() != Material.BARRIER) return;
+        if (itemStackClicked == null || equalButton(itemStack)) return false;
 
         if (itemStackClicked.hasItemMeta() && itemStackClicked.getItemMeta().hasCustomModelData()) {
             ItemMeta meta = itemStackClicked.getItemMeta();
@@ -273,8 +295,10 @@ public class InventoryCustom implements Botao, VGlobal {
                 int pageNumber = Integer.parseInt(meta.getDisplayName().substring(9).replaceAll("[^0-9]", ""));
                 pag = pageNumber;
                 show();
+                return true;
             }
         }
+        return false;
     }
 
     public String getTitle() {
@@ -299,5 +323,9 @@ public class InventoryCustom implements Botao, VGlobal {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public List<Item> getListItem(){
+        return listItem;
     }
 }
