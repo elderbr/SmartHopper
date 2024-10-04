@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.controllers.SmartHopper;
+import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
@@ -113,7 +114,7 @@ public class MoveHopperEvent implements Listener {
             }
         } catch (Exception e) {
             event.setCancelled(false);
-            if (e.getClass() == ItemException.class) {
+            if (e.getClass() == ItemException.class || e.getClass() == GrupoException.class) {
                 Msg.ServidorRed(e.getMessage());
             }
         }

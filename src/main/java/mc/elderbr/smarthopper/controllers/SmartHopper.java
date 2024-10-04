@@ -1,9 +1,12 @@
 package mc.elderbr.smarthopper.controllers;
 
 
+import mc.elderbr.smarthopper.exceptions.GrupoException;
+import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
+import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
@@ -12,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SmartHopper {
 
@@ -27,6 +31,8 @@ public class SmartHopper {
 
     private Grupo grupo;
     private GrupoController grupCtrl = new GrupoController();
+
+    private Block block = null;
 
     public SmartHopper() {
     }
@@ -46,6 +52,7 @@ public class SmartHopper {
     }
 
     public SmartHopper(@NotNull Hopper hopper) {
+        block = hopper.getBlock();
         listType = new ArrayList<>();
         name = hopper.getCustomName();
         if (name == null) {
@@ -61,6 +68,7 @@ public class SmartHopper {
     }
 
     public SmartHopper(@NotNull HopperMinecart hopperMinecart) {
+        block = hopperMinecart.getLocation().getBlock();
         listType = new ArrayList<>();
         name = hopperMinecart.getCustomName();
         if (name == null) {
@@ -76,6 +84,7 @@ public class SmartHopper {
     }
 
     public SmartHopper(Block block) {
+        this.block = block;
         listType = new ArrayList<>();
         if (block.getType() == Material.HOPPER) {
             myHopper = (Hopper) block.getState();
@@ -111,7 +120,7 @@ public class SmartHopper {
                 }
                 return grupo;
             }
-            if(nameCustom.contains("grupo")){
+            if (nameCustom.contains("grupo")) {
                 grupo = grupCtrl.findById(code);
                 if (name.contains("#")) {
                     grupo.setBlocked(true);
@@ -120,6 +129,13 @@ public class SmartHopper {
             }
         } catch (NumberFormatException e) {
             return null;
+        } catch (ItemException | GrupoException ex) {
+            if (Objects.nonNull(block)) {
+                Msg.ServidorBlue(String.format("Erro o funil nomeado como %s localizado na posição %d %d %d no mundo %s",
+                        name, block.getLocation().getBlockX(), block.getLocation().getBlockY(), block.getLocation().getBlockZ(), block.getWorld().getName()));
+            } else {
+                Msg.ServidorRed(ex.getMessage());
+            }
         }
         return null;
     }
