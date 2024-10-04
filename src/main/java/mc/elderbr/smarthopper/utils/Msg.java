@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Msg {
 
@@ -155,14 +156,15 @@ public class Msg {
         if (!list.isEmpty()) {
             PulaPlayer(player);
             for (IItem obj : list) {
-                if (obj instanceof Item item) {
+                if (Objects.isNull(obj)) {
+                    player.sendMessage("§c§lFunil invalido ou não existe!");
+                } else if (obj instanceof Item item) {
                     if (item.isBlocked()) {
                         player.sendMessage(Color("$cBloqueado$6 o item: " + item.toTranslation(player) + "$e ID: " + item.getId()));
                     } else {
                         player.sendMessage(Color("$2Item: $6" + item.toTranslation(player) + "$e ID: " + item.getId()));
                     }
-                }
-                if (obj instanceof Grupo grupo) {
+                } else if (obj instanceof Grupo grupo) {
                     if (grupo.isBlocked()) {
                         player.sendMessage(Color("$cBloqueado$6 o §9grupo: §e" + grupo.toTranslation(player) + "$e ID: " + grupo.getId()));
                     } else {
