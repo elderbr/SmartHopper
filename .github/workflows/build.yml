@@ -34,7 +34,7 @@ jobs:
           cp build/libs/SmartHopper-v*.jar version/SmartHopper-v$VERSION.jar
 
       - name: Upload the JAR (optional)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: SmartHopper-JAR
           path: version/SmartHopper-v*.jar
