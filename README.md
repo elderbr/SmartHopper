@@ -14,9 +14,9 @@ Para usar o separador inteligente basta ter uma **bigorna** e renome o funil com
 
 ---
 
-> Veja o tutorial completo [SmartHopper](https://youtu.be/fBIeZ57ka1M)
+> Veja o tutorial completo [SmartHopper](https://youtube.com/playlist?list=PL8oJmWW3nQz87G175wjBYRSWQmj6cismK&si=YO2cf0oUBVVgysoh)
 
-> Download SmartHopper v4.0.8 [SmartHopper](https://github.com/elderbr/SmartHopper/raw/main/version/SmartHopper-4.0.8.jar)
+> Download SmartHopper v4.1.0 [SmartHopper](https://github.com/elderbr/SmartHopper/blob/main/version/SmartHopper_v4.1.0.jar)
 
 <a href="https://www.spigotmc.org/resources/smarthopper.73646/" alt="SpigotMc" target="_blank">
     <img  src="https://github.com/elderbr/assets/blob/main/smarthopper/spigotmc_logo.png?raw=true"  width="150"  height="150">
@@ -86,18 +86,8 @@ do jogador. O jogador precisa está online para ser adicionado.
 
 ---
 
-## Livros
-
-### Livro dos grupos
-- Digite **/livro** para receber o livro com os nomes de todos os grupos
-
-### Livro com informações do Smart Hopper
-- Digite **/config** para receber o livro com os comandos do Smart Hopper
-
----
-
 ### Comando reload
-- Carrega as informações do Smart Hopper sem precisar reiniciar o servidor
+- Carrega as informações do Smart Hopper sem precisar reiniciar o servidor, busca novos itens criando novos grupos e adicionando ao grupos já existentes os novos itens. 
 
 ---
 
@@ -105,11 +95,6 @@ do jogador. O jogador precisa está online para ser adicionado.
 
 É importa ter um funil principal onde leva os itens para os funis que fazem a conexão formando uma encanação.
 É importante ter um funil de resto, ou seja, aquele baú onde vão ficar os itens que não foram configurados no separador.
-
-| Funil Principal |    Funil  |  Funil       |       Funil   |
-| --------------|-----------|--------------|---------------|
-| 				| Stone     | Stone Stairs |  Resto        |
-|               | Stone Slab | Stone Wall   |               |
 
 
 ### AVISO
@@ -119,7 +104,10 @@ Na coluna ***não pode ter um funil sem está configurado***, quando funil não 
 ### Agora com icone para navegar entre os itens do grupo
 
 #### Botão Próximo
-![Ir para próxima página](https://github.com/elderbr/SmartHopper/raw/main/src/main/resources/img/btn_next.png)
+![Ir para próxima página](https://raw.githubusercontent.com/elderbr/assets/refs/heads/main/smarthopper/navegation_page_2.png)
+
+#### Botão Retornar
+![Retorna página Anterior](https://raw.githubusercontent.com/elderbr/assets/refs/heads/main/smarthopper/navegation_page_1.png)
 
 #### Botão Salvar
-![botão salvar](https://github.com/elderbr/SmartHopper/raw/main/src/main/resources/img/btn_save.png)
+![botão salvar](https://raw.githubusercontent.com/elderbr/assets/refs/heads/main/smarthopper/navegation_save.png)
