@@ -44,5 +44,5 @@ jobs:
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v3
       with:
-        name: my-app-jar
-        path: build/libs/*.jar  # Caminho para o arquivo jar gerado
+        name: SmartHopper
+        path: version/*.jar  # Caminho para o arquivo jar gerado
