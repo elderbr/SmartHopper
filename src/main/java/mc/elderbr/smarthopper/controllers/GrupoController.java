@@ -83,7 +83,7 @@ public class GrupoController implements GrupMsg, VGlobal {
             throw new GrupoException(GRUP_NAME_REQUIRED);
         }
         for (Grupo grup : GRUPO_MAP_NAME.values()) {
-            if (grup.toTranslation(player).equalsIgnoreCase(name)) {
+            if (Objects.equals(grup.getName().toLowerCase(), name) || Objects.equals(grup.toTranslation(player).toLowerCase(), name.toLowerCase())) {
                 return grup;
             }
         }
@@ -92,12 +92,12 @@ public class GrupoController implements GrupMsg, VGlobal {
 
     public Grupo findByIdOrName(String value) {
         Grupo grup;
-        String grupName = value.toLowerCase();
+        String name = value.toLowerCase();
         try {
-            int code = Integer.parseInt(grupName.replaceAll("[^0-9]", ""));
+            int code = Integer.parseInt(name.replaceAll("[^0-9]", ""));
             grup = grupoDao.findById(code);
         } catch (NumberFormatException e) {
-            grup = grupoDao.findByName(grupName);
+            grup = grupoDao.findByName(name);
         }
         if (grup == null) {
             throw new GrupoException(String.format(GRUP_NOT_EXIST, value));
@@ -107,12 +107,12 @@ public class GrupoController implements GrupMsg, VGlobal {
 
     public Grupo findByIdOrName(Player player, String name) {
         Grupo grup;
-        String grupName = name.toLowerCase();
+        String grupName = name.trim().toLowerCase();
         try {
             int code = Integer.parseInt(grupName.replaceAll("[^0-9]", ""));
             grup = grupoDao.findById(code);
         } catch (NumberFormatException e) {
-            grup = findByName(player, name);
+            grup = findByName(player, grupName);
         }
         if (grup == null) {
             throw new GrupoException(String.format(GRUP_NOT_EXIST, name));

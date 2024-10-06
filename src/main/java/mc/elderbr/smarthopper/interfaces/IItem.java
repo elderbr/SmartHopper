@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 
 import java.util.Map;
+import java.util.Objects;
 
 public interface IItem {
 
@@ -41,7 +42,7 @@ public interface IItem {
 
     default String toTranslation(Player player) {
         String lang = player.getLocale();
-        if (getTranslations().get(lang) != null) {
+        if (Objects.nonNull(getTranslations().get(lang))) {
             return getTranslations().get(lang);
         }
         return getName();
