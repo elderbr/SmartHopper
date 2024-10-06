@@ -287,9 +287,12 @@ public class GrupoController implements GrupMsg, VGlobal {
             }
             for (String nameItem : ITEM_MAP_NAME.keySet()) {
                 if (GrupoCreate.containsItem(nameGrup, nameItem)) {
+                    Item item = itemDao.findByName(nameItem);
+                    item.addGrups(grup.getId());// Adiciona o grupo na lista do item
+                    itemDao.update(item);// Atualiza o item
                     // Adiciona o item ao grupo se não existir na lista
                     if (grup.getItemsNames().contains(nameItem)) continue;
-                    grup.addItems(itemDao.findByName(nameItem));
+                    grup.addItems(item);
                 }
             }
             grupDao.save(grup);
