@@ -1,48 +1,40 @@
-name: Java CI with Gradle
+name: Build SmartHopper
 
 on:
   push:
     branches:
-      - main  # O workflow será disparado em pushes para a branch main
-  pull_request:
-    branches:
-      - main  # Também será disparado quando houver pull requests para a branch main
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'  # Use a versão do Java que você precisa
+      - name: Set up JDK 22
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '22'
 
-    - name: Cache Gradle packages
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
 
-    - name: Build with Gradle
-      run: ./gradlew build
+      - name: Create version directory if not exists
+        run: mkdir -p version
 
-    - name: Generate JAR
-      run: ./gradlew jar
+      - name: Copy JAR to version directory
+        run: |
+          VERSION=$(./gradlew -q printVersion)
+          cp build/libs/SmartHopper-v*.jar version/SmartHopper-v$VERSION.jar
 
-    - name: Upload JAR artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: SmartHopper
-        path: version/*.jar  # Caminho para o arquivo jar gerado
+      - name: Upload the JAR (optional)
+        uses: actions/upload-artifact@v2
+        with:
+          name: SmartHopper-JAR
+          path: version/SmartHopper-v*.jar
