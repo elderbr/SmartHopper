@@ -1,0 +1,22 @@
+#Configuração Separador inteligente SmartHopper
+author: ElderBR
+discord: ElderBR#5398
+#Tutorial de como usar
+tutorial: https://youtube/fBIeZ57ka1M?si=ZqE5TQRG2KjlaHdD
+#Versão do plugin
+version: 4.0.9
+# Para ter uma visualização melhor use a textura personalizada do Smart Hopper
+# a textura traz imagens para os botões de navegação de pagina do grupo
+# textura do botão próxima página
+# textura do botão anterior retorna a página anterior
+# textura do botão salvar que salva ou atera o grupo
+# link texture pack http://elderbr.com/minecraft/textures/SmartHopper.zip
+useTexture: true
+#Adminsitradores é responsável por adicionar ou remover operadores
+#Fica responsável por adicionar, alterar ou remover grupos
+adm:
+  - ElderBR
+#Linguagens disponível
+lang:
+  - pt_br
+  - pt_pt
