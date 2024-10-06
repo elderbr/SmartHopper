@@ -265,6 +265,9 @@ public class InventoryCustom implements Botao, VGlobal {
             }
         }
         player.openInventory(inventory);// Abrindo o inventário
+        if(Objects.nonNull(grupo)) {// Se o grupo existir mostra o nome do grupo para o player
+            Msg.Grupo(player, grupo);
+        }
         return this;
     }
 
