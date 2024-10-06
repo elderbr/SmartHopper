@@ -119,3 +119,6 @@ run/
 # Meus documentos
 .txt
 !version/*.jar
+
+# Não ignorar os arquivos do gradle
+!gradle/wrapper/
