@@ -1,385 +1,914 @@
 lang: pt_br
-acacia log: Tronco de acácia
-acacia wood: Madeira de acácia
-acacia: Acácia
-andesite slab: Laje de andesito
-andesite stairs: Escadas de andesito
-andesite: Andesito
-anvil: Bigorna
-apple: Maçã
-arrow: Flecha
+type: grupo
+acacia: Acácias
+acacia fence: Cercas De Acácia
+acacia log: Troncos De Acácia
+acacia wood: Madeiras De Acácia
+affinity: Afinidades
+amethyst: Ametistas
+amethyst bud: Brotos De Ametista
+andesite: Andesitos
+andesite slab: Lajes De Andesito
+andesite stairs: Escadas De Andesito
+anvil: Bigornas
+apple: Maçãs
+aqua: Águas
+armadillo: Tatus
+armor: Armaduras
+armor trim smithing template: Modelos De Adornos De Armaduras
+arrow: Flechas
+arthropods: Artrópodes
+aspect: Aspectos
+awkward: Desajeitados
 axe: Machados
-awkward: Poção estranha
+axolotl: Axolotes
+azalea: Azáleas
+azalea leaves: Folhas De Azáleas
 ball: Bolas
-banner pattern: Desenho para estandarte
-banner: Estandarte
-basalt: Basalto
+bamboo: Bambus
+bamboo block: Blocos De Bambu
+bamboo fence: Cercas De Bambu
+bamboo mosaic: Mosaicos De Bambu
+bane: Maldições
+banner: Bandeiras
+banner pattern: Padrões De Bandeira
+basalt: Basaltos
 bed: Camas
-bee: Colmeia
+bee: Abelhas
+beef: Carnes Bovinas
 beetroot: Beterrabas
-birch log: Tronco de bétula
-birch wood: Madeira de bétula
-birch: Bétula
-black concrete: Cimento preto
-black stained: Vidros preta
-black: Preto
-blackstone brick: Tijolos de pedra-negra
-blackstone bricks: Tijolos de pedra-negra polida
-blackstone slab: Laje de pedra-negra
-blackstone stairs: Escadas de pedra-negra
-blackstone wall: Muro de pedra-negra
-blackstone: Pedra-negra
-blaze: Blaze
+berries: Bagas
+binding: Vinculações
+birch: Bétulas
+birch fence: Cercas De Bétula
+birch log: Troncos De Bétula
+birch wood: Madeiras De Bétula
+black: Pretos
+black concrete: Concretos Pretos
+black stained: Manchados De Preto
+black stained glass: Vidros Manchados De Preto
+blackstone: Pedras Negras
+blackstone slab: Lajes De Pedra Negra
+blackstone stairs: Escadas De Pedra Negra
+blackstone wall: Paredes De Pedra Negra
+blast: Explosões
+blaze: Chamas
 block: Blocos
-blue banner: Estandarte azul
-blue bed: Cama azul
-blue carpet: Tapete azul
-blue concrete powder: Cimento azul
-blue concrete: Cimento azul
-blue dye: Corante azul
-blue glazed: Azulejo azul
-blue shulker: Caixa de shulker azul
-blue stained glass pane: Vidraça azul
-blue terracotta: Terracota azul
-blue wool: Lã azul
-blue: Azul
-boat: Botes
+blue: Azuis
+blue banner: Bandeiras Azuis
+blue bed: Camas Azuis
+blue candle: Velas Azuis
+blue carpet: Tapetes Azuis
+blue concrete: Concretos Azuis
+blue concrete powder: Pó De Concreto Azul
+blue dye: Corantes Azuis
+blue glazed terracotta: Terracotas Esmaltadas Azuis
+blue shulker box: Caixas De Shulker Azuis
+blue stained: Manchados De Azul
+blue stained glass: Vidros Manchados De Azul
+blue stained glass pane: Painéis De Vidro Manchados De Azul
+blue terracotta: Terracotas Azuis
+blue wool: Lãs Azuis
+boat: Barcos
 bone: Ossos
-book: Livro
+book: Livros
+bookshelf: Estantes De Livros
 boots: Botas
-bottle: Frascos
-bow: Arco
-brain coral block: Bloco de coral-de-cérebro
-brain coral: Coral-de-cérebro
-brick slab: Laje de tijolos
-brick stairs: Escadas de tijolos
-brick wall: Muro de tijolos
+bottle: Garrafas
+box: Caixas
+brain: Cérebros
+brain coral: Corais Cerebrais
+brain coral block: Blocos De Coral Cerebral
+brain coral fan: Leques De Coral Cerebral
+breach: Brechas
+breathing: Respirações
+breeze: Brisas
 brick: Tijolos
-bricks: Blocos de tijolos
-brown concrete: Cimento marrom
-brown mushroom: Bloco de cogumelo marrom
-brown: Marrom
-bubble coral block: Bloco de coral-de-bolha
-bubble coral fan: Gorgônia-de-bolha
-bubble coral: Bloco de coral-de-bolha
-bubble: Coluna de bolhas
+brick slab: Lajes De Tijolo
+brick stairs: Escadas De Tijolo
+brick wall: Paredes De Tijolo
+brown: Marrons
+brown concrete: Concretos Marrons
+brown mushroom: Cogumelos Marrons
+brown stained: Manchados De Marrom
+brown stained glass: Vidros Manchados De Marrom
+bubble: Bolhas
+bubble coral: Corais De Bolha
+bubble coral block: Blocos De Coral De Bolha
+bubble coral fan: Leques De Coral De Bolha
 bucket: Baldes
+bud: Brotos
+bulb: Lâmpadas
+burst: Explosões
 bush: Arbustos
-button: Botão
-campfire: Fogueira
-carne crua: Carne Crua
+button: Botões
+campfire: Fogueiras
+candle: Velas
 carpet: Tapetes
 carrot: Cenouras
-chainmail: Armaduras de malha
-harming: Poção de dano
-chest: Baú
-chestplate: Peitoral
-chicken: Carne de Galinha
-chorus fruit: Fruta do coro
-chorus: Coro
-clay: Argila
-coal: Carvão
-cobblestone slab: Laje de pedregulho
-cobblestone stairs: Escadas de pedregulho
-cobblestone wall: Muro de pedregulho
-cobblestone: Pedregulho
-cod: Bacalhau
-concrete: Cimentos
-cooked: Assados
-coral block: Bloco de coral
-coral fan: Cérebro
-coral: Coral
-cracked stone: Tijolos de pedra rachados
-cracked: Tijolos rachados
-creeper: Creeper
-crimson hyphae: Hifas carmesins
-crimson stem: Caule carmesim
-crimson: Carmesim
-crystal: Cristal
-cut red sandstone: Arenito vermelho lapidado
-cut sandstone: Laje de arenito lapidado
-cut: Lapidado
-cyan concrete: Cimento ciano
-cyan: ciano
-dark oak log: Tronco de carvalho escuro
-dark oak wood: Madeira de carvalho escuro
-dark oak: Carvalho escuro
-dark prismarine: Prismarinho escuro
-dark: Itens Escuro
-dead brain coral: Coral-de-cérebro morto
-dead brain: Cérebro morto
-dead bubble coral: Coral-de-bolha morto
-dead fire coral: Coral-de-fogo morto
-dead horn coral: Coral-de-chifre morto
-dead tube coral: Coral-de-tubo morto
-dead: Morto
-detector: Detector
-diamond: Diamante
-diamond tools: Ferramentas de diamante
-diorite slab: Laje de diorito
-diorite stairs: Escadas de diorito
-diorite: Diorito
+cat: Gatos
+chain: Correntes
+chainmail: Cotas De Malha
+channeling: Canalizações
+charge: Cargas
+charged: Carregados
+cherry: Cerejeiras
+cherry fence: Cercas De Cerejeira
+cherry log: Troncos De Cerejeira
+cherry wood: Madeiras De Cerejeira
+chest: Baús
+chest boat: Barcos Com Baú
+chestplate: Peitorais
+chicken: Frangos
+chiseled: Entalhados
+chiseled copper: Cobre Entalhado
+chiseled tuff: Tufo Entalhado
+chorus: Coros
+chorus fruit: Frutas De Coro
+clay: Argilas
+coal: Carvões
+coal ore: Minérios De Carvão
+cobbled: Pedregosos
+cobbled deepslate: Ardósias Profundas Pedregosas
+cobblestone: Pedregulhos
+cobblestone slab: Lajes De Pedregulho
+cobblestone stairs: Escadas De Pedregulho
+cobblestone wall: Paredes De Pedregulho
+cod: Bacalhaus
+command: Comandos
+command block: Blocos De Comando
+compass: Bússolas
+concrete: Concretos
+concrete powder: Pós De Concreto
+cooked: Cozidos
+copper: Cobres
+copper block: Blocos De Cobre
+copper bulb: Lâmpadas De Cobre
+copper door: Portas De Cobre
+copper grate: Grades De Cobre
+copper ore: Minérios De Cobre
+copper slab: Lajes De Cobre
+copper stairs: Escadas De Cobre
+copper trapdoor: Alçapões De Cobre
+coral: Corais
+coral block: Blocos De Coral
+coral fan: Leques De Coral
+cracked: Rachados
+cracked deepslate: Ardósias Profundas Rachadas
+creator: Criadores
+creeper: Creepers
+crimson: Carmesins
+crimson fence: Cercas Carmesins
+crimson hyphae: Hifas Carmesins
+crimson stem: Caules Carmesins
+curse: Maldições
+curse 1: Maldição 1
+cut: Cortados
+cut copper: Cobres Cortados
+cut copper slab: Lajes De Cobre Cortado
+cut copper stairs: Escadas De Cobre Cortado
+cut red: Vermelhos Cortados
+cut red sandstone: Arenitos Vermelhos Cortados
+cut sandstone: Arenitos Cortados
+cyan: Cianos
+cyan concrete: Concretos Cianos
+cyan stained: Manchados De Ciano
+cyan stained glass: Vidros Manchados De Ciano
+damage: Dano
+dark: Escuros
+dark oak: Carvalhos Escuros
+dark oak fence: Cercas De Carvalho Escuro
+dark oak log: Troncos De Carvalho Escuro
+dark oak wood: Madeiras De Carvalho Escuro
+dark prismarine: Prismarinas Escuras
+dead: Mortos
+dead brain: Cérebros Mortos
+dead brain coral: Corais Cerebrais Mortos
+dead bubble: Bolhas Mortas
+dead bubble coral: Corais De Bolha Mortos
+dead fire: Fogo Morto
+dead fire coral: Corais De Fogo Mortos
+dead horn: Chifres Mortos
+dead horn coral: Corais De Chifre Mortos
+dead tube: Tubos Mortos
+dead tube coral: Corais De Tubo Mortos
+deepslate: Ardósias Profundas
+deepslate brick: Tijolos De Ardósia Profunda
+deepslate slab: Lajes De Ardósia Profunda
+deepslate stairs: Escadas De Ardósia Profunda
+deepslate tile: Azulejos De Ardósia Profunda
+deepslate tiles: Azulejos De Ardósia Profunda
+deepslate wall: Paredes De Ardósia Profunda
+density: Densidades
+depth: Profundidades
+detector: Detectores
+diamond: Diamantes
+diamond armor: Armaduras De Diamante
+diamond ore: Minérios De Diamante
+diamond tools: Ferramentas De Diamante
+diorite: Dioritos
+diorite slab: Lajes De Diorito
+diorite stairs: Escadas De Diorito
 dirt: Terras
-disc: Disco musical
+disc: Discos
 door: Portas
-dragon: Dragão
-dried kelp: Algas secas
-dust: Itens Pó
+dragon: Dragões
+dried: Secos
+dried kelp: Algas Secas
+dripleaf: Folhas Gotejantes
+dripstone: Pedras Gotejantes
 dye: Corantes
+edge: Bordas
+efficiency: Eficiências
 egg: Ovos
-emerald: Esmeralda
-enchanted book: Livro encantado
-enchanted: Encantado
-end stone: Tijolos de pedra do End
-end: Itens do fim
+emerald: Esmeraldas
+emerald ore: Minérios De Esmeralda
+enchanted: Encantados
+enchanted book: Livros Encantados
+enchanted book aqua: Livros Encantados De Água
+enchanted book aqua affinity: Livros Encantados De Afinidade Aquática
+enchanted book bane: Livros Encantados De Maldição
+enchanted book bane of: Livros Encantados Da Maldição De
+enchanted book bane of arthropods: Livros Encantados Da Maldição Dos Artrópodes
+enchanted book binding: Livros Encantados De Vinculação
+enchanted book binding curse: Livros Encantados Da Maldição De Vinculação
+enchanted book blast: Livros Encantados De Explosão
+enchanted book blast protection: Livros Encantados De Proteção Contra Explosão
+enchanted book breach: Livros Encantados De Brecha
+enchanted book channeling: Livros Encantados De Canalização
+enchanted book density: Livros Encantados De Densidade
+enchanted book depth: Livros Encantados De Profundidade
+enchanted book depth strider: Livros Encantados De Passos Profundos
+enchanted book efficiency: Livros Encantados De Eficiência
+enchanted book feather: Livros Encantados De Pena
+enchanted book feather falling: Livros Encantados De Queda Suave
+enchanted book fire: Livros Encantados De Fogo
+enchanted book fire aspect: Livros Encantados De Aspecto De Fogo
+enchanted book fire protection: Livros Encantados De Proteção Contra Fogo
+enchanted book flame: Livros Encantados De Chama
+enchanted book fortune: Livros Encantados De Fortuna
+enchanted book frost: Livros Encantados De Geada
+enchanted book frost walker: Livros Encantados De Caminhante Gelado
+enchanted book impaling: Livros Encantados De Empalamento
+enchanted book infinity: Livros Encantados De Infinidade
+enchanted book knockback: Livros Encantados De Repulsão
+enchanted book looting: Livros Encantados De Saque
+enchanted book loyalty: Livros Encantados De Lealdade
+enchanted book luck: Livros Encantados De Sorte
+enchanted book luck of: Livros Encantados Da Sorte De
+enchanted book luck of the: Livros Encantados Da Sorte Do
+enchanted book luck of the sea: Livros Encantados Da Sorte Do Mar
+enchanted book lure: Livros Encantados De Isca
+enchanted book mending: Livros Encantados De Conserto
+enchanted book multishot: Livros Encantados De Multitiro
+enchanted book piercing: Livros Encantados De Perfuração
+enchanted book power: Livros Encantados De Poder
+enchanted book projectile: Livros Encantados De Projétil
+enchanted book projectile protection: Livros Encantados De Proteção Contra Projéteis
+enchanted book protection: Livros Encantados De Proteção
+enchanted book punch: Livros Encantados De Impacto
+enchanted book quick: Livros Encantados De Rapidez
+enchanted book quick charge: Livros Encantados De Recarga Rápida
+enchanted book respiration: Livros Encantados De Respiração
+enchanted book riptide: Livros Encantados De Correnteza
+enchanted book sharpness: Livros Encantados De Afiamento
+enchanted book silk: Livros Encantados De Seda
+enchanted book silk touch: Livros Encantados De Toque Suave
+enchanted book smite: Livros Encantados De Golpe
+enchanted book soul: Livros Encantados De Alma
+enchanted book soul speed: Livros Encantados De Velocidade Da Alma
+enchanted book sweeping: Livros Encantados De Varredura
+enchanted book sweeping edge: Livros Encantados De Borda Varrida
+enchanted book swift: Livros Encantados De Agilidade
+enchanted book swift sneak: Livros Encantados De Furtividade Rápida
+enchanted book thorns: Livros Encantados De Espinhos
+enchanted book unbreaking: Livros Encantados De Inquebrável
+enchanted book vanishing: Livros Encantados De Desaparecimento
+enchanted book vanishing curse: Livros Encantados Da Maldição Do Desaparecimento
+enchanted book wind: Livros Encantados De Vento
+enchanted book wind burst: Livros Encantados De Rajada De Vento
+end: Fim
+end stone: Pedras Do Fim
+end stone brick: Tijolos De Pedra Do Fim
+ender: Enders
+exposed: Expostos
+exposed chiseled copper: Cobre Entalhado Exposto
+exposed copper: Cobres Expostos
+exposed copper bulb: Lâmpadas De Cobre Expostas
+exposed copper door: Portas De Cobre Expostas
+exposed copper grate: Grades De Cobre Expostas
+exposed copper trapdoor: Alçapões De Cobre Expostos
+exposed cut: Cortados Expostos
+exposed cut copper: Cobres Cortados Expostos
+exposed cut copper slab: Lajes De Cobre Cortado Exposto
+exposed cut copper stairs: Escadas De Cobre Cortado Exposto
 eye: Olhos
-fan: Leque de coral
-fence gate: Portão
-fern: Samambaia
-fire coral block: Bloco de coral-de-fogo
-fire coral fan: Leque de Gorgônia-de-fogo
-fire coral: Coral-de-fogo morto
-fire resistance: Poção de resistência ao fogo
-firework: Fogo de artifício
+falling: Quedas
+fan: Leques
+feather: Penas
+fence: Cercas
+fence gate: Portões De Cerca
+fern: Samambaias
+fire: Fogos
+fire coral: Corais De Fogo
+fire coral block: Blocos De Coral De Fogo
+fire coral fan: Leques De Coral De Fogo
+fire resistance: Resistências Ao Fogo
+firework: Fogos De Artifício
 fish: Peixes
-flowers: Flores
-fruit: Fruta do coro
+flame: Chamas
+flint: Pederneiras
+flow: Fluxos
+flower: Flores
+flowering: Florescendo
+flowering azalea: Azáleas Floridas
+fortune: Fortunas
+frame: Molduras
+froglight: Luzes De Sapo
+frost: Geadas
+fruit: Frutas
 fungus: Fungos
 furnace: Fornos
-glass pane: Vidraças
+gate: Portões
+ghast: Ghasts
 glass: Vidros
-glazed: Azulejo
-glowstone: Item luminoso Nether
-gold: Ouro
-golden: Dourada
-golden tools: Ferramentas de Ouro
-granite slab: Laje de granito
-granite stairs: Escadas de granito
-granite: Granito
-grass: Grama
-gray: Cinza
-green concrete: Cimento verde
-green: Verde
-head: Cabeça
-helmet: Capacete de malha
-hoe: Enxada
+glass pane: Painéis De Vidro
+glazed: Esmaltados
+glazed terracotta: Terracotas Esmaltadas
+glow: Brilhos
+glowstone: Pedras Luminosas
+goat: Cabras
+gold: Ouros
+gold block: Blocos De Ouro
+gold ore: Minérios De Ouro
+golden: Dourados
+golden apple: Maçãs Douradas
+golden armor: Armaduras Douradas
+golden tools: Ferramentas Douradas
+golem: Golems
+golem spawn egg: Ovos De Invocação De Golem
+granite: Granitos
+granite slab: Lajes De Granito
+granite stairs: Escadas De Granito
+grass: Gramas
+grate: Grades
+gravel: Cascalhos
+gray: Cinzas
+gray banner: Bandeiras Cinzas
+gray bed: Camas Cinzas
+gray candle: Velas Cinzas
+gray carpet: Tapetes Cinzas
+gray concrete: Concretos Cinzas
+gray concrete powder: Pó De Concreto Cinza
+gray dye: Corantes Cinzas
+gray glazed terracotta: Terracotas Esmaltadas Cinzas
+gray shulker box: Caixas De Shulker Cinzas
+gray stained: Manchados De Cinza
+gray stained glass: Vidros Manchados De Cinza
+gray stained glass pane: Painéis De Vidro Manchados De Cinza
+gray terracotta: Terracotas Cinzas
+gray wool: Lãs Cinzas
+green: Verdes
+green concrete: Concretos Verdes
+green stained: Manchados De Verde
+green stained glass: Vidros Manchados De Verde
+guardian: Guardiões
+guardian spawn egg: Ovos De Invocação De Guardião
+guster: Gusters
+hanging: Suspensos
+hanging sign: Placas Suspensas
+harming: Ferimentos
+head: Cabeças
+heal: Curar
+healing: Curando
+heart: Corações
+heavy: Pesados
+helmet: Capacetes
+hoe: Enxadas
 honey: Mel
-honeycomb: Favo de mel
-hopper: Funil
-horn coral block: Bloco de coral-de-chifre
-horn coral fan: Gorgônia-de-chifre
-horn coral: Coral-de-chifre
-horse armor: Armadura de cavalo
+honeycomb: Favos De Mel
+hopper: Funis
+horn: Chifres
+horn coral: Corais De Chifre
+horn coral block: Blocos De Coral De Chifre
+horn coral fan: Leques De Coral De Chifre
+horse: Cavalos
+horse armor: Armaduras De Cavalo
+horse spawn egg: Ovos De Invocação De Cavalo
 hyphae: Hifas
 ice: Gelo
-infested stone: Pedra infestados
-infested: Pedra infestados
-ingot: Barras
-instant damage: Poção de dano
-instant heal: Poção de cura
-invisibility: Poção de invisibilidade
-iron: Ferro
-iron tools: Ferramentas de Ferro
-jungle log: Tronco de árvore da selva
-jungle wood: Madeira da selva
-jungle: Selva
-jump: Poção de salto
-kelp: Algas secas
+impaling: Empalamentos
+infested: Infestados
+infested stone: Pedras Infestadas
+infinity: Infinitos
+ingot: Lingotes
+ink: Tintas
+ink sac: Sacos De Tinta
+instant: Instantâneos
+instant damage: Dano Instantâneo
+instant heal: Cura Instantânea
+invisibility: Invisibilidades
+iron: Ferros
+iron armor: Armaduras De Ferro
+iron block: Blocos De Ferro
+iron ore: Minérios De Ferro
+iron tools: Ferramentas De Ferro
+item: Itens
+item frame: Molduras De Itens
+jump: Saltos
+jungle: Selvas
+jungle fence: Cercas De Selva
+jungle log: Troncos De Selva
+jungle wood: Madeiras De Selva
+kelp: Algas
+key: Chaves
+knockback: Repulsões
 lantern: Lanternas
-lazuli: Lápis-lazúli
-leather: Couro
+lapis: Lápis-Lazúlis
+lapis ore: Minérios De Lápis-Lazúli
+large: Grandes
+leaping: Saltos Altos
+leather: Couros
 leaves: Folhas
-leaping: Poção de salto
 leggings: Calças
-levitation: Poção de levitação
-light blue: Azul-claro
-light gray: Cinza-claro
-lime concrete: Cimento verde-limão
-lime: Verde-limão
-lingering potion: Poção prolongada
-log: Tronco
-luck: Poção de sorte
-magenta concrete: Cimento magenta
-magenta: Magenta
-magma: Magma
-map: Mapa
-melon slice: Fatia de melancia
-melon: Melancia
-minecart: Carrinhos
-mossy cobblestone: Pedregulho musgoso
-mossy stone bricks: Blocos de pedra musgosos
-mossy stone: Tijolos de pedra musgosos
+light: Luzes
+light blue: Azul-Claros
+light blue concrete: Concretos Azul-Claro
+light blue stained: Manchados De Azul-Claro
+light blue stained glass: Vidros Manchados De Azul-Claro
+light gray: Cinza-Claros
+light gray concrete: Concretos Cinza-Claro
+light gray stained: Manchados De Cinza-Claro
+light gray stained glass: Vidros Manchados De Cinza-Claro
+lily: Lírios
+lime: Verdes-Limão
+lime concrete: Concretos Verde-Limão
+lime stained: Manchados De Verde-Limão
+lime stained glass: Vidros Manchados De Verde-Limão
+lingering: Persistentes
+lingering potion: Poções Persistentes
+lingering potion instant: Poções Persistentes Instantâneas
+lingering potion long: Poções Persistentes Longas
+lingering potion strong: Poções Persistentes Fortes
+lingering potion water: Poções Persistentes De Água
+llama: Lhamas
+llama spawn egg: Ovos De Invocação De Lhama
+log: Troncos
+long: Longos
+long fire resistance: Resistências Ao Fogo Longas
+long invisibility: Invisibilidades Longas
+long leaping: Saltos Longos
+long night vision: Visões Noturnas Longas
+long poison: Venenos Longos
+long regeneration: Regenerações Longas
+long slow falling: Quedas Lentas Longas
+long slowness: Lentidões Longas
+long strength: Forças Longas
+long swiftness: Rapidezes Longas
+long turtle master: Mestres Da Tartaruga Longos
+long water breathing: Respirações Subaquáticas Longas
+long weakness: Fraquezas Longas
+looting: Saques
+loyalty: Lealdades
+luck: Sortes
+lure: Iscas
+magenta: Magentas
+magenta concrete: Concretos Magenta
+magenta stained: Manchados De Magenta
+magenta stained glass: Vidros Manchados De Magenta
+magma: Magmas
+mangrove: Mangues
+mangrove fence: Cercas De Mangue
+mangrove log: Troncos De Mangue
+mangrove roots: Raízes De Mangue
+mangrove wood: Madeiras De Mangue
+map: Mapas
+master: Mestres
+melon: Melancias
+melon slice: Fatias De Melancia
+mending: Consertos
+minecart: Vagões
+mosaic: Mosaicos
+moss: Musgos
 mossy: Musgosos
-mushroom block: Bloco de cogumelo
-mushroom: Cogumelo
-music disc: Disco musical
-mutton: Carneiro
-mundane: Poção comum
-nether brick slab: Laje de tijolos do Nether
-nether brick stairs: Escadas de tijolos do Nether
-nether brick wall: Muro de tijolos do Nether
-nether brick: Tijolos do Nether
-nether bricks: Blocos de Tijolos do Nether
-nether wart: Itens do fungos do Nether
-nether: Itens do Nether
-netherite: Netherita
-netherite tools: Ferramentas de Netherita
-night vision: Poção de visão noturna
-nugget: Pepita
-nylium: Nicélio
-oak door: Porta de carvalho
-oak fence gate: Portão de carvalho
-oak fence: Portão de carvalho escuro
-oak leaves: Folhas de carvalho escuro
-oak log: Tronco de carvalho escuro
-oak planks: Tábuas de carvalho escuro
-oak pressure: Placa de pressão de carvalho
-oak sapling: Muda de carvalho escuro
-oak sign: Placa de carvalho escuro
-oak slab: Laje de carvalho escuro
-oak stairs: Escadas de carvalho escuro
-oak trapdoor: Alçapão de carvalho escuro
-oak wall sign: Placa de carvalho de parede
-oak wall: Placa de carvalho escuro de parede
-oak wood: Madeira de carvalho escuro
-oak: Carvalho
-obsidian: Obsidiana
-orange concrete: Cimento laranja
-orange: Laranja
-ore: Minério
-pane: Vidraça
-pattern: Desenho para estandarte
-pickaxe: Picareta
-pillar: Pilar
-pink: Rosa
-piston: Pistão
+mossy cobblestone: Pedregulhos Musgosos
+mossy stone: Pedras Musgosas
+mossy stone brick: Tijolos De Pedra Musgosa
+mud: Lamas
+mud brick: Tijolos De Lama
+multishot: Multitiros
+mundane: Comuns
+mushroom: Cogumelos
+mushroom block: Blocos De Cogumelo
+music: Músicas
+music disc: Discos De Música
+music disc creator: Criadores De Disco De Música
+mutton: Carnes De Carneiro
+nether: Infernos
+nether brick: Tijolos Do Inferno
+nether brick slab: Lajes De Tijolo Do Inferno
+nether brick stairs: Escadas De Tijolo Do Inferno
+nether brick wall: Paredes De Tijolo Do Inferno
+nether wart: Verrugas Do Inferno
+netherite: Netheritas
+netherite armor: Armaduras De Netherita
+netherite tool: Ferramentas De Netherita
+night: Noites
+night vision: Visões Noturnas
+nugget: Pepitas
+nylium: Nílias
+oak: Carvalhos
+oak boat: Barcos De Carvalho
+oak button: Botões De Carvalho
+oak chest boat: Barcos Com Baú De Carvalho
+oak door: Portas De Carvalho
+oak fence: Cercas De Carvalho
+oak fence gate: Portões De Cerca De Carvalho
+oak hanging sign: Placas Suspensas De Carvalho
+oak leaves: Folhas De Carvalho
+oak log: Troncos De Carvalho
+oak planks: Tábuas De Carvalho
+oak pressure plate: Placas De Pressão De Carvalho
+oak sapling: Mudas De Carvalho
+oak sign: Placas De Carvalho
+oak slab: Lajes De Carvalho
+oak stairs: Escadas De Carvalho
+oak trapdoor: Alçapões De Carvalho
+oak wood: Madeiras De Carvalho
+obsidian: Obsidianas
+ominous: Ominosos
+oozing: Gotejantes
+orange: Laranjas
+orange concrete: Concretos Laranja
+orange stained: Manchados De Laranja
+orange stained glass: Vidros Manchados De Laranja
+ore: Minérios
+oxidized: Oxidados
+oxidized chiseled copper: Cobre Entalhado Oxidado
+oxidized copper: Cobres Oxidados
+oxidized copper bulb: Lâmpadas De Cobre Oxidadas
+oxidized copper door: Portas De Cobre Oxidadas
+oxidized copper grate: Grades De Cobre Oxidadas
+oxidized copper trapdoor: Alçapões De Cobre Oxidados
+oxidized cut: Cortados Oxidados
+oxidized cut copper: Cobres Cortados Oxidados
+oxidized cut copper slab: Lajes De Cobre Cortado Oxidado
+oxidized cut copper stairs: Escadas De Cobre Cortado Oxidado
+packed: Compactados
+pane: Painéis
+pattern: Padrões
+phantom: Fantasmas
+pickaxe: Picaretas
+piercing: Perfurações
+piglin: Piglins
+piglin spawn egg: Ovos De Invocação De Piglin
+pillar: Pilares
+pink: Rosas
+pink concrete: Concretos Rosa
+pink stained: Manchados De Rosa
+pink stained glass: Vidros Manchados De Rosa
+piston: Pistões
+pitcher: Jarras
 planks: Tábuas
+plant: Plantas
 plate: Placas
-polished blackstone bricks: Tijolos de pedra-negra polida
-polished blackstone: Pedra-negra polida
-polished diorite: Laje de diorito polido
-polished granite: Granito polido
-polished: Polidas
-porkchop: Costeleta de porco
+poison: Venenos
+polished: Polidos
+polished andesite: Andesitos Polidos
+polished blackstone: Pedras Negras Polidas
+polished blackstone brick: Tijolos De Pedra Negra Polida
+polished deepslate: Ardósias Profundas Polidas
+polished diorite: Dioritos Polidos
+polished granite: Granitos Polidos
+polished tuff: Tufos Polidos
+porkchop: Costeletas De Porco
+pot: Potes
 potato: Batatas
-potion: Poção
-poison: Poção de veneno
-powder: Cimento
-pressure plate: Placa de pressão
-prismarine brick: Tijolos de prismarinho
-prismarine slab: Laje de prismarinho
-prismarine stairs: Escadas de prismarinho
-prismarine: Prismarinho
-pufferfish: Baiacu
-pumpkin: Abóbora
-purple concrete: Cimento roxo
-purple stained glass: Vidro roxo
-purple: Roxo
-purpur: Púrpura
-quartz block: Bloco de quartzo
-quartz slab: Laje de quartzo
-quartz stairs: Escadas de quartzo
-quartz: Quartzo
-rabbit: Coelho
-rail: Trilho
-red concrete: Cimento vermelho
-red mushroom: Cogumelo vermelho
-red nether: Tijolos vermelhos do Nether
-red sandstone slab: Laje de arenito vermelho
-red sandstone stairs: Escadas de arenito vermelho
-red sandstone: Arenito vermelho
-red: Vermelho
-redstone: Redstone
-redstones: Redstones
-regen: Poção de regeneração
+potion: Poções
+potion awkward: Poções Desajeitadas
+potion fire resistance: Poções De Resistência Ao Fogo
+potion harming: Poções De Ferimento
+potion healing: Poções De Cura
+potion infested: Poções Infestadas
+potion instant: Poções Instantâneas
+potion instant damage: Poções De Dano Instantâneo
+potion instant heal: Poções De Cura Instantânea
+potion invisibility: Poções De Invisibilidade
+potion jump: Poções De Salto
+potion leaping: Poções De Salto Alto
+potion long: Poções Longas
+potion long fire resistance: Poções Longas De Resistência Ao Fogo
+potion long invisibility: Poções Longas De Invisibilidade
+potion long leaping: Poções Longas De Salto Alto
+potion long night vision: Poções Longas De Visão Noturna
+potion long poison: Poções Longas De Veneno
+potion long regeneration: Poções Longas De Regeneração
+potion long slow falling: Poções Longas De Queda Lenta
+potion long slowness: Poções Longas De Lentidão
+potion long strength: Poções Longas De Força
+potion long swiftness: Poções Longas De Rapidez
+potion long turtle master: Poções Longas Do Mestre Das Tartarugas
+potion long water breathing: Poções Longas De Respiração Subaquática
+potion long weakness: Poções Longas De Fraqueza
+potion luck: Poções De Sorte
+potion mundane: Poções Comuns
+potion night vision: Poções De Visão Noturna
+potion oozing: Poções Gotejantes
+potion poison: Poções De Veneno
+potion regen: Poções De Regeneração
+potion regeneration: Poções De Regeneração
+potion slow falling: Poções De Queda Lenta
+potion slowness: Poções De Lentidão
+potion speed: Poções De Velocidade
+potion strength: Poções De Força
+potion strong: Poções Fortes
+potion strong harming: Poções Fortes De Ferimento
+potion strong healing: Poções Fortes De Cura
+potion strong leaping: Poções Fortes De Salto Alto
+potion strong poison: Poções Fortes De Veneno
+potion strong regeneration: Poções Fortes De Regeneração
+potion strong slowness: Poções Fortes De Lentidão
+potion strong strength: Poções Fortes De Força
+potion strong swiftness: Poções Fortes De Rapidez
+potion strong turtle master: Poções Fortes Do Mestre Das Tartarugas
+potion swiftness: Poções De Rapidez
+potion thick: Poções Espessas
+potion turtle master: Poções Do Mestre Das Tartarugas
+potion uncraftable: Poções Não Fabricáveis
+potion water: Poções De Água
+potion water breathing: Poções De Respiração Subaquática
+potion weakness: Poções De Fraqueza
+potion weaving: Poções De Entrelaçamento
+potion wind charged: Poções Carregadas De Vento
+pottery: Cerâmicas
+pottery sherd: Cacos De Cerâmica
+powder: Pó
+power: Poderes
+pressure: Pressões
+pressure plate: Placas De Pressão
+prismarine: Prismarinas
+prismarine brick: Tijolos De Prismarina
+prismarine slab: Lajes De Prismarina
+prismarine stairs: Escadas De Prismarina
+projectile: Projéteis
+protection: Proteções
+protection 1: Proteção 1
+protection 2: Proteção 2
+protection 3: Proteção 3
+protection 4: Proteção 4
+pufferfish: Baiacus
+pumpkin: Abóboras
+punch: Impactos
+purple: Roxos
+purple concrete: Concretos Roxos
+purple stained: Manchados De Roxo
+purple stained glass: Vidros Manchados De Roxo
+purpur: Purpures
+quartz: Quartzos
+quartz block: Blocos De Quartzo
+quartz slab: Lajes De Quartzo
+quartz stairs: Escadas De Quartzo
+quick: Rápidos
+rabbit: Coelhos
+raft: Jangadas
+rail: Trilhos
+raw: Brutos
+raw copper: Cobre Bruto
+raw gold: Ouro Bruto
+raw iron: Ferro Bruto
+red: Vermelhos
+red concrete: Concretos Vermelhos
+red mushroom: Cogumelos Vermelhos
+red nether: Infernos Vermelhos
+red nether brick: Tijolos Do Inferno Vermelho
+red sandstone: Arenitos Vermelhos
+red sandstone slab: Lajes De Arenito Vermelho
+red sandstone stairs: Escadas De Arenito Vermelho
+red stained: Manchados De Vermelho
+red stained glass: Vidros Manchados De Vermelho
+redstone: Pedras Vermelhas
+redstone ore: Minérios De Pedra Vermelha
+regen: Regenerações
+regeneration: Regenerações
+resistance: Resistências
+respiration: Respirações
+riptide: Correntezas
 rod: Varas
 roots: Raízes
-rose: Rosa
-salmon: Salmão
-sand: Areia
-sandstone slab: Laje de arenito
-sandstone stairs: Escadas de arenito
-sandstone wall: Muro de arenito
+rose: Rosas
+sac: Sacos
+salmon: Salmões
+sand: Areias
 sandstone: Arenitos
+sandstone slab: Lajes De Arenito
+sandstone stairs: Escadas De Arenito
+sandstone wall: Paredes De Arenito
 sapling: Mudas
-sea: Lampadas do Mar
+sculk: Sculks
+sculk sensor: Sensores De Sculk
+scute: Escamas
+sea: Mares
 seeds: Sementes
+sensor: Sensores
+shard: Fragmentos
+sharpness: Afiamentos
 shell: Conchas
-shovel: Pá
-shulker box: Caixa de shulker
+sherd: Cacos
+shovel: Pás
+shulker: Shulkers
+shulker box: Caixas De Shulker
 sign: Placas
+silk: Sedas
+skeleton: Esqueletos
+skeleton skull: Crânios De Esqueleto
+skeleton spawn egg: Ovos De Invocação De Esqueleto
+skull: Crânios
 slab: Lajes
-slice: Fatia de melancia
-slime: Slime
-smooth quartz: Quartzo liso
-smooth red sandstone: Arenito vermelho liso
-smooth sandstone: Arenito liso
-smooth stone: Pedra lisa
-smooth: Liso
-snow: Neve
-slow falling: Poção de queda lenta
-slowness: Poção de lentidão
-soul: Itens das almas
-speed: Poção de agilidade
-spider eye: Olhos de aranha
-splash potion: Poção arremessável
-sponge: Esponja
-spruce log: Tronco de pinheiro
-spruce wood: Madeira de pinheiro
-spruce: Pinheiro
+slice: Fatias
+slime: Slimes
+slow: Lentidões
+slow falling: Quedas Lentas
+slowness: Lentidões
+small: Pequenos
+smite: Golpes
+smithing: Forjas
+smithing template: Modelos De Forja
+smooth: Lisos
+smooth quartz: Quartzos Lisos
+smooth red: Vermelhos Lisos
+smooth red sandstone: Arenitos Vermelhos Lisos
+smooth sandstone: Arenitos Lisos
+smooth stone: Pedras Lisas
+sneak: Furtividade
+sniffer: Farejadores
+snow: Neves
+soul: Almas
+spawn: Invocações
+spawn egg: Ovos De Invocação
+spawner: Geradores
+speed: Velocidades
+spider: Aranhas
+spider eye: Olhos De Aranha
+spider spawn egg: Ovos De Invocação De Aranha
+splash: Arremessos
+splash potion: Poções Arremessáveis
+splash potion instant: Poções Arremessáveis Instantâneas
+splash potion long: Poções Arremessáveis Longas
+splash potion strong: Poções Arremessáveis Fortes
+splash potion water: Poções Arremessáveis De Água
+sponge: Esponjas
+spruce: Pinheiros
+spruce fence: Cercas De Pinheiro
+spruce log: Troncos De Pinheiro
+spruce wood: Madeiras De Pinheiro
+squid: Lulas
+squid spawn egg: Ovos De Invocação De Lula
+stained: Manchados
+stained glass: Vidros Manchados
+stained glass pane: Painéis De Vidro Manchados
 stairs: Escadas
 stand: Suportes
-stem: Troncos
+star: Estrelas
+stem: Caules
 stew: Ensopados
-stone brick slab: Laje de tijolos de pedra
-stone brick stairs: Escadas de tijolos de pedra
-stone brick wall: Muro de tijolos de pedra
-stone brick: Tijolos de pedra
-stone bricks: Blocos Tijolos de pedra
-stone button: Botão de pedra
-stone slab: Laje de pedra
-stone stairs: Escadas de pedra
+stick: Gravetos
 stone: Pedras
-stone tools: Ferramentas de Pedra
-strength: Poção de força
-stripped birch: Tronco de bétula descascado
-stripped crimson: Hifas carmesins descascadas
-stripped dark: Tronco de carvalho escuro descascado
-stripped jungle: Tronco de árvore da selva descascado
-stripped oak: Tronco de carvalho descascado
-stripped spruce: Tronco de pinheiro descascado
-stripped warped: Hifas distorcidas descascadas
-stripped: Tronco de descascado
+stone brick: Tijolos De Pedra
+stone brick slab: Lajes De Tijolo De Pedra
+stone brick stairs: Escadas De Tijolo De Pedra
+stone brick wall: Paredes De Tijolo De Pedra
+stone slab: Lajes De Pedra
+stone tools: Ferramentas De Pedra
+strength: Forças
+strider: Andarilhos
+stripped: Descascados
+stripped acacia: Acácias Descascadas
+stripped birch: Bétulas Descascadas
+stripped cherry: Cerejeiras Descascadas
+stripped crimson: Carmesins Descascados
+stripped dark: Escuros Descascados
+stripped dark oak: Carvalhos Escuros Descascados
+stripped jungle: Selvas Descascadas
+stripped mangrove: Mangues Descascados
+stripped oak: Carvalhos Descascados
+stripped spruce: Pinheiros Descascados
+stripped warped: Distorcidos Descascados
+strong: Fortes
+strong harming: Ferimentos Fortes
+strong healing: Curas Fortes
+strong leaping: Saltos Fortes
+strong poison: Venenos Fortes
+strong regeneration: Regenerações Fortes
+strong slowness: Lentidões Fortes
+strong strength: Forças Fortes
+strong swiftness: Rapidezes Fortes
+strong turtle master: Mestres Das Tartarugas Fortes
+structure: Estruturas
+sugar: Açúcares
+suspicious: Suspeitos
+sweeping: Varreduras
+swift: Ágeis
+swiftness: Rapidezes
 sword: Espadas
-table: Bancadas
-terracotta: terracota
-thick: Poção espessa
-tnt: Dinamite
+table: Mesas
+tadpole: Girinos
+template: Modelos
+terracotta: Terracotas
+the sea: O Mar
+thick: Espessas
+thorns: Espinhos
+tile: Azulejo
+tiles: Azulejos
+tnt: TNTs
 torch: Tochas
-trapdoor: Alçapão
-tropical fish: Peixe tropical
-tube coral block: Bloco de coral
-tube coral fan: Gorgônia-de-tubo
-tube coral: Coral-de-tubo
+torchflower: Flores-De-Tocha
+touch: Toque
+trader: Comerciantes
+trapdoor: Alçapões
+trial: Testes
+trial key: Chaves De Teste
+trim: Adornos
+trim smithing template: Modelo De Adorno De Forja
+tropical: Tropicais
+tropical fish: Peixes Tropicais
+tube: Tubos
+tube coral: Corais De Tubo
+tube coral block: Blocos De Coral De Tubo
+tube coral fan: Leques De Coral De Tubo
+tuff: Tufos
+tuff brick: Tijolos De Tufo
+tuff slab: Lajes De Tufo
+tuff stairs: Escadas De Tufo
+tuff wall: Paredes De Tufo
 tulip: Tulipas
-turtle: Tartaruga
-turtle master: Poção do mestre-tartaruga
-vines: Trepadeiras
+turtle: Tartarugas
+turtle master: Mestres Das Tartarugas
+unbreaking: Inquebráveis
+uncraftable: Não Fabricáveis
+vanishing: Desaparecimentos
+vex: Vexes
+villager: Aldeões
+villager spawn egg: Ovos De Invocação De Aldeão
+vines: Vinhas
+vision: Visões
+walker: Andarilhos
 wall: Paredes
-warped hyphae: Hifas descascadas
-warped stem: Caule distorcido
-warped: Distorcido
-wart block: Bloco de fungos do Nether
-wart: Fungos do Nether
-water: Frasco de água
-water breathing: Poção de respiração aquática
-weakness: Poção de fraqueza
-weighted: Placa de pressão de pesagem pesada
-wet: Esponja
-wheat: Trigo
-white: Branco
-wither: Wither
+ward: Guardiões
+warped: Distorcidos
+warped fence: Cercas Distorcidas
+warped fungus: Fungos Distorcidos
+warped hyphae: Hifas Distorcidas
+warped stem: Caules Distorcidos
+wart: Verrugas
+wart block: Blocos De Verruga
+water: Água
+water breathing: Respiração Subaquática
+waxed: Encerados
+waxed copper: Cobre Encerado
+waxed cut: Cortados Encerados
+waxed cut copper: Cobre Cortado Encerado
+waxed exposed: Expostos Encerados
+waxed exposed copper: Cobre Exposto Encerado
+waxed exposed cut: Cortes Expostos Encerados
+waxed exposed cut copper: Cobre Cortado Exposto Encerado
+waxed oxidized: Oxidados Encerados
+waxed oxidized copper: Cobre Oxidado Encerado
+waxed oxidized cut: Cortes Oxidados Encerados
+waxed oxidized cut copper: Cobre Cortado Oxidado Encerado
+waxed weathered: Envelhecidos Encerados
+waxed weathered copper: Cobre Envelhecido Encerado
+waxed weathered cut: Cortes Envelhecidos Encerados
+waxed weathered cut copper: Cobre Cortado Envelhecido Encerado
+weakness: Fraquezas
+weathered: Envelhecidos
+weathered chiseled copper: Cobre Entalhado Envelhecido
+weathered copper: Cobre Envelhecido
+weathered copper bulb: Lâmpada De Cobre Envelhecida
+weathered copper door: Porta De Cobre Envelhecida
+weathered copper grate: Grade De Cobre Envelhecida
+weathered copper trapdoor: Alçapão De Cobre Envelhecido
+weathered cut: Cortados Envelhecidos
+weathered cut copper: Cobre Cortado Envelhecido
+weathered cut copper slab: Lajes De Cobre Cortado Envelhecido
+weathered cut copper stairs: Escadas De Cobre Cortado Envelhecido
+weaving: Entrelaçamentos
+weighted: Pesados
+weighted pressure plate: Placas De Pressão Pesadas
+wheat: Trigos
+white: Brancos
+white concrete: Concretos Brancos
+white stained: Manchados De Branco
+white stained glass: Vidros Manchados De Branco
+wind: Ventos
+wind charged: Carregados De Vento
+wither: Murchados
+wither skeleton: Esqueletos Murchados
+wolf: Lobos
 wood: Madeiras
-wooden: Ferramentas de madeira
-wool: Lã
-yellow: Amarelo
+wooden: De Madeira
+wool: Lãs
+yellow: Amarelos
+yellow concrete: Concretos Amarelos
+yellow stained: Manchados De Amarelo
+yellow stained glass: Vidros Manchados De Amarelo
+zombie: Zumbis
