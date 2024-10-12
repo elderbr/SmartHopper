@@ -20,8 +20,6 @@ import java.util.Objects;
 public class TraducaoConfig {
     private static final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
 
-    private String name;
-    private Traducao traducao;
 
     private BufferedWriter escrever;
     private BufferedReader reader;
@@ -49,6 +47,10 @@ public class TraducaoConfig {
             // Se o arquivo pt_pt não existir cria
             if (!filePT.exists()) {
                 createTP();
+            }
+            // Se o arquvio do grupo não existir
+            if(!fileGrupoBR.exists()){
+                createGroup();
             }
         }
         reload();// Lendo todas as traduções
@@ -115,19 +117,56 @@ public class TraducaoConfig {
         }
     }
 
+    private void createGroup() {
+        try {
+
+            escrever = Files.newBufferedWriter(fileGrupoBR.toPath(), StandardCharsets.UTF_8);
+
+            input = getClass().getResourceAsStream("/grupo.yml");
+            reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
+
+            escrever.write("# Tradução para todos os grupos em português Brasil");
+            escrever.newLine();
+            escrever.write("lang: pt_br");
+            escrever.newLine();
+            escrever.write("type: grupo");
+            escrever.flush();
+            while ((txtReader = reader.readLine()) != null) {
+                escrever.write(txtReader);
+                escrever.newLine();
+                escrever.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (escrever != null)
+                    escrever.close();
+                if (reader != null)
+                    reader.close();
+            } catch (IOException er) {
+                er.printStackTrace();
+            }
+        }
+    }
+
     public static void reload() {
-        String lang = null;
-        String type = null;
+        String lang;
+        String type;
         for (File file : directoryFile.listFiles()) {
             // Lendo o arquivo de tradução
             yml = YamlConfiguration.loadConfiguration(file);
-            // Nome do linguagem
-            lang = yml.getString("lang");
-            type = (Objects.isNull(yml.getString("type")) || yml.getString("type").isBlank() ? "all" : yml.getString("type"));
+
+            lang = yml.getString("lang");// Nome do linguagem
+            type = yml.getString("type");
 
             if (lang == null || lang.isBlank()) {
                 Msg.ServidorRed(String.format("No arquivo %s não está definido o lang!!!", file.getName()));
                 continue;
+            }
+
+            if(Objects.isNull(type)){
+                type = "all";
             }
 
             for (Map.Entry<String, Object> map : yml.getValues(false).entrySet()) {
@@ -135,7 +174,7 @@ public class TraducaoConfig {
                 String name = map.getKey();
                 String translate = map.getValue().toString();
 
-                if (name.equals("lang") || name.equals("type")) continue;
+                if (name.equals("lang") || name.equals("type") || Objects.isNull(translate) || translate.isBlank()) continue;
 
                 switch (type) {
                     case "item":
