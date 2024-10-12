@@ -1,5 +1,6 @@
 package mc.elderbr.smarthopper.model;
 
+import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.factories.GrupFactory;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -10,7 +11,7 @@ import java.util.*;
 
 public class GrupoCreate implements VGlobal {
 
-    private static Set<String> listNameGrup = new HashSet<>();
+    private static Set<String> listNameGrup = new TreeSet<>();
 
     private GrupoCreate() {
     }
@@ -47,26 +48,32 @@ public class GrupoCreate implements VGlobal {
     }
 
     public static List<String> NEW() {
+        List<Grupo> grupos = new ArrayList<>();
         NewNome();
         Iterator<String> iterator = listNameGrup.iterator();
         while (iterator.hasNext()) {
             String nameGrupo = iterator.next();
+
+            Grupo grupo = new Grupo();
+            grupo.setName(nameGrupo);
+
             int count = 0;
             for (String nameItem : ITEM_MAP_NAME.keySet()) {
                 if (containsItem(nameGrupo, nameItem)) {
+                    grupo.addItems(ItemController.FindByName(nameItem));
                     count++;
                 }
             }
+            grupos.add(grupo);
             if (count < 2) {
                 iterator.remove();
+                grupos.remove(grupo);
             }
         }
-
         // Grupos personalizados
         for (String name : GrupFactory.names()) {
             listNameGrup.add(name);
         }
-
         List<String> list = new ArrayList<>(listNameGrup);
         Collections.sort(list);
         return list;

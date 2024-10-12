@@ -21,6 +21,8 @@ commands:
     description: Adicionar novo grupo
   removegrupo:
     description: Remover grupo existente
+  gruponame:
+    description: Gera o arquivo grupo_name.yml com todos os nomes dos grupos
   addAdm:
       description: Adiciona Administrador para o SmartHopper
   removeradm:

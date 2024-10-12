@@ -2,6 +2,7 @@ package mc.elderbr.smarthopper.cmd;
 
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.dao.GrupoDao;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.interfaces.msg.GrupMsg;
 import mc.elderbr.smarthopper.model.Grupo;
@@ -49,6 +50,8 @@ public class GrupoComando implements CommandExecutor {
                     return add();
                 case "removegrupo":// REMOVER GRUPO
                     return delete();
+                case "gruponame":
+                   return GrupoDao.CreateGrupName(player);
             }
         }
         return false;

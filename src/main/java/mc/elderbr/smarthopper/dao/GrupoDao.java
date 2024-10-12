@@ -8,12 +8,14 @@ import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.*;
 
 public class GrupoDao implements VGlobal {
 
@@ -195,5 +197,33 @@ public class GrupoDao implements VGlobal {
         }
     }
 
+    /***
+     * Cria o arquivo grupo_name.yml com todos os nomes dos grupos
+     * O arquivo pode ser usado para traduzir os nomes dos grupos
+     */
+    public static boolean CreateGrupName(Player player){
+        File file = new File(VGlobal.ARQUIVO, "grupo_name.yml");
+
+        List<String> names = new ArrayList<>(VGlobal.GRUPO_MAP_NAME.keySet());
+        Collections.sort(names);
+
+        try(BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
+            writer.write("lang:");
+            writer.newLine();
+            for (String name : names) {
+                writer.write(name.concat(":"));
+                writer.newLine();
+                writer.flush();
+            }
+            Msg.PlayerGold(player, "Arquivo grupo_name.yml foi criado com sucesso!");
+            Msg.ServidorBlue("Arquivo grupo_name.yml foi criado com sucesso!");
+            return true;
+        }catch (IOException e){
+            Msg.ServidorRed("Erro ao criar os nomes dos grupos");
+        }
+        Msg.PlayerGold(player, "Erro ao criar o arquivo grupo_name.yml!");
+        Msg.ServidorBlue("Erro ao criar o arquivo grupo_name.yml!");
+        return false;
+    }
 
 }
