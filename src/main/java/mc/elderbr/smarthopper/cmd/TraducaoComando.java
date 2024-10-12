@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
+import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -35,7 +36,7 @@ public class TraducaoComando implements CommandExecutor {
                     try {
                         if (itemController.addTranslation(player, args)) {
                             item = itemController.getItem();
-                            Msg.PlayerTodos("Tradução adicionada para o item $e" + item.getName() + "$r em $e" + player.getLocale() + "$r como $e" + item.toTranslation(player)+"$r!");
+                            Msg.PlayerTodos("Tradução adicionada para o item $e" + item.getName() + "$r em $e" + player.getLocale() + "$r como $e" + item.toTranslation(player) + "$r!");
                             return true;
                         } else {
                             Msg.PlayerGold(player, "Erro ao tentar adicionar a tradução para o item!!!");
@@ -57,6 +58,9 @@ public class TraducaoComando implements CommandExecutor {
                         Msg.PlayerGold(player, e.getMessage());
                     }
                     break;
+                case "traducaoreload":
+                    TraducaoConfig.reload();
+                    return true;
             }
         }
         return false;

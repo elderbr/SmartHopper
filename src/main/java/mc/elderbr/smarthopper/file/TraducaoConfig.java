@@ -15,9 +15,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.Objects;
 
 public class TraducaoConfig {
-    private final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
+    private static final File directoryFile = new File(VGlobal.FILE_LANG.getAbsolutePath());
 
     private String name;
     private Traducao traducao;
@@ -29,12 +30,12 @@ public class TraducaoConfig {
 
     private static YamlConfiguration yml;
 
-    private File fileBR = new File(directoryFile, "pt_br.yml");
-    private File fileGrupoBR = new File(directoryFile, "grupo.yml");
-    private File filePT = new File(directoryFile, "pt_pt.yml");
+    private static final File fileBR = new File(directoryFile, "pt_br.yml");
+    private static final File fileGrupoBR = new File(directoryFile, "grupo.yml");
+    private static final File filePT = new File(directoryFile, "pt_pt.yml");
 
-    private ItemController itemCtrl = new ItemController();
-    private GrupoController grupoCtrl = new GrupoController();
+    private static ItemController itemCtrl = new ItemController();
+    private static GrupoController grupoCtrl = new GrupoController();
 
     public TraducaoConfig() {
         // Criando o pasta lang
@@ -114,13 +115,15 @@ public class TraducaoConfig {
         }
     }
 
-    public void reload() {
+    public static void reload() {
         String lang = null;
+        String type = null;
         for (File file : directoryFile.listFiles()) {
             // Lendo o arquivo de tradução
             yml = YamlConfiguration.loadConfiguration(file);
             // Nome do linguagem
             lang = yml.getString("lang");
+            type = (Objects.isNull(yml.getString("type")) || yml.getString("type").isBlank() ? "all" : yml.getString("type"));
 
             if (lang == null || lang.isBlank()) {
                 Msg.ServidorRed(String.format("No arquivo %s não está definido o lang!!!", file.getName()));
@@ -128,30 +131,55 @@ public class TraducaoConfig {
             }
 
             for (Map.Entry<String, Object> map : yml.getValues(false).entrySet()) {
-                // Procurando e salvando a tradução para o item
-                try {
-                    Item item = itemCtrl.findByName(map.getKey());
-                    if (item == null) continue;
-                    item.addTranslation(lang, map.getValue().toString());
-                    itemCtrl.update(item);
-                    Msg.ServidorGreen("$2Adicionando tradução para o item $6" + item.getName());
-                } catch (ItemException e) {
-                    continue;
-                }
 
-                // Procurando e salvando a tradução para o grupo
-                try {
-                    Grupo grupo = grupoCtrl.findByName(map.getKey());
-                    if (grupo == null) continue;
-                    grupo.addTranslation(lang, map.getValue().toString());
-                    grupoCtrl.update(grupo);
-                    Msg.ServidorBlue("$9Adicionando tradução para o grupo $6" + grupo.getName());
-                } catch (GrupoException e) {
+                String name = map.getKey();
+                String translate = map.getValue().toString();
 
+                if (name.equals("lang") || name.equals("type")) continue;
+
+                switch (type) {
+                    case "item":
+                        try {
+                            translateItem(name, lang, translate);// Procurando e salvando a tradução para o item
+                        } catch (ItemException e) {
+                            continue;
+                        }
+                        break;
+                    case "grupo":
+                        try {
+                            translateGrupo(name, lang, translate);// Procurando e salvando a tradução para o grupo
+                        } catch (GrupoException e) {
+                        }
+                        break;
+                    default:
+                        try {
+                            translateItem(name, lang, translate);// Procurando e salvando a tradução para o item
+                        } catch (ItemException e) {
+                        }
+                        try {
+                            translateGrupo(name, lang, translate);// Procurando e salvando a tradução para o grupo
+                        } catch (GrupoException e) {
+                        }
                 }
             }
             file.delete();
         }
+    }
+
+    public static void translateItem(String name, String lang, String translate) throws ItemException {
+        Item item = itemCtrl.findByName(name);
+        if (Objects.isNull(item)) return;
+        item.addTranslation(lang, translate);
+        itemCtrl.update(item);
+        Msg.ServidorGreen("$2Adicionando tradução para o item $6" + item.getName());
+    }
+
+    public static void translateGrupo(String name, String lang, String translate) throws GrupoException {
+        Grupo grupo = grupoCtrl.findByName(name);
+        if (Objects.isNull(grupo)) return;
+        grupo.addTranslation(lang, translate);
+        grupoCtrl.update(grupo);
+        Msg.ServidorBlue("$9Adicionando tradução para o grupo $6" + grupo.getName());
     }
 
 }
