@@ -1,5 +1,5 @@
 name: SmartHopper
-version: 4.1.0
+version: 4.1.1
 main: mc.elderbr.smarthopper.MainSmartHopper
 api-version: 1.21
 authors: [ ElderBR ]
@@ -17,6 +17,9 @@ commands:
   traducaogrupo:
     usage: /traducaogrupo <codigo> <traducao>
     description: Adicionar tradução para o grupo
+  traducaoreload:
+    aliases: reloadtranslate
+    description: Ler os arquivos na pasta lang
   addgrupo:
     description: Adicionar novo grupo
   removegrupo:
