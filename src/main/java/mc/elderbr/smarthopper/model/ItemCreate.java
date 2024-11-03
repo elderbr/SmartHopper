@@ -17,6 +17,7 @@ public class ItemCreate implements VGlobal {
     public static List<String> Create() {
         for (Material material : Material.values()) {
 
+            if(!material.isItem()) continue;
             ItemStack itemStack = new ItemStack(material);
 
             if (!itemStack.getType().isItem() || itemStack.getType().isAir()) continue;
