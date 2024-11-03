@@ -127,9 +127,6 @@ public class TraducaoConfig {
 
             escrever.write("# Tradução para todos os grupos em português Brasil");
             escrever.newLine();
-            escrever.write("lang: pt_br");
-            escrever.newLine();
-            escrever.write("type: grupo");
             escrever.flush();
             while ((txtReader = reader.readLine()) != null) {
                 escrever.write(txtReader);
