@@ -36,7 +36,8 @@ public class MoveHopperEvent implements Listener {
 
     private ItemController itemController = new ItemController();
 
-    public MoveHopperEvent() {}
+    public MoveHopperEvent() {
+    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void moveItemHopper(InventoryMoveItemEvent event) {
@@ -54,7 +55,11 @@ public class MoveHopperEvent implements Listener {
             destination = event.getDestination();// Inventorio de destino
 
             // Pega o bloco de baixo de onde o item está
-            blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            if (inventory.getType() == InventoryType.CHEST && inventory.getSize() > 27) {
+                blockDown = destination.getLocation().getBlock();
+            } else {
+                blockDown = inventory.getLocation().getBlock().getRelative(BlockFace.DOWN);
+            }
 
             if (destination.getType() == InventoryType.HOPPER) {
                 event.setCancelled(true);// Cancela o movimento do item
