@@ -13,73 +13,27 @@ import java.util.List;
 
 public class HopperRecipe {
 
-    private ShapedRecipe recipe;
-    public ItemStack SmartHopper = new ItemStack(Material.HOPPER);
-    private ItemMeta meta;
-    private List<String> lore = new ArrayList<>();
+    private static ShapedRecipe recipe;
+    public static ItemStack SmartHopper = new ItemStack(Material.HOPPER);
+    private static ItemMeta meta;
+    private static List<String> lore = new ArrayList<>();
 
     public HopperRecipe() {
 
     }
 
-    public ShapedRecipe createSmartHopper() {
-
-        // ITEM PADRÃO DO SMARTHOPPER
+    public static ShapedRecipe createSmartHopper() {
         SmartHopper = new ItemStack(Material.HOPPER);
         meta = SmartHopper.getItemMeta();
-        meta.setDisplayName("SmartHopper§e");
-        meta.setLore(Arrays.asList("SmartHopper"));
+        meta.setDisplayName("§aSmart Hopper");
+        meta.setLore(Arrays.asList(new String[]{"§f§lSmart Hopper"}));
         SmartHopper.setItemMeta(meta);
-
-        recipe = new ShapedRecipe(new NamespacedKey(VGlobal.SMARTHOPPER, "hopper0"), SmartHopper);
-
-        recipe.shape("%B%", "%C%", " % ");
+        recipe = new ShapedRecipe(new NamespacedKey(VGlobal.SMARTHOPPER, "smart_hopper"), SmartHopper);
+        recipe.shape(new String[]{"%B%", "%C%", " % "});
         recipe.setIngredient('B', Material.IRON_BARS);
         recipe.setIngredient('C', Material.CHEST);
         recipe.setIngredient('%', Material.IRON_INGOT);
         return recipe;
     }
-
-    public ShapedRecipe createSmartHopper1() {
-
-        // ITEM PADRÃO DO SMARTHOPPER
-        SmartHopper = new ItemStack(Material.HOPPER);
-        meta = SmartHopper.getItemMeta();
-        meta.setDisplayName("SmartHopper§e");
-        meta.setLore(Arrays.asList("SmartHopper"));
-        SmartHopper.setItemMeta(meta);
-
-        recipe = new ShapedRecipe(new NamespacedKey(VGlobal.SMARTHOPPER, "hopper1"), SmartHopper);
-        recipe.shape("B", "H");
-        recipe.setIngredient('B', Material.IRON_BARS);
-        recipe.setIngredient('H', Material.HOPPER);
-        return recipe;
-    }
-
-    public ShapedRecipe createSmartHopper3() {
-
-        // ITEM PADRÃO DO SMARTHOPPER
-        SmartHopper = new ItemStack(Material.HOPPER, 3);
-        meta = SmartHopper.getItemMeta();
-        meta.setDisplayName("SmartHopper§e");
-        meta.setLore(Arrays.asList("SmartHopper"));
-        SmartHopper.setItemMeta(meta);
-
-        recipe = new ShapedRecipe(new NamespacedKey(VGlobal.SMARTHOPPER, "hopper3"), SmartHopper);
-        recipe.shape("BBB", "HHH");
-        recipe.setIngredient('B', Material.IRON_BARS);
-        recipe.setIngredient('H', Material.HOPPER);
-        return recipe;
-    }
-
-    private void createItem() {
-        // ITEM PADRÃO DO SMARTHOPPER
-        SmartHopper = new ItemStack(Material.HOPPER);
-        meta = SmartHopper.getItemMeta();
-        meta.setDisplayName("SmartHopper§e");
-        meta.setLore(Arrays.asList("SmartHopper"));
-        SmartHopper.setItemMeta(meta);
-    }
-
 
 }

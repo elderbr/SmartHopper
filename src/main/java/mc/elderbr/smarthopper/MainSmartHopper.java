@@ -8,6 +8,7 @@ import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.event.*;
 import mc.elderbr.smarthopper.file.TraducaoConfig;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
+import mc.elderbr.smarthopper.recipes.HopperRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
@@ -42,6 +43,9 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
 
         // Eventos
         events();
+
+        // Receitas
+        recipes();
     }
 
     @Override
@@ -90,5 +94,10 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new MoveHopperEvent(), this);
         getServer().getPluginManager().registerEvents(new PickupItemEvent(), this);
         getServer().getPluginManager().registerEvents(new TextureEvent(), this);
+    }
+
+    // Registrar a receita no servidor
+    private void recipes(){
+        getServer().addRecipe(HopperRecipe.createSmartHopper());
     }
 }
