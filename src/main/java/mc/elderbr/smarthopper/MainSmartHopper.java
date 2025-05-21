@@ -97,7 +97,7 @@ public class MainSmartHopper extends JavaPlugin implements Listener {
     }
 
     // Registrar a receita no servidor
-    private void recipes(){
+    private void recipes() {
         getServer().addRecipe(HopperRecipe.createSmartHopper());
     }
 }
