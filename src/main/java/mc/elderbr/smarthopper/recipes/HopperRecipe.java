@@ -26,9 +26,10 @@ public class HopperRecipe {
         SmartHopper = new ItemStack(Material.HOPPER);
         meta = SmartHopper.getItemMeta();
         meta.setDisplayName("§aSmart Hopper");
-        meta.setLore(Arrays.asList(new String[]{"§f§lSmart Hopper"}));
+        meta.setLore(Arrays.asList(new String[]{VGlobal.NAME_RECIPE}));
         SmartHopper.setItemMeta(meta);
-        recipe = new ShapedRecipe(new NamespacedKey(VGlobal.SMARTHOPPER, "smart_hopper"), SmartHopper);
+        recipe = new ShapedRecipe(new NamespacedKey(VGlobal.SMARTHOPPER, "iron_smart_hopper"), SmartHopper);
+        recipe.setGroup("minecraft:redstone");
         recipe.shape(new String[]{"%B%", "%C%", " % "});
         recipe.setIngredient('B', Material.IRON_BARS);
         recipe.setIngredient('C', Material.CHEST);
