@@ -74,9 +74,16 @@ public interface VGlobal {
      *********************************************************/
     Map<String, ItemStack> POTION_MAP = new HashMap<>();
 
+    /*********************************************************
+     *
+     *                    Receitas
+     *
+     *********************************************************/
+    String NAME_RECIPE = "§f§lSmart Hopper";
 
     Plugin SMARTHOPPER = Bukkit.getServer().getPluginManager().getPlugin("SmartHopper");
     String VERSION = SMARTHOPPER.getDescription().getVersion();
+    String NAME_SMARTHOPPER = "§2§lSmart Hopper";
     int VERSION_INT = Integer.parseInt(VERSION.replaceAll("[^0-9]", ""));
 
     File ARQUIVO = SMARTHOPPER.getDataFolder().getAbsoluteFile();
