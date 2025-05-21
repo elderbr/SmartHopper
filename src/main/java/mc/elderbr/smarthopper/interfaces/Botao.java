@@ -7,6 +7,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.Objects;
+
+import static mc.elderbr.smarthopper.interfaces.VGlobal.NAME_SMARTHOPPER;
 
 public interface Botao {
 
@@ -94,9 +97,18 @@ public interface Botao {
         return btn;
     }
 
+    default ItemStack BtnBlocked(){
+        ItemStack btn = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
+        ItemMeta meta = btn.getItemMeta();
+        meta.setDisplayName("§4§lBloqueado");
+        meta.setLore(Arrays.asList(NAME_SMARTHOPPER));
+        meta.setCustomModelData(13);
+        btn.setItemMeta(meta);
+        return btn;
+    }
+
     default boolean equalButton(ItemStack itemStack){
-        if(itemStack == null
-                || itemStack.getType() != Material.BARRIER
+        if(Objects.isNull(itemStack)
                 || !itemStack.hasItemMeta()
                 || !itemStack.getItemMeta().hasCustomModelData()
                 || itemStack.getItemMeta().getCustomModelData() < 1
@@ -107,6 +119,7 @@ public interface Botao {
             case 10:
             case 11:
             case 12:
+            case 13:
                 return true;
             default:
                 return false;
