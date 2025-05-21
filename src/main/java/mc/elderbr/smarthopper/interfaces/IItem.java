@@ -11,6 +11,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -140,6 +142,17 @@ public interface IItem {
         } catch (Exception e) {
             throw new ItemException(ItemMsg.ITEM_INVALID);
         }
+        return itemStack;
+    }
+
+    default ItemStack getItemStackWithMeta(){
+        ItemStack itemStack = new ItemStack(getItemStack().getType());
+        ItemMeta meta = itemStack.getItemMeta();
+        List<String> lore = new ArrayList<>();
+        lore.add("§eID: " + getId());
+        lore.add("§2Item: " + getName());
+        meta.setLore(lore);
+        itemStack.setItemMeta(meta);
         return itemStack;
     }
 
