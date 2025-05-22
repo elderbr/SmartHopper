@@ -26,17 +26,19 @@ public interface IItem extends ITitle {
         return String.valueOf(getId());
     }
 
-    default String toIdConfig(){
+    default String getIdCodeConfig(){
         return "I" + getId();
+    }
+
+    default String getIdConfig() {
+        return TITLE_ID_ITEM+ getId();
     }
 
     IItem setName(String name);
     String getName();
-    default String toNameConfig() {
+    default String getNameConfig() {
         return TITLE_NAME_ITEM + getName();
     }
-
-
 
     boolean isBlocked();
 
@@ -161,8 +163,8 @@ public interface IItem extends ITitle {
         ItemStack itemStack = new ItemStack(getItemStack().getType());
         ItemMeta meta = itemStack.getItemMeta();
         List<String> lore = new ArrayList<>();
-        lore.add("§eID: " + getId());
-        lore.add("§2Item: " + getName());
+        lore.add(getIdConfig());
+        lore.add(getNameConfig());
         meta.setLore(lore);
         itemStack.setItemMeta(meta);
         return itemStack;
