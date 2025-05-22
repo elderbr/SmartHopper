@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class HopperRecipe {
+public class HopperRecipe implements VGlobal {
 
     private static ShapedRecipe recipe;
     public static ItemStack SmartHopper = new ItemStack(Material.HOPPER);
@@ -19,16 +19,15 @@ public class HopperRecipe {
     private static List<String> lore = new ArrayList<>();
 
     public HopperRecipe() {
-
     }
 
     public static ShapedRecipe createSmartHopper() {
         SmartHopper = new ItemStack(Material.HOPPER);
         meta = SmartHopper.getItemMeta();
-        meta.setDisplayName("§aSmart Hopper");
-        meta.setLore(Arrays.asList(new String[]{VGlobal.NAME_RECIPE}));
+        meta.setDisplayName(TITLE_RECIPE);
+        meta.setLore(Arrays.asList(new String[]{NAME_RECIPE}));
         SmartHopper.setItemMeta(meta);
-        recipe = new ShapedRecipe(new NamespacedKey(VGlobal.SMARTHOPPER, "iron_smart_hopper"), SmartHopper);
+        recipe = new ShapedRecipe(new NamespacedKey(SMARTHOPPER, "iron_smart_hopper"), SmartHopper);
         recipe.setGroup("minecraft:redstone");
         recipe.shape(new String[]{"%B%", "%C%", " % "});
         recipe.setIngredient('B', Material.IRON_BARS);
@@ -36,5 +35,4 @@ public class HopperRecipe {
         recipe.setIngredient('%', Material.IRON_INGOT);
         return recipe;
     }
-
 }
