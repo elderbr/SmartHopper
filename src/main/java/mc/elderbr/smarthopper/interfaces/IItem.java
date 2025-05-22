@@ -16,15 +16,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public interface IItem {
-
-    Integer getId();
+public interface IItem extends ITitle {
 
     IItem setId(Integer code);
 
-    String getName();
+    Integer getId();
+
+    default String toId() {
+        return String.valueOf(getId());
+    }
+
+    default String toIdConfig(){
+        return "I" + getId();
+    }
 
     IItem setName(String name);
+    String getName();
+    default String toNameConfig() {
+        return TITLE_NAME_ITEM + getName();
+    }
+
+
 
     boolean isBlocked();
 
@@ -57,7 +69,7 @@ public interface IItem {
     }
 
     default ItemStack parseItemStack(String name) {
-        return new ItemStack(Material.getMaterial(name.toUpperCase().replaceAll("\\s","_")));
+        return new ItemStack(Material.getMaterial(name.toUpperCase().replaceAll("\\s", "_")));
     }
 
     default ItemStack getItemStack() {
@@ -145,7 +157,7 @@ public interface IItem {
         return itemStack;
     }
 
-    default ItemStack getItemStackWithMeta(){
+    default ItemStack getItemStackWithMeta() {
         ItemStack itemStack = new ItemStack(getItemStack().getType());
         ItemMeta meta = itemStack.getItemMeta();
         List<String> lore = new ArrayList<>();
