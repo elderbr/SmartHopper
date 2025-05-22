@@ -22,10 +22,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.*;
 
@@ -79,6 +76,21 @@ public class ItemController implements ItemMsg {
             throw new ItemException(ITEM_ID_INVALID);
         }
         Item item = itemDao.findById(id);
+        if (item == null) {
+            throw new ItemException(ITEM_INVALID);
+        }
+        return item;
+    }
+
+    public Item findByID(String id) throws ItemException {
+        if(Objects.isNull(id)){
+            throw new ItemException(ITEM_ID_INVALID);
+        }
+        int code = Integer.parseInt(id.replaceAll("[^0-9]", ""));
+        if (code < 1) {
+            throw new ItemException(ITEM_ID_INVALID);
+        }
+        Item item = itemDao.findById(code);
         if (item == null) {
             throw new ItemException(ITEM_INVALID);
         }
