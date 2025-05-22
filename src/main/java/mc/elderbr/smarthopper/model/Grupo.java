@@ -4,6 +4,7 @@ import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.interfaces.IItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -118,17 +119,26 @@ public class Grupo implements IItem, Cloneable {
     }
 
     @Override
+    public ItemStack getItemStackWithMeta() {
+        ItemStack newItem = new ItemStack(getItemStack());
+        ItemMeta m = newItem.getItemMeta();
+        m.setLore(List.of(TITLE_ID_GROUP + getId(), TITLE_NAME_GROUP + getName()));
+        newItem.setItemMeta(m);
+        return newItem;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("id: ").append(id).append("\n");
         sb.append("name: ").append(name).append("\n");
         sb.append("blocked: ").append(blocked).append("\n");
         sb.append("translation: ").append("\n");
-        for( Map.Entry<String, String> lang : translation.entrySet()){
-            sb.append(lang.getKey()+": ").append(lang.getValue()).append("\n");
+        for (Map.Entry<String, String> lang : translation.entrySet()) {
+            sb.append(lang.getKey() + ": ").append(lang.getValue()).append("\n");
         }
         sb.append("Item: ").append("\n");
-        for(Item item : items){
+        for (Item item : items) {
             sb.append(item.getName()).append("\n");
         }
         return sb.toString();
