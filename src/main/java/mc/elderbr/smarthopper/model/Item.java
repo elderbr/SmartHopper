@@ -6,10 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static mc.elderbr.smarthopper.interfaces.VGlobal.ITEM_NAME_LIST;
 
@@ -122,5 +119,15 @@ public class Item implements IItem, ItemMsg, Comparable<Item> {
 
     public static String TO_ItemStack(ItemStack itemStack){
         return new Item().toItem(itemStack);
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(Objects.isNull(obj)) return false;
+        if(this == obj) return true;
+        if(this.getId().equals(((Item) obj).getId())) {
+            return true;
+        }
+        return false;
     }
 }
