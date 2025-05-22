@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static mc.elderbr.smarthopper.interfaces.VGlobal.NAME_SMARTHOPPER;
+import static mc.elderbr.smarthopper.interfaces.ITitle.NAME_SMART_HOPPER;
 
 public interface Botao {
 
@@ -101,7 +101,7 @@ public interface Botao {
         ItemStack btn = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName("§4§lBloqueado");
-        meta.setLore(Arrays.asList(NAME_SMARTHOPPER));
+        meta.setLore(Arrays.asList(NAME_SMART_HOPPER));
         meta.setCustomModelData(13);
         btn.setItemMeta(meta);
         return btn;
