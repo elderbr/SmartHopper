@@ -2,32 +2,48 @@ package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
+import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.factories.InventoryFactory;
 import mc.elderbr.smarthopper.interfaces.Botao;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
+import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class InventarioEvent implements Listener, Botao {
+public class InventarioEvent implements Listener, Botao, VGlobal {
 
     private Player player;
     private InventoryCustom inventoryCustom;
     private Inventory inventory;
+    private InventoryClickEvent event;
+    private InventoryFactory inventoryFactory = InventoryFactory.getInstance();
 
+    private ItemController itemCtrl = new ItemController();
     private ItemStack itemClicked;
+    private ItemStack itemHopper;
+    private List<ItemStack> listItemStick = new ArrayList<>();
+
+    private List<Item> listItem = new ArrayList<>();
+
     private Grupo grupo;
     private GrupoController grupoCtrl = new GrupoController();
-    private InventoryClickEvent event;
-    private List<ItemStack> listItem = new ArrayList<>();
 
     @EventHandler
     public void InventoryClick(InventoryClickEvent event) {
@@ -35,34 +51,128 @@ public class InventarioEvent implements Listener, Botao {
         this.event = event;
         inventory = event.getView().getTopInventory();
         try {
-            if (event.getCurrentItem() == null) return;
-            itemClicked = event.getCurrentItem();
-            if (itemClicked.getType().isAir()) return;
-            inventoryCustom = new InventoryCustom(event);
+            if (Objects.isNull(event.getCurrentItem()) || event.getCurrentItem().getType() == Material.AIR) return;
+            itemClicked = event.getCurrentItem();// Pega o item clicado
 
-            if (inventoryCustom.getTitle().contains("Smart Hopper")) {
+            // Verificar se o inventário aberto é o do Smart Hopper
+            if (event.getView().getTitle().contains("Smart Hopper")) {
                 event.setCancelled(true);// Cancela o movimento do item
-                inventoryCustom.btnNavegation(event);// Evento que navega entre os itens do grupo
-                grupo = null;
-                return;
-            }
 
-            grupo = inventoryCustom.getGrupo();
-            if (Objects.nonNull(grupo)) {
-                event.setCancelled(true);// Cancela o movimento do item pelo o player
-                // Evento que navega entre os itens do grupo
-                if (inventoryCustom.btnNavegation(event)) {
+                // Verifica se o inventário é do tipo funil do Smart Hopper
+                if (event.getView().getTitle().equals(NAME_RECIPE)) {
+
+                    // Cancela o movimento do item se o botão for igual ao botão de bloqueio
+                    if (equalButton(itemClicked) && itemClicked.equals(BtnBlocked())) return;
+
+                    Item item = itemCtrl.findByItemStack(itemClicked);// Busca o item clicado
+
+                    // Verifica se o item clicado é o botão de salvar
+                    if (itemClicked.equals(BtnSalva())) {
+                        for (ItemStack itemStack : inventory.getContents()) {
+                            if (Objects.isNull(itemStack) || itemStack.getType() == Material.AIR) continue;
+                            if (equalButton(itemStack)) {
+                                inventory.removeItem(itemStack);
+                            }
+                        }
+
+                        ItemMeta meta = itemHopper.getItemMeta();
+                        StringBuilder sb = new StringBuilder();
+                        for (Item it : listItem) {
+                            sb.append("I").append(it.getId()).append(";");
+                        }
+                        meta.setDisplayName(sb.toString().substring(0, sb.length() - 1));
+                        itemHopper.setItemMeta(meta);
+                        player.closeInventory();// Fecha o inventário
+                        Msg.PlayerGold(player, "Funil configurado com sucesso!");
+                        return;
+                    }
+
+                    ItemStack newItem = item.getItemStackWithMeta();
+                    // Verifica se o item já existe no inventário
+                    // Verifica se o item clicado já foi adicionado no inventory
+                    // Se o item já existe no inventário, remove o item do inventário
+                    boolean exists = false;
+                    for (int i = 0; i < listItem.size(); i++) {
+                        Item itemRemove = listItem.get(i);
+                        if (Objects.equals(item, itemRemove)) {
+                            ItemStack iv = inventory.getItem(i);
+                            inventory.removeItem(iv);
+                            listItem.remove(i);
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if(!exists){
+                        listItem.add(item);
+                        inventory.addItem(newItem);
+                    }
                     return;
                 }
+                inventoryCustom = new InventoryCustom(event);
+                inventoryCustom.btnNavegation(event);// Evento que navega entre os itens do grupo
+                grupo = inventoryCustom.getGrupo();
+                if (Objects.nonNull(grupo)) {
+                    // Evento que navega entre os itens do grupo
+                    if (inventoryCustom.btnNavegation(event)) {
+                        return;
+                    }
 
-                // Verifica se o player é Adm do servidor ou do Smart Hopper
-                if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
-                add();// Adicionando item ao grupo
-                remove();// Removendo item do grupo
-                save();// Salvando o grupo
+                    // Verifica se o player é Adm do servidor ou do Smart Hopper
+                    if (!player.isOp() && !AdmController.ContainsAdm(player)) return;
+                    add();// Adicionando item ao grupo
+                    remove();// Removendo item do grupo
+                    save();// Salvando o grupo
+                }
             }
         } catch (Exception e) {
             Msg.PlayerRed(player, e.getMessage());
+        }
+    }
+
+    @EventHandler
+    public void playerInteract(PlayerInteractEvent event) {
+        // verifica se o click foi com o botão direito
+        if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+            this.player = event.getPlayer();
+            this.inventory = player.getInventory();
+
+            ItemStack itemAir = player.getItemOnCursor();// Pegando item que o jogador está segurando
+            this.itemHopper = player.getInventory().getItemInMainHand();// Pegando item que o jogador está clicando
+
+            // Se o jogador não estiver segurando nada ou o item for ar, ou o item que ele está clicando for ar, retorna
+            if (Objects.isNull(itemHopper) || itemHopper.getType().isAir() || !itemAir.getType().isAir()) return;
+
+            // Verifica se o inventário é do tipo funil
+            if (itemHopper.getType() == Material.HOPPER) {
+                // Verifica se o jogador está segurando um item contém lore
+                if (Objects.isNull(itemHopper.getItemMeta())
+                        || Objects.isNull(itemHopper.getItemMeta().getLore())
+                        || itemHopper.getItemMeta().getLore().isEmpty()) {
+                    return;
+                }
+                // Verifica se o lore contém o nome da receita
+                List<String> lore = itemHopper.getItemMeta().getLore();
+                if (lore.contains(NAME_RECIPE)) {
+                    listItem = new ArrayList<>();
+                    listItemStick = new ArrayList<>();
+                    ItemMeta meta = itemHopper.getItemMeta();
+                    String name = meta.getDisplayName();
+
+                    inventory = inventoryFactory.InventoryConfigurationHopper();
+                    if (name.contains(";")) {
+                        String[] ids = name.split(";");
+                        for (String id : ids) {
+                            Item item1 = itemCtrl.findByID(Integer.parseInt(id.replaceAll("[^0-9;]", "")));
+                            if (Objects.nonNull(item1)) {
+                                listItem.add(item1);
+                                listItemStick.add(item1.getItemStack());
+                                inventory.addItem(item1.getItemStackWithMeta());
+                            }
+                        }
+                    }
+                    player.openInventory(inventory);
+                }
+            }
         }
     }
 
@@ -75,10 +185,11 @@ public class InventarioEvent implements Listener, Botao {
             }
             ItemStack newItem = new ItemStack(itemClicked.getType());
             newItem.setAmount(1);
+
             // Adiciona item no grupo
             if (!grupo.containsItem(newItem)) {
                 grupo.addItems(newItem);
-                listItem.add(newItem);
+                listItemStick.add(newItem);
                 // Verifica se o item está na lista do inventário
                 inventory.addItem(newItem);// Adicionando o item no inventário aberto
             }
@@ -113,7 +224,7 @@ public class InventarioEvent implements Listener, Botao {
                 if (grupo.getId() < 1) {
                     grupo.addTranslation(player, grupo.getName());
                     grupo.toTranslation(player);
-                    for (ItemStack itemStack : listItem) {
+                    for (ItemStack itemStack : listItemStick) {
                         grupo.addItems(itemStack);
                     }
                     if (grupoCtrl.save(grupo)) {
@@ -128,7 +239,7 @@ public class InventarioEvent implements Listener, Botao {
                 // Envia mensagem para todos os jogadores online
                 Msg.PlayerTodos(msg);
                 grupo = null;
-                listItem.clear();
+                listItemStick.clear();
             }
         } catch (Exception e) {
             Msg.PlayerRed(player, e.getMessage());
