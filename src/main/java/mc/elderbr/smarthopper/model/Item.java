@@ -125,6 +125,7 @@ public class Item implements IItem, ItemMsg, Comparable<Item> {
     public boolean equals(Object obj){
         if(Objects.isNull(obj)) return false;
         if(this == obj) return true;
+        if(!(obj instanceof Item)) return false;
         if(this.getId().equals(((Item) obj).getId())) {
             return true;
         }
