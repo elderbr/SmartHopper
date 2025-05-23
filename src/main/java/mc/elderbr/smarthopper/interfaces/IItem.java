@@ -170,6 +170,13 @@ public interface IItem extends ITitle {
         return itemStack;
     }
 
+    default boolean equals(IItem item) {
+        if(this != item){
+            return false;
+        }
+        return getId().equals(item.getId()) && getName().equals(item.getName());
+    }
+
     default void infor() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n+--------------------------+\n");
