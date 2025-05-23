@@ -4,6 +4,7 @@ package mc.elderbr.smarthopper.controllers;
 import mc.elderbr.smarthopper.exceptions.GrupoException;
 import mc.elderbr.smarthopper.exceptions.ItemException;
 import mc.elderbr.smarthopper.interfaces.IItem;
+import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
@@ -11,13 +12,14 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.minecart.HopperMinecart;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SmartHopper {
+public class SmartHopper implements VGlobal {
 
 
     private int code;
@@ -48,6 +50,45 @@ public class SmartHopper {
             }
         } else {
             listType.add(getTypes(title));
+        }
+    }
+
+    public SmartHopper(@NotNull ItemStack itemStack){
+        if(Objects.nonNull(itemStack.getItemMeta())){
+            listType = new ArrayList<>();
+            if(itemStack.getItemMeta().hasLore() && itemStack.getItemMeta().getLore().size() == 2) {
+                code = Integer.parseInt(itemStack.getItemMeta().getLore().get(0).replaceAll("[^0-9]", ""));
+                name = itemStack.getItemMeta().getLore().get(1);
+
+                // Verifica se o texto contém 'Item:'
+                if (name.contains("Item:")) {
+                    listType.add(itemCtrl.findByID(code));
+                    return;
+                }
+                // Verifica se o texto contém 'Grupo:'
+                if (name.contains("Grupo:")) {
+                    try {
+                        listType.add(grupCtrl.findById(code));
+                    } catch (Exception e) {
+                    }
+                    return;
+                }
+            }
+            if(!itemStack.getItemMeta().getDisplayName().isEmpty()){
+                name = itemStack.getItemMeta().getDisplayName();
+                if(Objects.isNull(name) || name.isEmpty()) return;
+                getTypes(name);
+                return;
+            }
+            item = itemCtrl.findByItemStack(itemStack);
+            if (Objects.nonNull(item)) {
+                listType.add(item);
+                return;
+            }
+        }
+        item = itemCtrl.findByItemStack(itemStack);
+        if (Objects.nonNull(item)) {
+            listType.add(item);
         }
     }
 
