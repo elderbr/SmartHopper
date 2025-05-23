@@ -3,8 +3,10 @@ package mc.elderbr.smarthopper.event;
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
 import mc.elderbr.smarthopper.controllers.ItemController;
+import mc.elderbr.smarthopper.controllers.SmartHopper;
 import mc.elderbr.smarthopper.factories.InventoryFactory;
 import mc.elderbr.smarthopper.interfaces.Botao;
+import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.model.Grupo;
 import mc.elderbr.smarthopper.model.InventoryCustom;
@@ -12,12 +14,10 @@ import mc.elderbr.smarthopper.model.Item;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -26,24 +26,27 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class InventarioEvent implements Listener, Botao, VGlobal {
 
     private Player player;
+    private String titleHopper = "";
     private InventoryCustom inventoryCustom;
     private Inventory inventory;
     private InventoryClickEvent event;
     private InventoryFactory inventoryFactory = InventoryFactory.getInstance();
 
-    private ItemController itemCtrl = new ItemController();
     private ItemStack itemClicked;
     private ItemStack itemHopper;
     private List<ItemStack> listItemStick = new ArrayList<>();
 
-    private List<Item> listItem = new ArrayList<>();
+    private List<IItem> listItem = new ArrayList<>();
 
     private Grupo grupo;
     private GrupoController grupoCtrl = new GrupoController();
+
+    private SmartHopper smartHopper;
 
     @EventHandler
     public void InventoryClick(InventoryClickEvent event) {
@@ -64,47 +67,52 @@ public class InventarioEvent implements Listener, Botao, VGlobal {
                     // Cancela o movimento do item se o botão for igual ao botão de bloqueio
                     if (equalButton(itemClicked) && itemClicked.equals(BtnBlocked())) return;
 
-                    Item item = itemCtrl.findByItemStack(itemClicked);// Busca o item clicado
-
                     // Verifica se o item clicado é o botão de salvar
                     if (itemClicked.equals(BtnSalva())) {
-                        for (ItemStack itemStack : inventory.getContents()) {
-                            if (Objects.isNull(itemStack) || itemStack.getType() == Material.AIR) continue;
-                            if (equalButton(itemStack)) {
-                                inventory.removeItem(itemStack);
-                            }
-                        }
 
+                        // Pegando dos itens do inventário
                         ItemMeta meta = itemHopper.getItemMeta();
-                        StringBuilder sb = new StringBuilder();
-                        for (Item it : listItem) {
-                            sb.append("I").append(it.getId()).append(";");
+                        // Verifica se lista é vazia
+                        if (listItem.isEmpty()) {
+                            titleHopper = TITLE_RECIPE;
+                        } else {
+                            titleHopper = listItem.stream().map(IItem::getIdCodeConfig).collect(Collectors.joining(";"));
                         }
-                        meta.setDisplayName(sb.toString().substring(0, sb.length() - 1));
+                        meta.setDisplayName(titleHopper);// Alterando o nome da configuração do funil
                         itemHopper.setItemMeta(meta);
                         player.closeInventory();// Fecha o inventário
                         Msg.PlayerGold(player, "Funil configurado com sucesso!");
                         return;
                     }
-
-                    ItemStack newItem = item.getItemStackWithMeta();
+                    smartHopper = new SmartHopper(itemClicked);
+                    IItem item = smartHopper.getTypes().get(0);// Busca no banco de dados o item clicado
                     // Verifica se o item já existe no inventário
                     // Verifica se o item clicado já foi adicionado no inventory
                     // Se o item já existe no inventário, remove o item do inventário
-                    boolean exists = false;
-                    for (int i = 0; i < listItem.size(); i++) {
-                        Item itemRemove = listItem.get(i);
-                        if (Objects.equals(item, itemRemove)) {
-                            ItemStack iv = inventory.getItem(i);
-                            inventory.removeItem(iv);
-                            listItem.remove(i);
-                            exists = true;
+                    boolean contains = false;
+                    for (ItemStack itemStack : inventory.getContents()) {
+                        if (Objects.isNull(itemStack) || itemStack.getType() == Material.AIR) continue;
+
+                        smartHopper = new SmartHopper(itemStack);
+                        if(smartHopper.getTypes().isEmpty()) continue;
+                        IItem newItemIv = smartHopper.getTypes().get(0);
+                        if (newItemIv.equals(item)) {
+                            inventory.removeItem(itemStack);
+                            listItem.remove(item);
+                            contains = true;
                             break;
                         }
                     }
-                    if(!exists){
+                    if (!contains) {
+                        // Adiciona o item no inventário
+                        inventory.addItem(item.getItemStackWithMeta());
                         listItem.add(item);
-                        inventory.addItem(newItem);
+                    }
+                    titleHopper = listItem.stream().map(IItem::getIdCodeConfig).collect(Collectors.joining(";"));
+
+                    // Verifica se o titulo do funil é maior que 50 caracteres
+                    if (titleHopper.length() > 50) {
+                        Msg.PlayerRed(player, "Ops, a configuração para o funil é muito grande, remove algum item!");
                     }
                     return;
                 }
@@ -126,6 +134,7 @@ public class InventarioEvent implements Listener, Botao, VGlobal {
             }
         } catch (Exception e) {
             Msg.PlayerRed(player, e.getMessage());
+            Msg.ServidorErro(e, "Erro ao clicar no inventário", getClass());
         }
     }
 
@@ -159,15 +168,15 @@ public class InventarioEvent implements Listener, Botao, VGlobal {
                     String name = meta.getDisplayName();
 
                     inventory = inventoryFactory.InventoryConfigurationHopper();
-                    if (name.contains(";")) {
-                        String[] ids = name.split(";");
-                        for (String id : ids) {
-                            Item item1 = itemCtrl.findByID(Integer.parseInt(id.replaceAll("[^0-9;]", "")));
-                            if (Objects.nonNull(item1)) {
-                                listItem.add(item1);
-                                listItemStick.add(item1.getItemStack());
-                                inventory.addItem(item1.getItemStackWithMeta());
-                            }
+                    smartHopper = new SmartHopper(name);
+                    for (IItem sm : smartHopper.getTypes()) {
+                        if (sm instanceof Item item) {
+                            listItem.add(item);
+                            inventory.addItem(item.getItemStackWithMeta());
+                        }
+                        if (sm instanceof Grupo grupo) {
+                            listItem.add(grupo);
+                            inventory.addItem(grupo.getItemStackWithMeta());
                         }
                     }
                     player.openInventory(inventory);
