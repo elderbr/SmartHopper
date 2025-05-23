@@ -63,6 +63,15 @@ public class GrupoController implements GrupMsg, VGlobal {
         return grupo;
     }
 
+    public Grupo findById(String code) {
+        try {
+            int id = Integer.parseInt(code.replaceAll("[^0-9]", ""));
+            return grupoDao.findById(id);
+        }catch (Exception e){
+            throw new GrupoException(GRUP_INVALID);
+        }
+    }
+
     public Grupo sourchByName(String name){
         return grupoDao.findByName(name.toLowerCase());
     }
