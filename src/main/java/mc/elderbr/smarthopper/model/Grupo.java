@@ -32,6 +32,11 @@ public class Grupo implements IItem, Cloneable {
     }
 
     @Override
+    public String getIdCodeConfig(){
+        return "G"+ getId();
+    }
+
+    @Override
     public String getName() {
         return name;
     }
