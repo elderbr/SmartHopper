@@ -9,11 +9,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static mc.elderbr.smarthopper.interfaces.ITitle.NAME_SMART_HOPPER;
+import static mc.elderbr.smarthopper.interfaces.ITitle.TITLE_SMART_HOPPER;
 
 public interface Botao {
 
-    default ItemStack BtnSalva(){
+    default ItemStack BtnSalva() {
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName(Msg.Color("$2$lSalva"));
@@ -23,7 +23,7 @@ public interface Botao {
         return btn;
     }
 
-    default ItemStack BtnProximo(){
+    default ItemStack BtnProximo() {
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName(Msg.Color("$9$l Próximo"));
@@ -33,7 +33,7 @@ public interface Botao {
         return btn;
     }
 
-    default ItemStack BtnProximoPag2(){
+    default ItemStack BtnProximoPag2() {
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName(Msg.Color("$9$l Ir para pagina 2"));
@@ -43,7 +43,7 @@ public interface Botao {
         return btn;
     }
 
-    default ItemStack BtnProximoPag3(){
+    default ItemStack BtnProximoPag3() {
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName(Msg.Color("$9$l Ir para página 3"));
@@ -53,7 +53,7 @@ public interface Botao {
         return btn;
     }
 
-    default ItemStack BtnAnteriorPag1(){
+    default ItemStack BtnAnteriorPag1() {
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName(Msg.Color("$9$lRetorna a página 1"));
@@ -63,7 +63,7 @@ public interface Botao {
         return btn;
     }
 
-    default ItemStack BtnAnteriorPag2(){
+    default ItemStack BtnAnteriorPag2() {
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName(Msg.Color("$9$lRetorna para página 2"));
@@ -73,49 +73,49 @@ public interface Botao {
         return btn;
     }
 
-    default Item BtnNavegation(){
+    default Item BtnNavegation() {
         return new Item(new ItemStack(Material.BARRIER, 1));
     }
 
-    default ItemStack BtnNextPage(int page){
+    default ItemStack BtnNextPage(int page) {
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
-        meta.setDisplayName("§9§lPágina "+ (page));
-        meta.setLore(Arrays.asList("§fIr para a página "+(page)));
+        meta.setDisplayName("§9§lPágina " + (page));
+        meta.setLore(Arrays.asList("§fIr para a página " + (page)));
         meta.setCustomModelData(11);
         btn.setItemMeta(meta);
         return btn;
     }
 
-    default ItemStack BtnPreviewPage(int page){
+    default ItemStack BtnPreviewPage(int page) {
         ItemStack btn = new ItemStack(Material.BARRIER, 1);
         ItemMeta meta = btn.getItemMeta();
-        meta.setDisplayName("§9§lRetorna página "+ (page));
-        meta.setLore(Arrays.asList("§fRetorna para página "+ (page)));
+        meta.setDisplayName("§9§lRetorna página " + (page));
+        meta.setLore(Arrays.asList("§fRetorna para página " + (page)));
         meta.setCustomModelData(12);
         btn.setItemMeta(meta);
         return btn;
     }
 
-    default ItemStack BtnBlocked(){
+    default ItemStack BtnBlocked() {
         ItemStack btn = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
         ItemMeta meta = btn.getItemMeta();
         meta.setDisplayName("§4§lBloqueado");
-        meta.setLore(Arrays.asList(NAME_SMART_HOPPER));
+        meta.setLore(Arrays.asList(TITLE_SMART_HOPPER));
         meta.setCustomModelData(13);
         btn.setItemMeta(meta);
         return btn;
     }
 
-    default boolean equalButton(ItemStack itemStack){
-        if(Objects.isNull(itemStack)
+    default boolean equalButton(ItemStack itemStack) {
+        if (Objects.isNull(itemStack)
                 || !itemStack.hasItemMeta()
                 || !itemStack.getItemMeta().hasCustomModelData()
                 || itemStack.getItemMeta().getCustomModelData() < 1
-                ){
+        ) {
             return false;
         }
-        switch (itemStack.getItemMeta().getCustomModelData()){
+        switch (itemStack.getItemMeta().getCustomModelData()) {
             case 10:
             case 11:
             case 12:

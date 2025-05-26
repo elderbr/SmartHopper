@@ -12,7 +12,6 @@ import mc.elderbr.smarthopper.interfaces.IItem;
 import mc.elderbr.smarthopper.interfaces.VGlobal;
 import mc.elderbr.smarthopper.utils.Msg;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -28,9 +27,6 @@ import java.util.Objects;
 
 public class InventoryCustom implements Botao, VGlobal {
 
-    private final String TITULO_SMART_HOPPER = "§f§lSmart Hopper";
-    private final String TITULO_GRUP_NEW = "§lNovo Grupo: §r";
-    private final String TITULO_GRUP = "§lGrupo: §r";
     private SmartHopper smarthopper;
     private Player player;
     private String titulo;
@@ -54,10 +50,10 @@ public class InventoryCustom implements Botao, VGlobal {
     private InventoryCustom() {
     }
 
-    public InventoryCustom(InventoryOpenEvent event){
+    public InventoryCustom(InventoryOpenEvent event) {
         inventoryTop = event.getView().getTopInventory();
         titulo = event.getView().getTitle();
-        if(titulo.contains("Smart Hopper") || titulo.contains("Grupo")) {
+        if (titulo.contains("Smart Hopper") || titulo.contains("Grupo")) {
             listItem = new ArrayList<>();
             smarthopper = new SmartHopper(titulo);
             for (IItem type : smarthopper.getTypes()) {
@@ -81,8 +77,8 @@ public class InventoryCustom implements Botao, VGlobal {
         titulo = event.getView().getTitle();
         grupo = null;
 
-        if (titulo.contains(TITULO_SMART_HOPPER)) {
-            String name = titulo.replaceAll(TITULO_SMART_HOPPER, "").trim();
+        if (titulo.contains(TITLE_SMART_HOPPER)) {
+            String name = titulo.replaceAll(TITLE_SMART_HOPPER, "").trim();
             smarthopper = new SmartHopper(name);
             for (IItem type : smarthopper.getTypes()) {
                 if (type instanceof Item item) {
@@ -99,9 +95,9 @@ public class InventoryCustom implements Botao, VGlobal {
         }
 
         if (titulo.contains("Grupo")) {
-            if (titulo.contains(TITULO_GRUP_NEW)) {
+            if (titulo.contains(TITLE_NEW_GROUP)) {
                 grupo = new Grupo();
-                grupo.setName(titulo.replaceAll(TITULO_GRUP_NEW, ""));
+                grupo.setName(titulo.replaceAll(TITLE_NEW_GROUP, ""));
                 if (GrupoDao.FindByName(grupo.getName()) != null) {
                     grupo = grupoCtrl.findByName(grupo.getName());
                     throw new GrupoException("O grupo já existe!!!");
@@ -162,12 +158,12 @@ public class InventoryCustom implements Botao, VGlobal {
         this.smarthopper = smartHopper;
         List<IItem> listType = smarthopper.getTypes();
 
-        if(listType.size() == 1){// Se lista for igual a 1 e se for igual ao grupo
-            if(listType.get(0) instanceof Grupo grupo){
-                titulo = Msg.Color(TITULO_GRUP + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
+        if (listType.size() == 1) {// Se lista for igual a 1 e se for igual ao grupo
+            if (listType.get(0) instanceof Grupo grupo) {
+                titulo = String.format("%s %s %s %d", TITLE_GROUP, grupo.toTranslation(player), TITLE_ID_GROUP, grupo.getId());
                 this.grupo = grupo;
                 // Adicionando na lista de item
-                for(Item item : grupo.getItems()){
+                for (Item item : grupo.getItems()) {
                     listItem.add(item);
                 }
             }
@@ -195,10 +191,10 @@ public class InventoryCustom implements Botao, VGlobal {
             }
             sb.append(";");
         }
-        if(listItem.size()<54){// Se a quantidade de item for menor que 54
-            titulo = TITULO_SMART_HOPPER;
-        }else {// Se a quantidade for maior que 54 adicionar os ID do item ou grupo
-            titulo = "§f§lSmart Hopper " + sb.toString().substring(0, sb.toString().length() - 1);
+        if (listItem.size() < 54) {// Se a quantidade de item for menor que 54
+            titulo = TITLE_SMART_HOPPER;
+        } else {// Se a quantidade for maior que 54 adicionar os ID do item ou grupo
+            titulo = TITLE_NEW_GROUP + sb.toString().substring(0, sb.toString().length() - 1);
         }
     }
 
@@ -225,7 +221,7 @@ public class InventoryCustom implements Botao, VGlobal {
     }
 
     public InventoryCustom create() throws GrupoException {
-        titulo = Msg.Color(TITULO_GRUP_NEW.concat(grupo.getName()));
+        titulo = Msg.Color(TITLE_NEW_GROUP.concat(grupo.getName()));
         inventory = Bukkit.createInventory(null, 54, titulo);// Quantidade de espaço do baú
         inventory.setItem(53, BtnSalva());
         player.openInventory(inventory);
@@ -239,7 +235,8 @@ public class InventoryCustom implements Botao, VGlobal {
             return this;
         }
         if (Objects.nonNull(grupo)) {// Se não existir grupo renomea o inventário para Smart Hopper
-            titulo = Msg.Color(TITULO_GRUP + grupo.toTranslation(player) + " $lID: $r" + grupo.getId());
+            //titulo = Msg.Color(TITLE_GROUP.concat(grupo.toTranslation(player)).concat(TITLE_ID_GROUP) + grupo.getId());
+            titulo = String.format("%s %s %s %d", TITLE_GROUP, grupo.toTranslation(player), TITLE_ID_GROUP, grupo.getId());
         }
         createPagination();
         // Criando um inventário personalizado
@@ -265,7 +262,7 @@ public class InventoryCustom implements Botao, VGlobal {
             }
         }
         player.openInventory(inventory);// Abrindo o inventário
-        if(Objects.nonNull(grupo)) {// Se o grupo existir mostra o nome do grupo para o player
+        if (Objects.nonNull(grupo)) {// Se o grupo existir mostra o nome do grupo para o player
             Msg.Grupo(player, grupo);
         }
         return this;
@@ -313,7 +310,7 @@ public class InventoryCustom implements Botao, VGlobal {
         return inventory;
     }
 
-    public List<Item> getListItem(){
+    public List<Item> getListItem() {
         return listItem;
     }
 }

@@ -2,7 +2,6 @@ package mc.elderbr.smarthopper.event;
 
 import mc.elderbr.smarthopper.controllers.AdmController;
 import mc.elderbr.smarthopper.controllers.GrupoController;
-import mc.elderbr.smarthopper.controllers.ItemController;
 import mc.elderbr.smarthopper.controllers.SmartHopper;
 import mc.elderbr.smarthopper.factories.InventoryFactory;
 import mc.elderbr.smarthopper.interfaces.Botao;
@@ -32,6 +31,8 @@ public class InventarioEvent implements Listener, Botao, VGlobal {
 
     private Player player;
     private String titleHopper = "";
+
+    private String titleInventory;
     private InventoryCustom inventoryCustom;
     private Inventory inventory;
     private InventoryClickEvent event;
@@ -53,16 +54,18 @@ public class InventarioEvent implements Listener, Botao, VGlobal {
         player = (Player) event.getWhoClicked();
         this.event = event;
         inventory = event.getView().getTopInventory();
+        titleInventory = event.getView().getTitle();
+
         try {
             if (Objects.isNull(event.getCurrentItem()) || event.getCurrentItem().getType() == Material.AIR) return;
             itemClicked = event.getCurrentItem();// Pega o item clicado
 
             // Verificar se o inventário aberto é o do Smart Hopper
-            if (event.getView().getTitle().contains("Smart Hopper")) {
+            if (containsTitle(titleInventory)) {
                 event.setCancelled(true);// Cancela o movimento do item
 
                 // Verifica se o inventário é do tipo funil do Smart Hopper
-                if (event.getView().getTitle().equals(NAME_RECIPE)) {
+                if (titleInventory.equals(NAME_RECIPE)) {
 
                     // Cancela o movimento do item se o botão for igual ao botão de bloqueio
                     if (equalButton(itemClicked) && itemClicked.equals(BtnBlocked())) return;
@@ -94,7 +97,7 @@ public class InventarioEvent implements Listener, Botao, VGlobal {
                         if (Objects.isNull(itemStack) || itemStack.getType() == Material.AIR) continue;
 
                         smartHopper = new SmartHopper(itemStack);
-                        if(smartHopper.getTypes().isEmpty()) continue;
+                        if (smartHopper.getTypes().isEmpty()) continue;
                         IItem newItemIv = smartHopper.getTypes().get(0);
                         if (newItemIv.equals(item)) {
                             inventory.removeItem(itemStack);
